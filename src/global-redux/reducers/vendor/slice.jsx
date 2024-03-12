@@ -1,0 +1,73 @@
+import { toast } from "react-toastify";
+import { getAllVendors, addVendor } from "./thunk";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+
+const initialState = {
+  loading: false,
+  allVendors: [],
+  vendorAddSuccess: false,
+};
+
+export const setupGetAllVendors = createAsyncThunk(
+  "vendor/getAllVendors",
+  async (data, thunkAPI) => {
+    return getAllVendors(data, thunkAPI);
+  }
+);
+export const setupAddVendor = createAsyncThunk(
+  "vendor/addVendor",
+  async (data, thunkAPI) => {
+    return addVendor(data, thunkAPI);
+  }
+);
+
+export const slice = createSlice({
+  name: "vendor",
+  initialState,
+  reducers: {
+    resetVendorAddSuccess: (state) => {
+      state.vendorAddSuccess = false;
+    },
+  },
+  // All Vendors
+  extraReducers: (builder) => {
+    builder
+      .addCase(setupGetAllVendors.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupGetAllVendors.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.allVendors = payload || [{ error: "Not Found" }];
+      })
+      .addCase(setupGetAllVendors.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Add Vendor
+    builder
+      .addCase(setupAddVendor.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupAddVendor.fulfilled, (state) => {
+        state.loading = false;
+        state.vendorAddSuccess = true;
+        toast.success("Vendor Added Successfully");
+      })
+      .addCase(setupAddVendor.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+  },
+});
+
+export const { resetVendorAddSuccess } = slice.actions;
+
+export default slice.reducer;
