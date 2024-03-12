@@ -1,42 +1,123 @@
-
 @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 
 html,
 body {
-    height: 100%;
+  height: 100%;
   font-family: "Poppins", sans-serif !important;
 }
 
-.main-font{
+.main-font {
   font-family: "Poppins", sans-serif !important;
+}
 
+.heading {
+  font-family: "Poppins", sans-serif !important;
+}
+
+.css-1rgmeur {
+  font-family: "Poppins", sans-serif !important;
+}
+.css-17gq4vl.MuiSelect-select {
+  font-family: "Poppins", sans-serif !important;
+}
+.css-1x5jdmq {
+  font-family: "Poppins", sans-serif !important;
+}
+.fxt-template-layout31 .fxt-form-content .form-control {
+  font-size: 16px !important;
+  font-family: "Poppins", sans-serif !important;
+}
+.css-e4w4as-MuiFormLabel-root-MuiInputLabel-root {
+  font-family: "Poppins", sans-serif !important;
+}
+.css-o943dk-MuiFormLabel-root-MuiInputLabel-root {
+  font-family: "Poppins", sans-serif !important;
+}
+.css-10botns-MuiInputBase-input-MuiFilledInput-input {
+  font-family: "Poppins", sans-serif !important;
+}
+.css-yf8vq0-MuiSelect-nativeInput {
+  font-family: "Poppins", sans-serif !important;
+}
+.css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root {
+  font-family: "Poppins", sans-serif !important;
+}
+.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
+  font-family: "Poppins", sans-serif !important;
+}
+.css-1jy569b-MuiFormLabel-root-MuiInputLabel-root.Mui-focused {
+  font-family: "Poppins", sans-serif !important;
+}
+.css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root {
+  font-family: "Poppins", sans-serif !important;
+}
+
+.css-qiwgdb.css-qiwgdb.css-qiwgdb {
+  font-family: "Poppins", sans-serif !important;
+}
+.css-14x1nlk {
+  font-family: "Poppins", sans-serif !important;
+}
+.css-1ald77x.Mui-focused {
+  font-family: "Poppins", sans-serif !important;
+}
+.css-p0rm37 {
+  font-family: "Poppins", sans-serif !important;
+}
+.css-1km1ehz {
+  font-family: "Poppins", sans-serif !important;
+}
+p {
+  font-family: "Poppins", sans-serif !important;
+}
+
+.css-1ald77x {
+  font-family: "Poppins", sans-serif !important;
+}
+
+.css-1jzq0dw-MuiChip-label {
+  font-family: "Poppins", sans-serif !important;
+}
+.css-11lqbxm {
+  font-family: "Poppins", sans-serif !important;
+}
+
+.css-1h9z7r5-MuiButtonBase-root-MuiTab-root.Mui-selected {
+  font-family: "Poppins", sans-serif !important;
+}
+
+[type="button"]:not(:disabled),
+[type="reset"]:not(:disabled),
+[type="submit"]:not(:disabled),
+button:not(:disabled) {
+  font-family: "Poppins", sans-serif !important;
 }
 
 body {
-    margin: 0;
-    overflow-x: hidden;
+  margin: 0;
+  overflow-x: hidden;
 }
-.accordion-item:first-of-type>.accordion-header .accordion-button{
+.accordion-item:first-of-type > .accordion-header .accordion-button {
   font-family: "Poppins", sans-serif !important;
 }
 
-.css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root{
+.css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root {
   font-family: "Poppins", sans-serif !important;
-
 }
 
-.css-1jy569b-MuiFormLabel-root-MuiInputLabel-root{
+.css-1jy569b-MuiFormLabel-root-MuiInputLabel-root {
   font-family: "Poppins", sans-serif !important;
-  
+}
+.css-11lqbxm {
+  font-family: "Poppins", sans-serif !important;
 }
 
-.css-1x5jdmq{
+.css-1x5jdmq {
   font-family: "Poppins", sans-serif !important;
-  font-size: 13px !important;
-
+  font-size: 15px !important;
 }
 
-.ml-4{
+.ml-4 {
   margin-left: 10px !important;
 }
 
@@ -47,18 +128,18 @@ body {
   text-overflow: ellipsis;
 }
 
-.accordion-button{
+.accordion-button {
   font-family: "Poppins", sans-serif !important;
 }
 
-.css-1q2h7u5{
+.css-1q2h7u5 {
   font-family: "Poppins", sans-serif !important;
   color: #0a7386 !important;
 }
 
-.css-1xr9krm.Mui-selected{
+.css-1xr9krm.Mui-selected {
   background-color: #0a7386 !important;
-    color: white !important;
+  color: white !important;
 }
 
 .h-40 {
@@ -194,9 +275,9 @@ body {
 .h-200 {
   height: 200px !important;
 }
-.m-50{
-    margin-left: 50px !important;
-    margin-right: 50px !important;
+.m-50 {
+  margin-left: 50px !important;
+  margin-right: 50px !important;
 }
 
 .cursor-pointer {
@@ -324,10 +405,10 @@ body {
   font-weight: bold;
   color: #0a7386;
 }
-.css-1h9z7r5-MuiButtonBase-root-MuiTab-root.Mui-selected{
+.css-1h9z7r5-MuiButtonBase-root-MuiTab-root.Mui-selected {
   color: #0a7386 !important;
 }
-.css-8je8zh-MuiTouchRipple-root{
+.css-8je8zh-MuiTouchRipple-root {
   color: #0a7386 !important;
   font-size: 20px !important;
 }
@@ -433,11 +514,11 @@ a {
   border-radius: 8px;
   margin-bottom: 15px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  overflow: hidden; 
+  overflow: hidden;
 }
 
 .accordion-header {
-  margin: 0; 
+  margin: 0;
 }
 
 .accordion-button {
@@ -476,11 +557,11 @@ a {
 }
 
 table th {
-  font-size: 12px !important; 
+  font-size: 12px !important;
   font-weight: bold;
   text-align: start;
-  background-color: #f4f4f4; 
-  padding: 8px; 
+  background-color: #f4f4f4;
+  padding: 8px;
 }
 
 table td {
@@ -498,7 +579,7 @@ label {
   font-size: 11px;
   color: #666;
   font-weight: normal !important;
-  margin-top: 5px; 
+  margin-top: 5px;
 }
 
 .label {
@@ -506,13 +587,13 @@ label {
 }
 .job-name-column {
   width: 300px !important;
-  min-width: 300px; 
-  max-width: 300px; 
+  min-width: 300px;
+  max-width: 300px;
 }
 .dynamic-cls {
   width: 100px !important;
-  min-width: 100px; 
-  max-width: 100px; 
+  min-width: 100px;
+  max-width: 100px;
 }
 .link-underline-muted {
   color: #007bff;
@@ -540,7 +621,6 @@ label {
   text-transform: capitalize !important;
 }
 
-
 table th {
   font-size: 12px !important; /* Adjust based on your specific design */
   font-weight: bold;
@@ -560,13 +640,13 @@ label {
   font-weight: bold;
 }
 
-.p-0{
+.p-0 {
   padding: 0px !important;
 }
-.per80{
-  width:80% !important
+.per80 {
+  width: 80% !important;
 }
-.h-70{
+.h-70 {
   height: 70px !important;
 }
 
@@ -577,7 +657,6 @@ label {
   margin-top: 5px; /* Adjust as needed */
 }
 
-
 .main-content {
   overflow-x: hidden;
 }
@@ -585,10 +664,10 @@ label {
 li {
   cursor: pointer !important;
 }
-.link-wrap span i{
+.link-wrap span i {
   font-size: 20px !important;
 }
-.link-wrap-active span i{
+.link-wrap-active span i {
   font-size: 20px !important;
 }
 
@@ -601,13 +680,13 @@ li {
 .ql-toolbar.ql-snow + .ql-container.ql-snow {
   min-height: 70vh !important;
 }
-.color-white{
+.color-white {
   color: white !important;
 }
-.f-40{
+.f-40 {
   font-size: 40px !important;
 }
-.min-w-80{
+.min-w-80 {
   min-width: 80px !important;
 }
 
@@ -615,7 +694,7 @@ li {
   min-height: 30vh !important;
 }
 
-.application-main-color{
+.application-main-color {
   background-color: #0a7386 !important;
 }
 
@@ -655,7 +734,7 @@ span[aria-label="Insert Ordered List"] .jodit-toolbar-button__trigger {
   display: flex !important;
 }
 
-.css-18lrjg1-MuiCircularProgress-root{
+.css-18lrjg1-MuiCircularProgress-root {
   color: #0a7386 !important;
 }
 
@@ -672,9 +751,7 @@ span[aria-label="Insert Ordered List"] .jodit-toolbar-button__trigger {
   font-size: 13px;
 }
 
-
-
-.Mui-error{
+.Mui-error {
   color: rgb(238, 137, 137) !important;
   font-size: 13px !important;
 }
@@ -685,23 +762,23 @@ span[aria-label="Insert Ordered List"] .jodit-toolbar-button__trigger {
   padding-top: 100px;
   left: 0;
   top: 0px;
-  width: 100%; 
-  height: 100%; 
-  overflow: auto; 
-  background-color: rgb(0, 0, 0); 
-  background-color: rgba(0, 0, 0, 0.4); 
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
   min-height: 100vh;
   overflow-x: hidden;
 }
-.css-1wc848c-MuiFormHelperText-root.Mui-error{
+.css-1wc848c-MuiFormHelperText-root.Mui-error {
   margin-left: 0px !important;
   color: rgb(238, 137, 137) !important;
-    font-size: 13px !important;
+  font-size: 13px !important;
 }
-.css-v7esy.Mui-error{
+.css-v7esy.Mui-error {
   margin-left: 0px !important;
   color: rgb(238, 137, 137) !important;
-    font-size: 13px !important;
+  font-size: 13px !important;
 }
 
 .model-wrap {
@@ -726,43 +803,48 @@ span[aria-label="Insert Ordered List"] .jodit-toolbar-button__trigger {
   display: block !important;
 }
 
-
-.css-1x5jdmq{
+.css-1x5jdmq {
   height: 2px !important;
 }
 
-.css-hip9hq-MuiPaper-root-MuiAppBar-root{
-background-color: #0a7386 !important;
-}
-
-.h-40{
-    height: 40px !important;
-} 
-.text-between{
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-}
-
-.css-1x5jdmq{
-  height: 25px !important;
-}
-.css-qiwgdb.MuiSelect-select{
-  height: 25px !important;
-}
-
-.css-1x7skt0{
+.css-hip9hq-MuiPaper-root-MuiAppBar-root {
   background-color: #0a7386 !important;
 }
 
-.css-fvipm8{
+.h-40 {
+  height: 40px !important;
+}
+.text-between {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.css-1x5jdmq {
+  height: 25px !important;
+}
+.css-qiwgdb.MuiSelect-select {
+  height: 25px !important;
+}
+
+.css-1x7skt0 {
+  background-color: #0a7386 !important;
+}
+
+.css-fvipm8 {
   height: 60px !important;
 }
 
-@media screen and (max-width:600px) {
-    .m-50{
-        margin-left: 20px !important;
-        margin-right:20px !important;
-    }
+@media screen and (max-width: 600px) {
+  .m-50 {
+    margin-left: 10px !important;
+    margin-right: 10px !important;
+  }
 }
 
+@media screen and (max-width: 600px) {
+  .main-wrapper {
+    margin-left: 10px !important;
+    margin-right: 10px !important;
+  }
+}

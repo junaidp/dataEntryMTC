@@ -4,8 +4,8 @@ import * as Yup from "yup";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
-import RichTextEditor from "../../common/RichText";
-import { setupAddProvider } from "../../../global-redux/reducers/providers/slice";
+import RichTextEditor from "../../../../common/RichText";
+import { setupAddProvider } from "../../../../../global-redux/reducers/providers/slice";
 import { useSelector, useDispatch } from "react-redux";
 
 const AddProviderDialog = ({ setShowAddProviderDialog, currentVendorId }) => {

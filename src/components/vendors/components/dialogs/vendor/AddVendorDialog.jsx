@@ -4,11 +4,11 @@ import * as Yup from "yup";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
-import RichTextEditor from "../../common/RichText";
+import RichTextEditor from "../../../../common/RichText";
 import {
   setupAddVendor,
   resetVendorAddSuccess,
-} from "../../../global-redux/reducers/vendor/slice";
+} from "../../../../../global-redux/reducers/vendor/slice";
 import { useSelector, useDispatch } from "react-redux";
 
 const AddVendorDialog = ({ setShowAddVendorDialog }) => {

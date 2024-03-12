@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import { getAllVendors, addVendor } from "./thunk";
+import { getAllVendors, addVendor, searchVendorByQuery } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
@@ -12,6 +12,12 @@ export const setupGetAllVendors = createAsyncThunk(
   "vendor/getAllVendors",
   async (data, thunkAPI) => {
     return getAllVendors(data, thunkAPI);
+  }
+);
+export const setupSearchVendorByQuery = createAsyncThunk(
+  "vendor/searchVendorByQuery",
+  async (data, thunkAPI) => {
+    return searchVendorByQuery(data, thunkAPI);
   }
 );
 export const setupAddVendor = createAsyncThunk(
@@ -40,6 +46,23 @@ export const slice = createSlice({
         state.allVendors = payload || [{ error: "Not Found" }];
       })
       .addCase(setupGetAllVendors.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // By Query
+    builder
+      .addCase(setupSearchVendorByQuery.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupSearchVendorByQuery.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.allVendors = payload || [{ error: "Not Found" }];
+      })
+      .addCase(setupSearchVendorByQuery.rejected, (state, action) => {
         state.loading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);

@@ -7,6 +7,9 @@ import Box from "@mui/material/Box";
 import Vendors from "../vendors/Vendors";
 import Experience from "../experiences/Experiences";
 import Providers from "../variations/Variations";
+import Button from "@mui/material/Button";
+import { setupSearchVendorByQuery } from "../../global-redux/reducers/vendor/slice";
+import { useDispatch, useSelector } from "react-redux";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -42,13 +45,31 @@ function a11yProps(index) {
 }
 
 export default function BasicTabs() {
+  const dispatch = useDispatch();
   const [value, setValue] = React.useState(0);
+  const { loading } = useSelector((state) => state?.vendors);
 
-  const handleChange = (event, newValue) => {
+  const handleChange = (_, newValue) => {
     setValue(newValue);
   };
   const [searchValue, setSearchValue] = React.useState("");
   const [showAddVendorDialog, setShowAddVendorDialog] = React.useState(false);
+
+  const handleInputChange = (event) => {
+    setSearchValue(event.target.value);
+  };
+
+  function handleSeachVendor() {
+    if (!loading) {
+      dispatch(setupSearchVendorByQuery(searchValue));
+    }
+  }
+
+  React.useEffect(() => {
+    if (searchValue === "") {
+      dispatch(setupSearchVendorByQuery(""));
+    }
+  }, [searchValue]);
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -69,16 +90,31 @@ export default function BasicTabs() {
             <h2 className="heading mt-2">Add Vendor</h2>
           </Button>
         </div>
-        <div className="example-header">
-          <div className="mb-4 w-100">
+        <div className="example-header row">
+          <div className="mb-4 col-lg-10">
             <label>Search Vendor</label>
             <input
               placeholder="Filter"
               id="inputField"
               className="form-control h-40"
               value={searchValue}
-              onChange={(e) => setSearchValue(e?.target?.value)}
+              onChange={(event) => {
+                handleInputChange(event);
+              }}
             />
+          </div>
+          <div className="col-lg-2">
+            <div
+              className={`btn btn-labeled btn-primary px-3 shadow  my-4 ${
+                loading && "disabled"
+              }`}
+              onClick={handleSeachVendor}
+            >
+              <span className="btn-label me-2">
+                <i className="fa fa-check-circle f-18"></i>
+              </span>
+              {loading ? "Loading.." : "Search"}
+            </div>
           </div>
         </div>
         <Vendors

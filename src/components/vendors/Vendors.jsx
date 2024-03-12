@@ -1,5 +1,4 @@
 import React from "react";
-import Button from "@mui/material/Button";
 import { setupGetAllVendors } from "../../global-redux/reducers/vendor/slice";
 import { useSelector, useDispatch } from "react-redux";
 import { CircularProgress } from "@mui/material";
@@ -16,16 +15,16 @@ import {
   setupGetAllExperience,
   resetExperienceAddSuccess,
 } from "../../global-redux/reducers/experiences/slice";
-import VendorRecord from "./components/VendorRecord";
-import ExperienceRecord from "./components/ExperienceRecord";
-import ServiceRecord from "./components/ServiceRecord";
-import ProviderRecord from "./components/ProviderRecord";
-import AddVendorDialog from "./components/AddVendorDialog";
-import RichTextEditor from "./components/RichText";
+import VendorRecord from "./components/records/VendorRecord";
+import ExperienceRecord from "./components/records/ExperienceRecord";
+import ServiceRecord from "./components/records/ServiceRecord";
+import ProviderRecord from "./components/records/ProviderRecord";
+import AddVendorDialog from "./components/dialogs/vendor/AddVendorDialog";
+import RichTextEditor from "./components/common/RichText";
 import TextField from "@mui/material/TextField";
-import AddExperienceDialog from "./components/AddExperienceDialog";
-import AddServiceDialog from "./components/AddServiceDialog";
-import AddProviderDialog from "./components/AddProviderDialog";
+import AddExperienceDialog from "./components/dialogs/experience/AddExperienceDialog";
+import AddServiceDialog from "./components/dialogs/service/AddServiceDialog";
+import AddProviderDialog from "./components/dialogs/provider/AddProviderDialog";
 
 const Vendor = ({ setShowAddVendorDialog, showAddVendorDialog }) => {
   const { allVendors, loading, vendorAddSuccess } = useSelector(
@@ -44,7 +43,6 @@ const Vendor = ({ setShowAddVendorDialog, showAddVendorDialog }) => {
   const dispatch = useDispatch({ showAddVendorDialog });
   const [vendorPage, setVendorPage] = React.useState(1);
   const [currentVendorId, setCurrentVendorId] = React.useState("");
-  // const [showAddVendorDialog, setShowAddVendorDialog] = React.useState(false);
   const [showAddExperienceDialog, setShowAddExperienceDialog] =
     React.useState(false);
   const [showAddServiceDialog, setShowAddServiceDialog] = React.useState(false);
@@ -64,6 +62,7 @@ const Vendor = ({ setShowAddVendorDialog, showAddVendorDialog }) => {
 
   React.useEffect(() => {
     if (vendorAddSuccess) {
+      setCurrentVendorId("");
       dispatch(setupGetAllVendors());
     }
   }, [vendorAddSuccess]);
@@ -130,23 +129,6 @@ const Vendor = ({ setShowAddVendorDialog, showAddVendorDialog }) => {
           </div>
         </div>
       )}
-      {/* <div className="mb-4 " style={{ marginLeft: "-10px" }}>
-        <Button size="medium" onClick={() => setShowAddVendorDialog(true)}>
-          <h2 className="heading mt-2">Add Vendor</h2>
-        </Button>
-      </div> */}
-      {/* <div className="example-header">
-        <div className="mb-4 w-100">
-          <label>Search Vendor</label>
-          <input
-            placeholder="Filter"
-            id="inputField"
-            className="form-control h-40"
-            value={searchValue}
-            onChange={(e) => setSearchValue(e?.target?.value)}
-          />
-        </div>
-      </div> */}
       {loading ? (
         <CircularProgress />
       ) : allVendors?.length === 0 || allVendors[0]?.error === "Not Found" ? (

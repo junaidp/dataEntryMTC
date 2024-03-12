@@ -11,6 +11,17 @@ export const getAllVendors = async (_, thunkAPI) => {
   }
 };
 
+export const searchVendorByQuery = async (data, thunkAPI) => {
+  try {
+    let props = await axios.get(
+      `https://data-entry-08031d053c68.herokuapp.com/vendor/getVendors?name=${data}`
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
 export const addVendor = async (data, thunkAPI) => {
   try {
     let props = await axios.post(

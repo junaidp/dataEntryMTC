@@ -2,10 +2,7 @@ import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { v4 as uuidv4 } from "uuid";
-import {
-  setupAddExperience,
-  resetExperienceAddSuccess,
-} from "../../../global-redux/reducers/experiences/slice";
+import { setupAddExperience } from "../../../../../global-redux/reducers/experiences/slice";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import ExperienceDialogForm from "./ExperienceDialogForm";
@@ -24,24 +21,25 @@ const AddExperienceDialog = ({
   const [links, setLinks] = React.useState([]);
   const [linksWithOtherExperinces, setLinksWithOtherExperiences] =
     React.useState([]);
+  const [price, setPrice] = React.useState("");
+  const [prices, setPrices] = React.useState([]);
+  const [duration, setDuration] = React.useState("");
+  const [durations, setDurations] = React.useState([]);
+  const [availableTime, setAvailableTime] = React.useState("");
+  const [avialableTimes, setAvailableTimes] = React.useState([]);
+
   const { experienceAddSuccess, loading } = useSelector(
     (state) => state?.experiences
   );
   let initialValues = {
     title: "",
     address: "",
-    price: "",
-    duration: "",
-    availableTime: "",
     description: "",
     termsAndConditions: "",
   };
   const validationSchema = Yup.object({
     title: Yup.string().required("Title is required"),
     address: Yup.string().required("Address is required"),
-    price: Yup.string().required("Price is required"),
-    duration: Yup.string().required("Duration is required"),
-    availableTime: Yup.string().required("availableTime  is required"),
     description: Yup.string().required("Please provide description"),
     termsAndConditions: Yup.string().required(
       "Please provide Terms And Conditions"
@@ -55,7 +53,7 @@ const AddExperienceDialog = ({
     onSubmit: (values) => {
       if (!loading) {
         if (keywords.length === 0) {
-          toast.error("Provide keywors");
+          toast.error("Provide keywords");
         }
         if (linksWithOtherExperinces.length === 0) {
           toast.error("Provide Link With Other Experience");
@@ -63,10 +61,22 @@ const AddExperienceDialog = ({
         if (links?.length === 0) {
           toast.error("Provide Links");
         }
+        if (prices?.length === 0) {
+          toast.error("Provide Prices");
+        }
+        if (durations?.length === 0) {
+          toast.error("Provide Durations");
+        }
+        if (avialableTimes?.length === 0) {
+          toast.error("Provide Available Times");
+        }
         if (
           keywords.length !== 0 &&
           linksWithOtherExperinces?.length !== 0 &&
-          links?.length !== 0
+          links?.length !== 0 &&
+          prices?.length !== 0 &&
+          durations?.length !== 0 &&
+          avialableTimes?.length !== 0
         ) {
           dispatch(
             setupAddExperience([
@@ -90,6 +100,15 @@ const AddExperienceDialog = ({
                 storyLineKeywords: keywords.map((item) => {
                   return item?.name;
                 }),
+                price: prices?.map((item) => {
+                  return item.price;
+                }),
+                duration: durations?.map((item) => {
+                  return item.duration;
+                }),
+                availableTime: avialableTimes?.map((item) => {
+                  return item.time;
+                }),
               },
             ])
           );
@@ -105,6 +124,48 @@ const AddExperienceDialog = ({
     formik.resetForm({
       values: { ...formik.values, termsAndConditions: value },
     });
+  }
+
+  function handleAddPrice() {
+    if (price === "") {
+      toast.error("Provide Price");
+    }
+    if (price !== "") {
+      setPrices([...prices, { id: uuidv4(), price }]);
+      setPrice("");
+    }
+  }
+  function handleDeletePrice(id) {
+    setPrices((pre) => pre?.filter((singleItem) => singleItem?.id !== id));
+  }
+  function handleAddDuration() {
+    if (duration === "") {
+      toast.error("Provide Duration");
+    }
+    if (duration !== "") {
+      setDurations([...durations, { id: uuidv4(), duration }]);
+      setDuration("");
+    }
+  }
+  function handleDeleteDuration(id) {
+    setDurations((pre) => pre?.filter((singleItem) => singleItem?.id !== id));
+  }
+  function handleAddAvailableTime() {
+    if (availableTime === "") {
+      toast.error("Provide Available Time");
+    }
+    if (availableTime !== "") {
+      setAvailableTimes([
+        ...avialableTimes,
+        { id: uuidv4(), time: availableTime },
+      ]);
+      setAvailableTime("");
+    }
+  }
+  function handleDeleteAvailableTime(id) {
+    setAvailableTimes((pre) =>
+      pre?.filter((singleItem) => singleItem?.id !== id)
+    );
   }
 
   function handleAddKeyword() {
@@ -192,6 +253,21 @@ const AddExperienceDialog = ({
       links={links}
       handleAddLink={handleAddLink}
       handleDeleteLink={handleDeleteLink}
+      price={price}
+      setPrice={setPrice}
+      handleAddPrice={handleAddPrice}
+      handleDeletePrice={handleDeletePrice}
+      prices={prices}
+      duration={duration}
+      setDuration={setDuration}
+      handleAddDuration={handleAddDuration}
+      handleDeleteDuration={handleDeleteDuration}
+      durations={durations}
+      availableTime={availableTime}
+      setAvailableTime={setAvailableTime}
+      handleAddAvailableTime={handleAddAvailableTime}
+      handleDeleteAvailableTime={handleDeleteAvailableTime}
+      avialableTimes={avialableTimes}
     />
   );
 };

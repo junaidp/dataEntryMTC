@@ -1,8 +1,6 @@
 import React from "react";
 import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
-import RichTextEditor from "./RichText";
+import RichTextEditor from "../common/RichText";
 
 const VendorRecord = ({ vendor }) => {
   return (
@@ -72,39 +70,33 @@ const VendorRecord = ({ vendor }) => {
               />
             </div>
           </div>
-
           <div className="row">
             <div className="col-lg-6 mb-4">
-              <Select
-                id="regionsCovered"
-                name="regionsCovered"
-                className="form-control w-100 h-40"
+              <TextField
+                id="pointOfContact"
+                name="pointOfContact"
+                label="Regions Covered"
+                variant="outlined"
+                className="form-control"
                 disabled
-                defaultValue={vendor?.regionsCovered?vendor?.regionsCovered:"No Regions Provided"}
-              >
-                <MenuItem value="">Select Region</MenuItem>
-                <MenuItem value="UK">UK</MenuItem>
-                <MenuItem value="US">US</MenuItem>
-                <MenuItem value="Germany">Germany</MenuItem>
-                <MenuItem value="Pakistan">Pakistan</MenuItem>
-                <MenuItem value="No Regions Provided">
-                  No Regions Provided
-                </MenuItem>
-              </Select>
+                defaultValue={
+                  vendor?.regionsCovered
+                    ? vendor?.regionsCovered
+                    : "No Regions Provided"
+                }
+              />
             </div>
 
             <div className="col-lg-6 mb-4">
-              <Select
-                id="manageVenue"
-                name="manageVenue"
-                className="form-control w-100 h-40"
+              <TextField
+                id="pointOfContact"
+                name="pointOfContact"
+                label="Manage Venue"
+                variant="outlined"
+                className="form-control"
                 disabled
-                defaultValue={vendor?.manageVenue || false}
-              >
-                <MenuItem value="">Select One</MenuItem>
-                <MenuItem value={true}>Yes</MenuItem>
-                <MenuItem value={false}>No</MenuItem>
-              </Select>
+                defaultValue={vendor?.manageVenue === true ? "true" : "false"}
+              />
             </div>
           </div>
 
