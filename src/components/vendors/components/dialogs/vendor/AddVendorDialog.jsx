@@ -209,18 +209,18 @@ const AddVendorDialog = ({ setShowAddVendorDialog }) => {
             </div>
           </div>
         </div>
-        <div className="row py-3">
-          <div className="col-lg-6 text-end">
+        <div className="flex mb-2 flex-end">
+          <div>
             <button
               type="submit"
               className={`btn btn-primary float-start ${
                 loading && "disabled"
               } `}
             >
-              {loading ? "Loading..." : "Add"}
+              {loading ? "Loading..." : "Save"}
             </button>
           </div>
-          <div className="col-lg-6 text-end">
+          <div className="mx-4">
             <button
               type="button"
               className="btn btn-danger float-end"

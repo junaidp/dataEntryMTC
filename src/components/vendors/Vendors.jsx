@@ -25,6 +25,9 @@ import TextField from "@mui/material/TextField";
 import AddExperienceDialog from "./components/dialogs/experience/AddExperienceDialog";
 import AddServiceDialog from "./components/dialogs/service/AddServiceDialog";
 import AddProviderDialog from "./components/dialogs/provider/AddProviderDialog";
+import ViewExperieceDialog from "./components/view-dialogs/view-experience";
+import ViewProviderDialog from "./components/view-dialogs/view-provider";
+import ViewServiceDialog from "./components/view-dialogs/view-service";
 
 const Vendor = ({ setShowAddVendorDialog, showAddVendorDialog }) => {
   const { allVendors, loading, vendorAddSuccess } = useSelector(
@@ -47,6 +50,13 @@ const Vendor = ({ setShowAddVendorDialog, showAddVendorDialog }) => {
     React.useState(false);
   const [showAddServiceDialog, setShowAddServiceDialog] = React.useState(false);
   const [showAddProviderDialog, setShowAddProviderDialog] =
+    React.useState(false);
+
+  const [showViewSelectedExperience, setShowViewSelectedExperience] =
+    React.useState(false);
+  const [showViewSelectedService, setShowViewSelectedService] =
+    React.useState(false);
+  const [showViewSelectedProvider, setShowViewSelectedProvider] =
     React.useState(false);
   const handleChangeVendorPage = (_, value) => {
     setVendorPage(value);
@@ -109,6 +119,15 @@ const Vendor = ({ setShowAddVendorDialog, showAddVendorDialog }) => {
           </div>
         </div>
       )}
+      {showViewSelectedExperience && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <ViewExperieceDialog
+              setShowViewSelectedExperience={setShowViewSelectedExperience}
+            />
+          </div>
+        </div>
+      )}
       {showAddServiceDialog && (
         <div className="modal-objective">
           <div className="model-wrap">
@@ -119,12 +138,30 @@ const Vendor = ({ setShowAddVendorDialog, showAddVendorDialog }) => {
           </div>
         </div>
       )}
+      {showViewSelectedService && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <ViewServiceDialog
+              setShowViewSelectedService={setShowViewSelectedService}
+            />
+          </div>
+        </div>
+      )}
       {showAddProviderDialog && (
         <div className="modal-objective">
           <div className="model-wrap">
             <AddProviderDialog
               setShowAddProviderDialog={setShowAddProviderDialog}
               currentVendorId={currentVendorId}
+            />
+          </div>
+        </div>
+      )}
+      {showViewSelectedProvider && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <ViewProviderDialog
+              setShowViewSelectedProvider={setShowViewSelectedProvider}
             />
           </div>
         </div>
@@ -166,7 +203,7 @@ const Vendor = ({ setShowAddVendorDialog, showAddVendorDialog }) => {
                           vendor={vendor}
                           setCurrentVendorId={setCurrentVendorId}
                         />
-                        <div className="btn btn-labeled btn-primary  col-lg-12 h-40 shadow h-40 text-between mb-4">
+                        <div className="  col-lg-12 h-40 shadow h-40 text-between mb-4">
                           Expertise
                         </div>
                         <div className="px-4 py-2 ml-4">
@@ -174,12 +211,21 @@ const Vendor = ({ setShowAddVendorDialog, showAddVendorDialog }) => {
                             setShowAddExperienceDialog={
                               setShowAddExperienceDialog
                             }
+                            setShowViewSelectedExperience={
+                              setShowViewSelectedExperience
+                            }
                           />
                           <ServiceRecord
                             setShowAddServiceDialog={setShowAddServiceDialog}
+                            setShowViewSelectedService={
+                              setShowViewSelectedService
+                            }
                           />
                           <ProviderRecord
                             setShowAddProviderDialog={setShowAddProviderDialog}
+                            setShowViewSelectedProvider={
+                              setShowViewSelectedProvider
+                            }
                           />
                           <div className="row">
                             <div className="col-lg-12">
@@ -200,8 +246,9 @@ const Vendor = ({ setShowAddVendorDialog, showAddVendorDialog }) => {
                                 InputLabelProps={{
                                   shrink: true,
                                 }}
-                                defaultValue={allExperience?.length}
+                                value={allExperience?.length}
                                 disabled
+                                readonly
                               />
                             </div>
                             <div className="col-lg-4">
@@ -213,8 +260,9 @@ const Vendor = ({ setShowAddVendorDialog, showAddVendorDialog }) => {
                                 InputLabelProps={{
                                   shrink: true,
                                 }}
-                                defaultValue={allService?.length}
+                                value={allService?.length}
                                 disabled
+                                readonly
                               />
                             </div>
                             <div className="col-lg-4">
@@ -226,8 +274,9 @@ const Vendor = ({ setShowAddVendorDialog, showAddVendorDialog }) => {
                                 InputLabelProps={{
                                   shrink: true,
                                 }}
-                                defaultValue={allProvider?.length}
+                                value={allProvider?.length}
                                 disabled
+                                readonly
                               />
                             </div>
                           </div>

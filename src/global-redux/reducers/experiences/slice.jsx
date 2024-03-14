@@ -6,6 +6,7 @@ const initialState = {
   loading: false,
   allExperience: [],
   experienceAddSuccess: false,
+  selectedExperience: {},
 };
 
 export const setupGetAllExperience = createAsyncThunk(
@@ -28,6 +29,9 @@ export const slice = createSlice({
     resetExperienceAddSuccess: (state) => {
       state.experienceAddSuccess = false;
     },
+    changeSelectedExperience: (state, action) => {
+      state.selectedExperience = action.payload;
+    },
   },
   // All Experience
   extraReducers: (builder) => {
@@ -47,7 +51,7 @@ export const slice = createSlice({
           toast.error("An Error has occurred");
         }
       });
-      
+
     builder
       .addCase(setupAddExperience.pending, (state) => {
         state.loading = true;
@@ -67,6 +71,7 @@ export const slice = createSlice({
   },
 });
 
-export const { resetExperienceAddSuccess } = slice.actions;
+export const { resetExperienceAddSuccess, changeSelectedExperience } =
+  slice.actions;
 
 export default slice.reducer;

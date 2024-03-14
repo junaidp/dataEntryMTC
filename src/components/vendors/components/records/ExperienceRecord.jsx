@@ -1,9 +1,14 @@
 import React from "react";
 import Button from "@mui/material/Button";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { CircularProgress } from "@mui/material";
+import { changeSelectedExperience } from "../../../../global-redux/reducers/experiences/slice";
 
-const experienceRecord = ({ setShowAddExperienceDialog }) => {
+const experienceRecord = ({
+  setShowAddExperienceDialog,
+  setShowViewSelectedExperience,
+}) => {
+  const dispatch = useDispatch();
   const { allExperience, loading } = useSelector((state) => state.experiences);
   return (
     <div>
@@ -26,14 +31,12 @@ const experienceRecord = ({ setShowAddExperienceDialog }) => {
                 <table className="table table-bordered  table-hover rounded">
                   <thead className="bg-secondary text-white">
                     <tr>
-                      <th>Sr No.</th>
                       <th className="per80">Experience List</th>
                     </tr>
                   </thead>
                   <tbody>
                     {allExperience?.length === 0 ? (
                       <tr>
-                        <td>1</td>
                         <td className="per80">
                           <Button>No Experience Found. Please Add One</Button>
                         </td>
@@ -42,9 +45,17 @@ const experienceRecord = ({ setShowAddExperienceDialog }) => {
                       allExperience?.map((experience, index) => {
                         return (
                           <tr key={index}>
-                            <td>{index + 1}</td>
                             <td className="per80">
-                              <Button>{experience?.title}</Button>
+                              <Button
+                                onClick={() => {
+                                  dispatch(
+                                    changeSelectedExperience(experience)
+                                  );
+                                  setShowViewSelectedExperience(true);
+                                }}
+                              >
+                                {experience?.title}
+                              </Button>
                             </td>
                           </tr>
                         );

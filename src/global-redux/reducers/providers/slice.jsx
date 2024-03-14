@@ -6,6 +6,7 @@ const initialState = {
   loading: false,
   allProvider: [],
   providerAddSuccess: false,
+  selectedProvider: {},
 };
 
 export const setupGetAllProvider = createAsyncThunk(
@@ -27,6 +28,9 @@ export const slice = createSlice({
   reducers: {
     resetProviderAddSuccess: (state) => {
       state.providerAddSuccess = false;
+    },
+    changeSelectedProvider: (state, action) => {
+      state.selectedProvider = action?.payload;
     },
   },
   // All provider
@@ -66,6 +70,7 @@ export const slice = createSlice({
   },
 });
 
-export const { resetProviderAddSuccess } = slice.actions;
+export const { resetProviderAddSuccess, changeSelectedProvider } =
+  slice.actions;
 
 export default slice.reducer;

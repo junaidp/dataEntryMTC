@@ -6,6 +6,7 @@ const initialState = {
   loading: false,
   allService: [],
   serviceAddSuccess: false,
+  selectedService: {},
 };
 
 export const setupGetAllService = createAsyncThunk(
@@ -27,6 +28,9 @@ export const slice = createSlice({
   reducers: {
     resetServiceAddSuccess: (state) => {
       state.serviceAddSuccess = false;
+    },
+    changeSelectedService: (state, action) => {
+      state.selectedService = action?.payload;
     },
   },
   // All service
@@ -66,6 +70,6 @@ export const slice = createSlice({
   },
 });
 
-export const { resetServiceAddSuccess } = slice.actions;
+export const { resetServiceAddSuccess, changeSelectedService } = slice.actions;
 
 export default slice.reducer;

@@ -117,6 +117,10 @@ body {
   font-size: 15px !important;
 }
 
+.flex-end{
+  justify-content: flex-end !important;
+}
+
 .ml-4 {
   margin-left: 10px !important;
 }

@@ -1,9 +1,14 @@
 import React from "react";
 import Button from "@mui/material/Button";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { CircularProgress } from "@mui/material";
+import { changeSelectedProvider } from "../../../../global-redux/reducers/providers/slice";
 
-const providersRecord = ({ setShowAddProviderDialog }) => {
+const providersRecord = ({
+  setShowAddProviderDialog,
+  setShowViewSelectedProvider,
+}) => {
+  const dispatch = useDispatch();
   const { allProvider, loading } = useSelector((state) => state.providers);
   return (
     <div>
@@ -26,14 +31,12 @@ const providersRecord = ({ setShowAddProviderDialog }) => {
                 <table className="table table-bordered  table-hover rounded">
                   <thead className="bg-secondary text-white">
                     <tr>
-                      <th>Sr No.</th>
                       <th className="per80">Provider List</th>
                     </tr>
                   </thead>
                   <tbody>
                     {allProvider?.length === 0 ? (
                       <tr>
-                        <td>1</td>
                         <td className="per80">
                           <Button>No Provider Found. Please Add One</Button>
                         </td>
@@ -42,9 +45,15 @@ const providersRecord = ({ setShowAddProviderDialog }) => {
                       allProvider?.map((provider, index) => {
                         return (
                           <tr key={index}>
-                            <td>{index + 1}</td>
                             <td className="per80">
-                              <Button>{provider?.name}</Button>
+                              <Button
+                                onClick={() => {
+                                  dispatch(changeSelectedProvider(provider));
+                                  setShowViewSelectedProvider(true);
+                                }}
+                              >
+                                {provider?.name}
+                              </Button>
                             </td>
                           </tr>
                         );

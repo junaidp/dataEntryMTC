@@ -13,7 +13,7 @@ const AddExperienceDialog = ({
 }) => {
   const dispatch = useDispatch();
   const [keywords, setKeywords] = React.useState([]);
-  const [keyword, setKeyword] = React.useState([]);
+  const [keyword, setKeyword] = React.useState("");
   const [experienceName, setExperienceName] = React.useState("");
   const [why, setWhy] = React.useState("");
   const [link, setLink] = React.useState("");
@@ -27,6 +27,14 @@ const AddExperienceDialog = ({
   const [durations, setDurations] = React.useState([]);
   const [availableTime, setAvailableTime] = React.useState("");
   const [avialableTimes, setAvailableTimes] = React.useState([]);
+
+  // Input Refs
+  const priceRef = React.useRef(null);
+  const durationRef = React.useRef(null);
+  const availableTimeRef = React.useRef(null);
+  const keywordRef = React.useRef(null);
+  const linkRef = React.useRef(null);
+  const linkExplanationRef = React.useRef(null);
 
   const { experienceAddSuccess, loading } = useSelector(
     (state) => state?.experiences
@@ -126,9 +134,13 @@ const AddExperienceDialog = ({
     });
   }
 
-  function handleAddPrice() {
+  function handleAddPrice(event) {
+    event.preventDefault();
     if (price === "") {
       toast.error("Provide Price");
+    }
+    if (priceRef.current) {
+      priceRef.current.focus();
     }
     if (price !== "") {
       setPrices([...prices, { id: uuidv4(), price }]);
@@ -138,9 +150,13 @@ const AddExperienceDialog = ({
   function handleDeletePrice(id) {
     setPrices((pre) => pre?.filter((singleItem) => singleItem?.id !== id));
   }
-  function handleAddDuration() {
+  function handleAddDuration(event) {
+    event.preventDefault();
     if (duration === "") {
       toast.error("Provide Duration");
+    }
+    if (durationRef.current) {
+      durationRef.current.focus();
     }
     if (duration !== "") {
       setDurations([...durations, { id: uuidv4(), duration }]);
@@ -150,9 +166,13 @@ const AddExperienceDialog = ({
   function handleDeleteDuration(id) {
     setDurations((pre) => pre?.filter((singleItem) => singleItem?.id !== id));
   }
-  function handleAddAvailableTime() {
+  function handleAddAvailableTime(event) {
+    event.preventDefault();
     if (availableTime === "") {
       toast.error("Provide Available Time");
+    }
+    if (availableTimeRef.current) {
+      availableTimeRef.current.focus();
     }
     if (availableTime !== "") {
       setAvailableTimes([
@@ -168,9 +188,13 @@ const AddExperienceDialog = ({
     );
   }
 
-  function handleAddKeyword() {
+  function handleAddKeyword(event) {
+    event.preventDefault();
     if (keyword === "") {
       toast.error("Provide Keyword");
+    }
+    if (keywordRef.current) {
+      keywordRef.current.focus();
     }
     if (keyword !== "") {
       setKeywords([...keywords, { id: uuidv4(), name: keyword }]);
@@ -192,9 +216,16 @@ const AddExperienceDialog = ({
     }
   }
 
-  function handleAddLink() {
+  function handleAddLink(event) {
+    event.preventDefault();
     if (link === "" || linkExplanation === "") {
       toast.error("Provide Both Values");
+    }
+    if (linkRef.current) {
+      linkRef.current.focus();
+    }
+    if (linkExplanationRef.current) {
+      linkExplanationRef.current.focus();
     }
     if (link !== "" && linkExplanation !== "") {
       setLinks([...links, { id: uuidv4(), link, linkExplanation }]);
@@ -268,6 +299,12 @@ const AddExperienceDialog = ({
       handleAddAvailableTime={handleAddAvailableTime}
       handleDeleteAvailableTime={handleDeleteAvailableTime}
       avialableTimes={avialableTimes}
+      priceRef={priceRef}
+      durationRef={durationRef}
+      availableTimeRef={availableTimeRef}
+      keywordRef={keywordRef}
+      linkRef={linkRef}
+      linkExplanationRef={linkExplanationRef}
     />
   );
 };

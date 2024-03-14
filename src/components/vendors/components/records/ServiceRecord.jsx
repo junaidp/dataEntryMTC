@@ -1,9 +1,14 @@
 import React from "react";
 import Button from "@mui/material/Button";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { CircularProgress } from "@mui/material";
+import { changeSelectedService } from "../../../../global-redux/reducers/services/slice";
 
-const serviceRecord = ({ setShowAddServiceDialog }) => {
+const serviceRecord = ({
+  setShowAddServiceDialog,
+  setShowViewSelectedService,
+}) => {
+  const dispatch = useDispatch();
   const { allService, loading } = useSelector((state) => state.services);
   return (
     <div>
@@ -26,14 +31,12 @@ const serviceRecord = ({ setShowAddServiceDialog }) => {
                 <table className="table table-bordered  table-hover rounded">
                   <thead className="bg-secondary text-white">
                     <tr>
-                      <th>Sr No.</th>
                       <th className="per80">Service List</th>
                     </tr>
                   </thead>
                   <tbody>
                     {allService?.length === 0 ? (
                       <tr>
-                        <td>1</td>
                         <td className="per80">
                           <Button>No Service Found. Please Add One</Button>
                         </td>
@@ -42,9 +45,15 @@ const serviceRecord = ({ setShowAddServiceDialog }) => {
                       allService?.map((service, index) => {
                         return (
                           <tr key={index}>
-                            <td>{index + 1}</td>
                             <td className="per80">
-                              <Button>{service?.title}</Button>
+                              <Button
+                                onClick={() => {
+                                  dispatch(changeSelectedService(service));
+                                  setShowViewSelectedService(true);
+                                }}
+                              >
+                                {service?.title}
+                              </Button>
                             </td>
                           </tr>
                         );

@@ -18,6 +18,12 @@ const AddExperienceDialog = ({ setShowAddServiceDialog, currentVendorId }) => {
   const [availableTime, setAvailableTime] = React.useState("");
   const [avialableTimes, setAvailableTimes] = React.useState([]);
 
+  // Input Refs
+  const priceRef = React.useRef(null);
+  const durationRef = React.useRef(null);
+  const availableTimeRef = React.useRef(null);
+  const linkRef = React.useRef(null);
+
   const { serviceAddSuccess, loading } = useSelector(
     (state) => state?.services
   );
@@ -89,9 +95,13 @@ const AddExperienceDialog = ({ setShowAddServiceDialog, currentVendorId }) => {
     formik.resetForm({ values: { ...formik.values, description: value } });
   }
 
-  function handleAddLink() {
+  function handleAddLink(event) {
+    event.preventDefault();
     if (link === "") {
       toast.error("Provide Link");
+    }
+    if (linkRef.current) {
+      linkRef.current.focus();
     }
     if (link !== "") {
       setLinks([...links, { id: uuidv4(), link }]);
@@ -101,9 +111,13 @@ const AddExperienceDialog = ({ setShowAddServiceDialog, currentVendorId }) => {
   function handleDeleteLink(id) {
     setLinks((pre) => pre?.filter((singleItem) => singleItem?.id !== id));
   }
-  function handleAddPrice() {
+  function handleAddPrice(event) {
+    event.preventDefault();
     if (price === "") {
       toast.error("Provide Price");
+    }
+    if (priceRef.current) {
+      priceRef.current.focus();
     }
     if (price !== "") {
       setPrices([...prices, { id: uuidv4(), price }]);
@@ -113,9 +127,13 @@ const AddExperienceDialog = ({ setShowAddServiceDialog, currentVendorId }) => {
   function handleDeletePrice(id) {
     setPrices((pre) => pre?.filter((singleItem) => singleItem?.id !== id));
   }
-  function handleAddDuration() {
+  function handleAddDuration(event) {
+    event.preventDefault();
     if (duration === "") {
       toast.error("Provide Duration");
+    }
+    if (durationRef.current) {
+      durationRef.current.focus();
     }
     if (duration !== "") {
       setDurations([...durations, { id: uuidv4(), duration }]);
@@ -125,9 +143,13 @@ const AddExperienceDialog = ({ setShowAddServiceDialog, currentVendorId }) => {
   function handleDeleteDuration(id) {
     setDurations((pre) => pre?.filter((singleItem) => singleItem?.id !== id));
   }
-  function handleAddAvailableTime() {
+  function handleAddAvailableTime(event) {
+    event.preventDefault();
     if (availableTime === "") {
       toast.error("Provide Available Time");
+    }
+    if (availableTimeRef.current) {
+      availableTimeRef.current.focus();
     }
     if (availableTime !== "") {
       setAvailableTimes([
@@ -181,6 +203,10 @@ const AddExperienceDialog = ({ setShowAddServiceDialog, currentVendorId }) => {
       handleAddAvailableTime={handleAddAvailableTime}
       handleDeleteAvailableTime={handleDeleteAvailableTime}
       avialableTimes={avialableTimes}
+      priceRef={priceRef}
+      durationRef={durationRef}
+      availableTimeRef={availableTimeRef}
+      linkRef={linkRef}
     />
   );
 };

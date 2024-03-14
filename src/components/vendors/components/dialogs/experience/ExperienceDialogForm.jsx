@@ -44,6 +44,12 @@ const ExperienceDialogForm = ({
   avialableTimes,
   handleAddAvailableTime,
   handleDeleteAvailableTime,
+  priceRef,
+  durationRef,
+  availableTimeRef,
+  keywordRef,
+  linkRef,
+  linkExplanationRef,
 }) => {
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -77,181 +83,206 @@ const ExperienceDialogForm = ({
               />
             </div>
           </div>
-
-          <div className="row mt-4">
-            <hr />
+          <div className="row">
             <div>
               <h5>Price:</h5>
-              <div className="row p-0">
-                <div className="col-lg-10 mb-4">
-                  <label className="w-100">Add Price:</label>
-                  <TextField
-                    className="form-control"
-                    value={price}
-                    onChange={(event) => setPrice(event.target.value)}
-                  />
-                </div>
-
-                <div
-                  className={`col-lg-2 text-end float-end align-self-end mb-4`}
-                >
-                  <div
-                    className="btn btn-labeled btn-primary px-3 shadow"
-                    onClick={handleAddPrice}
-                  >
-                    <span className="btn-label me-2">
-                      <i className="fa fa-plus"></i>
-                    </span>
-                    Add Price
+              <div>
+                <form onSubmit={handleAddPrice} className="row p-0">
+                  <div className="col-lg-10 mb-4">
+                    <label className="w-100">Add Price:</label>
+                    <TextField
+                      className="form-control"
+                      value={price}
+                      onChange={(event) => setPrice(event.target.value)}
+                      inputRef={priceRef}
+                    />
                   </div>
-                </div>
+
+                  <div
+                    className={`col-lg-2 text-end float-end align-self-end mb-4`}
+                  >
+                    <button
+                      className="btn btn-labeled btn-primary px-3 shadow"
+                      onClick={handleAddPrice}
+                      type="submit"
+                    >
+                      <span className="btn-label me-2">
+                        <i className="fa fa-plus"></i>
+                      </span>
+                      Add Price
+                    </button>
+                  </div>
+                </form>
               </div>
               <label className="mb-2">List Of Prices:</label>
               <Card className="py-4">
-                {prices.map((key, index) => {
-                  return (
-                    <Chip
-                      label={key?.price}
-                      key={index}
-                      variant="outlined"
-                      className="mx-2 mb-2"
-                      onDelete={() => handleDeletePrice(key?.id)}
-                    />
-                  );
-                })}
+                {prices?.length === 0 ? (
+                  <lable className="mx-2">No Price Provided</lable>
+                ) : (
+                  prices.map((key, index) => {
+                    return (
+                      <Chip
+                        label={key?.price}
+                        key={index}
+                        variant="outlined"
+                        className="mx-2 mb-2"
+                        onDelete={() => handleDeletePrice(key?.id)}
+                      />
+                    );
+                  })
+                )}
               </Card>
             </div>
           </div>
           <div className="row mt-4">
-            <hr />
             <div>
               <h5>Duration:</h5>
-              <div className="row p-0">
-                <div className="col-lg-10 mb-4">
-                  <label className="w-100">Add Duration:</label>
-                  <TextField
-                    className="form-control"
-                    value={duration}
-                    onChange={(event) => setDuration(event.target.value)}
-                  />
-                </div>
-
-                <div
-                  className={`col-lg-2 text-end float-end align-self-end mb-4`}
-                >
-                  <div
-                    className="btn btn-labeled btn-primary px-3 shadow"
-                    onClick={handleAddDuration}
-                  >
-                    <span className="btn-label me-2">
-                      <i className="fa fa-plus"></i>
-                    </span>
-                    Add Duration
+              <div>
+                <form onSubmit={handleAddDuration} className="row p-0">
+                  <div className="col-lg-10 mb-4">
+                    <label className="w-100">Add Duration:</label>
+                    <TextField
+                      className="form-control"
+                      value={duration}
+                      onChange={(event) => setDuration(event.target.value)}
+                      inputRef={durationRef}
+                    />
                   </div>
-                </div>
+                  <div
+                    className={`col-lg-2 text-end float-end align-self-end mb-4`}
+                  >
+                    <button
+                      className="btn btn-labeled btn-primary px-3 shadow"
+                      onClick={handleAddDuration}
+                      type="submit"
+                    >
+                      <span className="btn-label me-2">
+                        <i className="fa fa-plus"></i>
+                      </span>
+                      Add Duration
+                    </button>
+                  </div>
+                </form>
               </div>
               <label className="mb-2">List Of Durations:</label>
               <Card className="py-4">
-                {durations.map((key, index) => {
-                  return (
-                    <Chip
-                      label={key?.duration}
-                      key={index}
-                      variant="outlined"
-                      className="mx-2 mb-2"
-                      onDelete={() => handleDeleteDuration(key?.id)}
-                    />
-                  );
-                })}
+                {durations?.length === 0 ? (
+                  <lable className="mx-2">No Duration Provided</lable>
+                ) : (
+                  durations.map((key, index) => {
+                    return (
+                      <Chip
+                        label={key?.duration}
+                        key={index}
+                        variant="outlined"
+                        className="mx-2 mb-2"
+                        onDelete={() => handleDeleteDuration(key?.id)}
+                      />
+                    );
+                  })
+                )}
               </Card>
             </div>
           </div>
           <div className="row mt-4">
-            <hr />
             <div>
               <h5>Available Time:</h5>
-              <div className="row p-0">
+              <div>
+                <form onSubmit={handleAddAvailableTime} className="row p-0">
+                  <div className="col-lg-10 mb-4">
+                    <label className="w-100">Add Available Time:</label>
+                    <TextField
+                      className="form-control"
+                      value={availableTime}
+                      onChange={(event) => setAvailableTime(event.target.value)}
+                      inputRef={availableTimeRef}
+                    />
+                  </div>
+
+                  <div
+                    className={`col-lg-2 text-end float-end align-self-end mb-4`}
+                  >
+                    <button
+                      className="btn btn-labeled btn-primary px-3 shadow"
+                      onClick={handleAddAvailableTime}
+                      type="submit"
+                    >
+                      <span className="btn-label me-2">
+                        <i className="fa fa-plus"></i>
+                      </span>
+                      Add Time
+                    </button>
+                  </div>
+                </form>
+              </div>
+              <label className="mb-2">List Of Available Times:</label>
+              <Card className="py-4">
+                {avialableTimes?.length === 0 ? (
+                  <lable className="mx-2">No Time Provided</lable>
+                ) : (
+                  avialableTimes.map((key, index) => {
+                    return (
+                      <Chip
+                        label={key?.time}
+                        key={index}
+                        variant="outlined"
+                        className="mx-2 mb-2"
+                        onDelete={() => handleDeleteAvailableTime(key?.id)}
+                      />
+                    );
+                  })
+                )}
+              </Card>
+            </div>
+          </div>
+          <div className="mb-4 mt-4">
+            <h5>Keywords:</h5>
+            <div>
+              <form className="row p-0" onSubmit={handleAddKeyword}>
                 <div className="col-lg-10 mb-4">
-                  <label className="w-100">Add Available Time:</label>
+                  <label className="w-100">Add Keyword:</label>
                   <TextField
                     className="form-control"
-                    value={availableTime}
-                    onChange={(event) => setAvailableTime(event.target.value)}
+                    value={keyword}
+                    onChange={(event) => setKeyword(event.target.value)}
+                    inputRef={keywordRef}
                   />
                 </div>
-
                 <div
                   className={`col-lg-2 text-end float-end align-self-end mb-4`}
                 >
-                  <div
+                  <button
                     className="btn btn-labeled btn-primary px-3 shadow"
-                    onClick={handleAddAvailableTime}
+                    type="submit"
+                    onClick={handleAddKeyword}
                   >
                     <span className="btn-label me-2">
                       <i className="fa fa-plus"></i>
                     </span>
-                    Add Available Time
-                  </div>
+                    Add Keyword
+                  </button>
                 </div>
-              </div>
-              <label className="mb-2">List Of Available Times:</label>
-              <Card className="py-4">
-                {avialableTimes.map((key, index) => {
-                  return (
-                    <Chip
-                      label={key?.time}
-                      key={index}
-                      variant="outlined"
-                      className="mx-2 mb-2"
-                      onDelete={() => handleDeleteAvailableTime(key?.id)}
-                    />
-                  );
-                })}
-              </Card>
-            </div>
-          </div>
-          <hr />
-          <div className="mb-4">
-            <h5>Keywords:</h5>
-            <div className="row p-0">
-              <div className="col-lg-10 mb-4">
-                <label className="w-100">Add Keyword:</label>
-                <TextField
-                  className="form-control"
-                  value={keyword}
-                  onChange={(event) => setKeyword(event.target.value)}
-                />
-              </div>
-              <div
-                className={`col-lg-2 text-end float-end align-self-end mb-4`}
-              >
-                <div
-                  className="btn btn-labeled btn-primary px-3 shadow"
-                  onClick={handleAddKeyword}
-                >
-                  <span className="btn-label me-2">
-                    <i className="fa fa-plus"></i>
-                  </span>
-                  Add Keyword
-                </div>
-              </div>
+              </form>
             </div>
             <label className="mb-2">List Of Keywords:</label>
             <Card className="py-4">
-              {keywords.map((key, index) => {
-                return (
-                  <Chip
-                    label={key?.name}
-                    key={index}
-                    variant="outlined"
-                    className="mx-2"
-                    onDelete={() => handleDeleteKeyword(key?.id)}
-                  />
-                );
-              })}
+              {keywords?.length === 0 ? (
+                <lable className="mx-2">No Keyword Provided</lable>
+              ) : (
+                keywords.map((key, index) => {
+                  return (
+                    <Chip
+                      label={key?.name}
+                      key={index}
+                      variant="outlined"
+                      className="mx-2"
+                      onDelete={() => handleDeleteKeyword(key?.id)}
+                    />
+                  );
+                })
+              )}
             </Card>
           </div>
-          <hr />
           <div className="mb-4">
             <h5>Link With Other Experiences:</h5>
             <div className="row p-0">
@@ -302,53 +333,62 @@ const ExperienceDialogForm = ({
               })}
             </Card>
           </div>
-          <hr />
           <div className="mb-4">
             <h5>Links:</h5>
-            <div className="row p-0">
-              <div className="col-lg-5 mb-4">
-                <label className="w-100">Add Link:</label>
-                <TextField
-                  className="form-control"
-                  value={link}
-                  onChange={(event) => setLink(event.target.value)}
-                />
-              </div>
-              <div className="col-lg-5 mb-4">
-                <label className="w-100">Add Link Explanation:</label>
-                <TextField
-                  className="form-control"
-                  value={linkExplanation}
-                  onChange={(event) => setLinkExplanation(event.target.value)}
-                />
-              </div>
-              <div
-                className={`col-lg-2 text-end float-end align-self-end mb-4`}
-              >
-                <div
-                  className="btn btn-labeled btn-primary px-3 shadow"
-                  onClick={handleAddLink}
-                >
-                  <span className="btn-label me-2">
-                    <i className="fa fa-plus"></i>
-                  </span>
-                  Add Link
+            <div>
+              <form onSubmit={handleAddLink} className="row p-0">
+                <div className="col-lg-5 mb-4">
+                  <label className="w-100">Add Link:</label>
+                  <TextField
+                    className="form-control"
+                    value={link}
+                    onChange={(event) => setLink(event.target.value)}
+                    inputRef={linkRef}
+                  />
                 </div>
-              </div>
+                <div className="col-lg-5 mb-4">
+                  <label className="w-100">Add Link Explanation:</label>
+                  <TextField
+                    className="form-control"
+                    value={linkExplanation}
+                    onChange={(event) => setLinkExplanation(event.target.value)}
+                    // inputRef={linkExplanationRef}
+                  />
+                </div>
+
+                <div
+                  className={`col-lg-2 text-end float-end align-self-end mb-4`}
+                >
+                  <button
+                    className="btn btn-labeled btn-primary px-3 shadow"
+                    onClick={handleAddLink}
+                    type="submit"
+                  >
+                    <span className="btn-label me-2">
+                      <i className="fa fa-plus"></i>
+                    </span>
+                    Add Link
+                  </button>
+                </div>
+              </form>
             </div>
             <label className="mb-2">List Of Links:</label>
             <Card className="py-4">
-              {links.map((key, index) => {
-                return (
-                  <Chip
-                    label={key?.link}
-                    key={index}
-                    variant="outlined"
-                    className="mx-2"
-                    onDelete={() => handleDeleteLink(key?.id)}
-                  />
-                );
-              })}
+              {links?.length === 0 ? (
+                <lable className="mx-2">No Link Provided</lable>
+              ) : (
+                links.map((key, index) => {
+                  return (
+                    <Chip
+                      label={key?.link}
+                      key={index}
+                      variant="outlined"
+                      className="mx-2"
+                      onDelete={() => handleDeleteLink(key?.id)}
+                    />
+                  );
+                })
+              )}
             </Card>
           </div>
 
@@ -383,18 +423,18 @@ const ExperienceDialogForm = ({
           </div>
         </div>
 
-        <div className="row py-3">
-          <div className="col-lg-6 text-end">
+        <div className="flex mb-2 flex-end">
+          <div>
             <button
               type="submit"
               className={`btn btn-primary float-start ${
                 loading && "disabled"
               } `}
             >
-              {loading ? "Loading..." : "Add"}
+              {loading ? "Loading..." : "Save"}
             </button>
           </div>
-          <div className="col-lg-6 text-end">
+          <div className="mx-4">
             <button
               type="button"
               className="btn btn-danger float-end"
