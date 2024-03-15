@@ -1,5 +1,4 @@
 import React from "react";
-import TextField from "@mui/material/TextField";
 import RichTextEditor from "../common/RichText";
 
 const VendorRecord = ({ vendor }) => {
@@ -7,96 +6,44 @@ const VendorRecord = ({ vendor }) => {
     <div>
       <div className="px-4 py-4">
         <div>
-          <div className="col-lg-8 mb-4">
-            <TextField
-              id="name"
-              name="name"
-              label="Vendor’s name"
-              variant="outlined"
-              className="form-control"
-              disabled
-              defaultValue={vendor?.name || "No Name Provided"}
-            />
+          <div className="col-lg-12 mb-4">
+            <label>Vendor’s name</label>
+            <p>{vendor?.name || "No Name Provided"}</p>
           </div>
 
           <div className="row">
             <div className="col-lg-6 mb-4">
-              <TextField
-                id="address"
-                name="address"
-                label="Vendor’s address"
-                variant="outlined"
-                className="form-control"
-                disabled
-                defaultValue={vendor?.address || "No Address Provided"}
-              />
+              <label>Vendor’s address</label>
+              <p>{vendor?.address || "No Address Provided"}</p>
             </div>
             <div className="col-lg-6 mb-4">
-              <TextField
-                id="pointOfContact"
-                name="pointOfContact"
-                label="Point of Contact"
-                variant="outlined"
-                className="form-control"
-                disabled
-                defaultValue={
-                  vendor?.pointOfContact || "No Point Of Contact Provided"
-                }
-              />
+              <label>Point of Contact</label>
+              <p>{vendor?.pointOfContact || "No Point Of Contact Provided"}</p>
             </div>
           </div>
 
           <div className="row">
             <div className="col-lg-6 mb-4">
-              <TextField
-                id="website"
-                name="website"
-                label="Website"
-                variant="outlined"
-                className="form-control"
-                disabled
-                defaultValue={vendor?.website || "No Website Provided"}
-              />
+              <label>Website</label>
+              <p>{vendor?.website || "No Website Provided"}</p>
             </div>
             <div className="col-lg-6 mb-4">
-              <TextField
-                id="email"
-                name="email"
-                label="Email"
-                variant="outlined"
-                className="form-control"
-                disabled
-                defaultValue={vendor?.email || "No Email Provided"}
-              />
+              <label>Email</label>
+              <p>{vendor?.email || "No Email Provided"}</p>
             </div>
           </div>
           <div className="row">
             <div className="col-lg-6 mb-4">
-              <TextField
-                id="pointOfContact"
-                name="pointOfContact"
-                label="Regions Covered"
-                variant="outlined"
-                className="form-control"
-                disabled
-                defaultValue={
-                  vendor?.regionsCovered
-                    ? vendor?.regionsCovered
-                    : "No Regions Provided"
-                }
-              />
+              <label>Regions Covered</label>
+              <p>
+                {vendor?.regionsCovered
+                  ? vendor?.regionsCovered
+                  : "No Regions Provided"}
+              </p>
             </div>
-
             <div className="col-lg-6 mb-4">
-              <TextField
-                id="pointOfContact"
-                name="pointOfContact"
-                label="Manage Venue"
-                variant="outlined"
-                className="form-control"
-                disabled
-                defaultValue={vendor?.manageVenue === true ? "true" : "false"}
-              />
+              <label>Manage Venue</label>
+              <p>{vendor?.manageVenue === true ? "true" : "false"}</p>
             </div>
           </div>
 

@@ -12,15 +12,13 @@ const AddExperienceDialog = ({
   currentVendorId,
 }) => {
   const dispatch = useDispatch();
+  const { allExperience } = useSelector((state) => state.experiences);
+  const [experience, setExperiences] = React.useState([]);
   const [keywords, setKeywords] = React.useState([]);
   const [keyword, setKeyword] = React.useState("");
-  const [experienceName, setExperienceName] = React.useState("");
-  const [why, setWhy] = React.useState("");
   const [link, setLink] = React.useState("");
   const [linkExplanation, setLinkExplanation] = React.useState("");
   const [links, setLinks] = React.useState([]);
-  const [linksWithOtherExperinces, setLinksWithOtherExperiences] =
-    React.useState([]);
   const [price, setPrice] = React.useState("");
   const [prices, setPrices] = React.useState([]);
   const [duration, setDuration] = React.useState("");
@@ -34,7 +32,6 @@ const AddExperienceDialog = ({
   const availableTimeRef = React.useRef(null);
   const keywordRef = React.useRef(null);
   const linkRef = React.useRef(null);
-  const linkExplanationRef = React.useRef(null);
 
   const { experienceAddSuccess, loading } = useSelector(
     (state) => state?.experiences
@@ -63,9 +60,6 @@ const AddExperienceDialog = ({
         if (keywords.length === 0) {
           toast.error("Provide keywords");
         }
-        if (linksWithOtherExperinces.length === 0) {
-          toast.error("Provide Link With Other Experience");
-        }
         if (links?.length === 0) {
           toast.error("Provide Links");
         }
@@ -80,12 +74,18 @@ const AddExperienceDialog = ({
         }
         if (
           keywords.length !== 0 &&
-          linksWithOtherExperinces?.length !== 0 &&
           links?.length !== 0 &&
           prices?.length !== 0 &&
           durations?.length !== 0 &&
           avialableTimes?.length !== 0
         ) {
+          const filteredLinkWithOtherExperiences = allExperience.filter(
+            (item) => experience.includes(item?.title)
+          );
+          let allLinksWithOtherExperiences =
+            filteredLinkWithOtherExperiences.reduce((acc, item) => {
+              return acc.concat(item?.linkWithOtherExperience);
+            }, []);
           dispatch(
             setupAddExperience([
               {
@@ -97,14 +97,7 @@ const AddExperienceDialog = ({
                     explanation: item.linkExplanation,
                   };
                 }),
-                linkWithOtherExperience: linksWithOtherExperinces?.map(
-                  (item) => {
-                    return {
-                      experienceName: item?.experienceName,
-                      why: item.why,
-                    };
-                  }
-                ),
+                linkWithOtherExperience: allLinksWithOtherExperiences || [],
                 storyLineKeywords: keywords.map((item) => {
                   return item?.name;
                 }),
@@ -202,20 +195,6 @@ const AddExperienceDialog = ({
     }
   }
 
-  function handleAddLinkWithOtherExperience() {
-    if (experienceName === "" || why === "") {
-      toast.error("Provide Both Values");
-    }
-    if (experienceName !== "" && why !== "") {
-      setLinksWithOtherExperiences([
-        ...linksWithOtherExperinces,
-        { id: uuidv4(), experienceName, why },
-      ]);
-      setExperienceName("");
-      setWhy("");
-    }
-  }
-
   function handleAddLink(event) {
     event.preventDefault();
     if (link === "" || linkExplanation === "") {
@@ -223,9 +202,6 @@ const AddExperienceDialog = ({
     }
     if (linkRef.current) {
       linkRef.current.focus();
-    }
-    if (linkExplanationRef.current) {
-      linkExplanationRef.current.focus();
     }
     if (link !== "" && linkExplanation !== "") {
       setLinks([...links, { id: uuidv4(), link, linkExplanation }]);
@@ -237,11 +213,7 @@ const AddExperienceDialog = ({
   function handleDeleteKeyword(id) {
     setKeywords((pre) => pre?.filter((singleItem) => singleItem?.id !== id));
   }
-  function handleDeleteLinkWithOtherExperience(id) {
-    setLinksWithOtherExperiences((pre) =>
-      pre?.filter((singleItem) => singleItem?.id !== id)
-    );
-  }
+
   function handleDeleteLink(id) {
     setLinks((pre) => pre?.filter((singleItem) => singleItem?.id !== id));
   }
@@ -265,18 +237,11 @@ const AddExperienceDialog = ({
       setKeyword={setKeyword}
       handleAddKeyword={handleAddKeyword}
       handleDeleteKeyword={handleDeleteKeyword}
-      experienceName={experienceName}
-      setExperienceName={setExperienceName}
-      why={why}
-      setWhy={setWhy}
-      handleAddLinkWithOtherExperience={handleAddLinkWithOtherExperience}
       handleClose={handleClose}
       loading={loading}
       handleChangeDescription={handleChangeDescription}
       handleChangeTermsAndConditions={handleChangeTermsAndConditions}
       keywords={keywords}
-      linksWithOtherExperinces={linksWithOtherExperinces}
-      handleDeleteLinkWithOtherExperience={handleDeleteLinkWithOtherExperience}
       link={link}
       setLink={setLink}
       linkExplanation={linkExplanation}
@@ -304,7 +269,9 @@ const AddExperienceDialog = ({
       availableTimeRef={availableTimeRef}
       keywordRef={keywordRef}
       linkRef={linkRef}
-      linkExplanationRef={linkExplanationRef}
+      setExperiences={setExperiences}
+      experience={experience}
+      allExperience={allExperience}
     />
   );
 };

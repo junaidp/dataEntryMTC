@@ -73,8 +73,10 @@ export default function BasicTabs() {
           aria-label="basic tabs example"
         >
           <Tab label="Vendor" {...a11yProps(0)} />
-          <Tab label="Experience" {...a11yProps(1)} />
           <Tab label="Providers" {...a11yProps(2)} />
+          <Tab label="Experience" {...a11yProps(1)} />
+          <Tab label="Services" {...a11yProps(1)} />
+          <Tab label="Options" {...a11yProps(1)} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
@@ -107,6 +109,12 @@ export default function BasicTabs() {
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
         <Providers />
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={3}>
+        <p>Here Comes Service Data</p>
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={4}>
+        <p>Here Comes Option Data</p>
       </CustomTabPanel>
     </Box>
   );

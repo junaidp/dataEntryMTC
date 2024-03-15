@@ -117,7 +117,7 @@ const ViewExperienceDialog = ({ setShowViewSelectedExperience }) => {
                     label={key}
                     key={index}
                     variant="outlined"
-                    className="mx-2"
+                    className="mx-2 mb-2"
                   />
                 );
               })
@@ -134,7 +134,7 @@ const ViewExperienceDialog = ({ setShowViewSelectedExperience }) => {
                     label={key?.experienceName ? key?.experienceName : key?.why}
                     key={index}
                     variant="outlined"
-                    className="mx-2"
+                    className="mx-2 mb-2"
                   />
                 );
               })}
@@ -153,7 +153,7 @@ const ViewExperienceDialog = ({ setShowViewSelectedExperience }) => {
                     label={key?.link}
                     key={index}
                     variant="outlined"
-                    className="mx-2"
+                    className="mx-2 mb-2"
                   />
                 );
               })

@@ -3,6 +3,7 @@ import TextField from "@mui/material/TextField";
 import RichTextEditor from "../../../../common/RichText";
 import Chip from "@mui/material/Chip";
 import { Card } from "@mui/material";
+import MultipleSelect from "./MultiSelect";
 
 const ExperienceDialogForm = ({
   formik,
@@ -10,18 +11,11 @@ const ExperienceDialogForm = ({
   setKeyword,
   handleAddKeyword,
   handleDeleteKeyword,
-  experienceName,
-  setExperienceName,
-  why,
-  setWhy,
-  handleAddLinkWithOtherExperience,
   handleClose,
   loading,
   handleChangeDescription,
   handleChangeTermsAndConditions,
   keywords,
-  linksWithOtherExperinces,
-  handleDeleteLinkWithOtherExperience,
   link,
   setLink,
   linkExplanation,
@@ -49,7 +43,9 @@ const ExperienceDialogForm = ({
   availableTimeRef,
   keywordRef,
   linkRef,
-  linkExplanationRef,
+  setExperiences,
+  experience,
+  allExperience,
 }) => {
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -97,7 +93,6 @@ const ExperienceDialogForm = ({
                       inputRef={priceRef}
                     />
                   </div>
-
                   <div
                     className={`col-lg-2 text-end float-end align-self-end mb-4`}
                   >
@@ -275,7 +270,7 @@ const ExperienceDialogForm = ({
                       label={key?.name}
                       key={index}
                       variant="outlined"
-                      className="mx-2"
+                      className="mx-2 mb-2"
                       onDelete={() => handleDeleteKeyword(key?.id)}
                     />
                   );
@@ -283,55 +278,14 @@ const ExperienceDialogForm = ({
               )}
             </Card>
           </div>
-          <div className="mb-4">
-            <h5>Link With Other Experiences:</h5>
-            <div className="row p-0">
-              <div className="col-lg-5 mb-4">
-                <label className="w-100">Add Experience Name:</label>
-                <TextField
-                  className="form-control"
-                  value={experienceName}
-                  onChange={(event) => setExperienceName(event.target.value)}
-                />
-              </div>
-              <div className="col-lg-5 mb-4">
-                <label className="w-100">Add Reason:</label>
-                <TextField
-                  className="form-control"
-                  value={why}
-                  onChange={(event) => setWhy(event.target.value)}
-                />
-              </div>
-              <div
-                className={`col-lg-2 text-end float-end align-self-end mb-4`}
-              >
-                <div
-                  className="btn btn-labeled btn-primary px-3 shadow"
-                  onClick={handleAddLinkWithOtherExperience}
-                >
-                  <span className="btn-label me-2">
-                    <i className="fa fa-plus"></i>
-                  </span>
-                  Add Link With Other Experience
-                </div>
-              </div>
+          <div className="row mb-4">
+            <div className="col-lg-12">
+              <MultipleSelect
+                setExperiences={setExperiences}
+                experience={experience}
+                names={allExperience?.map((all) => all?.title)}
+              />
             </div>
-            <label className="mb-2">List Of Link With Other Experiences:</label>
-            <Card className="py-4">
-              {linksWithOtherExperinces.map((key, index) => {
-                return (
-                  <Chip
-                    label={key?.experienceName}
-                    key={index}
-                    variant="outlined"
-                    className="mx-2"
-                    onDelete={() =>
-                      handleDeleteLinkWithOtherExperience(key?.id)
-                    }
-                  />
-                );
-              })}
-            </Card>
           </div>
           <div className="mb-4">
             <h5>Links:</h5>
@@ -352,7 +306,6 @@ const ExperienceDialogForm = ({
                     className="form-control"
                     value={linkExplanation}
                     onChange={(event) => setLinkExplanation(event.target.value)}
-                    // inputRef={linkExplanationRef}
                   />
                 </div>
 
@@ -383,7 +336,7 @@ const ExperienceDialogForm = ({
                       label={key?.link}
                       key={index}
                       variant="outlined"
-                      className="mx-2"
+                      className="mx-2 mb-2"
                       onDelete={() => handleDeleteLink(key?.id)}
                     />
                   );

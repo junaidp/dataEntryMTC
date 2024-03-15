@@ -28,6 +28,7 @@ import AddProviderDialog from "./components/dialogs/provider/AddProviderDialog";
 import ViewExperieceDialog from "./components/view-dialogs/view-experience";
 import ViewProviderDialog from "./components/view-dialogs/view-provider";
 import ViewServiceDialog from "./components/view-dialogs/view-service";
+import EditVendorDialog from "./components/edit-dialogs/vendor/index";
 
 const Vendor = ({ setShowAddVendorDialog, showAddVendorDialog }) => {
   const { allVendors, loading, vendorAddSuccess } = useSelector(
@@ -58,6 +59,7 @@ const Vendor = ({ setShowAddVendorDialog, showAddVendorDialog }) => {
     React.useState(false);
   const [showViewSelectedProvider, setShowViewSelectedProvider] =
     React.useState(false);
+  const [showEditVendorDialog, setShowEditVendorDialog] = React.useState(false);
   const handleChangeVendorPage = (_, value) => {
     setVendorPage(value);
   };
@@ -106,6 +108,16 @@ const Vendor = ({ setShowAddVendorDialog, showAddVendorDialog }) => {
         <div className="modal-objective">
           <div className="model-wrap">
             <AddVendorDialog setShowAddVendorDialog={setShowAddVendorDialog} />
+          </div>
+        </div>
+      )}
+      {showEditVendorDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <EditVendorDialog
+              setShowEditVendorDialog={setShowEditVendorDialog}
+              currentVendorId={currentVendorId}
+            />
           </div>
         </div>
       )}
@@ -198,6 +210,25 @@ const Vendor = ({ setShowAddVendorDialog, showAddVendorDialog }) => {
                   >
                     <div className="accordion-body">
                       <div className="container">
+                        <div className="float-end mb-2">
+                          <div
+                            className={`btn btn-labeled btn-primary px-3 shadow  my-4 `}
+                            onClick={() => setShowEditVendorDialog(true)}
+                          >
+                            <span className="btn-label me-2">
+                              <i className="fa fa-check-circle f-18"></i>
+                            </span>
+                            Edit
+                          </div>
+                          <div
+                            className={`btn btn-labeled btn-danger mx-4 px-3 shadow  my-4 `}
+                          >
+                            <span className="btn-label me-2">
+                              <i className="fa fa-check-circle f-18"></i>
+                            </span>
+                            Delete
+                          </div>
+                        </div>
                         <VendorRecord
                           key={index}
                           vendor={vendor}
