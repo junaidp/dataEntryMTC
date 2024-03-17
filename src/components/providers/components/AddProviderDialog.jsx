@@ -4,21 +4,18 @@ import * as Yup from "yup";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
-import RichTextEditor from "../../../../common/RichText";
-import {
-  setupAddVendor,
-  resetVendorAddSuccess,
-} from "../../../../../global-redux/reducers/vendor/slice";
+import RichTextEditor from "../../../components/common/RichText";
+import { setupAddProvider } from "../../../global-redux/reducers/providers/slice";
 import { useSelector, useDispatch } from "react-redux";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
-import { toast } from "react-toastify";
 
-const EditVendorDialog = ({ setShowEditVendorDialog, currentVendorId }) => {
+const AddProviderDialog = ({ setShowAddProviderDialog }) => {
   const dispatch = useDispatch();
-  const { vendorAddSuccess, loading, allVendors } = useSelector(
-    (state) => state?.vendors
+  const { providerAddSuccess, loading } = useSelector(
+    (state) => state?.providers
   );
+  const { allVendors } = useSelector((state) => state.vendors);
   let initialValues = {
     name: "",
     address: "",
@@ -28,10 +25,11 @@ const EditVendorDialog = ({ setShowEditVendorDialog, currentVendorId }) => {
     regionsCovered: "",
     manageVenue: "",
     description: "",
+    vendorId: "",
   };
   const validationSchema = Yup.object({
-    name: Yup.string().required("Vendor's name is required"),
-    address: Yup.string().required("Vendor's address is required"),
+    name: Yup.string().required("Provider name is required"),
+    address: Yup.string().required("Provider address is required"),
     pointOfContact: Yup.string().required("Point of contact is required"),
     website: Yup.string().required("Website of contact is required"),
     email: Yup.string()
@@ -42,6 +40,7 @@ const EditVendorDialog = ({ setShowEditVendorDialog, currentVendorId }) => {
       "Please select Yes or No for managing venue"
     ),
     description: Yup.string().required("Please provide description"),
+    vendorId: Yup.string().required("Vendor is required"),
   });
 
   // Formik hook
@@ -49,11 +48,15 @@ const EditVendorDialog = ({ setShowEditVendorDialog, currentVendorId }) => {
     initialValues: initialValues,
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      let currentVendor = allVendors?.find(
-        (singleVendor) => singleVendor?.id === currentVendorId
-      );
       if (!loading) {
-        dispatch(setupAddVendor({ ...values, id: currentVendor?.id }));
+        dispatch(
+          setupAddProvider([
+            {
+              ...values,
+              experienceId: values?.vendorId,
+            },
+          ])
+        );
       }
     },
   });
@@ -64,47 +67,26 @@ const EditVendorDialog = ({ setShowEditVendorDialog, currentVendorId }) => {
 
   function handleClose() {
     formik.resetForm({ values: initialValues });
-    setShowEditVendorDialog(false);
+    setShowAddProviderDialog(false);
   }
 
   React.useEffect(() => {
-    if (vendorAddSuccess) {
-      toast.success("Vendor Updated Successfully");
+    if (providerAddSuccess) {
       formik.resetForm({ values: initialValues });
-      setShowEditVendorDialog(false);
-      dispatch(resetVendorAddSuccess());
+      setShowAddProviderDialog(false);
     }
-  }, [vendorAddSuccess]);
-
-  React.useEffect(() => {
-    let selectedVendor = allVendors?.find(
-      (singleVendor) => singleVendor?.id === currentVendorId
-    );
-    formik.resetForm({
-      values: {
-        ...formik.values,
-        name: selectedVendor?.name,
-        address: selectedVendor?.address,
-        pointOfContact: selectedVendor?.pointOfContact,
-        website: selectedVendor?.website,
-        email: selectedVendor?.email,
-        regionsCovered: selectedVendor?.regionsCovered,
-        manageVenue: selectedVendor?.manageVenue,
-        description: selectedVendor?.description,
-      },
-    });
-  }, [currentVendorId]);
+  }, [providerAddSuccess]);
 
   return (
     <form onSubmit={formik.handleSubmit}>
       <div className="px-4 py-4">
-        <h2 className="pb-4 heading">Edit Vendor</h2>
+        <h2 className="pb-4 heading">Add Provider</h2>
         <div>
           <div className="col-lg-8 mb-4">
             <TextField
               id="name"
               name="name"
-              label="Vendor’s name"
+              label="Provider name"
               variant="outlined"
               className="form-control"
               {...formik.getFieldProps("name")}
@@ -118,7 +100,7 @@ const EditVendorDialog = ({ setShowEditVendorDialog, currentVendorId }) => {
               <TextField
                 id="address"
                 name="address"
-                label="Vendor’s address"
+                label="Provider address"
                 variant="outlined"
                 className="form-control"
                 {...formik.getFieldProps("address")}
@@ -142,6 +124,37 @@ const EditVendorDialog = ({ setShowEditVendorDialog, currentVendorId }) => {
                   formik.touched.pointOfContact && formik.errors.pointOfContact
                 }
               />
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-lg-12 mb-4">
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">Vendor</InputLabel>
+                <Select
+                  id="regionsCovered"
+                  name="regionsCovered"
+                  className="form-control w-100 "
+                  label="Regions Covered"
+                  defaultValue=""
+                  {...formik.getFieldProps("vendorId")}
+                  error={
+                    formik.touched.vendorId && Boolean(formik.errors.vendorId)
+                  }
+                  helperText={formik.touched.vendorId && formik.errors.vendorId}
+                >
+                  <MenuItem value="">Select Vndor</MenuItem>
+                  {allVendors?.map((item, index) => {
+                    return (
+                      <MenuItem value={item?.id} key={index}>
+                        {item?.name}
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+              </FormControl>
+              {formik.touched.vendorId && formik.errors.vendorId && (
+                <div className="error">{formik.errors.vendorId}</div>
+              )}
             </div>
           </div>
 
@@ -171,7 +184,6 @@ const EditVendorDialog = ({ setShowEditVendorDialog, currentVendorId }) => {
               />
             </div>
           </div>
-
           <div className="row">
             <div className="col-lg-6 mb-4">
               <FormControl fullWidth>
@@ -207,28 +219,26 @@ const EditVendorDialog = ({ setShowEditVendorDialog, currentVendorId }) => {
                 )}
             </div>
             <div className="col-lg-6 mb-4">
-              <div>
-                <div className="form-check form-switch ">
-                  <label className="mx-2">Manage Venue</label>
-                  <input
-                    className="form-check-input h-20 w-80"
-                    {...formik.getFieldProps("manageVenue")}
-                    type="checkbox"
-                    role="switch"
-                    id="flexSwitchCheckDefault"
-                    checked={Boolean(formik.values.manageVenue)}
-                  />
-                </div>
-
-                {formik.touched.manageVenue && formik.errors.manageVenue && (
-                  <div className="error">{formik.errors.manageVenue}</div>
-                )}
+              <div className="form-check form-switch ">
+                <label className="mx-2">Manage Venue</label>
+                <input
+                  className="form-check-input h-20 w-80"
+                  {...formik.getFieldProps("manageVenue")}
+                  type="checkbox"
+                  role="switch"
+                  id="flexSwitchCheckDefault"
+                />
               </div>
+
+              {formik.touched.manageVenue && formik.errors.manageVenue && (
+                <div className="error">{formik.errors.manageVenue}</div>
+              )}
             </div>
           </div>
 
           <div className="row mb-4">
             <div className="col-lg-12">
+              <label>Description</label>
               <RichTextEditor
                 placeholder="Vendor’ Description"
                 initialValue={formik.values.description}
@@ -267,4 +277,4 @@ const EditVendorDialog = ({ setShowEditVendorDialog, currentVendorId }) => {
   );
 };
 
-export default EditVendorDialog;
+export default AddProviderDialog;

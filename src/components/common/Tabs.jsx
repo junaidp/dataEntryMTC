@@ -6,7 +6,9 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Vendors from "../vendors/Vendors";
 import Experience from "../experiences/Experiences";
-import Providers from "../variations/Variations";
+// import Varations from "../variations/Variations";
+import Providers from "../../components/providers/Provider";
+import Services from "../services/Services";
 import Button from "@mui/material/Button";
 import { setupSearchVendorByQuery } from "../../global-redux/reducers/vendor/slice";
 import { useDispatch, useSelector } from "react-redux";
@@ -47,11 +49,12 @@ function a11yProps(index) {
 
 export default function BasicTabs() {
   const dispatch = useDispatch();
+  const { vendorAddSuccess } = useSelector((state) => state.vendors);
   const [value, setValue] = React.useState(0);
-
   const handleChange = (_, newValue) => {
     setValue(newValue);
   };
+  // For Vendor
   const [searchValue, setSearchValue] = React.useState("");
   const [debouncedSearchValue] = useDebounce(searchValue, 1000);
   const [showAddVendorDialog, setShowAddVendorDialog] = React.useState(false);
@@ -64,6 +67,68 @@ export default function BasicTabs() {
     dispatch(setupSearchVendorByQuery(debouncedSearchValue));
   }, [debouncedSearchValue]);
 
+  React.useEffect(() => {
+    if (vendorAddSuccess) {
+      setSearchValue("");
+    }
+  }, [vendorAddSuccess]);
+  // For Experience
+  const [experienceSearchValue, setExperienceSearchValue] = React.useState("");
+  const [debouncedExperienceSearchValue] = useDebounce(searchValue, 1000);
+  const [showAddExperienceDialog, setShowAddExperienceDialog] =
+    React.useState(false);
+
+  const handleExperienceInputChange = (event) => {
+    setExperienceSearchValue(event.target.value);
+  };
+
+  // React.useEffect(() => {
+  //   dispatch(setupSearchVendorByQuery(debouncedSearchValue));
+  // }, [debouncedExperienceSearchValue]);
+
+  // React.useEffect(() => {
+  //   if (vendorAddSuccess) {
+  //     setSearchValue("");
+  //   }
+  // }, [vendorAddSuccess]);
+  // For Service
+  const [serviceSearchValue, setServiceSearchValue] = React.useState("");
+  const [debouncedServiceSearchValue] = useDebounce(searchValue, 1000);
+  const [showAddServiceDialog, setShowAddServiceDialog] = React.useState(false);
+
+  const handleServiceInputChange = (event) => {
+    setServiceSearchValue(event.target.value);
+  };
+
+  // React.useEffect(() => {
+  //   dispatch(setupSearchVendorByQuery(debouncedSearchValue));
+  // }, [debouncedExperienceSearchValue]);
+
+  // React.useEffect(() => {
+  //   if (vendorAddSuccess) {
+  //     setSearchValue("");
+  //   }
+  // }, [vendorAddSuccess]);
+  // For Provider
+  const [providerSearchValue, setProviderSearchValue] = React.useState("");
+  const [debouncedProviderSearchValue] = useDebounce(searchValue, 1000);
+  const [showAddProvidereDialog, setShowAddProviderDialog] =
+    React.useState(false);
+
+  const handleProviderInputChange = (event) => {
+    setProviderSearchValue(event.target.value);
+  };
+
+  // React.useEffect(() => {
+  //   dispatch(setupSearchVendorByQuery(debouncedSearchValue));
+  // }, [debouncedExperienceSearchValue]);
+
+  // React.useEffect(() => {
+  //   if (vendorAddSuccess) {
+  //     setSearchValue("");
+  //   }
+  // }, [vendorAddSuccess]);
+
   return (
     <Box sx={{ width: "100%" }}>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -73,10 +138,11 @@ export default function BasicTabs() {
           aria-label="basic tabs example"
         >
           <Tab label="Vendor" {...a11yProps(0)} />
-          <Tab label="Providers" {...a11yProps(2)} />
           <Tab label="Experience" {...a11yProps(1)} />
           <Tab label="Services" {...a11yProps(1)} />
+          <Tab label="Providers" {...a11yProps(2)} />
           <Tab label="Options" {...a11yProps(1)} />
+          <Tab label="Variations" {...a11yProps(1)} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
@@ -105,16 +171,88 @@ export default function BasicTabs() {
         />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        <Experience />
+        <div className="mb-4 " style={{ marginLeft: "-10px" }}>
+          <Button
+            size="medium"
+            onClick={() => setShowAddExperienceDialog(true)}
+          >
+            <h2 className="heading mt-2">Add Experience</h2>
+          </Button>
+        </div>
+        <div className="example-header row">
+          <div className="mb-4 col-lg-12">
+            <label>Search Experience</label>
+            <input
+              placeholder="Filter"
+              id="inputField"
+              className="form-control h-40"
+              value={experienceSearchValue}
+              onChange={(event) => {
+                handleExperienceInputChange(event);
+              }}
+            />
+          </div>
+        </div>
+        <Experience
+          showAddExperienceDialog={showAddExperienceDialog}
+          setShowAddExperienceDialog={setShowAddExperienceDialog}
+        />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
-        <Providers />
+        <div className="mb-4 " style={{ marginLeft: "-10px" }}>
+          <Button size="medium" onClick={() => setShowAddServiceDialog(true)}>
+            <h2 className="heading mt-2">Add Service</h2>
+          </Button>
+        </div>
+        <div className="example-header row">
+          <div className="mb-4 col-lg-12">
+            <label>Search Service</label>
+            <input
+              placeholder="Filter"
+              id="inputField"
+              className="form-control h-40"
+              value={serviceSearchValue}
+              onChange={(event) => {
+                handleServiceInputChange(event);
+              }}
+            />
+          </div>
+        </div>
+        <Services
+          showAddServiceDialog={showAddServiceDialog}
+          setShowAddServiceDialog={setShowAddServiceDialog}
+        />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={3}>
-        <p>Here Comes Service Data</p>
+        <div className="mb-4 " style={{ marginLeft: "-10px" }}>
+          <Button size="medium" onClick={() => setShowAddProviderDialog(true)}>
+            <h2 className="heading mt-2">Add Provider</h2>
+          </Button>
+        </div>
+        <div className="example-header row">
+          <div className="mb-4 col-lg-12">
+            <label>Search Provider</label>
+            <input
+              placeholder="Filter"
+              id="inputField"
+              className="form-control h-40"
+              value={providerSearchValue}
+              onChange={(event) => {
+                handleProviderInputChange(event);
+              }}
+            />
+          </div>
+        </div>
+        <Providers
+          showAddProvidereDialog={showAddProvidereDialog}
+          setShowAddProviderDialog={setShowAddProviderDialog}
+        />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={4}>
-        <p>Here Comes Option Data</p>
+        <p>Here Comes The Options</p>
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={5}>
+        <p>Here Comes The Variaions</p>
       </CustomTabPanel>
     </Box>
   );

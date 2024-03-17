@@ -112,12 +112,35 @@ body {
   font-family: "Poppins", sans-serif !important;
 }
 
+.mr-2 {
+  margin-right: 10px !important;
+}
+
+.h-20 {
+  height: 30px !important;
+}
+
+.w-30 {
+  width: 30px !important;
+}
+
 .css-1x5jdmq {
   font-family: "Poppins", sans-serif !important;
   font-size: 15px !important;
 }
+.max-height-200 {
+  max-height: 200px !important;
+}
 
-.flex-end{
+.margin-auto {
+  margin: auto !important;
+}
+.overflow-y-auto {
+  overflow-y: auto !important;
+  overflow-x: hidden;
+}
+
+.flex-end {
   justify-content: flex-end !important;
 }
 

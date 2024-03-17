@@ -1,9 +1,13 @@
 import React from "react";
 import TextField from "@mui/material/TextField";
-import RichTextEditor from "../../../../common/RichText";
+import RichTextEditor from "../../common/RichText";
 import Chip from "@mui/material/Chip";
 import { Card } from "@mui/material";
 import MultipleSelect from "./MultiSelect";
+import InputLabel from "@mui/material/InputLabel";
+import FormControl from "@mui/material/FormControl";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 
 const ExperienceDialogForm = ({
   formik,
@@ -46,6 +50,7 @@ const ExperienceDialogForm = ({
   setExperiences,
   experience,
   allExperience,
+  allVendors,
 }) => {
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -63,6 +68,37 @@ const ExperienceDialogForm = ({
               error={formik.touched.title && Boolean(formik.errors.title)}
               helperText={formik.touched.title && formik.errors.title}
             />
+          </div>
+          <div className="row">
+            <div className="col-lg-12 mb-4">
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">Vendor</InputLabel>
+                <Select
+                  id="regionsCovered"
+                  name="regionsCovered"
+                  className="form-control w-100 "
+                  label="Regions Covered"
+                  defaultValue=""
+                  {...formik.getFieldProps("vendorId")}
+                  error={
+                    formik.touched.vendorId && Boolean(formik.errors.vendorId)
+                  }
+                  helperText={formik.touched.vendorId && formik.errors.vendorId}
+                >
+                  <MenuItem value="">Select Vndor</MenuItem>
+                  {allVendors?.map((item, index) => {
+                    return (
+                      <MenuItem value={item?.id} key={index}>
+                        {item?.name}
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+              </FormControl>
+              {formik.touched.vendorId && formik.errors.vendorId && (
+                <div className="error">{formik.errors.vendorId}</div>
+              )}
+            </div>
           </div>
 
           <div className="row">

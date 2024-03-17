@@ -12,7 +12,7 @@ import { setupGetAllVendors } from "../../global-redux/reducers/vendor/slice";
 import { useSelector } from "react-redux";
 import Form from "./components/Form";
 
-const Variations = ({ showAddServiceDialog, setShowAddServiceDialog }) => {
+const Services = ({ showAddServiceDialog, setShowAddServiceDialog }) => {
   const dispatch = useDispatch();
   const { allService, serviceAddSuccess, loading } = useSelector(
     (state) => state.services
@@ -113,4 +113,4 @@ const Variations = ({ showAddServiceDialog, setShowAddServiceDialog }) => {
   );
 };
 
-export default Variations;
+export default Services;

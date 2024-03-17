@@ -1,5 +1,4 @@
 import React from "react";
-import TextField from "@mui/material/TextField";
 import RichTextEditor from "../../../../common/RichText";
 import { useSelector } from "react-redux";
 
@@ -9,101 +8,71 @@ const ViewProviderDialog = ({ setShowViewSelectedProvider }) => {
     <div className="px-4 py-4">
       <h2 className="pb-4 heading">View Provider</h2>
       <div>
-        <div className="col-lg-8 mb-4">
-          <TextField
-            id="name"
-            name="name"
-            label="Provider name"
-            variant="outlined"
-            className="form-control"
-            value={selectedProvider?.name}
-            disabled
-            readonly
-          />
+        <div className="col-lg-12 mb-4">
+          <label>Provider name</label>
+          <p>
+            {selectedProvider?.name
+              ? selectedProvider?.name
+              : "No Name Provided"}
+          </p>
         </div>
-
         <div className="row">
           <div className="col-lg-6 mb-4">
-            <TextField
-              id="address"
-              name="address"
-              label="Provider address"
-              variant="outlined"
-              className="form-control"
-              value={selectedProvider?.address}
-              disabled
-              readonly
-            />
+            <label>Provider address</label>
+            <p>
+              {selectedProvider?.address
+                ? selectedProvider?.address
+                : "No Address Provided"}
+            </p>
           </div>
           <div className="col-lg-6 mb-4">
-            <TextField
-              id="pointOfContact"
-              name="pointOfContact"
-              label="Point of Contact"
-              variant="outlined"
-              className="form-control"
-              value={selectedProvider?.pointOfContact}
-              disabled
-              readonly
-            />
+            <label>Point of Contact</label>
+            <p>
+              {selectedProvider?.pointOfContact
+                ? selectedProvider?.pointOfContact
+                : "No Point Of Contact Provided"}
+            </p>
           </div>
         </div>
-
         <div className="row">
           <div className="col-lg-6 mb-4">
-            <TextField
-              id="website"
-              name="website"
-              label="Website"
-              variant="outlined"
-              className="form-control"
-              value={selectedProvider?.website}
-              disabled
-              readonly
-            />
+            <label>Website</label>
+            <p>
+              {selectedProvider?.website
+                ? selectedProvider?.website
+                : "No Website Provided"}
+            </p>
           </div>
           <div className="col-lg-6 mb-4">
-            <TextField
-              id="email"
-              name="email"
-              label="Email"
-              variant="outlined"
-              className="form-control"
-              value={selectedProvider?.email}
-              disabled
-              readonly
-            />
+            <label>Email</label>
+            <p>
+              {selectedProvider?.email
+                ? selectedProvider?.email
+                : "No Email Provided"}
+            </p>
           </div>
         </div>
-
         <div className="row">
           <div className="col-lg-6 mb-4">
-            <TextField
-              id="email"
-              name="email"
-              label="Regions"
-              variant="outlined"
-              className="form-control"
-              value={selectedProvider?.regionsCovered}
-              disabled
-              readonly
-            />
+            <label>Manage Venue</label>
+            <p>
+              {Boolean(selectedProvider.manageVenue) === true
+                ? "True"
+                : "False"}
+            </p>
           </div>
           <div className="col-lg-6 mb-4">
-            <TextField
-              id="email"
-              name="email"
-              label="Manage Venue"
-              variant="outlined"
-              className="form-control"
-              value={selectedProvider?.manageVenue === true ? "true" : false}
-              disabled
-              readonly
-            />
+            <label>Regions</label>
+            <p>
+              {selectedProvider?.regionsCovered
+                ? selectedProvider?.regionsCovered
+                : "No Regions Covered Provided"}
+            </p>
           </div>
         </div>
         <div className="row mb-4">
           <div className="col-lg-12">
+            <label>Description</label>
             <RichTextEditor
               placeholder="Vendor’ Description"
               initialValue={selectedProvider.description}

@@ -10,6 +10,16 @@ export const getAllProvider = async (data, thunkAPI) => {
     return thunkAPI.rejectWithValue(error);
   }
 };
+export const getAllProviderWithOutParams = async (_, thunkAPI) => {
+  try {
+    let props = await axios.get(
+      `https://data-entry-08031d053c68.herokuapp.com/provider/getProviders`
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
 
 export const addProvider = async (data, thunkAPI) => {
   try {

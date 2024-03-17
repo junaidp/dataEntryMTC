@@ -43,7 +43,7 @@ const VendorRecord = ({ vendor }) => {
             </div>
             <div className="col-lg-6 mb-4">
               <label>Manage Venue</label>
-              <p>{vendor?.manageVenue === true ? "true" : "false"}</p>
+              <p>{vendor?.manageVenue === true ? "True" : "False"}</p>
             </div>
           </div>
 

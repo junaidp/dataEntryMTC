@@ -27,8 +27,8 @@ const serviceRecord = ({
                 </span>
                 New Service
               </div>
-              <div className="col-lg-10 mb-4">
-                <table className="table table-bordered  table-hover rounded">
+              <div className="col-lg-10">
+                <table className="table table-bordered  table-hover rounded mb-0">
                   <thead className="bg-secondary text-white">
                     <tr>
                       <th className="per80">Service List</th>
@@ -38,7 +38,9 @@ const serviceRecord = ({
                     {allService?.length === 0 ? (
                       <tr>
                         <td className="per80">
-                          <Button>No Service Found. Please Add One</Button>
+                          <Button className="cursor-pointer">
+                            No Service Found. Please Add One
+                          </Button>
                         </td>
                       </tr>
                     ) : (
@@ -47,6 +49,7 @@ const serviceRecord = ({
                           <tr key={index}>
                             <td className="per80">
                               <Button
+                                className="cursor-pointer"
                                 onClick={() => {
                                   dispatch(changeSelectedService(service));
                                   setShowViewSelectedService(true);

@@ -10,6 +10,9 @@ import {
   resetVendorAddSuccess,
 } from "../../../../../global-redux/reducers/vendor/slice";
 import { useSelector, useDispatch } from "react-redux";
+import InputLabel from "@mui/material/InputLabel";
+import FormControl from "@mui/material/FormControl";
+import { toast } from "react-toastify";
 
 const AddVendorDialog = ({ setShowAddVendorDialog }) => {
   const dispatch = useDispatch();
@@ -21,7 +24,7 @@ const AddVendorDialog = ({ setShowAddVendorDialog }) => {
     website: "",
     email: "",
     regionsCovered: "",
-    manageVenue: "",
+    manageVenue: false,
     description: "",
   };
   const validationSchema = Yup.object({
@@ -61,6 +64,7 @@ const AddVendorDialog = ({ setShowAddVendorDialog }) => {
 
   React.useEffect(() => {
     if (vendorAddSuccess) {
+      toast.success("Vendor Added Successfully");
       formik.resetForm({ values: initialValues });
       setShowAddVendorDialog(false);
       dispatch(resetVendorAddSuccess());
@@ -146,49 +150,50 @@ const AddVendorDialog = ({ setShowAddVendorDialog }) => {
 
           <div className="row">
             <div className="col-lg-6 mb-4">
-              <Select
-                id="regionsCovered"
-                name="regionsCovered"
-                className="form-control w-100 h-40"
-                defaultValue="Germany"
-                {...formik.getFieldProps("regionsCovered")}
-                error={
-                  formik.touched.regionsCovered &&
-                  Boolean(formik.errors.regionsCovered)
-                }
-                helperText={
-                  formik.touched.regionsCovered && formik.errors.regionsCovered
-                }
-              >
-                <MenuItem value="">Select Region</MenuItem>
-                <MenuItem value="UK">UK</MenuItem>
-                <MenuItem value="US">US</MenuItem>
-                <MenuItem value="Germany">Germany</MenuItem>
-                <MenuItem value="Pakistan">Pakistan</MenuItem>
-              </Select>
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">
+                  Regions Covered
+                </InputLabel>
+                <Select
+                  id="regionsCovered"
+                  name="regionsCovered"
+                  className="form-control w-100 "
+                  label="Regions Covered"
+                  defaultValue="Germany"
+                  {...formik.getFieldProps("regionsCovered")}
+                  error={
+                    formik.touched.regionsCovered &&
+                    Boolean(formik.errors.regionsCovered)
+                  }
+                  helperText={
+                    formik.touched.regionsCovered &&
+                    formik.errors.regionsCovered
+                  }
+                >
+                  <MenuItem value="">Select Region</MenuItem>
+                  <MenuItem value="UK">UK</MenuItem>
+                  <MenuItem value="US">US</MenuItem>
+                  <MenuItem value="Germany">Germany</MenuItem>
+                  <MenuItem value="Pakistan">Pakistan</MenuItem>
+                </Select>
+              </FormControl>
               {formik.touched.regionsCovered &&
                 formik.errors.regionsCovered && (
                   <div className="error">{formik.errors.regionsCovered}</div>
                 )}
             </div>
             <div className="col-lg-6 mb-4">
-              <Select
-                id="manageVenue"
-                name="manageVenue"
-                className="form-control w-100 h-40"
-                {...formik.getFieldProps("manageVenue")}
-                error={
-                  formik.touched.manageVenue &&
-                  Boolean(formik.errors.manageVenue)
-                }
-                helperText={
-                  formik.touched.manageVenue && formik.errors.manageVenue
-                }
-              >
-                <MenuItem value="">Select One</MenuItem>
-                <MenuItem value={true}>Yes</MenuItem>
-                <MenuItem value={false}>No</MenuItem>
-              </Select>
+              <div className="form-check form-switch ">
+                <label className="mx-2">Manage Venue</label>
+                <input
+                  className="form-check-input h-20 w-80"
+                  {...formik.getFieldProps("manageVenue")}
+                  type="checkbox"
+                  role="switch"
+                  id="flexSwitchCheckDefault"
+                />
+              </div>
+
               {formik.touched.manageVenue && formik.errors.manageVenue && (
                 <div className="error">{formik.errors.manageVenue}</div>
               )}
@@ -220,7 +225,7 @@ const AddVendorDialog = ({ setShowAddVendorDialog }) => {
               {loading ? "Loading..." : "Save"}
             </button>
           </div>
-          <div className="mx-4">
+          <div className="mx-2">
             <button
               type="button"
               className="btn btn-danger float-end"

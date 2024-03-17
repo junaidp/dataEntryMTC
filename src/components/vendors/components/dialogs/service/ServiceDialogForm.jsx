@@ -105,7 +105,7 @@ const ServiceDialogForm = ({
                     className={`col-lg-2 text-end float-end align-self-end mb-4`}
                   >
                     <button
-                      className="btn btn-labeled btn-primary px-3 shadow"
+                      className="btn btn-labeled btn-primary w-100 shadow"
                       onClick={handleAddPrice}
                       type="submit"
                     >
@@ -156,7 +156,7 @@ const ServiceDialogForm = ({
                     className={`col-lg-2 text-end float-end align-self-end mb-4`}
                   >
                     <button
-                      className="btn btn-labeled btn-primary px-3 shadow"
+                      className="btn btn-labeled btn-primary w-100 shadow"
                       onClick={handleAddDuration}
                       type="submit"
                     >
@@ -206,7 +206,7 @@ const ServiceDialogForm = ({
                     className={`col-lg-2 text-end float-end align-self-end mb-4`}
                   >
                     <button
-                      className="btn btn-labeled btn-primary px-3 shadow"
+                      className="btn btn-labeled btn-primary w-100 shadow"
                       onClick={handleAddAvailableTime}
                       type="submit"
                     >
@@ -256,7 +256,7 @@ const ServiceDialogForm = ({
                   className={`col-lg-2 text-end float-end align-self-end mb-4`}
                 >
                   <button
-                    className="btn btn-labeled btn-primary px-3 shadow"
+                    className="btn btn-labeled btn-primary w-100 shadow"
                     onClick={handleAddLink}
                     type="submit"
                   >
@@ -290,6 +290,7 @@ const ServiceDialogForm = ({
 
           <div className="row mb-4 mt-4">
             <div className="col-lg-12">
+              <label>Description</label>
               <RichTextEditor
                 placeholder="Description"
                 initialValue={formik.values.description}
@@ -314,7 +315,7 @@ const ServiceDialogForm = ({
               {loading ? "Loading..." : "Save"}
             </button>
           </div>
-          <div className="mx-4">
+          <div className="mx-2">
             <button
               type="button"
               className="btn btn-danger float-end"

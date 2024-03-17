@@ -1,25 +1,20 @@
 import React from "react";
 import TextField from "@mui/material/TextField";
-import RichTextEditor from "../../../../common/RichText";
+import RichTextEditor from "../../../components/common/RichText";
 import Chip from "@mui/material/Chip";
 import { Card } from "@mui/material";
-import MultipleSelect from "./MultiSelect";
+import InputLabel from "@mui/material/InputLabel";
+import FormControl from "@mui/material/FormControl";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 
-const ExperienceDialogForm = ({
+const ServiceDialogForm = ({
   formik,
-  keyword,
-  setKeyword,
-  handleAddKeyword,
-  handleDeleteKeyword,
   handleClose,
   loading,
   handleChangeDescription,
-  handleChangeTermsAndConditions,
-  keywords,
   link,
   setLink,
-  linkExplanation,
-  setLinkExplanation,
   links,
   handleAddLink,
   handleDeleteLink,
@@ -41,28 +36,45 @@ const ExperienceDialogForm = ({
   priceRef,
   durationRef,
   availableTimeRef,
-  keywordRef,
   linkRef,
-  setExperiences,
-  experience,
-  allExperience,
+  allVendors,
 }) => {
   return (
     <form onSubmit={formik.handleSubmit}>
       <div className="px-4 py-4">
-        <h2 className="pb-4 heading">Add Experience</h2>
+        <h2 className="pb-4 heading">Add Service</h2>
         <div>
-          <div className="col-lg-12 mb-4">
-            <TextField
-              id="title"
-              name="title"
-              label="Experience title"
-              variant="outlined"
-              className="form-control"
-              {...formik.getFieldProps("title")}
-              error={formik.touched.title && Boolean(formik.errors.title)}
-              helperText={formik.touched.title && formik.errors.title}
-            />
+          <div className="row">
+            <div className="col-lg-6 mb-4">
+              <TextField
+                id="title"
+                name="title"
+                label="Service title"
+                variant="outlined"
+                className="form-control"
+                {...formik.getFieldProps("title")}
+                error={formik.touched.title && Boolean(formik.errors.title)}
+                helperText={formik.touched.title && formik.errors.title}
+              />
+            </div>
+            <div className="col-lg-6 mb-4">
+              <TextField
+                id="title"
+                name="linkWithOtherExperience"
+                label="Link With Other Experience"
+                variant="outlined"
+                className="form-control"
+                {...formik.getFieldProps("linkWithOtherExperience")}
+                error={
+                  formik.touched.linkWithOtherExperience &&
+                  Boolean(formik.errors.linkWithOtherExperience)
+                }
+                helperText={
+                  formik.touched.linkWithOtherExperience &&
+                  formik.errors.linkWithOtherExperience
+                }
+              />
+            </div>
           </div>
 
           <div className="row">
@@ -70,13 +82,44 @@ const ExperienceDialogForm = ({
               <TextField
                 id="address"
                 name="address"
-                label="Experience address"
+                label="Service address"
                 variant="outlined"
                 className="form-control"
                 {...formik.getFieldProps("address")}
                 error={formik.touched.address && Boolean(formik.errors.address)}
                 helperText={formik.touched.address && formik.errors.address}
               />
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-lg-12 mb-4">
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">Vendor</InputLabel>
+                <Select
+                  id="regionsCovered"
+                  name="regionsCovered"
+                  className="form-control w-100 "
+                  label="Regions Covered"
+                  defaultValue=""
+                  {...formik.getFieldProps("vendorId")}
+                  error={
+                    formik.touched.vendorId && Boolean(formik.errors.vendorId)
+                  }
+                  helperText={formik.touched.vendorId && formik.errors.vendorId}
+                >
+                  <MenuItem value="">Select Vndor</MenuItem>
+                  {allVendors?.map((item, index) => {
+                    return (
+                      <MenuItem value={item?.id} key={index}>
+                        {item?.name}
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+              </FormControl>
+              {formik.touched.vendorId && formik.errors.vendorId && (
+                <div className="error">{formik.errors.vendorId}</div>
+              )}
             </div>
           </div>
           <div className="row">
@@ -93,6 +136,7 @@ const ExperienceDialogForm = ({
                       inputRef={priceRef}
                     />
                   </div>
+
                   <div
                     className={`col-lg-2 text-end float-end align-self-end mb-4`}
                   >
@@ -143,6 +187,7 @@ const ExperienceDialogForm = ({
                       inputRef={durationRef}
                     />
                   </div>
+
                   <div
                     className={`col-lg-2 text-end float-end align-self-end mb-4`}
                   >
@@ -162,7 +207,7 @@ const ExperienceDialogForm = ({
               <label className="mb-2">List Of Durations:</label>
               <Card className="py-4">
                 {durations?.length === 0 ? (
-                  <lable className="mx-2">No Duration Provided</lable>
+                  <lable className="mx-2">No Time Provided</lable>
                 ) : (
                   durations.map((key, index) => {
                     return (
@@ -193,7 +238,6 @@ const ExperienceDialogForm = ({
                       inputRef={availableTimeRef}
                     />
                   </div>
-
                   <div
                     className={`col-lg-2 text-end float-end align-self-end mb-4`}
                   >
@@ -230,68 +274,12 @@ const ExperienceDialogForm = ({
               </Card>
             </div>
           </div>
-          <div className="mb-4 mt-4">
-            <h5>Keywords:</h5>
-            <div>
-              <form className="row p-0" onSubmit={handleAddKeyword}>
-                <div className="col-lg-10 mb-4">
-                  <label className="w-100">Add Keyword:</label>
-                  <TextField
-                    className="form-control"
-                    value={keyword}
-                    onChange={(event) => setKeyword(event.target.value)}
-                    inputRef={keywordRef}
-                  />
-                </div>
-                <div
-                  className={`col-lg-2 text-end float-end align-self-end mb-4`}
-                >
-                  <button
-                    className="btn btn-labeled btn-primary w-100 shadow"
-                    type="submit"
-                    onClick={handleAddKeyword}
-                  >
-                    <span className="btn-label me-2">
-                      <i className="fa fa-plus"></i>
-                    </span>
-                    Add Keyword
-                  </button>
-                </div>
-              </form>
-            </div>
-            <label className="mb-2">List Of Keywords:</label>
-            <Card className="py-4">
-              {keywords?.length === 0 ? (
-                <lable className="mx-2">No Keyword Provided</lable>
-              ) : (
-                keywords.map((key, index) => {
-                  return (
-                    <Chip
-                      label={key?.name}
-                      key={index}
-                      variant="outlined"
-                      className="mx-2 mb-2"
-                      onDelete={() => handleDeleteKeyword(key?.id)}
-                    />
-                  );
-                })
-              )}
-            </Card>
-          </div>
-          <div className="row mb-4">
-            <div className="col-lg-12">
-              <MultipleSelect
-                setExperiences={setExperiences}
-                experience={experience}
-                names={allExperience?.map((all) => all?.title)}
-              />
-            </div>
-          </div>
-          <div className="mb-4">
+
+          <div className="mt-4">
             <h5>Links:</h5>
             <div>
               <form onSubmit={handleAddLink} className="row p-0">
-                <div className="col-lg-5 mb-4">
+                <div className="col-lg-10 mb-4">
                   <label className="w-100">Add Link:</label>
                   <TextField
                     className="form-control"
@@ -300,15 +288,6 @@ const ExperienceDialogForm = ({
                     inputRef={linkRef}
                   />
                 </div>
-                <div className="col-lg-5 mb-4">
-                  <label className="w-100">Add Link Explanation:</label>
-                  <TextField
-                    className="form-control"
-                    value={linkExplanation}
-                    onChange={(event) => setLinkExplanation(event.target.value)}
-                  />
-                </div>
-
                 <div
                   className={`col-lg-2 text-end float-end align-self-end mb-4`}
                 >
@@ -345,7 +324,7 @@ const ExperienceDialogForm = ({
             </Card>
           </div>
 
-          <div className="row mb-4">
+          <div className="row mb-4 mt-4">
             <div className="col-lg-12">
               <label>Description</label>
               <RichTextEditor
@@ -357,23 +336,6 @@ const ExperienceDialogForm = ({
               {formik.touched.description && formik.errors.description && (
                 <div className="error">{formik.errors.description}</div>
               )}
-            </div>
-          </div>
-          <div className="row mb-4">
-            <div className="col-lg-12">
-              <label>Terms And Conditions</label>
-              <RichTextEditor
-                placeholder="Terms And Conditions"
-                initialValue={formik.values.termsAndConditions}
-                handleChangeTermsAndConditions={handleChangeTermsAndConditions}
-                readonly={false}
-              />
-              {formik.touched.termsAndConditions &&
-                formik.errors.termsAndConditions && (
-                  <div className="error">
-                    {formik.errors.termsAndConditions}
-                  </div>
-                )}
             </div>
           </div>
         </div>
@@ -404,4 +366,4 @@ const ExperienceDialogForm = ({
   );
 };
 
-export default ExperienceDialogForm;
+export default ServiceDialogForm;

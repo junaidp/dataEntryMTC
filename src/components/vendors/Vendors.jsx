@@ -21,7 +21,6 @@ import ServiceRecord from "./components/records/ServiceRecord";
 import ProviderRecord from "./components/records/ProviderRecord";
 import AddVendorDialog from "./components/dialogs/vendor/AddVendorDialog";
 import RichTextEditor from "./components/common/RichText";
-import TextField from "@mui/material/TextField";
 import AddExperienceDialog from "./components/dialogs/experience/AddExperienceDialog";
 import AddServiceDialog from "./components/dialogs/service/AddServiceDialog";
 import AddProviderDialog from "./components/dialogs/provider/AddProviderDialog";
@@ -29,6 +28,7 @@ import ViewExperieceDialog from "./components/view-dialogs/view-experience";
 import ViewProviderDialog from "./components/view-dialogs/view-provider";
 import ViewServiceDialog from "./components/view-dialogs/view-service";
 import EditVendorDialog from "./components/edit-dialogs/vendor/index";
+import DeleteVendorDialog from "./components/edit-dialogs/delete-vendor/index";
 
 const Vendor = ({ setShowAddVendorDialog, showAddVendorDialog }) => {
   const { allVendors, loading, vendorAddSuccess } = useSelector(
@@ -60,10 +60,11 @@ const Vendor = ({ setShowAddVendorDialog, showAddVendorDialog }) => {
   const [showViewSelectedProvider, setShowViewSelectedProvider] =
     React.useState(false);
   const [showEditVendorDialog, setShowEditVendorDialog] = React.useState(false);
+  const [showDeleteVendorDialog, setShowDeleteVendorDialog] =
+    React.useState(false);
   const handleChangeVendorPage = (_, value) => {
     setVendorPage(value);
   };
-
   React.useEffect(() => {
     if (currentVendorId && currentVendorId !== "") {
       dispatch(setupGetAllService(currentVendorId));
@@ -116,6 +117,16 @@ const Vendor = ({ setShowAddVendorDialog, showAddVendorDialog }) => {
           <div className="model-wrap">
             <EditVendorDialog
               setShowEditVendorDialog={setShowEditVendorDialog}
+              currentVendorId={currentVendorId}
+            />
+          </div>
+        </div>
+      )}
+      {showDeleteVendorDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <DeleteVendorDialog
+              setShowDeleteVendorDialog={setShowDeleteVendorDialog}
               currentVendorId={currentVendorId}
             />
           </div>
@@ -222,6 +233,7 @@ const Vendor = ({ setShowAddVendorDialog, showAddVendorDialog }) => {
                           </div>
                           <div
                             className={`btn btn-labeled btn-danger mx-4 px-3 shadow  my-4 `}
+                            onClick={() => setShowDeleteVendorDialog(true)}
                           >
                             <span className="btn-label me-2">
                               <i className="fa fa-check-circle f-18"></i>
@@ -234,30 +246,38 @@ const Vendor = ({ setShowAddVendorDialog, showAddVendorDialog }) => {
                           vendor={vendor}
                           setCurrentVendorId={setCurrentVendorId}
                         />
-                        <div className="  col-lg-12 h-40 shadow h-40 text-between mb-4">
+                        <div className="  col-lg-6 h-40 shadow h-40 text-between mb-4 margin-auto">
                           Expertise
                         </div>
                         <div className="px-4 py-2 ml-4">
-                          <ExperienceRecord
-                            setShowAddExperienceDialog={
-                              setShowAddExperienceDialog
-                            }
-                            setShowViewSelectedExperience={
-                              setShowViewSelectedExperience
-                            }
-                          />
-                          <ServiceRecord
-                            setShowAddServiceDialog={setShowAddServiceDialog}
-                            setShowViewSelectedService={
-                              setShowViewSelectedService
-                            }
-                          />
-                          <ProviderRecord
-                            setShowAddProviderDialog={setShowAddProviderDialog}
-                            setShowViewSelectedProvider={
-                              setShowViewSelectedProvider
-                            }
-                          />
+                          <div className="max-height-200 overflow-y-auto mb-4">
+                            <ExperienceRecord
+                              setShowAddExperienceDialog={
+                                setShowAddExperienceDialog
+                              }
+                              setShowViewSelectedExperience={
+                                setShowViewSelectedExperience
+                              }
+                            />
+                          </div>
+                          <div className="max-height-200 overflow-y-auto mb-4">
+                            <ServiceRecord
+                              setShowAddServiceDialog={setShowAddServiceDialog}
+                              setShowViewSelectedService={
+                                setShowViewSelectedService
+                              }
+                            />
+                          </div>
+                          <div className="max-height-200 overflow-y-auto mb-4">
+                            <ProviderRecord
+                              setShowAddProviderDialog={
+                                setShowAddProviderDialog
+                              }
+                              setShowViewSelectedProvider={
+                                setShowViewSelectedProvider
+                              }
+                            />
+                          </div>
                           <div className="row">
                             <div className="col-lg-12">
                               <RichTextEditor
@@ -268,47 +288,17 @@ const Vendor = ({ setShowAddVendorDialog, showAddVendorDialog }) => {
                             </div>
                           </div>
                           <div className="row mt-4">
-                            <div className="col-lg-4">
-                              <TextField
-                                id="outlined-number"
-                                label="Total Experiences"
-                                className="w-100"
-                                type="number"
-                                InputLabelProps={{
-                                  shrink: true,
-                                }}
-                                value={allExperience?.length}
-                                disabled
-                                readonly
-                              />
+                            <div className="col-lg-4 mb-4">
+                              <label>Total Experiences</label>
+                              <p>{allExperience?.length}</p>
                             </div>
-                            <div className="col-lg-4">
-                              <TextField
-                                id="outlined-number"
-                                label="Total Services"
-                                className="w-100"
-                                type="number"
-                                InputLabelProps={{
-                                  shrink: true,
-                                }}
-                                value={allService?.length}
-                                disabled
-                                readonly
-                              />
+                            <div className="col-lg-4 mb-4">
+                              <label>Total Services</label>
+                              <p>{allService?.length}</p>
                             </div>
-                            <div className="col-lg-4">
-                              <TextField
-                                id="outlined-number"
-                                label="Total Providers"
-                                className="w-100"
-                                type="number"
-                                InputLabelProps={{
-                                  shrink: true,
-                                }}
-                                value={allProvider?.length}
-                                disabled
-                                readonly
-                              />
+                            <div className="col-lg-4 mb-4">
+                              <label>Total Providers</label>
+                              <p>{allProvider?.length}</p>
                             </div>
                           </div>
                         </div>

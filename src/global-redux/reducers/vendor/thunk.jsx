@@ -33,3 +33,14 @@ export const addVendor = async (data, thunkAPI) => {
     return thunkAPI.rejectWithValue(error);
   }
 };
+
+export const deleteVendor = async (data, thunkAPI) => {
+  try {
+    let props = await axios.delete(
+      `https://data-entry-08031d053c68.herokuapp.com/vendor/deleteVendor${data}`
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};

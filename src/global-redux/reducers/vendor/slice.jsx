@@ -1,5 +1,10 @@
 import { toast } from "react-toastify";
-import { getAllVendors, addVendor, searchVendorByQuery } from "./thunk";
+import {
+  getAllVendors,
+  addVendor,
+  searchVendorByQuery,
+  deleteVendor,
+} from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
@@ -24,6 +29,12 @@ export const setupAddVendor = createAsyncThunk(
   "vendor/addVendor",
   async (data, thunkAPI) => {
     return addVendor(data, thunkAPI);
+  }
+);
+export const setupDeleteVendor = createAsyncThunk(
+  "vendor/deleteVendor",
+  async (data, thunkAPI) => {
+    return deleteVendor(data, thunkAPI);
   }
 );
 
@@ -78,9 +89,26 @@ export const slice = createSlice({
       .addCase(setupAddVendor.fulfilled, (state) => {
         state.loading = false;
         state.vendorAddSuccess = true;
-        toast.success("Vendor Added Successfully");
       })
       .addCase(setupAddVendor.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Delete Vendor
+    builder
+      .addCase(setupDeleteVendor.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupDeleteVendor.fulfilled, (state) => {
+        state.loading = false;
+        state.vendorAddSuccess = true;
+        toast.success("Vendor Deleted Successfully");
+      })
+      .addCase(setupDeleteVendor.rejected, (state, action) => {
         state.loading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);

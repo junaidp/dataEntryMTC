@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import { getAllService, addService } from "./thunk";
+import { getAllService, addService, getAllServiceWithOutParama } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
@@ -13,6 +13,12 @@ export const setupGetAllService = createAsyncThunk(
   "service/getAllService",
   async (data, thunkAPI) => {
     return getAllService(data, thunkAPI);
+  }
+);
+export const setupGetAllServiceWithOutParama = createAsyncThunk(
+  "service/getAllServiceWithOutParama",
+  async (data, thunkAPI) => {
+    return getAllServiceWithOutParama(data, thunkAPI);
   }
 );
 export const setupAddService = createAsyncThunk(
@@ -44,6 +50,26 @@ export const slice = createSlice({
         state.allService = payload || [{ error: "Not Found" }];
       })
       .addCase(setupGetAllService.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Get All Services WithOut Params
+    builder
+      .addCase(setupGetAllServiceWithOutParama.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(
+        setupGetAllServiceWithOutParama.fulfilled,
+        (state, { payload }) => {
+          state.loading = false;
+          state.allService = payload || [{ error: "Not Found" }];
+        }
+      )
+      .addCase(setupGetAllServiceWithOutParama.rejected, (state, action) => {
         state.loading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);

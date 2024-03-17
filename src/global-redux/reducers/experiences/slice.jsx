@@ -1,5 +1,9 @@
 import { toast } from "react-toastify";
-import { getAllExperience, addExperience } from "./thunk";
+import {
+  getAllExperience,
+  addExperience,
+  getAllExperienceWithOutParams,
+} from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
@@ -13,6 +17,12 @@ export const setupGetAllExperience = createAsyncThunk(
   "experience/getAllExperience",
   async (data, thunkAPI) => {
     return getAllExperience(data, thunkAPI);
+  }
+);
+export const setupGetAllExperienceWithOutParams = createAsyncThunk(
+  "experience/getAllExperienceWithOutParams",
+  async (data, thunkAPI) => {
+    return getAllExperienceWithOutParams(data, thunkAPI);
   }
 );
 export const setupAddExperience = createAsyncThunk(
@@ -33,8 +43,8 @@ export const slice = createSlice({
       state.selectedExperience = action.payload;
     },
   },
-  // All Experience
   extraReducers: (builder) => {
+    // All Experience
     builder
       .addCase(setupGetAllExperience.pending, (state) => {
         state.loading = true;
@@ -44,6 +54,26 @@ export const slice = createSlice({
         state.allExperience = payload || [{ error: "Not Found" }];
       })
       .addCase(setupGetAllExperience.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // All Experience Without Params
+    builder
+      .addCase(setupGetAllExperienceWithOutParams.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(
+        setupGetAllExperienceWithOutParams.fulfilled,
+        (state, { payload }) => {
+          state.loading = false;
+          state.allExperience = payload || [{ error: "Not Found" }];
+        }
+      )
+      .addCase(setupGetAllExperienceWithOutParams.rejected, (state, action) => {
         state.loading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);
