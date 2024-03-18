@@ -2,12 +2,12 @@ import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { v4 as uuidv4 } from "uuid";
-import { setupAddService } from "../../../../../global-redux/reducers/services/slice";
+import { setupAddService } from "../../../global-redux/reducers/services/slice";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import ServiceDialogForm from "./ServiceDialogForm";
+import ServiceDialogForm from "./EditServiceDialogForm";
 
-const AddExperienceDialog = ({ setShowAddServiceDialog, currentVendorId }) => {
+const AddExperienceDialog = ({ setShowEditServiceDialog, selectedService }) => {
   const dispatch = useDispatch();
   const [link, setLink] = React.useState("");
   const [links, setLinks] = React.useState([]);
@@ -70,7 +70,8 @@ const AddExperienceDialog = ({ setShowAddServiceDialog, currentVendorId }) => {
             setupAddService([
               {
                 ...values,
-                vendorId: currentVendorId,
+                id: selectedService?.id,
+                providerId: selectedService?.providerId,
                 links: links?.map((item) => {
                   return item.link;
                 }),
@@ -167,16 +168,62 @@ const AddExperienceDialog = ({ setShowAddServiceDialog, currentVendorId }) => {
 
   function handleClose() {
     formik.resetForm({ values: initialValues });
-    setShowAddServiceDialog(false);
+    setShowEditServiceDialog(false);
   }
 
   React.useEffect(() => {
     if (serviceAddSuccess) {
-      toast.success("Service Added Successfully");
+      toast.success("Service Updated Successfully");
       formik.resetForm({ values: initialValues });
-      setShowAddServiceDialog(false);
+      setShowEditServiceDialog(false);
     }
   }, [serviceAddSuccess]);
+
+  React.useEffect(() => {
+    if (Object.keys(selectedService)?.length !== 0) {
+      formik.resetForm({
+        values: {
+          ...formik.values,
+          title: selectedService?.title,
+          address: selectedService?.address,
+          description: selectedService?.description,
+          linkWithOtherExperience: selectedService?.linkWithOtherExperience,
+        },
+      });
+      setPrices(
+        selectedService?.price?.map((singleItem) => {
+          return {
+            id: uuidv4(),
+            price: singleItem,
+          };
+        })
+      );
+      setDurations(
+        selectedService?.duration?.map((singleItem) => {
+          return {
+            id: uuidv4(),
+            duration: singleItem,
+          };
+        })
+      );
+      setAvailableTimes(
+        selectedService?.availableTime?.map((singleItem) => {
+          return {
+            id: uuidv4(),
+            time: singleItem,
+          };
+        })
+      );
+      setLinks(
+        selectedService?.links?.map((singleItem) => {
+          return {
+            id: uuidv4(),
+            link: singleItem,
+          };
+        })
+      );
+    }
+  }, [selectedService]);
 
   return (
     <ServiceDialogForm

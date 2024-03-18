@@ -8,15 +8,22 @@ import {
 } from "../../global-redux/reducers/services/slice";
 import AddServiceDialog from "./components/AddServiceDialog";
 import { setupGetAllVendors } from "../../global-redux/reducers/vendor/slice";
-
+import DeleteVendorDialog from "./components/DeleteServiceDialog";
 import { useSelector } from "react-redux";
 import Form from "./components/Form";
+import EditServiceDialog from "./components/EditServiceDialog";
 
 const Services = ({ showAddServiceDialog, setShowAddServiceDialog }) => {
   const dispatch = useDispatch();
   const { allService, serviceAddSuccess, loading } = useSelector(
     (state) => state.services
   );
+  const [currentServiceId, setCurrentServiceId] = React.useState("");
+  const [showDeleteServiceDialog, setShowDeleteServiceDialog] =
+    React.useState(false);
+  const [selectedService, setSelectedService] = React.useState({});
+  const [showEditServiceDialog, setShowEditServiceDialog] =
+    React.useState(false);
   const [page, setPage] = React.useState(1);
   const handleChangePage = (_, value) => {
     setPage(value);
@@ -24,6 +31,7 @@ const Services = ({ showAddServiceDialog, setShowAddServiceDialog }) => {
 
   React.useEffect(() => {
     if (serviceAddSuccess) {
+      setCurrentServiceId("");
       dispatch(setupGetAllServiceWithOutParama());
       dispatch(setupGetAllVendors());
       dispatch(resetServiceAddSuccess());
@@ -42,6 +50,26 @@ const Services = ({ showAddServiceDialog, setShowAddServiceDialog }) => {
           <div className="model-wrap">
             <AddServiceDialog
               setShowAddServiceDialog={setShowAddServiceDialog}
+            />
+          </div>
+        </div>
+      )}
+      {showDeleteServiceDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <DeleteVendorDialog
+              setShowDeleteServiceDialog={setShowDeleteServiceDialog}
+              currentServiceId={currentServiceId}
+            />
+          </div>
+        </div>
+      )}
+      {showEditServiceDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <EditServiceDialog
+              setShowEditServiceDialog={setShowEditServiceDialog}
+              selectedService={selectedService}
             />
           </div>
         </div>
@@ -65,6 +93,7 @@ const Services = ({ showAddServiceDialog, setShowAddServiceDialog }) => {
                       data-bs-target={`#flush-collapse${index}`}
                       aria-expanded="false"
                       aria-controls={`flush-collapse${index}`}
+                      onClick={() => setCurrentServiceId(service?.id)}
                     >
                       <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
                       {service?.title ? service?.title : "No Title Provided"}
@@ -80,6 +109,10 @@ const Services = ({ showAddServiceDialog, setShowAddServiceDialog }) => {
                         <div className="float-end mb-2">
                           <div
                             className={`btn btn-labeled btn-primary px-3 shadow  my-4 `}
+                            onClick={() => {
+                              setSelectedService(service);
+                              setShowEditServiceDialog(true);
+                            }}
                           >
                             <span className="btn-label me-2">
                               <i className="fa fa-check-circle f-18"></i>
@@ -88,6 +121,7 @@ const Services = ({ showAddServiceDialog, setShowAddServiceDialog }) => {
                           </div>
                           <div
                             className={`btn btn-labeled btn-danger mx-4 px-3 shadow  my-4 `}
+                            onClick={() => setShowDeleteServiceDialog(true)}
                           >
                             <span className="btn-label me-2">
                               <i className="fa fa-check-circle f-18"></i>

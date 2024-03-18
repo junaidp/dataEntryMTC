@@ -32,3 +32,13 @@ export const addService = async (data, thunkAPI) => {
     return thunkAPI.rejectWithValue(error);
   }
 };
+export const deleteService = async (data, thunkAPI) => {
+  try {
+    let props = await axios.delete(
+      `https://data-entry-08031d053c68.herokuapp.com/services/deleteService${data}`
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};

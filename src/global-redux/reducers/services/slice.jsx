@@ -1,5 +1,10 @@
 import { toast } from "react-toastify";
-import { getAllService, addService, getAllServiceWithOutParama } from "./thunk";
+import {
+  getAllService,
+  addService,
+  getAllServiceWithOutParama,
+  deleteService,
+} from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
@@ -25,6 +30,12 @@ export const setupAddService = createAsyncThunk(
   "service/addService",
   async (data, thunkAPI) => {
     return addService(data, thunkAPI);
+  }
+);
+export const setupDeleteService = createAsyncThunk(
+  "service/deleteService",
+  async (data, thunkAPI) => {
+    return deleteService(data, thunkAPI);
   }
 );
 
@@ -86,6 +97,23 @@ export const slice = createSlice({
         state.serviceAddSuccess = true;
       })
       .addCase(setupAddService.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    builder
+      .addCase(setupDeleteService.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupDeleteService.fulfilled, (state) => {
+        state.loading = false;
+        state.serviceAddSuccess = true;
+        toast.success("Service Deleted Successfully");
+      })
+      .addCase(setupDeleteService.rejected, (state, action) => {
         state.loading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);

@@ -138,11 +138,11 @@ export default function BasicTabs() {
           aria-label="basic tabs example"
         >
           <Tab label="Vendor" {...a11yProps(0)} />
-          <Tab label="Experience" {...a11yProps(1)} />
           <Tab label="Services" {...a11yProps(1)} />
-          <Tab label="Providers" {...a11yProps(2)} />
-          <Tab label="Options" {...a11yProps(1)} />
-          <Tab label="Variations" {...a11yProps(1)} />
+          <Tab label="Experience" {...a11yProps(2)} />
+          <Tab label="Providers" {...a11yProps(3)} />
+          <Tab label="Options" {...a11yProps(4)} />
+          <Tab label="Variations" {...a11yProps(5)} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
@@ -172,6 +172,31 @@ export default function BasicTabs() {
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
         <div className="mb-4 " style={{ marginLeft: "-10px" }}>
+          <Button size="medium" onClick={() => setShowAddServiceDialog(true)}>
+            <h2 className="heading mt-2">Add Service</h2>
+          </Button>
+        </div>
+        <div className="example-header row">
+          <div className="mb-4 col-lg-12">
+            <label>Search Service</label>
+            <input
+              placeholder="Filter"
+              id="inputField"
+              className="form-control h-40"
+              value={serviceSearchValue}
+              onChange={(event) => {
+                handleServiceInputChange(event);
+              }}
+            />
+          </div>
+        </div>
+        <Services
+          showAddServiceDialog={showAddServiceDialog}
+          setShowAddServiceDialog={setShowAddServiceDialog}
+        />
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={2}>
+        <div className="mb-4 " style={{ marginLeft: "-10px" }}>
           <Button
             size="medium"
             onClick={() => setShowAddExperienceDialog(true)}
@@ -198,31 +223,7 @@ export default function BasicTabs() {
           setShowAddExperienceDialog={setShowAddExperienceDialog}
         />
       </CustomTabPanel>
-      <CustomTabPanel value={value} index={2}>
-        <div className="mb-4 " style={{ marginLeft: "-10px" }}>
-          <Button size="medium" onClick={() => setShowAddServiceDialog(true)}>
-            <h2 className="heading mt-2">Add Service</h2>
-          </Button>
-        </div>
-        <div className="example-header row">
-          <div className="mb-4 col-lg-12">
-            <label>Search Service</label>
-            <input
-              placeholder="Filter"
-              id="inputField"
-              className="form-control h-40"
-              value={serviceSearchValue}
-              onChange={(event) => {
-                handleServiceInputChange(event);
-              }}
-            />
-          </div>
-        </div>
-        <Services
-          showAddServiceDialog={showAddServiceDialog}
-          setShowAddServiceDialog={setShowAddServiceDialog}
-        />
-      </CustomTabPanel>
+
       <CustomTabPanel value={value} index={3}>
         <div className="mb-4 " style={{ marginLeft: "-10px" }}>
           <Button size="medium" onClick={() => setShowAddProviderDialog(true)}>
