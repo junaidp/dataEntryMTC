@@ -1,9 +1,9 @@
 import React from "react";
 import {
-  setupGetAllVariations,
-  resetVariationAddSuccess,
-  resetVariations,
-} from "../../global-redux/reducers/variations/slice.jsx";
+  setupGetAllOptions,
+  resetOptionAddSuccess,
+  resetOptions,
+} from "../../global-redux/reducers/options/slice";
 import { useDispatch, useSelector } from "react-redux";
 import { setupGetAllExperienceWithOutParams } from "../../global-redux/reducers/experiences/slice";
 import { CircularProgress, FormControl } from "@mui/material";
@@ -12,23 +12,22 @@ import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 import Form from "./components/Form.jsx";
 import Pagination from "@mui/material/Pagination";
-import AddVariationDialog from "./components/AddVariationDialog.jsx";
-import DeleteVariationDialog from "./components/DeleteVariationDialog.jsx";
-import EditVariationDialog from "./components/edit-variation/EditVariationDialog.jsx";
+import AddOptionDialog from "./components/AddOptionDialog.jsx";
+import DeleteOptionDialog from "./components/DeleteOptionDialog.jsx";
+import EditOptionDialog from "./components/edit-option/EditOptionDialog.jsx";
 
-const Variation = ({ showAddVariationDialog, setShowAddVariationDialog }) => {
+const Options = ({ setShowAddOptionDialog, showAddOptionDialog }) => {
   const dispatch = useDispatch();
   const { allExperience, loading: experienceLoading } = useSelector(
     (state) => state?.experiences
   );
-  const [showEditVariationDialog, setShowEditVariationDialog] =
+  const [showEditOptionDialog, setShowEditOptionDialog] = React.useState(false);
+  const [showDeleteOptionDialog, setShowDeleteOptionDialog] =
     React.useState(false);
-  const [showDeleteVariationDialog, setShowDeleteVariationDialog] =
-    React.useState(false);
-  const [currentVariationId, setCurrentVariationId] = React.useState("");
-  const [selectedVaraition, setSelectedVariation] = React.useState({});
-  const { loading, allVariations, variationAddSuccess } = useSelector(
-    (state) => state?.variations
+  const [currentOptionId, setCurrentOptionId] = React.useState("");
+  const [selectedOption, setSelectedOption] = React.useState({});
+  const { loading, allOptions, optionAddSuccess } = useSelector(
+    (state) => state?.options
   );
   const [experienceId, setExperienceId] = React.useState("");
   const [page, setPage] = React.useState(1);
@@ -38,54 +37,52 @@ const Variation = ({ showAddVariationDialog, setShowAddVariationDialog }) => {
 
   React.useEffect(() => {
     if (experienceId && experienceId !== "") {
-      dispatch(setupGetAllVariations(`?experienceId=${experienceId}`));
+      dispatch(setupGetAllOptions(`?experienceId=${experienceId}`));
     }
   }, [experienceId]);
   React.useEffect(() => {
-    if (variationAddSuccess) {
-      setSelectedVariation({});
-      setCurrentVariationId("");
-      dispatch(resetVariationAddSuccess());
+    if (optionAddSuccess) {
+      setSelectedOption({});
+      setCurrentOptionId("");
+      dispatch(resetOptionAddSuccess());
     }
     if (experienceId && experienceId !== "") {
-      dispatch(setupGetAllVariations(`?experienceId=${experienceId}`));
+      dispatch(setupGetAllOptions(`?experienceId=${experienceId}`));
     }
-  }, [variationAddSuccess]);
+  }, [optionAddSuccess]);
 
   React.useEffect(() => {
     dispatch(setupGetAllExperienceWithOutParams());
     return () => {
-      dispatch(resetVariations());
+      dispatch(resetOptions());
     };
   }, []);
 
   return (
     <div>
-      {showAddVariationDialog && (
+      {showAddOptionDialog && (
         <div className="modal-objective">
           <div className="model-wrap">
-            <AddVariationDialog
-              setShowAddVariationDialog={setShowAddVariationDialog}
+            <AddOptionDialog setShowAddOptionDialog={setShowAddOptionDialog} />
+          </div>
+        </div>
+      )}
+      {showEditOptionDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <EditOptionDialog
+              setShowEditOptionDialog={setShowEditOptionDialog}
+              selectedOption={selectedOption}
             />
           </div>
         </div>
       )}
-      {showEditVariationDialog && (
+      {showDeleteOptionDialog && (
         <div className="modal-objective">
           <div className="model-wrap">
-            <EditVariationDialog
-              setShowEditVariationDialog={setShowEditVariationDialog}
-              selectedVaraition={selectedVaraition}
-            />
-          </div>
-        </div>
-      )}
-      {showDeleteVariationDialog && (
-        <div className="modal-objective">
-          <div className="model-wrap">
-            <DeleteVariationDialog
-              setShowDeleteVariationDialog={setShowDeleteVariationDialog}
-              currentVariationId={currentVariationId}
+            <DeleteOptionDialog
+              setShowDeleteOptionDialog={setShowDeleteOptionDialog}
+              currentOptionId={currentOptionId}
             />
           </div>
         </div>
@@ -122,17 +119,16 @@ const Variation = ({ showAddVariationDialog, setShowAddVariationDialog }) => {
         <div className="mt-4">
           <CircularProgress />
         </div>
-      ) : allVariations?.length === 0 ||
-        allVariations[0]?.error === "Not Found" ? (
+      ) : allOptions?.length === 0 || allOptions[0]?.error === "Not Found" ? (
         <p className="mt-4">
-          Variations Not Found. Please Select Experience Or Change Experience
+          Options Not Found. Please Select Experience Or Change Experience
         </p>
       ) : (
         <div className="mt-4">
           <div className="accordion" id="accordionFlushExample">
-            {allVariations
+            {allOptions
               ?.slice((page - 1) * 10, page * 10)
-              ?.map((variation, index) => {
+              ?.map((option, index) => {
                 return (
                   <div className="accordion-item" key={index}>
                     <h2 className="accordion-header">
@@ -143,12 +139,10 @@ const Variation = ({ showAddVariationDialog, setShowAddVariationDialog }) => {
                         data-bs-target={`#flush-collapse${index}`}
                         aria-expanded="false"
                         aria-controls={`flush-collapse${index}`}
-                        onClick={() => setCurrentVariationId(variation?.id)}
+                        onClick={() => setCurrentOptionId(option?.id)}
                       >
                         <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
-                        {variation?.title
-                          ? variation?.title
-                          : "No Title Provided"}
+                        {option?.title ? option?.title : "No Title Provided"}
                       </button>
                     </h2>
                     <div
@@ -162,8 +156,8 @@ const Variation = ({ showAddVariationDialog, setShowAddVariationDialog }) => {
                             <div
                               className={`btn btn-labeled btn-primary px-3 shadow  my-4 `}
                               onClick={() => {
-                                setSelectedVariation(variation);
-                                setShowEditVariationDialog(true);
+                                setSelectedOption(option);
+                                setShowEditOptionDialog(true);
                               }}
                             >
                               <span className="btn-label me-2">
@@ -173,7 +167,7 @@ const Variation = ({ showAddVariationDialog, setShowAddVariationDialog }) => {
                             </div>
                             <div
                               className={`btn btn-labeled btn-danger mx-4 px-3 shadow  my-4 `}
-                              onClick={() => setShowDeleteVariationDialog(true)}
+                              onClick={() => setShowDeleteOptionDialog(true)}
                             >
                               <span className="btn-label me-2">
                                 <i className="fa fa-check-circle f-18"></i>
@@ -181,7 +175,7 @@ const Variation = ({ showAddVariationDialog, setShowAddVariationDialog }) => {
                               Delete
                             </div>
                           </div>
-                          <Form variation={variation} />
+                          <Form option={option} />
                         </div>
                       </div>
                     </div>
@@ -190,7 +184,7 @@ const Variation = ({ showAddVariationDialog, setShowAddVariationDialog }) => {
               })}
           </div>
           <Pagination
-            count={Math.ceil(allVariations?.length / 10)}
+            count={Math.ceil(allOptions?.length / 10)}
             page={page}
             onChange={handleChangePage}
           />
@@ -200,4 +194,4 @@ const Variation = ({ showAddVariationDialog, setShowAddVariationDialog }) => {
   );
 };
 
-export default Variation;
+export default Options;

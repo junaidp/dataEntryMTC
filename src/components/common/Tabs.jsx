@@ -13,6 +13,8 @@ import Button from "@mui/material/Button";
 import { setupSearchVendorByQuery } from "../../global-redux/reducers/vendor/slice";
 import { useDispatch, useSelector } from "react-redux";
 import { useDebounce } from "use-debounce";
+import Options from "../options/Options";
+import Variations from "../variations/Variations";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -117,6 +119,43 @@ export default function BasicTabs() {
 
   const handleProviderInputChange = (event) => {
     setProviderSearchValue(event.target.value);
+  };
+
+  // React.useEffect(() => {
+  //   dispatch(setupSearchVendorByQuery(debouncedSearchValue));
+  // }, [debouncedExperienceSearchValue]);
+
+  // React.useEffect(() => {
+  //   if (vendorAddSuccess) {
+  //     setSearchValue("");
+  //   }
+  // }, [vendorAddSuccess]);
+  // For Options
+  const [optionSearchValue, setOptionSearchValue] = React.useState("");
+  const [debouncedOptionSearchValue] = useDebounce(searchValue, 1000);
+  const [showAddOptionDialog, setShowAddOptionDialog] = React.useState(false);
+
+  const handleOptionInputChange = (event) => {
+    setOptionSearchValue(event.target.value);
+  };
+
+  // React.useEffect(() => {
+  //   dispatch(setupSearchVendorByQuery(debouncedSearchValue));
+  // }, [debouncedExperienceSearchValue]);
+
+  // React.useEffect(() => {
+  //   if (vendorAddSuccess) {
+  //     setSearchValue("");
+  //   }
+  // }, [vendorAddSuccess]);
+  // For  Variations
+  const [variationSearchValue, setVariationSearchValue] = React.useState("");
+  const [debouncedVariationSearchValue] = useDebounce(searchValue, 1000);
+  const [showAddVariationDialog, setShowAddVariationDialog] =
+    React.useState(false);
+
+  const handleVariationInputChange = (event) => {
+    setVariationSearchValue(event.target.value);
   };
 
   // React.useEffect(() => {
@@ -249,10 +288,54 @@ export default function BasicTabs() {
         />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={4}>
-        <p>Here Comes The Options</p>
+        <div className="mb-4 " style={{ marginLeft: "-10px" }}>
+          <Button size="medium" onClick={() => setShowAddOptionDialog(true)}>
+            <h2 className="heading mt-2">Add Option</h2>
+          </Button>
+        </div>
+        <div className="example-header row">
+          <div className="mb-4 col-lg-12">
+            <label>Search Option</label>
+            <input
+              placeholder="Filter"
+              id="inputField"
+              className="form-control h-40"
+              value={optionSearchValue}
+              onChange={(event) => {
+                handleOptionInputChange(event);
+              }}
+            />
+          </div>
+        </div>
+        <Options
+          showAddOptionDialog={showAddOptionDialog}
+          setShowAddOptionDialog={setShowAddOptionDialog}
+        />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={5}>
-        <p>Here Comes The Variaions</p>
+        <div className="mb-4 " style={{ marginLeft: "-10px" }}>
+          <Button size="medium" onClick={() => setShowAddVariationDialog(true)}>
+            <h2 className="heading mt-2">Add Variation</h2>
+          </Button>
+        </div>
+        <div className="example-header row">
+          <div className="mb-4 col-lg-12">
+            <label>Search Variation</label>
+            <input
+              placeholder="Filter"
+              id="inputField"
+              className="form-control h-40"
+              value={variationSearchValue}
+              onChange={(event) => {
+                handleVariationInputChange(event);
+              }}
+            />
+          </div>
+        </div>
+        <Variations
+          showAddVariationDialog={showAddVariationDialog}
+          setShowAddVariationDialog={setShowAddVariationDialog}
+        />
       </CustomTabPanel>
     </Box>
   );
