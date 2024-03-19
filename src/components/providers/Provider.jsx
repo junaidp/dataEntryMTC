@@ -10,12 +10,20 @@ import AddProviderDialog from "./components/AddProviderDialog";
 import { setupGetAllVendors } from "../../global-redux/reducers/vendor/slice";
 import RichTextEditor from "../../components/common/RichText";
 import { useSelector } from "react-redux";
+import DeleteProviderDialog from "./components/DeleteProviderDialog";
+import EditProviderDialog from "./components/EditProviderDialog";
 
 const Providers = ({ showAddProvidereDialog, setShowAddProviderDialog }) => {
   const dispatch = useDispatch();
   const { allProvider, providerAddSuccess, loading } = useSelector(
     (state) => state.providers
   );
+  const [showEditProviderDialog, setShowEditProviderDialog] =
+    React.useState(false);
+  const [selectedProvider, setSelectedProvider] = React.useState({});
+  const [showDeleteProviderDialog, setShowDeleteProviderDialog] =
+    React.useState(false);
+  const [currentProviderId, setCurrentProviderId] = React.useState("");
   const [page, setPage] = React.useState(1);
   const handleChangePage = (_, value) => {
     setPage(value);
@@ -23,6 +31,7 @@ const Providers = ({ showAddProvidereDialog, setShowAddProviderDialog }) => {
 
   React.useEffect(() => {
     if (providerAddSuccess) {
+      setCurrentProviderId("");
       dispatch(setupGetAllProviderWithOutParams());
       dispatch(setupGetAllVendors());
       dispatch(resetProviderAddSuccess());
@@ -41,6 +50,26 @@ const Providers = ({ showAddProvidereDialog, setShowAddProviderDialog }) => {
           <div className="model-wrap">
             <AddProviderDialog
               setShowAddProviderDialog={setShowAddProviderDialog}
+            />
+          </div>
+        </div>
+      )}
+      {showEditProviderDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <EditProviderDialog
+              setShowEditProviderDialog={setShowEditProviderDialog}
+              selectedProvider={selectedProvider}
+            />
+          </div>
+        </div>
+      )}
+      {showDeleteProviderDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <DeleteProviderDialog
+              setShowDeleteProviderDialog={setShowDeleteProviderDialog}
+              currentProviderId={currentProviderId}
             />
           </div>
         </div>
@@ -64,6 +93,7 @@ const Providers = ({ showAddProvidereDialog, setShowAddProviderDialog }) => {
                       data-bs-target={`#flush-collapse${index}`}
                       aria-expanded="false"
                       aria-controls={`flush-collapse${index}`}
+                      onClick={() => setCurrentProviderId(provider?.id)}
                     >
                       <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
                       {provider?.name ? provider?.name : "No Name Provided"}
@@ -79,6 +109,10 @@ const Providers = ({ showAddProvidereDialog, setShowAddProviderDialog }) => {
                         <div className="float-end mb-2">
                           <div
                             className={`btn btn-labeled btn-primary px-3 shadow  my-4 `}
+                            onClick={() => {
+                              setShowEditProviderDialog(true);
+                              setSelectedProvider(provider);
+                            }}
                           >
                             <span className="btn-label me-2">
                               <i className="fa fa-check-circle f-18"></i>
@@ -87,6 +121,9 @@ const Providers = ({ showAddProvidereDialog, setShowAddProviderDialog }) => {
                           </div>
                           <div
                             className={`btn btn-labeled btn-danger mx-4 px-3 shadow  my-4 `}
+                            onClick={() => {
+                              setShowDeleteProviderDialog(true);
+                            }}
                           >
                             <span className="btn-label me-2">
                               <i className="fa fa-check-circle f-18"></i>

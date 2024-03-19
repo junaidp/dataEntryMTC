@@ -2,14 +2,14 @@ import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { v4 as uuidv4 } from "uuid";
-import { setupAddExperience } from "../../../../../global-redux/reducers/experiences/slice";
+import { setupAddExperience } from "../../../../global-redux/reducers/experiences/slice";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import ExperienceDialogForm from "./ExperienceDialogForm";
 
-const AddExperienceDialog = ({
-  setShowAddExperienceDialog,
-  currentVendorId,
+const EditExperienceDialog = ({
+  setShowEditExperienceDialog,
+  selectedExperience,
 }) => {
   const dispatch = useDispatch();
   const { allExperience } = useSelector((state) => state.experiences);
@@ -90,7 +90,9 @@ const AddExperienceDialog = ({
             setupAddExperience([
               {
                 ...values,
-                vendorId: currentVendorId,
+                id: selectedExperience?.id,
+                vendorId: selectedExperience?.vendorId,
+                providerId: selectedExperience?.providerId,
                 links: links?.map((item) => {
                   return {
                     link: item.link,
@@ -220,16 +222,71 @@ const AddExperienceDialog = ({
 
   function handleClose() {
     formik.resetForm({ values: initialValues });
-    setShowAddExperienceDialog(false);
+    setShowEditExperienceDialog(false);
   }
 
   React.useEffect(() => {
     if (experienceAddSuccess) {
       formik.resetForm({ values: initialValues });
-      setShowAddExperienceDialog(false);
-      toast.success("Experience Added Successfully")
+      setShowEditExperienceDialog(false);
+      toast.success("Experience Updated Successfully");
     }
   }, [experienceAddSuccess]);
+
+  React.useEffect(() => {
+    if (Object.keys(selectedExperience)?.length !== 0) {
+      formik.resetForm({
+        values: {
+          ...formik.values,
+          title: selectedExperience?.title,
+          address: selectedExperience?.address,
+          description: selectedExperience?.description,
+          termsAndConditions: selectedExperience?.termsAndConditions,
+        },
+      });
+      setPrices(
+        selectedExperience?.price?.map((singleItem) => {
+          return {
+            id: uuidv4(),
+            price: singleItem,
+          };
+        })
+      );
+      setDurations(
+        selectedExperience?.duration?.map((singleItem) => {
+          return {
+            id: uuidv4(),
+            duration: singleItem,
+          };
+        })
+      );
+      setAvailableTimes(
+        selectedExperience?.availableTime?.map((singleItem) => {
+          return {
+            id: uuidv4(),
+            time: singleItem,
+          };
+        })
+      );
+      setLinks(
+        selectedExperience?.links?.map((singleItem) => {
+          return {
+            id: uuidv4(),
+            link: singleItem?.link,
+            linkExplanation: singleItem?.explanation,
+          };
+        })
+      );
+      setKeywords(
+        selectedExperience?.storyLineKeywords?.map((singleItem) => {
+          return {
+            id: uuidv4(),
+            name: singleItem,
+          };
+        })
+      );
+    }
+  }, [selectedExperience]);
 
   return (
     <ExperienceDialogForm
@@ -277,4 +334,4 @@ const AddExperienceDialog = ({
   );
 };
 
-export default AddExperienceDialog;
+export default EditExperienceDialog;

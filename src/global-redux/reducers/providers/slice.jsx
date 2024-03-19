@@ -3,6 +3,7 @@ import {
   getAllProvider,
   addProvider,
   getAllProviderWithOutParams,
+  deleteProvider,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -29,6 +30,12 @@ export const setupAddProvider = createAsyncThunk(
   "provider/addProvider",
   async (data, thunkAPI) => {
     return addProvider(data, thunkAPI);
+  }
+);
+export const setupDeleteProvider = createAsyncThunk(
+  "provider/deleteProvider",
+  async (data, thunkAPI) => {
+    return deleteProvider(data, thunkAPI);
   }
 );
 
@@ -90,6 +97,24 @@ export const slice = createSlice({
         state.providerAddSuccess = true;
       })
       .addCase(setupAddProvider.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Delete Provider
+    builder
+      .addCase(setupDeleteProvider.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupDeleteProvider.fulfilled, (state) => {
+        state.loading = false;
+        state.providerAddSuccess = true;
+        toast.success("Provider Deleted Succussfully");
+      })
+      .addCase(setupDeleteProvider.rejected, (state, action) => {
         state.loading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);

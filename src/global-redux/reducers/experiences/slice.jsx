@@ -3,6 +3,7 @@ import {
   getAllExperience,
   addExperience,
   getAllExperienceWithOutParams,
+  deleteExperience,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -29,6 +30,12 @@ export const setupAddExperience = createAsyncThunk(
   "experience/addExperience",
   async (data, thunkAPI) => {
     return addExperience(data, thunkAPI);
+  }
+);
+export const setupDeleteExperience = createAsyncThunk(
+  "experience/deleteExperience",
+  async (data, thunkAPI) => {
+    return deleteExperience(data, thunkAPI);
   }
 );
 
@@ -91,6 +98,24 @@ export const slice = createSlice({
         state.experienceAddSuccess = true;
       })
       .addCase(setupAddExperience.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Delete Experince
+    builder
+      .addCase(setupDeleteExperience.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupDeleteExperience.fulfilled, (state) => {
+        state.loading = false;
+        state.experienceAddSuccess = true;
+        toast.success("Experience Deleted Successfully");
+      })
+      .addCase(setupDeleteExperience.rejected, (state, action) => {
         state.loading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);

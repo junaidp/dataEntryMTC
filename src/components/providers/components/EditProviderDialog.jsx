@@ -4,14 +4,17 @@ import * as Yup from "yup";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
-import RichTextEditor from "../../../../common/RichText";
-import { setupAddProvider } from "../../../../../global-redux/reducers/providers/slice";
+import RichTextEditor from "../../../components/common/RichText";
+import { setupAddProvider } from "../../../global-redux/reducers/providers/slice";
 import { useSelector, useDispatch } from "react-redux";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import { toast } from "react-toastify";
 
-const AddProviderDialog = ({ setShowAddProviderDialog, currentVendorId }) => {
+const EditProviderDialog = ({
+  setShowEditProviderDialog,
+  selectedProvider,
+}) => {
   const dispatch = useDispatch();
   const { providerAddSuccess, loading } = useSelector(
     (state) => state?.providers
@@ -51,8 +54,9 @@ const AddProviderDialog = ({ setShowAddProviderDialog, currentVendorId }) => {
           setupAddProvider([
             {
               ...values,
-              experienceId: currentVendorId,
-              vendorId: currentVendorId,
+              id: selectedProvider?.id,
+              vendorId: selectedProvider?.vendorId,
+              experienceId: selectedProvider?.experienceId,
             },
           ])
         );
@@ -66,16 +70,34 @@ const AddProviderDialog = ({ setShowAddProviderDialog, currentVendorId }) => {
 
   function handleClose() {
     formik.resetForm({ values: initialValues });
-    setShowAddProviderDialog(false);
+    setShowEditProviderDialog(false);
   }
 
   React.useEffect(() => {
     if (providerAddSuccess) {
       formik.resetForm({ values: initialValues });
-      setShowAddProviderDialog(false);
-      toast.success("Provider Added Successfully")
+      setShowEditProviderDialog(false);
+      toast.success("Provider Updated Successfully");
     }
   }, [providerAddSuccess]);
+
+  React.useEffect(() => {
+    if (Object.keys(selectedProvider)?.length !== 0) {
+      formik.resetForm({
+        values: {
+          ...formik.values,
+          name: selectedProvider?.name,
+          address: selectedProvider?.address,
+          pointOfContact: selectedProvider?.pointOfContact,
+          website: selectedProvider?.website,
+          email: selectedProvider?.email,
+          regionsCovered: selectedProvider?.regionsCovered,
+          manageVenue: selectedProvider?.manageVenue,
+          description: selectedProvider?.description,
+        },
+      });
+    }
+  }, [selectedProvider]);
 
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -196,6 +218,7 @@ const AddProviderDialog = ({ setShowAddProviderDialog, currentVendorId }) => {
                   type="checkbox"
                   role="switch"
                   id="flexSwitchCheckDefault"
+                  checked={Boolean(formik?.values?.manageVenue)}
                 />
               </div>
 
@@ -246,4 +269,4 @@ const AddProviderDialog = ({ setShowAddProviderDialog, currentVendorId }) => {
   );
 };
 
-export default AddProviderDialog;
+export default EditProviderDialog;

@@ -8,7 +8,8 @@ import {
 } from "../../global-redux/reducers/experiences/slice";
 import AddExperienceDialog from "./components/AddExperieneDialog";
 import { setupGetAllVendors } from "../../global-redux/reducers/vendor/slice";
-
+import DeleteExperienceDialog from "./components/DeleteExperienceDialog";
+import EditExperienceDialog from "./components/edit-experience-dialog/EditExperienceDialog";
 import { useSelector } from "react-redux";
 import Form from "./components/Form";
 
@@ -20,9 +21,12 @@ const Experiences = ({
   const { allExperience, experienceAddSuccess, loading } = useSelector(
     (state) => state.experiences
   );
-  // const [showDeleteExperienceDialog, setShowDeleteExperienceDialog] =
-  //   React.useState(false);
-  // const [currentExperienceId, setShowCurrentExperienceId] = React.useState("");
+  const [showDeleteExperienceDialog, setShowDeleteExperienceDialog] =
+    React.useState(false);
+  const [showEditExperienceDialog, setShowEditExperienceDialog] =
+    React.useState(false);
+  const [selectedExperience, setSelectedExperience] = React.useState({});
+  const [currentExperienceId, setShowCurrentExperienceId] = React.useState("");
   const [page, setPage] = React.useState(1);
   const handleChangePage = (_, value) => {
     setPage(value);
@@ -30,6 +34,7 @@ const Experiences = ({
 
   React.useEffect(() => {
     if (experienceAddSuccess) {
+      setShowCurrentExperienceId("");
       dispatch(setupGetAllExperienceWithOutParams());
       dispatch(setupGetAllVendors());
       dispatch(resetExperienceAddSuccess());
@@ -48,6 +53,26 @@ const Experiences = ({
           <div className="model-wrap">
             <AddExperienceDialog
               setShowAddExperienceDialog={setShowAddExperienceDialog}
+            />
+          </div>
+        </div>
+      )}
+      {showDeleteExperienceDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <DeleteExperienceDialog
+              setShowDeleteExperienceDialog={setShowDeleteExperienceDialog}
+              currentExperienceId={currentExperienceId}
+            />
+          </div>
+        </div>
+      )}
+      {showEditExperienceDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <EditExperienceDialog
+              setShowEditExperienceDialog={setShowEditExperienceDialog}
+              selectedExperience={selectedExperience}
             />
           </div>
         </div>
@@ -72,6 +97,7 @@ const Experiences = ({
                       data-bs-target={`#flush-collapse${index}`}
                       aria-expanded="false"
                       aria-controls={`flush-collapse${index}`}
+                      onClick={() => setShowCurrentExperienceId(experience?.id)}
                     >
                       <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
                       {experience?.title
@@ -89,6 +115,10 @@ const Experiences = ({
                         <div className="float-end mb-2">
                           <div
                             className={`btn btn-labeled btn-primary px-3 shadow  my-4 `}
+                            onClick={() => {
+                              setSelectedExperience(experience);
+                              setShowEditExperienceDialog(true);
+                            }}
                           >
                             <span className="btn-label me-2">
                               <i className="fa fa-check-circle f-18"></i>
@@ -97,6 +127,7 @@ const Experiences = ({
                           </div>
                           <div
                             className={`btn btn-labeled btn-danger mx-4 px-3 shadow  my-4 `}
+                            onClick={() => setShowDeleteExperienceDialog(true)}
                           >
                             <span className="btn-label me-2">
                               <i className="fa fa-check-circle f-18"></i>
