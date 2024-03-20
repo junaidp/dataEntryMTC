@@ -12,12 +12,15 @@ import RichTextEditor from "../../components/common/RichText";
 import { useSelector } from "react-redux";
 import DeleteProviderDialog from "./components/DeleteProviderDialog";
 import EditProviderDialog from "./components/EditProviderDialog";
+import { setupGetAllExperienceWithOutParams } from "../../global-redux/reducers/experiences/slice";
 
 const Providers = ({ showAddProvidereDialog, setShowAddProviderDialog }) => {
   const dispatch = useDispatch();
   const { allProvider, providerAddSuccess, loading } = useSelector(
     (state) => state.providers
   );
+  const { allVendors } = useSelector((state) => state?.vendors);
+  const { allExperience } = useSelector((state) => state?.experiences);
   const [showEditProviderDialog, setShowEditProviderDialog] =
     React.useState(false);
   const [selectedProvider, setSelectedProvider] = React.useState({});
@@ -33,6 +36,7 @@ const Providers = ({ showAddProvidereDialog, setShowAddProviderDialog }) => {
     if (providerAddSuccess) {
       setCurrentProviderId("");
       dispatch(setupGetAllProviderWithOutParams());
+      dispatch(setupGetAllExperienceWithOutParams());
       dispatch(setupGetAllVendors());
       dispatch(resetProviderAddSuccess());
     }
@@ -40,6 +44,7 @@ const Providers = ({ showAddProvidereDialog, setShowAddProviderDialog }) => {
 
   React.useEffect(() => {
     dispatch(setupGetAllProviderWithOutParams());
+    dispatch(setupGetAllExperienceWithOutParams());
     dispatch(setupGetAllVendors());
   }, []);
 
@@ -157,6 +162,24 @@ const Providers = ({ showAddProvidereDialog, setShowAddProviderDialog }) => {
                                   {provider?.pointOfContact
                                     ? provider?.pointOfContact
                                     : "No Point Of Contact Provided"}
+                                </p>
+                              </div>
+                            </div>
+                            <div className="row">
+                              <div className="col-lg-6 mb-4">
+                                <label>Vendor</label>
+                                <p>
+                                  {allVendors?.find(
+                                    (all) => all?.id === provider?.vendorId
+                                  )?.name || "No Vendor Provided"}
+                                </p>
+                              </div>
+                              <div className="col-lg-6 mb-4">
+                                <label>Experience</label>
+                                <p>
+                                  {allExperience?.find(
+                                    (all) => all?.id === provider?.experienceId
+                                  )?.title || "No Experience Provided"}
                                 </p>
                               </div>
                             </div>

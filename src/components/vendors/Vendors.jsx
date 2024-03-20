@@ -278,15 +278,7 @@ const Vendor = ({ setShowAddVendorDialog, showAddVendorDialog }) => {
                               }
                             />
                           </div>
-                          <div className="row">
-                            <div className="col-lg-12">
-                              <RichTextEditor
-                                initialValue={""}
-                                readonly={false}
-                                placeholder="General Terms And Conditions "
-                              />
-                            </div>
-                          </div>
+
                           <div className="row mt-4">
                             <div className="col-lg-4 mb-4">
                               <label>Total Experiences</label>

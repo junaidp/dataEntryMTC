@@ -4,10 +4,8 @@ import RichTextEditor from "../../common/RichText";
 import Chip from "@mui/material/Chip";
 import { Card } from "@mui/material";
 import MultipleSelect from "./MultiSelect";
-import InputLabel from "@mui/material/InputLabel";
-import FormControl from "@mui/material/FormControl";
-import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
+import AutoCompleteProvider from "./ProviderAutoComplete";
+import AutoCompleteVendor from "./AutoCompleteVendor";
 
 const ExperienceDialogForm = ({
   formik,
@@ -21,6 +19,7 @@ const ExperienceDialogForm = ({
   handleChangeTermsAndConditions,
   keywords,
   link,
+  handleAddExperience,
   setLink,
   linkExplanation,
   setLinkExplanation,
@@ -50,6 +49,11 @@ const ExperienceDialogForm = ({
   setExperiences,
   experience,
   allExperience,
+  allProvider,
+  setExperienceWhy,
+  experienceWhy,
+  linkWithOtherExperiences,
+  handleDeleteLinkWithOtherExperience,
   allVendors,
 }) => {
   return (
@@ -69,40 +73,9 @@ const ExperienceDialogForm = ({
               helperText={formik.touched.title && formik.errors.title}
             />
           </div>
-          <div className="row">
-            <div className="col-lg-12 mb-4">
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Vendor</InputLabel>
-                <Select
-                  id="regionsCovered"
-                  name="regionsCovered"
-                  className="form-control w-100 "
-                  label="Regions Covered"
-                  defaultValue=""
-                  {...formik.getFieldProps("vendorId")}
-                  error={
-                    formik.touched.vendorId && Boolean(formik.errors.vendorId)
-                  }
-                  helperText={formik.touched.vendorId && formik.errors.vendorId}
-                >
-                  <MenuItem value="">Select Vndor</MenuItem>
-                  {allVendors?.map((item, index) => {
-                    return (
-                      <MenuItem value={item?.id} key={index}>
-                        {item?.name}
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
-              </FormControl>
-              {formik.touched.vendorId && formik.errors.vendorId && (
-                <div className="error">{formik.errors.vendorId}</div>
-              )}
-            </div>
-          </div>
 
           <div className="row">
-            <div className="col-lg-12 mb-4">
+            <div className="col-lg-12 mb-2">
               <TextField
                 id="address"
                 name="address"
@@ -114,6 +87,22 @@ const ExperienceDialogForm = ({
                 helperText={formik.touched.address && formik.errors.address}
               />
             </div>
+          </div>
+          <div className="row mb-4 w-100">
+            <AutoCompleteProvider
+              options={allProvider?.map((provider) => {
+                return { name: provider?.name, id: provider?.id };
+              })}
+              formik={formik}
+            />
+          </div>
+          <div className="row mb-4 w-100">
+            <AutoCompleteVendor
+              options={allVendors?.map((vendor) => {
+                return { name: vendor?.name, id: vendor?.id };
+              })}
+              formik={formik}
+            />
           </div>
           <div className="row">
             <div>
@@ -215,6 +204,7 @@ const ExperienceDialogForm = ({
               </Card>
             </div>
           </div>
+
           <div className="row mt-4">
             <div>
               <h5>Available Time:</h5>
@@ -315,13 +305,53 @@ const ExperienceDialogForm = ({
             </Card>
           </div>
           <div className="row mb-4">
-            <div className="col-lg-12">
+            <div className="col-lg-6">
               <MultipleSelect
                 setExperiences={setExperiences}
                 experience={experience}
                 names={allExperience?.map((all) => all?.title)}
               />
             </div>
+            <div className="col-lg-4 mb-4">
+              <label className="w-100 mb-2">Why:</label>
+              <TextField
+                className="form-control"
+                value={experienceWhy}
+                onChange={(event) => setExperienceWhy(event.target.value)}
+              />
+            </div>
+            <div className={`col-lg-2 text-end float-end align-self-end mb-4`}>
+              <button
+                className="btn btn-labeled btn-primary w-100 shadow"
+                type="submit"
+                onClick={handleAddExperience}
+              >
+                <span className="btn-label me-2">
+                  <i className="fa fa-plus"></i>
+                </span>
+                Add Experience
+              </button>
+            </div>
+            <label className="mb-2">List Of Experiences:</label>
+            <Card className="py-4">
+              {linkWithOtherExperiences?.length === 0 ? (
+                <lable className="mx-2">No Experience Provided</lable>
+              ) : (
+                linkWithOtherExperiences.map((key, index) => {
+                  return (
+                    <Chip
+                      label={`${key?.experienceName}-${key?.why}`}
+                      key={index}
+                      variant="outlined"
+                      className="mx-2 mb-2"
+                      onDelete={() =>
+                        handleDeleteLinkWithOtherExperience(key?.id)
+                      }
+                    />
+                  );
+                })
+              )}
+            </Card>
           </div>
           <div className="mb-4">
             <h5>Links:</h5>

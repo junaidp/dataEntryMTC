@@ -9,6 +9,8 @@ import { setupAddProvider } from "../../../global-redux/reducers/providers/slice
 import { useSelector, useDispatch } from "react-redux";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
+import AutoCompleteVendor from "./AutoCompleteVendor";
+import AutoCompleteExperience from "./AutoCompleteExperience";
 
 const AddProviderDialog = ({ setShowAddProviderDialog }) => {
   const dispatch = useDispatch();
@@ -16,6 +18,7 @@ const AddProviderDialog = ({ setShowAddProviderDialog }) => {
     (state) => state?.providers
   );
   const { allVendors } = useSelector((state) => state.vendors);
+  const { allExperience } = useSelector((state) => state.experiences);
   let initialValues = {
     name: "",
     address: "",
@@ -26,6 +29,7 @@ const AddProviderDialog = ({ setShowAddProviderDialog }) => {
     manageVenue: "",
     description: "",
     vendorId: "",
+    experienceId: "",
   };
   const validationSchema = Yup.object({
     name: Yup.string().required("Provider name is required"),
@@ -53,7 +57,6 @@ const AddProviderDialog = ({ setShowAddProviderDialog }) => {
           setupAddProvider([
             {
               ...values,
-              experienceId: values?.vendorId,
             },
           ])
         );
@@ -96,7 +99,7 @@ const AddProviderDialog = ({ setShowAddProviderDialog }) => {
           </div>
 
           <div className="row">
-            <div className="col-lg-6 mb-4">
+            <div className="col-lg-6 mb-2">
               <TextField
                 id="address"
                 name="address"
@@ -108,7 +111,7 @@ const AddProviderDialog = ({ setShowAddProviderDialog }) => {
                 helperText={formik.touched.address && formik.errors.address}
               />
             </div>
-            <div className="col-lg-6 mb-4">
+            <div className="col-lg-6 mb-2">
               <TextField
                 id="pointOfContact"
                 name="pointOfContact"
@@ -126,35 +129,25 @@ const AddProviderDialog = ({ setShowAddProviderDialog }) => {
               />
             </div>
           </div>
-          <div className="row">
-            <div className="col-lg-12 mb-4">
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Vendor</InputLabel>
-                <Select
-                  id="regionsCovered"
-                  name="regionsCovered"
-                  className="form-control w-100 "
-                  label="Regions Covered"
-                  defaultValue=""
-                  {...formik.getFieldProps("vendorId")}
-                  error={
-                    formik.touched.vendorId && Boolean(formik.errors.vendorId)
-                  }
-                  helperText={formik.touched.vendorId && formik.errors.vendorId}
-                >
-                  <MenuItem value="">Select Vndor</MenuItem>
-                  {allVendors?.map((item, index) => {
-                    return (
-                      <MenuItem value={item?.id} key={index}>
-                        {item?.name}
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
-              </FormControl>
-              {formik.touched.vendorId && formik.errors.vendorId && (
-                <div className="error">{formik.errors.vendorId}</div>
-              )}
+
+          <div className="row mb-2 w-100">
+            <div className="col-lg-12">
+              <AutoCompleteVendor
+                options={allVendors?.map((vendor) => {
+                  return { name: vendor?.name, id: vendor?.id };
+                })}
+                formik={formik}
+              />
+            </div>
+          </div>
+          <div className="row mb-4 w-100">
+            <div className="col-lg-12">
+              <AutoCompleteExperience
+                options={allExperience?.map((experience) => {
+                  return { name: experience?.title, id: experience?.id };
+                })}
+                formik={formik}
+              />
             </div>
           </div>
 

@@ -4,18 +4,30 @@ import { useSelector } from "react-redux";
 
 const ViewProviderDialog = ({ setShowViewSelectedProvider }) => {
   const { selectedProvider } = useSelector((state) => state.providers);
+  const { allExperience } = useSelector((state) => state.experiences);
   return (
     <div className="px-4 py-4">
       <h2 className="pb-4 heading">View Provider</h2>
       <div>
-        <div className="col-lg-12 mb-4">
-          <label>Provider name</label>
-          <p>
-            {selectedProvider?.name
-              ? selectedProvider?.name
-              : "No Name Provided"}
-          </p>
+        <div className="row">
+          <div className="col-lg-6 mb-4">
+            <label>Provider name</label>
+            <p>
+              {selectedProvider?.name
+                ? selectedProvider?.name
+                : "No Name Provided"}
+            </p>
+          </div>
+          <div className="col-lg-6 mb-4">
+            <label>Experience</label>
+            <p>
+              {allExperience?.find(
+                (all) => all?.id === selectedProvider?.experienceId
+              )?.title || "No Experience Provided"}
+            </p>
+          </div>
         </div>
+
         <div className="row">
           <div className="col-lg-6 mb-4">
             <label>Provider address</label>

@@ -26,6 +26,7 @@ const AddVendorDialog = ({ setShowAddVendorDialog }) => {
     regionsCovered: "",
     manageVenue: false,
     description: "",
+    termsNConditions: "",
   };
   const validationSchema = Yup.object({
     name: Yup.string().required("Vendor's name is required"),
@@ -40,6 +41,9 @@ const AddVendorDialog = ({ setShowAddVendorDialog }) => {
       "Please select Yes or No for managing venue"
     ),
     description: Yup.string().required("Please provide description"),
+    termsNConditions: Yup.string().required(
+      "Please provide terms & Conditions"
+    ),
   });
 
   // Formik hook
@@ -55,6 +59,9 @@ const AddVendorDialog = ({ setShowAddVendorDialog }) => {
 
   function handleChangeDescription(value) {
     formik.resetForm({ values: { ...formik.values, description: value } });
+  }
+  function handleChangeTermsAndConditions(value) {
+    formik.resetForm({ values: { ...formik.values, termsNConditions: value } });
   }
 
   function handleClose() {
@@ -202,6 +209,7 @@ const AddVendorDialog = ({ setShowAddVendorDialog }) => {
 
           <div className="row mb-4">
             <div className="col-lg-12">
+              <label>Description</label>
               <RichTextEditor
                 placeholder="Vendor’ Description"
                 initialValue={formik.values.description}
@@ -211,6 +219,21 @@ const AddVendorDialog = ({ setShowAddVendorDialog }) => {
               {formik.touched.description && formik.errors.description && (
                 <div className="error">{formik.errors.description}</div>
               )}
+            </div>
+          </div>
+          <div className="row mb-4">
+            <div className="col-lg-12">
+              <label>Terms & Condition</label>
+              <RichTextEditor
+                placeholder="Vendor’ Terms & Conditions"
+                initialValue={formik.values.termsNConditions}
+                handleChangeTermsAndConditions={handleChangeTermsAndConditions}
+                readonly={false}
+              />
+              {formik.touched.termsNConditions &&
+                formik.errors.termsNConditions && (
+                  <div className="error">{formik.errors.termsNConditions}</div>
+                )}
             </div>
           </div>
         </div>

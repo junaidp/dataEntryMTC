@@ -10,9 +10,11 @@ import { useSelector, useDispatch } from "react-redux";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import { toast } from "react-toastify";
+import AutoSelectExperience from "./ExperienceAutoComplete";
 
 const AddProviderDialog = ({ setShowAddProviderDialog, currentVendorId }) => {
   const dispatch = useDispatch();
+  let { allExperience } = useSelector((state) => state?.experiences);
   const { providerAddSuccess, loading } = useSelector(
     (state) => state?.providers
   );
@@ -25,6 +27,7 @@ const AddProviderDialog = ({ setShowAddProviderDialog, currentVendorId }) => {
     regionsCovered: "",
     manageVenue: "",
     description: "",
+    experienceId: "",
   };
   const validationSchema = Yup.object({
     name: Yup.string().required("Provider name is required"),
@@ -51,7 +54,6 @@ const AddProviderDialog = ({ setShowAddProviderDialog, currentVendorId }) => {
           setupAddProvider([
             {
               ...values,
-              experienceId: currentVendorId,
               vendorId: currentVendorId,
             },
           ])
@@ -73,7 +75,7 @@ const AddProviderDialog = ({ setShowAddProviderDialog, currentVendorId }) => {
     if (providerAddSuccess) {
       formik.resetForm({ values: initialValues });
       setShowAddProviderDialog(false);
-      toast.success("Provider Added Successfully")
+      toast.success("Provider Added Successfully");
     }
   }, [providerAddSuccess]);
 
@@ -108,7 +110,7 @@ const AddProviderDialog = ({ setShowAddProviderDialog, currentVendorId }) => {
                 helperText={formik.touched.address && formik.errors.address}
               />
             </div>
-            <div className="col-lg-6 mb-4">
+            <div className="col-lg-6 mb-2">
               <TextField
                 id="pointOfContact"
                 name="pointOfContact"
@@ -125,6 +127,15 @@ const AddProviderDialog = ({ setShowAddProviderDialog, currentVendorId }) => {
                 }
               />
             </div>
+          </div>
+
+          <div className="row mb-4 w-100">
+            <AutoSelectExperience
+              options={allExperience?.map((experience) => {
+                return { name: experience?.title, id: experience?.id };
+              })}
+              formik={formik}
+            />
           </div>
 
           <div className="row">

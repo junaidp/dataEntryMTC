@@ -15,6 +15,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useDebounce } from "use-debounce";
 import Options from "../options/Options";
 import Variations from "../variations/Variations";
+import { setupGetProviderByQuery } from "../../global-redux/reducers/providers/slice";
+import { setupGetExperienceWithQuerySearch } from "../../global-redux/reducers/experiences/slice";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -52,10 +54,13 @@ function a11yProps(index) {
 export default function BasicTabs() {
   const dispatch = useDispatch();
   const { vendorAddSuccess } = useSelector((state) => state.vendors);
+  const { providerAddSuccess } = useSelector((state) => state.providers);
+  const { experienceAddSuccess } = useSelector((state) => state.experiences);
   const [value, setValue] = React.useState(0);
   const handleChange = (_, newValue) => {
     setValue(newValue);
   };
+
   // For Vendor
   const [searchValue, setSearchValue] = React.useState("");
   const [debouncedSearchValue] = useDebounce(searchValue, 1000);
@@ -76,7 +81,10 @@ export default function BasicTabs() {
   }, [vendorAddSuccess]);
   // For Experience
   const [experienceSearchValue, setExperienceSearchValue] = React.useState("");
-  const [debouncedExperienceSearchValue] = useDebounce(searchValue, 1000);
+  const [debouncedExperienceSearchValue] = useDebounce(
+    experienceSearchValue,
+    1000
+  );
   const [showAddExperienceDialog, setShowAddExperienceDialog] =
     React.useState(false);
 
@@ -84,15 +92,15 @@ export default function BasicTabs() {
     setExperienceSearchValue(event.target.value);
   };
 
-  // React.useEffect(() => {
-  //   dispatch(setupSearchVendorByQuery(debouncedSearchValue));
-  // }, [debouncedExperienceSearchValue]);
+  React.useEffect(() => {
+    dispatch(setupGetExperienceWithQuerySearch(debouncedExperienceSearchValue));
+  }, [debouncedExperienceSearchValue]);
 
-  // React.useEffect(() => {
-  //   if (vendorAddSuccess) {
-  //     setSearchValue("");
-  //   }
-  // }, [vendorAddSuccess]);
+  React.useEffect(() => {
+    if (experienceAddSuccess) {
+      setExperienceSearchValue("");
+    }
+  }, [experienceAddSuccess]);
   // For Service
   const [serviceSearchValue, setServiceSearchValue] = React.useState("");
   const [debouncedServiceSearchValue] = useDebounce(searchValue, 1000);
@@ -113,7 +121,7 @@ export default function BasicTabs() {
   // }, [vendorAddSuccess]);
   // For Provider
   const [providerSearchValue, setProviderSearchValue] = React.useState("");
-  const [debouncedProviderSearchValue] = useDebounce(searchValue, 1000);
+  const [debouncedProviderSearchValue] = useDebounce(providerSearchValue, 1000);
   const [showAddProvidereDialog, setShowAddProviderDialog] =
     React.useState(false);
 
@@ -121,15 +129,15 @@ export default function BasicTabs() {
     setProviderSearchValue(event.target.value);
   };
 
-  // React.useEffect(() => {
-  //   dispatch(setupSearchVendorByQuery(debouncedSearchValue));
-  // }, [debouncedExperienceSearchValue]);
+  React.useEffect(() => {
+    dispatch(setupGetProviderByQuery(debouncedProviderSearchValue));
+  }, [debouncedProviderSearchValue]);
 
-  // React.useEffect(() => {
-  //   if (vendorAddSuccess) {
-  //     setSearchValue("");
-  //   }
-  // }, [vendorAddSuccess]);
+  React.useEffect(() => {
+    if (providerAddSuccess) {
+      setProviderSearchValue("");
+    }
+  }, [providerAddSuccess]);
   // For Options
   const [optionSearchValue, setOptionSearchValue] = React.useState("");
   const [debouncedOptionSearchValue] = useDebounce(searchValue, 1000);
@@ -167,6 +175,16 @@ export default function BasicTabs() {
   //     setSearchValue("");
   //   }
   // }, [vendorAddSuccess]);
+
+  // Common
+  React.useEffect(() => {
+    setSearchValue("");
+    setProviderSearchValue("");
+    setExperienceSearchValue("");
+    setServiceSearchValue("");
+    setOptionSearchValue("");
+    setVariationSearchValue("");
+  }, [value]);
 
   return (
     <Box sx={{ width: "100%" }}>

@@ -3,6 +3,7 @@ import {
   getAllExperience,
   addExperience,
   getAllExperienceWithOutParams,
+  getExperienceWithQuerySearch,
   deleteExperience,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
@@ -18,6 +19,12 @@ export const setupGetAllExperience = createAsyncThunk(
   "experience/getAllExperience",
   async (data, thunkAPI) => {
     return getAllExperience(data, thunkAPI);
+  }
+);
+export const setupGetExperienceWithQuerySearch = createAsyncThunk(
+  "experience/getExperienceWithQuerySearch",
+  async (data, thunkAPI) => {
+    return getExperienceWithQuerySearch(data, thunkAPI);
   }
 );
 export const setupGetAllExperienceWithOutParams = createAsyncThunk(
@@ -81,6 +88,26 @@ export const slice = createSlice({
         }
       )
       .addCase(setupGetAllExperienceWithOutParams.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // All Experience Without Params
+    builder
+      .addCase(setupGetExperienceWithQuerySearch.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(
+        setupGetExperienceWithQuerySearch.fulfilled,
+        (state, { payload }) => {
+          state.loading = false;
+          state.allExperience = payload || [{ error: "Not Found" }];
+        }
+      )
+      .addCase(setupGetExperienceWithQuerySearch.rejected, (state, action) => {
         state.loading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);

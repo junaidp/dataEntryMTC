@@ -12,6 +12,7 @@ import DeleteExperienceDialog from "./components/DeleteExperienceDialog";
 import EditExperienceDialog from "./components/edit-experience-dialog/EditExperienceDialog";
 import { useSelector } from "react-redux";
 import Form from "./components/Form";
+import { setupGetAllProviderWithOutParams } from "../../global-redux/reducers/providers/slice";
 
 const Experiences = ({
   showAddExperienceDialog,
@@ -37,12 +38,14 @@ const Experiences = ({
       setShowCurrentExperienceId("");
       dispatch(setupGetAllExperienceWithOutParams());
       dispatch(setupGetAllVendors());
+      dispatch(setupGetAllProviderWithOutParams());
       dispatch(resetExperienceAddSuccess());
     }
   }, [experienceAddSuccess]);
 
   React.useEffect(() => {
     dispatch(setupGetAllExperienceWithOutParams());
+    dispatch(setupGetAllProviderWithOutParams());
     dispatch(setupGetAllVendors());
   }, []);
 

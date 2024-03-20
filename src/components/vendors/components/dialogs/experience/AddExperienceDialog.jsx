@@ -13,6 +13,7 @@ const AddExperienceDialog = ({
 }) => {
   const dispatch = useDispatch();
   const { allExperience } = useSelector((state) => state.experiences);
+  const { allProvider } = useSelector((state) => state.providers);
   const [experience, setExperiences] = React.useState([]);
   const [keywords, setKeywords] = React.useState([]);
   const [keyword, setKeyword] = React.useState("");
@@ -25,6 +26,9 @@ const AddExperienceDialog = ({
   const [durations, setDurations] = React.useState([]);
   const [availableTime, setAvailableTime] = React.useState("");
   const [avialableTimes, setAvailableTimes] = React.useState([]);
+  const [experienceWhy, setExperienceWhy] = React.useState("");
+  const [linkWithOtherExperiences, setLinkWithOtherExperiences] =
+    React.useState([]);
 
   // Input Refs
   const priceRef = React.useRef(null);
@@ -41,6 +45,7 @@ const AddExperienceDialog = ({
     address: "",
     description: "",
     termsAndConditions: "",
+    providerId: "",
   };
   const validationSchema = Yup.object({
     title: Yup.string().required("Title is required"),
@@ -79,13 +84,6 @@ const AddExperienceDialog = ({
           durations?.length !== 0 &&
           avialableTimes?.length !== 0
         ) {
-          const filteredLinkWithOtherExperiences = allExperience.filter(
-            (item) => experience.includes(item?.title)
-          );
-          let allLinksWithOtherExperiences =
-            filteredLinkWithOtherExperiences.reduce((acc, item) => {
-              return acc.concat(item?.linkWithOtherExperience);
-            }, []);
           dispatch(
             setupAddExperience([
               {
@@ -97,7 +95,14 @@ const AddExperienceDialog = ({
                     explanation: item.linkExplanation,
                   };
                 }),
-                linkWithOtherExperience: allLinksWithOtherExperiences || [],
+                linkWithOtherExperience:
+                  linkWithOtherExperiences?.map((item) => {
+                    return {
+                      experienceId: item?.experienceId,
+                      experienceName: item?.experienceName,
+                      why: item?.why,
+                    };
+                  }) || [],
                 storyLineKeywords: keywords.map((item) => {
                   return item?.name;
                 }),
@@ -223,11 +228,42 @@ const AddExperienceDialog = ({
     setShowAddExperienceDialog(false);
   }
 
+  function handleAddExperience() {
+    if (experience?.length === 0 || experienceWhy === "") {
+      toast.error("Provide all values");
+    }
+    if (experience?.length !== 0 && experienceWhy !== "") {
+      let filteredArray = allExperience.filter((item) =>
+        experience.includes(item?.title)
+      );
+      let finalArray = [
+        ...linkWithOtherExperiences,
+        ...filteredArray?.map((all) => {
+          return {
+            experienceId: all?.id,
+            experienceName: all?.title,
+            why: experienceWhy,
+            id: uuidv4(),
+          };
+        }),
+      ];
+      setLinkWithOtherExperiences(finalArray);
+      setExperienceWhy("");
+      setExperiences([]);
+    }
+  }
+
+  function handleDeleteLinkWithOtherExperience(id) {
+    setLinkWithOtherExperiences((pre) =>
+      pre?.filter((singleItem) => singleItem?.id !== id)
+    );
+  }
+
   React.useEffect(() => {
     if (experienceAddSuccess) {
       formik.resetForm({ values: initialValues });
       setShowAddExperienceDialog(false);
-      toast.success("Experience Added Successfully")
+      toast.success("Experience Added Successfully");
     }
   }, [experienceAddSuccess]);
 
@@ -273,6 +309,12 @@ const AddExperienceDialog = ({
       setExperiences={setExperiences}
       experience={experience}
       allExperience={allExperience}
+      allProvider={allProvider}
+      setExperienceWhy={setExperienceWhy}
+      experienceWhy={experienceWhy}
+      handleAddExperience={handleAddExperience}
+      linkWithOtherExperiences={linkWithOtherExperiences}
+      handleDeleteLinkWithOtherExperience={handleDeleteLinkWithOtherExperience}
     />
   );
 };

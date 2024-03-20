@@ -49,6 +49,7 @@ const VendorRecord = ({ vendor }) => {
 
           <div className="row mb-4">
             <div className="col-lg-12">
+              <label>Description</label>
               <RichTextEditor
                 initialValue={
                   vendor.description
@@ -56,6 +57,20 @@ const VendorRecord = ({ vendor }) => {
                     : "<p>No Description Provided</p>"
                 }
                 placeholder="Decsription"
+                readonly={true}
+              />
+            </div>
+          </div>
+          <div className="row mb-4">
+            <div className="col-lg-12">
+              <label>Terms & Conditions</label>
+              <RichTextEditor
+                initialValue={
+                  vendor.termsNConditions
+                    ? vendor.termsNConditions
+                    : "<p>No Terms & Conditions Provided</p>"
+                }
+                placeholder="Terms & Conditions"
                 readonly={true}
               />
             </div>

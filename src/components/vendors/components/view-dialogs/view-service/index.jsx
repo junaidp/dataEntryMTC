@@ -4,38 +4,38 @@ import Chip from "@mui/material/Chip";
 import { Card } from "@mui/material";
 import { useSelector } from "react-redux";
 
-const ViewServiceDialog = ({ setShowViewSelectedService }) => {
+const ViewExperienceDialog = ({ setShowViewSelectedService }) => {
   const { selectedService } = useSelector((state) => state.services);
+  const { allProvider } = useSelector((state) => state?.providers);
   return (
     <div className="px-4 py-4">
-      <h2 className="pb-4 heading">View Service</h2>
+      <h2 className="pb-4 heading">View Experience</h2>
       <div>
         <div className="row">
-          <div className="col-lg-6 mb-4">
-            <label>Link With Other Experience</label>
-            <p>
-              {selectedService?.linkWithOtherExperience
-                ? selectedService?.linkWithOtherExperience
-                : "No Link With Other Experience Provided"}
-            </p>
-          </div>
-          <div className="col-lg-6 mb-4">
-            <label>Service title</label>
+          <div className="col-lg-4 mb-4">
+            <label>Experience title</label>
             <p>
               {selectedService?.title
                 ? selectedService?.title
                 : "No Title Provided"}
             </p>
           </div>
-        </div>
-
-        <div className="col-lg-6 mb-4">
-          <label>Service address</label>
-          <p>
-            {selectedService?.address
-              ? selectedService?.address
-              : "No Selected Service Provided"}
-          </p>
+          <div className="col-lg-4 mb-4">
+            <label>Experience address</label>
+            <p>
+              {selectedService?.address
+                ? selectedService?.address
+                : "No Address Provided"}
+            </p>
+          </div>
+          <div className="col-lg-4 mb-4">
+            <label>Provider</label>
+            <p>
+              {allProvider?.find(
+                (all) => all?.id === selectedService?.providerId
+              )?.name || "No Provider Provided"}
+            </p>
+          </div>
         </div>
         <div className="row">
           <div>
@@ -67,7 +67,7 @@ const ViewServiceDialog = ({ setShowViewSelectedService }) => {
               selectedService?.duration?.length === 0 ? (
                 <lable className="mx-2">No Duration Provided</lable>
               ) : (
-                selectedService.duration?.map((key, index) => {
+                selectedService?.duration?.map((key, index) => {
                   return (
                     <Chip
                       label={key}
@@ -103,14 +103,53 @@ const ViewServiceDialog = ({ setShowViewSelectedService }) => {
             </Card>
           </div>
         </div>
-
-        <div className="mt-4">
+        <div className="mb-4 mt-4">
+          <label className="mb-2">List Of Keywords:</label>
+          <Card className="py-4">
+            {!selectedService?.storyLineKeywords ||
+            selectedService?.storyLineKeywords?.length === 0 ? (
+              <lable className="mx-2">No Keyword Provided</lable>
+            ) : (
+              selectedService?.storyLineKeywords?.map((key, index) => {
+                return (
+                  <Chip
+                    label={key}
+                    key={index}
+                    variant="outlined"
+                    className="mx-2 mb-2"
+                  />
+                );
+              })
+            )}
+          </Card>
+        </div>
+        <div className="mb-4">
+          <label className="mb-2">List Of Link With Other Services:</label>
+          <Card className="py-4">
+            {!selectedService?.linkWithOtherService ||
+            selectedService?.linkWithOtherService?.length === 0 ? (
+              <p className="mx-2">No Link With Other Service Provided</p>
+            ) : (
+              selectedService?.linkWithOtherService?.map((key, index) => {
+                return (
+                  <Chip
+                    label={`${key?.serviceName}-${key?.why}`}
+                    key={index}
+                    variant="outlined"
+                    className="mx-2 mb-2"
+                  />
+                );
+              })
+            )}
+          </Card>
+        </div>
+        <div className="mb-4">
           <label className="mb-2">List Of Links:</label>
           <Card className="py-4">
-            {selectedService?.links?.length === 0 ? (
+            {!selectedService?.links || selectedService?.links?.length === 0 ? (
               <lable className="mx-2">No Link Provided</lable>
             ) : (
-              selectedService?.links?.map((key, index) => {
+              selectedService?.links.map((key, index) => {
                 return (
                   <Chip
                     label={key}
@@ -124,12 +163,22 @@ const ViewServiceDialog = ({ setShowViewSelectedService }) => {
           </Card>
         </div>
 
-        <div className="row mb-4 mt-4">
+        <div className="row mb-4">
           <div className="col-lg-12">
             <label>Description</label>
             <RichTextEditor
               placeholder="Description"
-              initialValue={selectedService.description}
+              initialValue={selectedService?.description}
+              readonly={true}
+            />
+          </div>
+        </div>
+        <div className="row mb-4">
+          <div className="col-lg-12">
+            <label>Terms & Conditions</label>
+            <RichTextEditor
+              placeholder="Terms And Conditions"
+              initialValue={selectedService?.termsAndConditions}
               readonly={true}
             />
           </div>
@@ -151,4 +200,4 @@ const ViewServiceDialog = ({ setShowViewSelectedService }) => {
   );
 };
 
-export default ViewServiceDialog;
+export default ViewExperienceDialog;

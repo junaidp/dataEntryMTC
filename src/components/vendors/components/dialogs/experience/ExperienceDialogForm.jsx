@@ -4,6 +4,7 @@ import RichTextEditor from "../../../../common/RichText";
 import Chip from "@mui/material/Chip";
 import { Card } from "@mui/material";
 import MultipleSelect from "./MultiSelect";
+import AutoCompleteProvider from "./ProviderAutoComplete";
 
 const ExperienceDialogForm = ({
   formik,
@@ -17,6 +18,7 @@ const ExperienceDialogForm = ({
   handleChangeTermsAndConditions,
   keywords,
   link,
+  handleAddExperience,
   setLink,
   linkExplanation,
   setLinkExplanation,
@@ -46,6 +48,11 @@ const ExperienceDialogForm = ({
   setExperiences,
   experience,
   allExperience,
+  allProvider,
+  setExperienceWhy,
+  experienceWhy,
+  linkWithOtherExperiences,
+  handleDeleteLinkWithOtherExperience,
 }) => {
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -78,6 +85,14 @@ const ExperienceDialogForm = ({
                 helperText={formik.touched.address && formik.errors.address}
               />
             </div>
+          </div>
+          <div className="row mb-4 w-100">
+            <AutoCompleteProvider
+              options={allProvider?.map((provider) => {
+                return { name: provider?.name, id: provider?.id };
+              })}
+              formik={formik}
+            />
           </div>
           <div className="row">
             <div>
@@ -179,6 +194,7 @@ const ExperienceDialogForm = ({
               </Card>
             </div>
           </div>
+
           <div className="row mt-4">
             <div>
               <h5>Available Time:</h5>
@@ -279,13 +295,53 @@ const ExperienceDialogForm = ({
             </Card>
           </div>
           <div className="row mb-4">
-            <div className="col-lg-12">
+            <div className="col-lg-6">
               <MultipleSelect
                 setExperiences={setExperiences}
                 experience={experience}
                 names={allExperience?.map((all) => all?.title)}
               />
             </div>
+            <div className="col-lg-4 mb-4">
+              <label className="w-100 mb-2">Why:</label>
+              <TextField
+                className="form-control"
+                value={experienceWhy}
+                onChange={(event) => setExperienceWhy(event.target.value)}
+              />
+            </div>
+            <div className={`col-lg-2 text-end float-end align-self-end mb-4`}>
+              <button
+                className="btn btn-labeled btn-primary w-100 shadow"
+                type="submit"
+                onClick={handleAddExperience}
+              >
+                <span className="btn-label me-2">
+                  <i className="fa fa-plus"></i>
+                </span>
+                Add Experience
+              </button>
+            </div>
+            <label className="mb-2">List Of Experiences:</label>
+            <Card className="py-4">
+              {linkWithOtherExperiences?.length === 0 ? (
+                <lable className="mx-2">No Experience Provided</lable>
+              ) : (
+                linkWithOtherExperiences.map((key, index) => {
+                  return (
+                    <Chip
+                      label={`${key?.experienceName}-${key?.why}`}
+                      key={index}
+                      variant="outlined"
+                      className="mx-2 mb-2"
+                      onDelete={() =>
+                        handleDeleteLinkWithOtherExperience(key?.id)
+                      }
+                    />
+                  );
+                })
+              )}
+            </Card>
           </div>
           <div className="mb-4">
             <h5>Links:</h5>

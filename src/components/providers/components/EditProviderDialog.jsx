@@ -9,7 +9,6 @@ import { setupAddProvider } from "../../../global-redux/reducers/providers/slice
 import { useSelector, useDispatch } from "react-redux";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
-import { toast } from "react-toastify";
 
 const EditProviderDialog = ({
   setShowEditProviderDialog,
@@ -19,6 +18,8 @@ const EditProviderDialog = ({
   const { providerAddSuccess, loading } = useSelector(
     (state) => state?.providers
   );
+  const { allVendors } = useSelector((state) => state.vendors);
+  const { allExperience } = useSelector((state) => state.experiences);
   let initialValues = {
     name: "",
     address: "",
@@ -28,6 +29,8 @@ const EditProviderDialog = ({
     regionsCovered: "",
     manageVenue: "",
     description: "",
+    vendorId: "",
+    experienceId: "",
   };
   const validationSchema = Yup.object({
     name: Yup.string().required("Provider name is required"),
@@ -42,6 +45,7 @@ const EditProviderDialog = ({
       "Please select Yes or No for managing venue"
     ),
     description: Yup.string().required("Please provide description"),
+    vendorId: Yup.string().required("Vendor is required"),
   });
 
   // Formik hook
@@ -53,10 +57,8 @@ const EditProviderDialog = ({
         dispatch(
           setupAddProvider([
             {
-              ...values,
               id: selectedProvider?.id,
-              vendorId: selectedProvider?.vendorId,
-              experienceId: selectedProvider?.experienceId,
+              ...values,
             },
           ])
         );
@@ -77,7 +79,6 @@ const EditProviderDialog = ({
     if (providerAddSuccess) {
       formik.resetForm({ values: initialValues });
       setShowEditProviderDialog(false);
-      toast.success("Provider Updated Successfully");
     }
   }, [providerAddSuccess]);
 
@@ -94,6 +95,8 @@ const EditProviderDialog = ({
           regionsCovered: selectedProvider?.regionsCovered,
           manageVenue: selectedProvider?.manageVenue,
           description: selectedProvider?.description,
+          vendorId: selectedProvider?.vendorId,
+          experienceId: selectedProvider?.experienceId,
         },
       });
     }
@@ -146,6 +149,53 @@ const EditProviderDialog = ({
                   formik.touched.pointOfContact && formik.errors.pointOfContact
                 }
               />
+            </div>
+          </div>
+
+          <div className="row">
+            <div className="col-lg-6 mb-4">
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">Vendor</InputLabel>
+                <Select
+                  id="vendorId"
+                  name="vendorId"
+                  className="form-control w-100 "
+                  label="Vendor"
+                  {...formik.getFieldProps("vendorId")}
+                >
+                  <MenuItem value="">Select Vendor</MenuItem>
+                  {allVendors?.map((vendor, index) => {
+                    return (
+                      <MenuItem value={vendor?.id} key={index}>
+                        {vendor?.name}
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+              </FormControl>
+            </div>
+            <div className="col-lg-6 mb-4">
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">
+                  Experience
+                </InputLabel>
+                <Select
+                  id="experienceId"
+                  name="experienceId"
+                  className="form-control w-100 "
+                  label="Experience"
+                  {...formik.getFieldProps("experienceId")}
+                >
+                  <MenuItem value="">Select Experience</MenuItem>
+                  {allExperience?.map((experience, index) => {
+                    return (
+                      <MenuItem value={experience?.id} key={index}>
+                        {experience?.title}
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+              </FormControl>
             </div>
           </div>
 
@@ -218,7 +268,6 @@ const EditProviderDialog = ({
                   type="checkbox"
                   role="switch"
                   id="flexSwitchCheckDefault"
-                  checked={Boolean(formik?.values?.manageVenue)}
                 />
               </div>
 

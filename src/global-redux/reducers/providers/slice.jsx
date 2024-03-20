@@ -3,6 +3,7 @@ import {
   getAllProvider,
   addProvider,
   getAllProviderWithOutParams,
+  getProviderByQuery,
   deleteProvider,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
@@ -24,6 +25,12 @@ export const setupGetAllProviderWithOutParams = createAsyncThunk(
   "provider/getAllProviderWithOutParams",
   async (data, thunkAPI) => {
     return getAllProviderWithOutParams(data, thunkAPI);
+  }
+);
+export const setupGetProviderByQuery = createAsyncThunk(
+  "provider/getProviderByQuery",
+  async (data, thunkAPI) => {
+    return getProviderByQuery(data, thunkAPI);
   }
 );
 export const setupAddProvider = createAsyncThunk(
@@ -81,6 +88,23 @@ export const slice = createSlice({
         }
       )
       .addCase(setupGetAllProviderWithOutParams.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Get all provider without params
+    builder
+      .addCase(setupGetProviderByQuery.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupGetProviderByQuery.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.allProvider = payload || [{ error: "Not Found" }];
+      })
+      .addCase(setupGetProviderByQuery.rejected, (state, action) => {
         state.loading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);

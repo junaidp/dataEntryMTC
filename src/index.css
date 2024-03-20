@@ -112,8 +112,22 @@ body {
   font-family: "Poppins", sans-serif !important;
 }
 
+.css-18nc3u2 .MuiOutlinedInput-root .MuiAutocomplete-input{
+  font-family: "Poppins", sans-serif !important;
+}
+
+.css-feqhe6{
+  font-family: "Poppins", sans-serif !important;
+}
+
 .mr-2 {
   margin-right: 10px !important;
+}
+
+.css-1h51icj-MuiAutocomplete-root
+  .MuiOutlinedInput-root
+  .MuiAutocomplete-input {
+  font-family: "Poppins", sans-serif !important;
 }
 
 .h-20 {

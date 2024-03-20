@@ -3,13 +3,22 @@ import TextField from "@mui/material/TextField";
 import RichTextEditor from "../../../../common/RichText";
 import Chip from "@mui/material/Chip";
 import { Card } from "@mui/material";
+import MultipleSelect from "./MultiSelect";
+import AutoCompleteProvider from "./ProviderAutoComplete";
 
 const ServiceDialogForm = ({
   formik,
+  keyword,
+  setKeyword,
+  handleAddKeyword,
+  handleDeleteKeyword,
   handleClose,
   loading,
   handleChangeDescription,
+  handleChangeTermsAndConditions,
+  keywords,
   link,
+  handleAddServices,
   setLink,
   links,
   handleAddLink,
@@ -32,48 +41,37 @@ const ServiceDialogForm = ({
   priceRef,
   durationRef,
   availableTimeRef,
+  keywordRef,
   linkRef,
+  setServices,
+  services,
+  allService,
+  allProvider,
+  setServiceWhy,
+  serviceWhy,
+  linkWithOtherServices,
+  handleDeleteLinkWithOtherServices,
 }) => {
   return (
     <form onSubmit={formik.handleSubmit}>
       <div className="px-4 py-4">
         <h2 className="pb-4 heading">Add Service</h2>
         <div>
-          <div className="row">
-            <div className="col-lg-6 mb-4">
-              <TextField
-                id="title"
-                name="title"
-                label="Service title"
-                variant="outlined"
-                className="form-control"
-                {...formik.getFieldProps("title")}
-                error={formik.touched.title && Boolean(formik.errors.title)}
-                helperText={formik.touched.title && formik.errors.title}
-              />
-            </div>
-            <div className="col-lg-6 mb-4">
-              <TextField
-                id="title"
-                name="linkWithOtherExperience"
-                label="Link With Other Experience"
-                variant="outlined"
-                className="form-control"
-                {...formik.getFieldProps("linkWithOtherExperience")}
-                error={
-                  formik.touched.linkWithOtherExperience &&
-                  Boolean(formik.errors.linkWithOtherExperience)
-                }
-                helperText={
-                  formik.touched.linkWithOtherExperience &&
-                  formik.errors.linkWithOtherExperience
-                }
-              />
-            </div>
+          <div className="col-lg-12 mb-4">
+            <TextField
+              id="title"
+              name="title"
+              label="Service title"
+              variant="outlined"
+              className="form-control"
+              {...formik.getFieldProps("title")}
+              error={formik.touched.title && Boolean(formik.errors.title)}
+              helperText={formik.touched.title && formik.errors.title}
+            />
           </div>
 
           <div className="row">
-            <div className="col-lg-12 mb-4">
+            <div className="col-lg-12 mb-2">
               <TextField
                 id="address"
                 name="address"
@@ -85,6 +83,14 @@ const ServiceDialogForm = ({
                 helperText={formik.touched.address && formik.errors.address}
               />
             </div>
+          </div>
+          <div className="row mb-4 w-100">
+            <AutoCompleteProvider
+              options={allProvider?.map((provider) => {
+                return { name: provider?.name, id: provider?.id };
+              })}
+              formik={formik}
+            />
           </div>
           <div className="row">
             <div>
@@ -100,7 +106,6 @@ const ServiceDialogForm = ({
                       inputRef={priceRef}
                     />
                   </div>
-
                   <div
                     className={`col-lg-2 text-end float-end align-self-end mb-4`}
                   >
@@ -151,7 +156,6 @@ const ServiceDialogForm = ({
                       inputRef={durationRef}
                     />
                   </div>
-
                   <div
                     className={`col-lg-2 text-end float-end align-self-end mb-4`}
                   >
@@ -171,7 +175,7 @@ const ServiceDialogForm = ({
               <label className="mb-2">List Of Durations:</label>
               <Card className="py-4">
                 {durations?.length === 0 ? (
-                  <lable className="mx-2">No Time Provided</lable>
+                  <lable className="mx-2">No Duration Provided</lable>
                 ) : (
                   durations.map((key, index) => {
                     return (
@@ -188,6 +192,7 @@ const ServiceDialogForm = ({
               </Card>
             </div>
           </div>
+
           <div className="row mt-4">
             <div>
               <h5>Available Time:</h5>
@@ -202,6 +207,7 @@ const ServiceDialogForm = ({
                       inputRef={availableTimeRef}
                     />
                   </div>
+
                   <div
                     className={`col-lg-2 text-end float-end align-self-end mb-4`}
                   >
@@ -238,8 +244,104 @@ const ServiceDialogForm = ({
               </Card>
             </div>
           </div>
-
-          <div className="mt-4">
+          <div className="mb-4 mt-4">
+            <h5>Keywords:</h5>
+            <div>
+              <form className="row p-0" onSubmit={handleAddKeyword}>
+                <div className="col-lg-10 mb-4">
+                  <label className="w-100">Add Keyword:</label>
+                  <TextField
+                    className="form-control"
+                    value={keyword}
+                    onChange={(event) => setKeyword(event.target.value)}
+                    inputRef={keywordRef}
+                  />
+                </div>
+                <div
+                  className={`col-lg-2 text-end float-end align-self-end mb-4`}
+                >
+                  <button
+                    className="btn btn-labeled btn-primary w-100 shadow"
+                    type="submit"
+                    onClick={handleAddKeyword}
+                  >
+                    <span className="btn-label me-2">
+                      <i className="fa fa-plus"></i>
+                    </span>
+                    Add Keyword
+                  </button>
+                </div>
+              </form>
+            </div>
+            <label className="mb-2">List Of Keywords:</label>
+            <Card className="py-4">
+              {keywords?.length === 0 ? (
+                <lable className="mx-2">No Keyword Provided</lable>
+              ) : (
+                keywords.map((key, index) => {
+                  return (
+                    <Chip
+                      label={key?.name}
+                      key={index}
+                      variant="outlined"
+                      className="mx-2 mb-2"
+                      onDelete={() => handleDeleteKeyword(key?.id)}
+                    />
+                  );
+                })
+              )}
+            </Card>
+          </div>
+          <div className="row mb-4">
+            <div className="col-lg-6">
+              <MultipleSelect
+                setServices={setServices}
+                services={services}
+                names={allService?.map((all) => all?.title)}
+              />
+            </div>
+            <div className="col-lg-4 mb-4">
+              <label className="w-100 mb-2">Why:</label>
+              <TextField
+                className="form-control"
+                value={serviceWhy}
+                onChange={(event) => setServiceWhy(event.target.value)}
+              />
+            </div>
+            <div className={`col-lg-2 text-end float-end align-self-end mb-4`}>
+              <button
+                className="btn btn-labeled btn-primary w-100 shadow"
+                type="submit"
+                onClick={handleAddServices}
+              >
+                <span className="btn-label me-2">
+                  <i className="fa fa-plus"></i>
+                </span>
+                Add Service
+              </button>
+            </div>
+            <label className="mb-2">List Of Services:</label>
+            <Card className="py-4">
+              {linkWithOtherServices?.length === 0 ? (
+                <lable className="mx-2">No Service Provided</lable>
+              ) : (
+                linkWithOtherServices.map((key, index) => {
+                  return (
+                    <Chip
+                      label={`${key?.serviceName}-${key?.why}`}
+                      key={index}
+                      variant="outlined"
+                      className="mx-2 mb-2"
+                      onDelete={() =>
+                        handleDeleteLinkWithOtherServices(key?.id)
+                      }
+                    />
+                  );
+                })
+              )}
+            </Card>
+          </div>
+          <div className="mb-4">
             <h5>Links:</h5>
             <div>
               <form onSubmit={handleAddLink} className="row p-0">
@@ -252,6 +354,7 @@ const ServiceDialogForm = ({
                     inputRef={linkRef}
                   />
                 </div>
+
                 <div
                   className={`col-lg-2 text-end float-end align-self-end mb-4`}
                 >
@@ -288,7 +391,7 @@ const ServiceDialogForm = ({
             </Card>
           </div>
 
-          <div className="row mb-4 mt-4">
+          <div className="row mb-4">
             <div className="col-lg-12">
               <label>Description</label>
               <RichTextEditor
@@ -300,6 +403,23 @@ const ServiceDialogForm = ({
               {formik.touched.description && formik.errors.description && (
                 <div className="error">{formik.errors.description}</div>
               )}
+            </div>
+          </div>
+          <div className="row mb-4">
+            <div className="col-lg-12">
+              <label>Terms And Conditions</label>
+              <RichTextEditor
+                placeholder="Terms And Conditions"
+                initialValue={formik.values.termsAndConditions}
+                handleChangeTermsAndConditions={handleChangeTermsAndConditions}
+                readonly={false}
+              />
+              {formik.touched.termsAndConditions &&
+                formik.errors.termsAndConditions && (
+                  <div className="error">
+                    {formik.errors.termsAndConditions}
+                  </div>
+                )}
             </div>
           </div>
         </div>

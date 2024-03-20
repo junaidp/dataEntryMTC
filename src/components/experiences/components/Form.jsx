@@ -1,8 +1,12 @@
 import React from "react";
 import RichTextEditor from "../../../components/common/RichText";
 import Chip from "@mui/material/Chip";
+import { useSelector } from "react-redux";
 
 const Form = ({ experience }) => {
+  const { allVendors } = useSelector((state) => state?.vendors);
+  const { allProvider } = useSelector((state) => state?.providers);
+  console.log(experience)
   return (
     <div className="px-4 py-4">
       <div>
@@ -17,6 +21,22 @@ const Form = ({ experience }) => {
               {experience?.address
                 ? experience?.address
                 : "No Address Provided"}
+            </p>
+          </div>
+        </div>
+        <div className="row mx-0" style={{ margin: "0px" }}>
+          <div className="col-lg-5 mb-4 p-0">
+            <label>Vendor</label>
+            <p>
+              {allVendors?.find((item) => item?.id === experience?.vendorId)
+                ?.name || "No Vendor Provided"}
+            </p>
+          </div>
+          <div className="col-lg-6 mb-4 p-0">
+            <label>Provider</label>
+            <p>
+              {allProvider?.map((item) => item?.id === experience?.providerId)
+                ?.name || "No Provider Provided"}
             </p>
           </div>
         </div>
@@ -98,6 +118,26 @@ const Form = ({ experience }) => {
                     key={index}
                     variant="outlined"
                     className="mr-2 mb-2"
+                  />
+                );
+              })
+            )}
+          </div>
+        </div>
+        <div className="mb-4 mt-4">
+          <label className="mb-2">List Of Link With Other Experiences:</label>
+          <div>
+            {!experience?.linkWithOtherExperience ||
+            experience?.linkWithOtherExperience?.length === 0 ? (
+              <p className="mx-2">No Link With Other Experince Provided</p>
+            ) : (
+              experience?.linkWithOtherExperience?.map((key, index) => {
+                return (
+                  <Chip
+                    label={`${key?.experienceName}-${key?.why}`}
+                    key={index}
+                    variant="outlined"
+                    className="mb-2"
                   />
                 );
               })

@@ -28,6 +28,7 @@ const EditVendorDialog = ({ setShowEditVendorDialog, currentVendorId }) => {
     regionsCovered: "",
     manageVenue: "",
     description: "",
+    termsNConditions: "",
   };
   const validationSchema = Yup.object({
     name: Yup.string().required("Vendor's name is required"),
@@ -42,6 +43,7 @@ const EditVendorDialog = ({ setShowEditVendorDialog, currentVendorId }) => {
       "Please select Yes or No for managing venue"
     ),
     description: Yup.string().required("Please provide description"),
+    termsNConditions: Yup.string().required("Please Terms & Conditions"),
   });
 
   // Formik hook
@@ -60,6 +62,9 @@ const EditVendorDialog = ({ setShowEditVendorDialog, currentVendorId }) => {
 
   function handleChangeDescription(value) {
     formik.resetForm({ values: { ...formik.values, description: value } });
+  }
+  function handleChangeTermsAndConditions(value) {
+    formik.resetForm({ values: { ...formik.values, termsNConditions: value } });
   }
 
   function handleClose() {
@@ -91,6 +96,7 @@ const EditVendorDialog = ({ setShowEditVendorDialog, currentVendorId }) => {
         regionsCovered: selectedVendor?.regionsCovered,
         manageVenue: selectedVendor?.manageVenue,
         description: selectedVendor?.description,
+        termsNConditions: selectedVendor?.termsNConditions,
       },
     });
   }, [currentVendorId]);
@@ -229,6 +235,7 @@ const EditVendorDialog = ({ setShowEditVendorDialog, currentVendorId }) => {
 
           <div className="row mb-4">
             <div className="col-lg-12">
+              <label>Description</label>
               <RichTextEditor
                 placeholder="Vendor’ Description"
                 initialValue={formik.values.description}
@@ -238,6 +245,21 @@ const EditVendorDialog = ({ setShowEditVendorDialog, currentVendorId }) => {
               {formik.touched.description && formik.errors.description && (
                 <div className="error">{formik.errors.description}</div>
               )}
+            </div>
+          </div>
+          <div className="row mb-4">
+            <div className="col-lg-12">
+              <label>Terms & Condition</label>
+              <RichTextEditor
+                placeholder="Vendor’ Terms & Conditions"
+                initialValue={formik.values.termsNConditions}
+                handleChangeTermsAndConditions={handleChangeTermsAndConditions}
+                readonly={false}
+              />
+              {formik.touched.termsNConditions &&
+                formik.errors.termsNConditions && (
+                  <div className="error">{formik.errors.termsNConditions}</div>
+                )}
             </div>
           </div>
         </div>
