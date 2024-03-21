@@ -1,26 +1,20 @@
 import React from "react";
 import {
-  setupGetAllVariations,
   resetVariationAddSuccess,
-  resetVariations,
+  setupGetAllVariationsWithOutParams,
 } from "../../global-redux/reducers/variations/slice.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { setupGetAllExperienceWithOutParams } from "../../global-redux/reducers/experiences/slice";
-import { CircularProgress, FormControl } from "@mui/material";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import InputLabel from "@mui/material/InputLabel";
+import { CircularProgress } from "@mui/material";
 import Form from "./components/Form.jsx";
 import Pagination from "@mui/material/Pagination";
 import AddVariationDialog from "./components/AddVariationDialog.jsx";
 import DeleteVariationDialog from "./components/DeleteVariationDialog.jsx";
 import EditVariationDialog from "./components/edit-variation/EditVariationDialog.jsx";
+import { setupGetAllProviderWithOutParams } from "../../global-redux/reducers/providers/slice.jsx";
 
 const Variation = ({ showAddVariationDialog, setShowAddVariationDialog }) => {
   const dispatch = useDispatch();
-  const { allExperience, loading: experienceLoading } = useSelector(
-    (state) => state?.experiences
-  );
   const [showEditVariationDialog, setShowEditVariationDialog] =
     React.useState(false);
   const [showDeleteVariationDialog, setShowDeleteVariationDialog] =
@@ -30,33 +24,26 @@ const Variation = ({ showAddVariationDialog, setShowAddVariationDialog }) => {
   const { loading, allVariations, variationAddSuccess } = useSelector(
     (state) => state?.variations
   );
-  const [experienceId, setExperienceId] = React.useState("");
   const [page, setPage] = React.useState(1);
   const handleChangePage = (_, value) => {
     setPage(value);
   };
 
   React.useEffect(() => {
-    if (experienceId && experienceId !== "") {
-      dispatch(setupGetAllVariations(`?experienceId=${experienceId}`));
-    }
-  }, [experienceId]);
-  React.useEffect(() => {
     if (variationAddSuccess) {
       setSelectedVariation({});
       setCurrentVariationId("");
       dispatch(resetVariationAddSuccess());
-    }
-    if (experienceId && experienceId !== "") {
-      dispatch(setupGetAllVariations(`?experienceId=${experienceId}`));
+      dispatch(setupGetAllExperienceWithOutParams());
+      dispatch(setupGetAllVariationsWithOutParams());
+      dispatch(setupGetAllProviderWithOutParams());
     }
   }, [variationAddSuccess]);
 
   React.useEffect(() => {
     dispatch(setupGetAllExperienceWithOutParams());
-    return () => {
-      dispatch(resetVariations());
-    };
+    dispatch(setupGetAllVariationsWithOutParams());
+    dispatch(setupGetAllProviderWithOutParams());
   }, []);
 
   return (
@@ -90,45 +77,15 @@ const Variation = ({ showAddVariationDialog, setShowAddVariationDialog }) => {
           </div>
         </div>
       )}
-      {experienceLoading ? (
-        <CircularProgress />
-      ) : (
-        allExperience?.length !== 0 && (
-          <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">
-              Select Experience
-            </InputLabel>
-            <Select
-              id="regionsCovered"
-              name="regionsCovered"
-              className="form-control w-100 "
-              label="Regions Covered"
-              value={experienceId}
-              onChange={(event) => setExperienceId(event?.target?.value)}
-            >
-              <MenuItem value="">Select Experience</MenuItem>
-              {allExperience?.map((experience, index) => {
-                return (
-                  <MenuItem value={experience?.id} key={index}>
-                    {experience?.title}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-          </FormControl>
-        )
-      )}
       {loading ? (
-        <div className="mt-4">
+        <div className="mt-2">
           <CircularProgress />
         </div>
       ) : allVariations?.length === 0 ||
         allVariations[0]?.error === "Not Found" ? (
-        <p className="mt-4">
-          Variations Not Found. Please Select Experience Or Change Experience
-        </p>
+        <p className="mt-4">Variations Not Found.</p>
       ) : (
-        <div className="mt-4">
+        <div className="mt-2">
           <div className="accordion" id="accordionFlushExample">
             {allVariations
               ?.slice((page - 1) * 10, page * 10)

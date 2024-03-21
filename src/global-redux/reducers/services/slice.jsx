@@ -3,6 +3,7 @@ import {
   getAllService,
   addService,
   getAllServiceWithOutParama,
+  getAllServicesWithQuery,
   deleteService,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
@@ -26,6 +27,13 @@ export const setupGetAllServiceWithOutParama = createAsyncThunk(
     return getAllServiceWithOutParama(data, thunkAPI);
   }
 );
+export const setupGetAllServicesWithQuery = createAsyncThunk(
+  "service/getAllServicesWithQuery",
+  async (data, thunkAPI) => {
+    return getAllServicesWithQuery(data, thunkAPI);
+  }
+);
+
 export const setupAddService = createAsyncThunk(
   "service/addService",
   async (data, thunkAPI) => {
@@ -81,6 +89,23 @@ export const slice = createSlice({
         }
       )
       .addCase(setupGetAllServiceWithOutParama.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Get All Services With Query
+    builder
+      .addCase(setupGetAllServicesWithQuery.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupGetAllServicesWithQuery.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.allService = payload || [{ error: "Not Found" }];
+      })
+      .addCase(setupGetAllServicesWithQuery.rejected, (state, action) => {
         state.loading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);

@@ -7,8 +7,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import ServiceDialogForm from "./EditServiceDialogForm";
 
-const AddExperienceDialog = ({ setShowEditServiceDialog, selectedService }) => {
+const EditServiceDialog = ({ setShowEditServiceDialog, selectedService }) => {
   const dispatch = useDispatch();
+  const { allService } = useSelector((state) => state.services);
+  const { allProvider } = useSelector((state) => state.providers);
+  const { allVendors } = useSelector((state) => state.vendors);
+  const [keywords, setKeywords] = React.useState([]);
+  const [keyword, setKeyword] = React.useState("");
   const [link, setLink] = React.useState("");
   const [links, setLinks] = React.useState([]);
   const [price, setPrice] = React.useState("");
@@ -17,11 +22,15 @@ const AddExperienceDialog = ({ setShowEditServiceDialog, selectedService }) => {
   const [durations, setDurations] = React.useState([]);
   const [availableTime, setAvailableTime] = React.useState("");
   const [avialableTimes, setAvailableTimes] = React.useState([]);
+  const [services, setServices] = React.useState([]);
+  const [serviceWhy, setServiceWhy] = React.useState("");
+  const [linkWithOtherServices, setLinkWithOtherServices] = React.useState([]);
 
   // Input Refs
   const priceRef = React.useRef(null);
   const durationRef = React.useRef(null);
   const availableTimeRef = React.useRef(null);
+  const keywordRef = React.useRef(null);
   const linkRef = React.useRef(null);
 
   const { serviceAddSuccess, loading } = useSelector(
@@ -31,15 +40,17 @@ const AddExperienceDialog = ({ setShowEditServiceDialog, selectedService }) => {
     title: "",
     address: "",
     description: "",
-    linkWithOtherExperience: "",
+    termsAndConditions: "",
+    providerId: "",
+    vendorId: "",
   };
   const validationSchema = Yup.object({
     title: Yup.string().required("Title is required"),
-    linkWithOtherExperience: Yup.string().required(
-      "Link With Other Experience is required"
-    ),
     address: Yup.string().required("Address is required"),
     description: Yup.string().required("Please provide description"),
+    termsAndConditions: Yup.string().required(
+      "Please provide Terms And Conditions"
+    ),
   });
 
   // Formik hook
@@ -48,6 +59,9 @@ const AddExperienceDialog = ({ setShowEditServiceDialog, selectedService }) => {
     validationSchema: validationSchema,
     onSubmit: (values) => {
       if (!loading) {
+        if (keywords.length === 0) {
+          toast.error("Provide keywords");
+        }
         if (links?.length === 0) {
           toast.error("Provide Links");
         }
@@ -61,6 +75,7 @@ const AddExperienceDialog = ({ setShowEditServiceDialog, selectedService }) => {
           toast.error("Provide Available Times");
         }
         if (
+          keywords.length !== 0 &&
           links?.length !== 0 &&
           prices?.length !== 0 &&
           durations?.length !== 0 &&
@@ -71,9 +86,17 @@ const AddExperienceDialog = ({ setShowEditServiceDialog, selectedService }) => {
               {
                 ...values,
                 id: selectedService?.id,
-                providerId: selectedService?.providerId,
-                links: links?.map((item) => {
-                  return item.link;
+                links: links?.map((item) => item?.link),
+                linkWithOtherService:
+                  linkWithOtherServices?.map((item) => {
+                    return {
+                      serviceId: item?.serviceId,
+                      serviceName: item?.serviceName,
+                      why: item?.why,
+                    };
+                  }) || [],
+                storyLineKeywords: keywords.map((item) => {
+                  return item?.name;
                 }),
                 price: prices?.map((item) => {
                   return item.price;
@@ -95,23 +118,12 @@ const AddExperienceDialog = ({ setShowEditServiceDialog, selectedService }) => {
   function handleChangeDescription(value) {
     formik.resetForm({ values: { ...formik.values, description: value } });
   }
+  function handleChangeTermsAndConditions(value) {
+    formik.resetForm({
+      values: { ...formik.values, termsAndConditions: value },
+    });
+  }
 
-  function handleAddLink(event) {
-    event.preventDefault();
-    if (link === "") {
-      toast.error("Provide Link");
-    }
-    if (linkRef.current) {
-      linkRef.current.focus();
-    }
-    if (link !== "") {
-      setLinks([...links, { id: uuidv4(), link }]);
-      setLink("");
-    }
-  }
-  function handleDeleteLink(id) {
-    setLinks((pre) => pre?.filter((singleItem) => singleItem?.id !== id));
-  }
   function handleAddPrice(event) {
     event.preventDefault();
     if (price === "") {
@@ -166,16 +178,83 @@ const AddExperienceDialog = ({ setShowEditServiceDialog, selectedService }) => {
     );
   }
 
+  function handleAddKeyword(event) {
+    event.preventDefault();
+    if (keyword === "") {
+      toast.error("Provide Keyword");
+    }
+    if (keywordRef.current) {
+      keywordRef.current.focus();
+    }
+    if (keyword !== "") {
+      setKeywords([...keywords, { id: uuidv4(), name: keyword }]);
+      setKeyword("");
+    }
+  }
+
+  function handleAddLink(event) {
+    event.preventDefault();
+    if (link === "") {
+      toast.error("Provide Both Values");
+    }
+    if (linkRef.current) {
+      linkRef.current.focus();
+    }
+    if (link !== "") {
+      setLinks([...links, { id: uuidv4(), link }]);
+      setLink("");
+    }
+  }
+
+  function handleDeleteKeyword(id) {
+    setKeywords((pre) => pre?.filter((singleItem) => singleItem?.id !== id));
+  }
+
+  function handleDeleteLink(id) {
+    setLinks((pre) => pre?.filter((singleItem) => singleItem?.id !== id));
+  }
+
   function handleClose() {
     formik.resetForm({ values: initialValues });
     setShowEditServiceDialog(false);
   }
 
+  function handleAddServices() {
+    if (services?.length === 0 || serviceWhy === "") {
+      toast.error("Provide all values");
+    }
+    if (services?.length !== 0 && serviceWhy !== "") {
+      let filteredArray = allService.filter((item) =>
+        services.includes(item?.title)
+      );
+      let finalArray = [
+        ...linkWithOtherServices,
+        ...filteredArray?.map((all) => {
+          return {
+            serviceId: all?.id,
+            serviceName: all?.title,
+            why: serviceWhy,
+            id: uuidv4(),
+          };
+        }),
+      ];
+      setLinkWithOtherServices(finalArray);
+      setServiceWhy("");
+      setServices([]);
+    }
+  }
+
+  function handleDeleteLinkWithOtherServices(id) {
+    setLinkWithOtherServices((pre) =>
+      pre?.filter((singleItem) => singleItem?.id !== id)
+    );
+  }
+
   React.useEffect(() => {
     if (serviceAddSuccess) {
-      toast.success("Service Updated Successfully");
       formik.resetForm({ values: initialValues });
       setShowEditServiceDialog(false);
+      toast.success("Services Updated Successfully");
     }
   }, [serviceAddSuccess]);
 
@@ -187,7 +266,9 @@ const AddExperienceDialog = ({ setShowEditServiceDialog, selectedService }) => {
           title: selectedService?.title,
           address: selectedService?.address,
           description: selectedService?.description,
-          linkWithOtherExperience: selectedService?.linkWithOtherExperience,
+          termsAndConditions: selectedService?.termsAndConditions,
+          providerId: selectedService?.providerId,
+          vendorId: selectedService?.vendorId,
         },
       });
       setPrices(
@@ -198,6 +279,15 @@ const AddExperienceDialog = ({ setShowEditServiceDialog, selectedService }) => {
           };
         })
       );
+      setKeywords(
+        selectedService?.storyLineKeywords?.map((key) => {
+          return {
+            id: uuidv4(),
+            name: key,
+          };
+        })
+      );
+
       setDurations(
         selectedService?.duration?.map((singleItem) => {
           return {
@@ -222,15 +312,31 @@ const AddExperienceDialog = ({ setShowEditServiceDialog, selectedService }) => {
           };
         })
       );
+      setLinkWithOtherServices(
+        selectedService?.linkWithOtherService?.map((singleItem) => {
+          return {
+            serviceId: singleItem?.serviceId,
+            serviceName: singleItem?.serviceName,
+            why: singleItem?.why,
+            id: uuidv4(),
+          };
+        })
+      );
     }
   }, [selectedService]);
 
   return (
     <ServiceDialogForm
       formik={formik}
+      keyword={keyword}
+      setKeyword={setKeyword}
+      handleAddKeyword={handleAddKeyword}
+      handleDeleteKeyword={handleDeleteKeyword}
       handleClose={handleClose}
       loading={loading}
       handleChangeDescription={handleChangeDescription}
+      handleChangeTermsAndConditions={handleChangeTermsAndConditions}
+      keywords={keywords}
       link={link}
       setLink={setLink}
       links={links}
@@ -254,9 +360,20 @@ const AddExperienceDialog = ({ setShowEditServiceDialog, selectedService }) => {
       priceRef={priceRef}
       durationRef={durationRef}
       availableTimeRef={availableTimeRef}
+      keywordRef={keywordRef}
       linkRef={linkRef}
+      setServices={setServices}
+      services={services}
+      allService={allService}
+      allProvider={allProvider}
+      setServiceWhy={setServiceWhy}
+      serviceWhy={serviceWhy}
+      handleAddServices={handleAddServices}
+      linkWithOtherServices={linkWithOtherServices}
+      handleDeleteLinkWithOtherServices={handleDeleteLinkWithOtherServices}
+      allVendors={allVendors}
     />
   );
 };
 
-export default AddExperienceDialog;
+export default EditServiceDialog;

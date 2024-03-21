@@ -6,6 +6,7 @@ import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
+import RichTextEditor from "../../../components/common/RichText";
 
 const ServiceDialogForm = ({
   formik,
@@ -37,6 +38,14 @@ const ServiceDialogForm = ({
   linkRef,
   allExperience,
   allProvider,
+  handleChangeDescription,
+  handleChangeTermsAndConditions,
+  handleAddKeyword,
+  handleDeleteKeyword,
+  keywordRef,
+  keyword,
+  keywords,
+  setKeyword,
 }) => {
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -55,6 +64,20 @@ const ServiceDialogForm = ({
                 error={formik.touched.title && Boolean(formik.errors.title)}
                 helperText={formik.touched.title && formik.errors.title}
               />
+            </div>
+          </div>
+
+          <div className="row mb-4">
+            <div className="col-lg-12">
+              <label>Description:</label>
+              <RichTextEditor
+                initialValue={formik.values.description}
+                handleChangeDescription={handleChangeDescription}
+                readonly={false}
+              />
+              {formik.touched.description && formik.errors.description && (
+                <div className="error">{formik.errors.description}</div>
+              )}
             </div>
           </div>
 
@@ -347,6 +370,68 @@ const ServiceDialogForm = ({
               )}
             </Card>
           </div>
+        </div>
+        <div className="row mb-4 mt-4">
+          <div className="col-lg-12">
+            <label>Terms & Condition:</label>
+            <RichTextEditor
+              initialValue={formik.values.termsAndConditions}
+              handleChangeDescription={handleChangeTermsAndConditions}
+              readonly={false}
+            />
+            {formik.touched.termsAndConditions &&
+              formik.errors.termsAndConditions && (
+                <div className="error">{formik.errors.termsAndConditions}</div>
+              )}
+          </div>
+        </div>
+        <div className="mb-4 mt-4">
+          <h5>Keywords:</h5>
+          <div>
+            <form className="row p-0" onSubmit={handleAddKeyword}>
+              <div className="col-lg-10 mb-4">
+                <label className="w-100">Add Keyword:</label>
+                <TextField
+                  className="form-control"
+                  value={keyword}
+                  onChange={(event) => setKeyword(event.target.value)}
+                  inputRef={keywordRef}
+                />
+              </div>
+              <div
+                className={`col-lg-2 text-end float-end align-self-end mb-4`}
+              >
+                <button
+                  className="btn btn-labeled btn-primary w-100 shadow"
+                  type="submit"
+                  onClick={handleAddKeyword}
+                >
+                  <span className="btn-label me-2">
+                    <i className="fa fa-plus"></i>
+                  </span>
+                  Add Keyword
+                </button>
+              </div>
+            </form>
+          </div>
+          <label className="mb-2">List Of Keywords:</label>
+          <Card className="py-4">
+            {keywords?.length === 0 ? (
+              <lable className="mx-2">No Keyword Provided</lable>
+            ) : (
+              keywords.map((key, index) => {
+                return (
+                  <Chip
+                    label={key?.name}
+                    key={index}
+                    variant="outlined"
+                    className="mx-2 mb-2"
+                    onDelete={() => handleDeleteKeyword(key?.id)}
+                  />
+                );
+              })
+            )}
+          </Card>
         </div>
         <div className="flex mb-2 flex-end mt-4">
           <div>

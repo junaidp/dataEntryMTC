@@ -12,6 +12,7 @@ import DeleteVendorDialog from "./components/DeleteServiceDialog";
 import { useSelector } from "react-redux";
 import Form from "./components/Form";
 import EditServiceDialog from "./components/EditServiceDialog";
+import { setupGetAllProviderWithOutParams } from "../../global-redux/reducers/providers/slice";
 
 const Services = ({ showAddServiceDialog, setShowAddServiceDialog }) => {
   const dispatch = useDispatch();
@@ -33,6 +34,7 @@ const Services = ({ showAddServiceDialog, setShowAddServiceDialog }) => {
     if (serviceAddSuccess) {
       setCurrentServiceId("");
       dispatch(setupGetAllServiceWithOutParama());
+      dispatch(setupGetAllProviderWithOutParams());
       dispatch(setupGetAllVendors());
       dispatch(resetServiceAddSuccess());
     }
@@ -41,6 +43,7 @@ const Services = ({ showAddServiceDialog, setShowAddServiceDialog }) => {
   React.useEffect(() => {
     dispatch(setupGetAllServiceWithOutParama());
     dispatch(setupGetAllVendors());
+    dispatch(setupGetAllProviderWithOutParams());
   }, []);
 
   return (

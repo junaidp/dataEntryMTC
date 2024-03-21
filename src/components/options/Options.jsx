@@ -1,26 +1,20 @@
 import React from "react";
 import {
-  setupGetAllOptions,
   resetOptionAddSuccess,
-  resetOptions,
+  setupGetAllOptionsWithOutParams,
 } from "../../global-redux/reducers/options/slice";
 import { useDispatch, useSelector } from "react-redux";
 import { setupGetAllExperienceWithOutParams } from "../../global-redux/reducers/experiences/slice";
-import { CircularProgress, FormControl } from "@mui/material";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import InputLabel from "@mui/material/InputLabel";
+import { CircularProgress } from "@mui/material";
 import Form from "./components/Form.jsx";
 import Pagination from "@mui/material/Pagination";
 import AddOptionDialog from "./components/AddOptionDialog.jsx";
 import DeleteOptionDialog from "./components/DeleteOptionDialog.jsx";
 import EditOptionDialog from "./components/edit-option/EditOptionDialog.jsx";
+import { setupGetAllProviderWithOutParams } from "../../global-redux/reducers/providers/slice.jsx";
 
 const Options = ({ setShowAddOptionDialog, showAddOptionDialog }) => {
   const dispatch = useDispatch();
-  const { allExperience, loading: experienceLoading } = useSelector(
-    (state) => state?.experiences
-  );
   const [showEditOptionDialog, setShowEditOptionDialog] = React.useState(false);
   const [showDeleteOptionDialog, setShowDeleteOptionDialog] =
     React.useState(false);
@@ -29,33 +23,26 @@ const Options = ({ setShowAddOptionDialog, showAddOptionDialog }) => {
   const { loading, allOptions, optionAddSuccess } = useSelector(
     (state) => state?.options
   );
-  const [experienceId, setExperienceId] = React.useState("");
   const [page, setPage] = React.useState(1);
   const handleChangePage = (_, value) => {
     setPage(value);
   };
 
   React.useEffect(() => {
-    if (experienceId && experienceId !== "") {
-      dispatch(setupGetAllOptions(`?experienceId=${experienceId}`));
-    }
-  }, [experienceId]);
-  React.useEffect(() => {
     if (optionAddSuccess) {
       setSelectedOption({});
       setCurrentOptionId("");
       dispatch(resetOptionAddSuccess());
-    }
-    if (experienceId && experienceId !== "") {
-      dispatch(setupGetAllOptions(`?experienceId=${experienceId}`));
+      dispatch(setupGetAllExperienceWithOutParams());
+      dispatch(setupGetAllOptionsWithOutParams());
+      dispatch(setupGetAllProviderWithOutParams());
     }
   }, [optionAddSuccess]);
 
   React.useEffect(() => {
     dispatch(setupGetAllExperienceWithOutParams());
-    return () => {
-      dispatch(resetOptions());
-    };
+    dispatch(setupGetAllOptionsWithOutParams());
+    dispatch(setupGetAllProviderWithOutParams());
   }, []);
 
   return (
@@ -87,44 +74,15 @@ const Options = ({ setShowAddOptionDialog, showAddOptionDialog }) => {
           </div>
         </div>
       )}
-      {experienceLoading ? (
-        <CircularProgress />
-      ) : (
-        allExperience?.length !== 0 && (
-          <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">
-              Select Experience
-            </InputLabel>
-            <Select
-              id="regionsCovered"
-              name="regionsCovered"
-              className="form-control w-100 "
-              label="Regions Covered"
-              value={experienceId}
-              onChange={(event) => setExperienceId(event?.target?.value)}
-            >
-              <MenuItem value="">Select Experience</MenuItem>
-              {allExperience?.map((experience, index) => {
-                return (
-                  <MenuItem value={experience?.id} key={index}>
-                    {experience?.title}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-          </FormControl>
-        )
-      )}
+
       {loading ? (
-        <div className="mt-4">
+        <div className="mt-2">
           <CircularProgress />
         </div>
       ) : allOptions?.length === 0 || allOptions[0]?.error === "Not Found" ? (
-        <p className="mt-4">
-          Options Not Found. Please Select Experience Or Change Experience
-        </p>
+        <p className="mt-2">Options Not Found</p>
       ) : (
-        <div className="mt-4">
+        <div className="mt-2">
           <div className="accordion" id="accordionFlushExample">
             {allOptions
               ?.slice((page - 1) * 10, page * 10)

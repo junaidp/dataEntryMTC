@@ -21,6 +21,17 @@ export const getAllVariations = async (data, thunkAPI) => {
     return thunkAPI.rejectWithValue(error);
   }
 };
+export const getAllVariationsWithOutParams = async (_, thunkAPI) => {
+  try {
+    let props = await axios.get(
+      `https://data-entry-08031d053c68.herokuapp.com/variation/getVariations`
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
 export const deleteVaration = async (data, thunkAPI) => {
   try {
     let props = await axios.delete(

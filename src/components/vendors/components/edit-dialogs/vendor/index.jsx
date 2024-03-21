@@ -235,9 +235,8 @@ const EditVendorDialog = ({ setShowEditVendorDialog, currentVendorId }) => {
 
           <div className="row mb-4">
             <div className="col-lg-12">
-              <label>Description</label>
+              <label>Description:</label>
               <RichTextEditor
-                placeholder="Vendor’ Description"
                 initialValue={formik.values.description}
                 handleChangeDescription={handleChangeDescription}
                 readonly={false}
@@ -249,9 +248,8 @@ const EditVendorDialog = ({ setShowEditVendorDialog, currentVendorId }) => {
           </div>
           <div className="row mb-4">
             <div className="col-lg-12">
-              <label>Terms & Condition</label>
+              <label>Terms & Condition:</label>
               <RichTextEditor
-                placeholder="Vendor’ Terms & Conditions"
                 initialValue={formik.values.termsNConditions}
                 handleChangeTermsAndConditions={handleChangeTermsAndConditions}
                 readonly={false}

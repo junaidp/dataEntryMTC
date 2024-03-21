@@ -137,7 +137,6 @@ const Providers = ({ showAddProvidereDialog, setShowAddProviderDialog }) => {
                           </div>
                         </div>
                         <div className="px-4 py-4">
-                          <h2 className="pb-4 heading">View Provider</h2>
                           <div>
                             <div className="col-lg-12 mb-4">
                               <label>Provider name</label>
@@ -223,7 +222,6 @@ const Providers = ({ showAddProvidereDialog, setShowAddProviderDialog }) => {
                               <div className="col-lg-12">
                                 <label>Description</label>
                                 <RichTextEditor
-                                  placeholder="Vendor’ Description"
                                   initialValue={provider.description}
                                   readonly={true}
                                 />

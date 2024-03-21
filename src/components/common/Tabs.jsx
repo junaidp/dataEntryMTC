@@ -6,7 +6,6 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Vendors from "../vendors/Vendors";
 import Experience from "../experiences/Experiences";
-// import Varations from "../variations/Variations";
 import Providers from "../../components/providers/Provider";
 import Services from "../services/Services";
 import Button from "@mui/material/Button";
@@ -17,6 +16,9 @@ import Options from "../options/Options";
 import Variations from "../variations/Variations";
 import { setupGetProviderByQuery } from "../../global-redux/reducers/providers/slice";
 import { setupGetExperienceWithQuerySearch } from "../../global-redux/reducers/experiences/slice";
+import { setupGetAllServicesWithQuery } from "../../global-redux/reducers/services/slice";
+import { setupGetAllOptions } from "../../global-redux/reducers/options/slice";
+import { setupGetAllVariations } from "../../global-redux/reducers/variations/slice";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -56,6 +58,9 @@ export default function BasicTabs() {
   const { vendorAddSuccess } = useSelector((state) => state.vendors);
   const { providerAddSuccess } = useSelector((state) => state.providers);
   const { experienceAddSuccess } = useSelector((state) => state.experiences);
+  const { serviceAddSuccess } = useSelector((state) => state.services);
+  const { optionAddSuccess } = useSelector((state) => state.options);
+  const { variationAddSuccess } = useSelector((state) => state.variations);
   const [value, setValue] = React.useState(0);
   const handleChange = (_, newValue) => {
     setValue(newValue);
@@ -103,22 +108,22 @@ export default function BasicTabs() {
   }, [experienceAddSuccess]);
   // For Service
   const [serviceSearchValue, setServiceSearchValue] = React.useState("");
-  const [debouncedServiceSearchValue] = useDebounce(searchValue, 1000);
+  const [debouncedServiceSearchValue] = useDebounce(serviceSearchValue, 1000);
   const [showAddServiceDialog, setShowAddServiceDialog] = React.useState(false);
 
   const handleServiceInputChange = (event) => {
     setServiceSearchValue(event.target.value);
   };
 
-  // React.useEffect(() => {
-  //   dispatch(setupSearchVendorByQuery(debouncedSearchValue));
-  // }, [debouncedExperienceSearchValue]);
+  React.useEffect(() => {
+    dispatch(setupGetAllServicesWithQuery(debouncedServiceSearchValue));
+  }, [debouncedServiceSearchValue]);
 
-  // React.useEffect(() => {
-  //   if (vendorAddSuccess) {
-  //     setSearchValue("");
-  //   }
-  // }, [vendorAddSuccess]);
+  React.useEffect(() => {
+    if (serviceAddSuccess) {
+      setServiceSearchValue("");
+    }
+  }, [serviceAddSuccess]);
   // For Provider
   const [providerSearchValue, setProviderSearchValue] = React.useState("");
   const [debouncedProviderSearchValue] = useDebounce(providerSearchValue, 1000);
@@ -140,25 +145,28 @@ export default function BasicTabs() {
   }, [providerAddSuccess]);
   // For Options
   const [optionSearchValue, setOptionSearchValue] = React.useState("");
-  const [debouncedOptionSearchValue] = useDebounce(searchValue, 1000);
+  const [debouncedOptionSearchValue] = useDebounce(optionSearchValue, 1000);
   const [showAddOptionDialog, setShowAddOptionDialog] = React.useState(false);
 
   const handleOptionInputChange = (event) => {
     setOptionSearchValue(event.target.value);
   };
 
-  // React.useEffect(() => {
-  //   dispatch(setupSearchVendorByQuery(debouncedSearchValue));
-  // }, [debouncedExperienceSearchValue]);
+  React.useEffect(() => {
+    dispatch(setupGetAllOptions(`?name=${debouncedOptionSearchValue}`));
+  }, [debouncedOptionSearchValue]);
 
-  // React.useEffect(() => {
-  //   if (vendorAddSuccess) {
-  //     setSearchValue("");
-  //   }
-  // }, [vendorAddSuccess]);
+  React.useEffect(() => {
+    if (optionAddSuccess) {
+      setOptionSearchValue("");
+    }
+  }, [optionAddSuccess]);
   // For  Variations
   const [variationSearchValue, setVariationSearchValue] = React.useState("");
-  const [debouncedVariationSearchValue] = useDebounce(searchValue, 1000);
+  const [debouncedVariationSearchValue] = useDebounce(
+    variationSearchValue,
+    1000
+  );
   const [showAddVariationDialog, setShowAddVariationDialog] =
     React.useState(false);
 
@@ -166,15 +174,15 @@ export default function BasicTabs() {
     setVariationSearchValue(event.target.value);
   };
 
-  // React.useEffect(() => {
-  //   dispatch(setupSearchVendorByQuery(debouncedSearchValue));
-  // }, [debouncedExperienceSearchValue]);
+  React.useEffect(() => {
+    dispatch(setupGetAllVariations(`?name=${debouncedVariationSearchValue}`));
+  }, [debouncedVariationSearchValue]);
 
-  // React.useEffect(() => {
-  //   if (vendorAddSuccess) {
-  //     setSearchValue("");
-  //   }
-  // }, [vendorAddSuccess]);
+  React.useEffect(() => {
+    if (variationAddSuccess) {
+      setVariationSearchValue("");
+    }
+  }, [variationAddSuccess]);
 
   // Common
   React.useEffect(() => {

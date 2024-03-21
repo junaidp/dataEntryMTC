@@ -218,9 +218,8 @@ const AddProviderDialog = ({ setShowAddProviderDialog, currentVendorId }) => {
 
           <div className="row mb-4">
             <div className="col-lg-12">
-              <label>Description</label>
+              <label>Description:</label>
               <RichTextEditor
-                placeholder="Vendor’ Description"
                 initialValue={formik.values.description}
                 handleChangeDescription={handleChangeDescription}
                 readonly={false}

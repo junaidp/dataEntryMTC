@@ -4,16 +4,16 @@ import Chip from "@mui/material/Chip";
 import { Card } from "@mui/material";
 import { useSelector } from "react-redux";
 
-const ViewExperienceDialog = ({ setShowViewSelectedService }) => {
+const ViewServiceeDialog = ({ setShowViewSelectedService }) => {
   const { selectedService } = useSelector((state) => state.services);
   const { allProvider } = useSelector((state) => state?.providers);
   return (
     <div className="px-4 py-4">
-      <h2 className="pb-4 heading">View Experience</h2>
+      <h2 className="pb-4 heading">View Service</h2>
       <div>
         <div className="row">
           <div className="col-lg-4 mb-4">
-            <label>Experience title</label>
+            <label>Service title:</label>
             <p>
               {selectedService?.title
                 ? selectedService?.title
@@ -21,7 +21,7 @@ const ViewExperienceDialog = ({ setShowViewSelectedService }) => {
             </p>
           </div>
           <div className="col-lg-4 mb-4">
-            <label>Experience address</label>
+            <label>Service address:</label>
             <p>
               {selectedService?.address
                 ? selectedService?.address
@@ -29,7 +29,7 @@ const ViewExperienceDialog = ({ setShowViewSelectedService }) => {
             </p>
           </div>
           <div className="col-lg-4 mb-4">
-            <label>Provider</label>
+            <label>Provider:</label>
             <p>
               {allProvider?.find(
                 (all) => all?.id === selectedService?.providerId
@@ -165,9 +165,8 @@ const ViewExperienceDialog = ({ setShowViewSelectedService }) => {
 
         <div className="row mb-4">
           <div className="col-lg-12">
-            <label>Description</label>
+            <label>Description:</label>
             <RichTextEditor
-              placeholder="Description"
               initialValue={selectedService?.description}
               readonly={true}
             />
@@ -175,9 +174,8 @@ const ViewExperienceDialog = ({ setShowViewSelectedService }) => {
         </div>
         <div className="row mb-4">
           <div className="col-lg-12">
-            <label>Terms & Conditions</label>
+            <label>Terms & Conditions:</label>
             <RichTextEditor
-              placeholder="Terms And Conditions"
               initialValue={selectedService?.termsAndConditions}
               readonly={true}
             />
@@ -200,4 +198,4 @@ const ViewExperienceDialog = ({ setShowViewSelectedService }) => {
   );
 };
 
-export default ViewExperienceDialog;
+export default ViewServiceeDialog;

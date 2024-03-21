@@ -11,6 +11,7 @@ import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import AutoCompleteVendor from "./AutoCompleteVendor";
 import AutoCompleteExperience from "./AutoCompleteExperience";
+import { toast } from "react-toastify";
 
 const AddProviderDialog = ({ setShowAddProviderDialog }) => {
   const dispatch = useDispatch();
@@ -77,6 +78,7 @@ const AddProviderDialog = ({ setShowAddProviderDialog }) => {
     if (providerAddSuccess) {
       formik.resetForm({ values: initialValues });
       setShowAddProviderDialog(false);
+      toast.success("Provider Added Successfully")
     }
   }, [providerAddSuccess]);
 
@@ -231,9 +233,8 @@ const AddProviderDialog = ({ setShowAddProviderDialog }) => {
 
           <div className="row mb-4">
             <div className="col-lg-12">
-              <label>Description</label>
+              <label>Description:</label>
               <RichTextEditor
-                placeholder="Vendor’ Description"
                 initialValue={formik.values.description}
                 handleChangeDescription={handleChangeDescription}
                 readonly={false}

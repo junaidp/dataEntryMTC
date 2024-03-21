@@ -41,7 +41,7 @@ const Form = ({ experience }) => {
         </div>
         <div className="row">
           <div>
-            <label className="mb-2">List Of Prices:</label>
+            <label className="mb-2">List Of Prices</label>
             <div>
               {!experience?.price || experience?.price?.length === 0 ? (
                 <lable className="mx-2">No Price Provided</lable>
@@ -62,7 +62,7 @@ const Form = ({ experience }) => {
         </div>
         <div className="row mt-4">
           <div>
-            <label className="mb-2">List Of Durations:</label>
+            <label className="mb-2">List Of Durations</label>
             <div>
               {!experience?.duration || experience?.duration?.length === 0 ? (
                 <lable className="mx-2">No Duration Provided</lable>
@@ -83,7 +83,7 @@ const Form = ({ experience }) => {
         </div>
         <div className="row mt-4">
           <div>
-            <label className="mb-2">List Of Available Times:</label>
+            <label className="mb-2">List Of Available Times</label>
             <div>
               {!experience?.availableTime ||
               experience?.availableTime?.length === 0 ? (
@@ -104,7 +104,7 @@ const Form = ({ experience }) => {
           </div>
         </div>
         <div className="mb-4 mt-4">
-          <label className="mb-2">List Of Keywords:</label>
+          <label className="mb-2">List Of Keywords</label>
           <div>
             {!experience?.storyLineKeywords ||
             experience?.storyLineKeywords?.length === 0 ? (
@@ -125,7 +125,7 @@ const Form = ({ experience }) => {
         </div>
 
         <div className="mb-4">
-          <label className="mb-2">List Of Link With Other Experiences:</label>
+          <label className="mb-2">List Of Link With Other Experiences</label>
           <div>
             {!experience?.linkWithOtherExperience ||
             experience?.linkWithOtherExperience?.length === 0 ? (
@@ -145,7 +145,7 @@ const Form = ({ experience }) => {
           </div>
         </div>
         <div className="mb-4">
-          <label className="mb-2">List Of Links:</label>
+          <label className="mb-2">List Of Links</label>
           <div>
             {!experience?.links || experience?.links?.length === 0 ? (
               <lable className="mx-2">No Link Provided</lable>
@@ -168,7 +168,6 @@ const Form = ({ experience }) => {
           <div className="col-lg-12">
             <label>Description</label>
             <RichTextEditor
-              placeholder="Description"
               initialValue={experience?.description}
               readonly={true}
             />
@@ -178,7 +177,6 @@ const Form = ({ experience }) => {
           <div className="col-lg-12">
             <label>Terms & Conditions</label>
             <RichTextEditor
-              placeholder="Terms And Conditions"
               initialValue={experience?.termsAndConditions}
               readonly={true}
             />

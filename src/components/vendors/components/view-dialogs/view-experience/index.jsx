@@ -13,7 +13,7 @@ const ViewExperienceDialog = ({ setShowViewSelectedExperience }) => {
       <div>
         <div className="row">
           <div className="col-lg-4 mb-4">
-            <label>Experience title</label>
+            <label>Experience title:</label>
             <p>
               {selectedExperience?.title
                 ? selectedExperience?.title
@@ -21,7 +21,7 @@ const ViewExperienceDialog = ({ setShowViewSelectedExperience }) => {
             </p>
           </div>
           <div className="col-lg-4 mb-4">
-            <label>Experience address</label>
+            <label>Experience address:</label>
             <p>
               {selectedExperience?.address
                 ? selectedExperience?.address
@@ -29,7 +29,7 @@ const ViewExperienceDialog = ({ setShowViewSelectedExperience }) => {
             </p>
           </div>
           <div className="col-lg-4 mb-4">
-            <label>Provider</label>
+            <label>Provider:</label>
             <p>
               {allProvider?.find(
                 (all) => all?.id === selectedExperience?.providerId
@@ -166,9 +166,8 @@ const ViewExperienceDialog = ({ setShowViewSelectedExperience }) => {
 
         <div className="row mb-4">
           <div className="col-lg-12">
-            <label>Description</label>
+            <label>Description:</label>
             <RichTextEditor
-              placeholder="Description"
               initialValue={selectedExperience?.description}
               readonly={true}
             />
@@ -176,9 +175,8 @@ const ViewExperienceDialog = ({ setShowViewSelectedExperience }) => {
         </div>
         <div className="row mb-4">
           <div className="col-lg-12">
-            <label>Terms & Conditions</label>
+            <label>Terms & Conditions:</label>
             <RichTextEditor
-              placeholder="Terms And Conditions"
               initialValue={selectedExperience?.termsAndConditions}
               readonly={true}
             />

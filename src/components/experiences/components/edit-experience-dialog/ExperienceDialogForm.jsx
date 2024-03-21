@@ -61,7 +61,7 @@ const ExperienceDialogForm = ({
   return (
     <form onSubmit={formik.handleSubmit}>
       <div className="px-4 py-4">
-        <h2 className="pb-4 heading">Add Experience</h2>
+        <h2 className="pb-4 heading">Edit Experience</h2>
         <div>
           <div className="col-lg-12 mb-4">
             <TextField
@@ -441,9 +441,8 @@ const ExperienceDialogForm = ({
 
           <div className="row mb-4">
             <div className="col-lg-12">
-              <label>Description</label>
+              <label>Description:</label>
               <RichTextEditor
-                placeholder="Description"
                 initialValue={formik.values.description}
                 handleChangeDescription={handleChangeDescription}
                 readonly={false}
@@ -455,9 +454,8 @@ const ExperienceDialogForm = ({
           </div>
           <div className="row mb-4">
             <div className="col-lg-12">
-              <label>Terms And Conditions</label>
+              <label>Terms And Conditions:</label>
               <RichTextEditor
-                placeholder="Terms And Conditions"
                 initialValue={formik.values.termsAndConditions}
                 handleChangeTermsAndConditions={handleChangeTermsAndConditions}
                 readonly={false}

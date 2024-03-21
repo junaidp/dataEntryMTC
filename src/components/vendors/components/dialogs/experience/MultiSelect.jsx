@@ -38,7 +38,7 @@ export default function MultipleSelect({ names, setExperiences, experience }) {
 
   return (
     <div>
-      <label className="mb-2">Select Experience</label>
+      <label className="mb-2">Select Experience:</label>
       <FormControl sx={{ width: "100%" }}>
         <InputLabel id="demo-multiple-name-label">
           Link With Other Experiences

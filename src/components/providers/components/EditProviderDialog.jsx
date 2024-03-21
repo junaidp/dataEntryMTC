@@ -79,6 +79,7 @@ const EditProviderDialog = ({
     if (providerAddSuccess) {
       formik.resetForm({ values: initialValues });
       setShowEditProviderDialog(false);
+      toast.success("Provider Updated Successfully")
     }
   }, [providerAddSuccess]);
 
@@ -279,9 +280,8 @@ const EditProviderDialog = ({
 
           <div className="row mb-4">
             <div className="col-lg-12">
-              <label>Description</label>
+              <label>Description:</label>
               <RichTextEditor
-                placeholder="Vendor’ Description"
                 initialValue={formik.values.description}
                 handleChangeDescription={handleChangeDescription}
                 readonly={false}

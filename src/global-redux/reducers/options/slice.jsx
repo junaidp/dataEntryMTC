@@ -1,5 +1,10 @@
 import { toast } from "react-toastify";
-import { addOption, getAllOptions, deleteOption } from "./thunk";
+import {
+  addOption,
+  getAllOptions,
+  getAllOptionsWithOutParams,
+  deleteOption,
+} from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
@@ -20,6 +25,12 @@ export const setupGetAllOptions = createAsyncThunk(
     return getAllOptions(data, thunkAPI);
   }
 );
+export const setupGetAllOptionsWithOutParams = createAsyncThunk(
+  "option/getAllOptionsWithOutParams",
+  async (data, thunkAPI) => {
+    return getAllOptionsWithOutParams(data, thunkAPI);
+  }
+);
 export const setupDeleteOption = createAsyncThunk(
   "option/deleteOption",
   async (data, thunkAPI) => {
@@ -38,8 +49,8 @@ export const slice = createSlice({
       state.allOptions = [];
     },
   },
-  // All Options
   extraReducers: (builder) => {
+    // All Options
     builder
       .addCase(setupGetAllOptions.pending, (state) => {
         state.loading = true;
@@ -49,6 +60,26 @@ export const slice = createSlice({
         state.allOptions = payload || [{ error: "Not Found" }];
       })
       .addCase(setupGetAllOptions.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // All Options WithOut Params
+    builder
+      .addCase(setupGetAllOptionsWithOutParams.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(
+        setupGetAllOptionsWithOutParams.fulfilled,
+        (state, { payload }) => {
+          state.loading = false;
+          state.allOptions = payload || [{ error: "Not Found" }];
+        }
+      )
+      .addCase(setupGetAllOptionsWithOutParams.rejected, (state, action) => {
         state.loading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);
@@ -93,6 +124,6 @@ export const slice = createSlice({
   },
 });
 
-export const { resetOptionAddSuccess,resetOptions } = slice.actions;
+export const { resetOptionAddSuccess, resetOptions } = slice.actions;
 
 export default slice.reducer;

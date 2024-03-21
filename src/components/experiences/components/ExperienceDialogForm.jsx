@@ -413,9 +413,8 @@ const ExperienceDialogForm = ({
 
           <div className="row mb-4">
             <div className="col-lg-12">
-              <label>Description</label>
+              <label>Description:</label>
               <RichTextEditor
-                placeholder="Description"
                 initialValue={formik.values.description}
                 handleChangeDescription={handleChangeDescription}
                 readonly={false}
@@ -427,9 +426,8 @@ const ExperienceDialogForm = ({
           </div>
           <div className="row mb-4">
             <div className="col-lg-12">
-              <label>Terms And Conditions</label>
+              <label>Terms And Conditions:</label>
               <RichTextEditor
-                placeholder="Terms And Conditions"
                 initialValue={formik.values.termsAndConditions}
                 handleChangeTermsAndConditions={handleChangeTermsAndConditions}
                 readonly={false}

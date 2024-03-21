@@ -265,7 +265,7 @@ const EditExperienceDialog = ({
     if (experienceAddSuccess) {
       formik.resetForm({ values: initialValues });
       setShowEditExperienceDialog(false);
-      toast.success("Experience Added Successfully");
+      toast.success("Experience Updated Successfully");
     }
   }, [experienceAddSuccess]);
 

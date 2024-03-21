@@ -1,5 +1,10 @@
 import { toast } from "react-toastify";
-import { addVariation, getAllVariations, deleteVaration } from "./thunk";
+import {
+  addVariation,
+  getAllVariations,
+  deleteVaration,
+  getAllVariationsWithOutParams,
+} from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
@@ -20,6 +25,12 @@ export const setupGetAllVariations = createAsyncThunk(
     return getAllVariations(data, thunkAPI);
   }
 );
+export const setupGetAllVariationsWithOutParams = createAsyncThunk(
+  "variation/getAllVariationsWithOutParams",
+  async (data, thunkAPI) => {
+    return getAllVariationsWithOutParams(data, thunkAPI);
+  }
+);
 export const setupDeleteVaration = createAsyncThunk(
   "variation/deleteVaration",
   async (data, thunkAPI) => {
@@ -38,8 +49,8 @@ export const slice = createSlice({
       state.allVariations = [];
     },
   },
-  // All Options
   extraReducers: (builder) => {
+    // All Options
     builder
       .addCase(setupGetAllVariations.pending, (state) => {
         state.loading = true;
@@ -49,6 +60,26 @@ export const slice = createSlice({
         state.allVariations = payload || [{ error: "Not Found" }];
       })
       .addCase(setupGetAllVariations.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // All Options WithOut Params
+    builder
+      .addCase(setupGetAllVariationsWithOutParams.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(
+        setupGetAllVariationsWithOutParams.fulfilled,
+        (state, { payload }) => {
+          state.loading = false;
+          state.allVariations = payload || [{ error: "Not Found" }];
+        }
+      )
+      .addCase(setupGetAllVariationsWithOutParams.rejected, (state, action) => {
         state.loading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);

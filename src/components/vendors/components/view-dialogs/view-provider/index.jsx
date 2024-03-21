@@ -11,7 +11,7 @@ const ViewProviderDialog = ({ setShowViewSelectedProvider }) => {
       <div>
         <div className="row">
           <div className="col-lg-6 mb-4">
-            <label>Provider name</label>
+            <label>Provider name:</label>
             <p>
               {selectedProvider?.name
                 ? selectedProvider?.name
@@ -19,7 +19,7 @@ const ViewProviderDialog = ({ setShowViewSelectedProvider }) => {
             </p>
           </div>
           <div className="col-lg-6 mb-4">
-            <label>Experience</label>
+            <label>Experience:</label>
             <p>
               {allExperience?.find(
                 (all) => all?.id === selectedProvider?.experienceId
@@ -30,7 +30,7 @@ const ViewProviderDialog = ({ setShowViewSelectedProvider }) => {
 
         <div className="row">
           <div className="col-lg-6 mb-4">
-            <label>Provider address</label>
+            <label>Provider address:</label>
             <p>
               {selectedProvider?.address
                 ? selectedProvider?.address
@@ -38,7 +38,7 @@ const ViewProviderDialog = ({ setShowViewSelectedProvider }) => {
             </p>
           </div>
           <div className="col-lg-6 mb-4">
-            <label>Point of Contact</label>
+            <label>Point of Contact:</label>
             <p>
               {selectedProvider?.pointOfContact
                 ? selectedProvider?.pointOfContact
@@ -48,7 +48,7 @@ const ViewProviderDialog = ({ setShowViewSelectedProvider }) => {
         </div>
         <div className="row">
           <div className="col-lg-6 mb-4">
-            <label>Website</label>
+            <label>Website:</label>
             <p>
               {selectedProvider?.website
                 ? selectedProvider?.website
@@ -56,7 +56,7 @@ const ViewProviderDialog = ({ setShowViewSelectedProvider }) => {
             </p>
           </div>
           <div className="col-lg-6 mb-4">
-            <label>Email</label>
+            <label>Email:</label>
             <p>
               {selectedProvider?.email
                 ? selectedProvider?.email
@@ -66,7 +66,7 @@ const ViewProviderDialog = ({ setShowViewSelectedProvider }) => {
         </div>
         <div className="row">
           <div className="col-lg-6 mb-4">
-            <label>Manage Venue</label>
+            <label>Manage Venue:</label>
             <p>
               {Boolean(selectedProvider.manageVenue) === true
                 ? "True"
@@ -74,7 +74,7 @@ const ViewProviderDialog = ({ setShowViewSelectedProvider }) => {
             </p>
           </div>
           <div className="col-lg-6 mb-4">
-            <label>Regions</label>
+            <label>Regions:</label>
             <p>
               {selectedProvider?.regionsCovered
                 ? selectedProvider?.regionsCovered
@@ -84,9 +84,8 @@ const ViewProviderDialog = ({ setShowViewSelectedProvider }) => {
         </div>
         <div className="row mb-4">
           <div className="col-lg-12">
-            <label>Description</label>
+            <label>Description:</label>
             <RichTextEditor
-              placeholder="Vendor’ Description"
               initialValue={selectedProvider.description}
               readonly={true}
             />

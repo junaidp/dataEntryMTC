@@ -22,12 +22,15 @@ const EditOptionDialog = ({ setShowEditOptionDialog, selectedOption }) => {
   const [durations, setDurations] = React.useState([]);
   const [availableTime, setAvailableTime] = React.useState("");
   const [avialableTimes, setAvailableTimes] = React.useState([]);
+  const [keywords, setKeywords] = React.useState([]);
+  const [keyword, setKeyword] = React.useState("");
 
   // Input Refs
   const priceRef = React.useRef(null);
   const durationRef = React.useRef(null);
   const availableTimeRef = React.useRef(null);
   const linkRef = React.useRef(null);
+  const keywordRef = React.useRef(null);
 
   const { optionAddSuccess, loading } = useSelector((state) => state?.options);
   const { allExperience } = useSelector((state) => state.experiences);
@@ -37,12 +40,16 @@ const EditOptionDialog = ({ setShowEditOptionDialog, selectedOption }) => {
     xpAddress: "",
     experienceId: "",
     providerId: "",
+    description: "",
+    termsAndConditions: "",
   };
   const validationSchema = Yup.object({
     title: Yup.string().required("Title is required"),
     xpAddress: Yup.string().required("Address is required"),
     experienceId: Yup.string().required("Experience is required"),
     providerId: Yup.string().required("Provider is required"),
+    description: Yup.string().required("Description is required"),
+    termsAndConditions: Yup.string().required("Terms & Condition is required"),
   });
 
   // Formik hook
@@ -77,6 +84,9 @@ const EditOptionDialog = ({ setShowEditOptionDialog, selectedOption }) => {
                 id: selectedOption?.id,
                 links: links?.map((item) => {
                   return item.link;
+                }),
+                storyLineKeywords: keywords.map((item) => {
+                  return item?.name;
                 }),
                 price: prices?.map((item) => {
                   return item.price;
@@ -170,6 +180,33 @@ const EditOptionDialog = ({ setShowEditOptionDialog, selectedOption }) => {
     setShowEditOptionDialog(false);
   }
 
+  function handleChangeDescription(value) {
+    formik.resetForm({ values: { ...formik.values, description: value } });
+  }
+  function handleChangeTermsAndConditions(value) {
+    formik.resetForm({
+      values: { ...formik.values, termsAndConditions: value },
+    });
+  }
+
+  function handleAddKeyword(event) {
+    event.preventDefault();
+    if (keyword === "") {
+      toast.error("Provide Keyword");
+    }
+    if (keywordRef.current) {
+      keywordRef.current.focus();
+    }
+    if (keyword !== "") {
+      setKeywords([...keywords, { id: uuidv4(), name: keyword }]);
+      setKeyword("");
+    }
+  }
+
+  function handleDeleteKeyword(id) {
+    setKeywords((pre) => pre?.filter((singleItem) => singleItem?.id !== id));
+  }
+
   React.useEffect(() => {
     if (optionAddSuccess) {
       toast.success("Option Updated Successfully");
@@ -193,6 +230,8 @@ const EditOptionDialog = ({ setShowEditOptionDialog, selectedOption }) => {
           xpAddress: selectedOption?.xpAddress,
           experienceId: selectedOption?.experienceId,
           providerId: selectedOption?.providerId,
+          description: selectedOption?.description,
+          termsAndConditions: selectedOption?.termsAndConditions,
         },
       });
 
@@ -217,6 +256,14 @@ const EditOptionDialog = ({ setShowEditOptionDialog, selectedOption }) => {
           return {
             id: uuidv4(),
             time: singleItem,
+          };
+        })
+      );
+      setKeywords(
+        selectedOption?.storyLineKeywords?.map((singleItem) => {
+          return {
+            id: uuidv4(),
+            name: singleItem,
           };
         })
       );
@@ -262,6 +309,14 @@ const EditOptionDialog = ({ setShowEditOptionDialog, selectedOption }) => {
       linkRef={linkRef}
       allExperience={allExperience}
       allProvider={allProvider}
+      handleAddKeyword={handleAddKeyword}
+      handleDeleteKeyword={handleDeleteKeyword}
+      keywordRef={keywordRef}
+      keyword={keyword}
+      keywords={keywords}
+      setKeyword={setKeyword}
+      handleChangeDescription={handleChangeDescription}
+      handleChangeTermsAndConditions={handleChangeTermsAndConditions}
     />
   );
 };

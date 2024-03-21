@@ -21,6 +21,16 @@ export const getAllOptions = async (data, thunkAPI) => {
     return thunkAPI.rejectWithValue(error);
   }
 };
+export const getAllOptionsWithOutParams = async (_, thunkAPI) => {
+  try {
+    let props = await axios.get(
+      `https://data-entry-08031d053c68.herokuapp.com/option/getOptions`
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
 export const deleteOption = async (data, thunkAPI) => {
   try {
     let props = await axios.delete(
