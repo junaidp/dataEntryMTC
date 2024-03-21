@@ -98,7 +98,7 @@ const AddProviderDialog = ({ setShowAddProviderDialog, currentVendorId }) => {
           </div>
 
           <div className="row">
-            <div className="col-lg-6 mb-4">
+            <div className="col-lg-6 mb-2">
               <TextField
                 id="address"
                 name="address"
@@ -129,7 +129,7 @@ const AddProviderDialog = ({ setShowAddProviderDialog, currentVendorId }) => {
             </div>
           </div>
 
-          <div className="row mb-4 w-100">
+          <div className="mb-4 w-100">
             <AutoSelectExperience
               options={allExperience?.map((experience) => {
                 return { name: experience?.title, id: experience?.id };

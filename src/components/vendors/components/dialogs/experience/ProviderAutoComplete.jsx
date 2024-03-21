@@ -27,7 +27,7 @@ export default function ControllableStates({ options, formik }) {
   }, [inputValue]);
 
   return (
-    <div>
+    <div className="w-100">
       <br />
       <Autocomplete
         value={value}
@@ -41,7 +41,7 @@ export default function ControllableStates({ options, formik }) {
         id="controllable-states-demo"
         options={options?.map((all) => all?.name)}
         renderInput={(params) => (
-          <TextField {...params} label="Select Provider" />
+          <TextField {...params} label="Select Provider" className="w-100" />
         )}
       />
     </div>

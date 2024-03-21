@@ -73,7 +73,7 @@ const ExperienceDialogForm = ({
           </div>
 
           <div className="row">
-            <div className="col-lg-12 mb-4">
+            <div className="col-lg-12 mb-2">
               <TextField
                 id="address"
                 name="address"
@@ -86,13 +86,15 @@ const ExperienceDialogForm = ({
               />
             </div>
           </div>
-          <div className="row mb-4 w-100">
-            <AutoCompleteProvider
-              options={allProvider?.map((provider) => {
-                return { name: provider?.name, id: provider?.id };
-              })}
-              formik={formik}
-            />
+          <div className="mb-4 w-100">
+            <div className="col-lg-12 w-100">
+              <AutoCompleteProvider
+                options={allProvider?.map((provider) => {
+                  return { name: provider?.name, id: provider?.id };
+                })}
+                formik={formik}
+              />
+            </div>
           </div>
           <div className="row">
             <div>

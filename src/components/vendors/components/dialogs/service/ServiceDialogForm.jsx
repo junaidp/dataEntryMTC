@@ -84,7 +84,7 @@ const ServiceDialogForm = ({
               />
             </div>
           </div>
-          <div className="row mb-4 w-100">
+          <div className="mb-4 w-100">
             <AutoCompleteProvider
               options={allProvider?.map((provider) => {
                 return { name: provider?.name, id: provider?.id };

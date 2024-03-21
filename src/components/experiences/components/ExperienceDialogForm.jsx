@@ -88,7 +88,7 @@ const ExperienceDialogForm = ({
               />
             </div>
           </div>
-          <div className="row mb-4 w-100">
+          <div className="mb-2 w-100">
             <AutoCompleteProvider
               options={allProvider?.map((provider) => {
                 return { name: provider?.name, id: provider?.id };
@@ -96,7 +96,7 @@ const ExperienceDialogForm = ({
               formik={formik}
             />
           </div>
-          <div className="row mb-4 w-100">
+          <div className="mb-4 w-100">
             <AutoCompleteVendor
               options={allVendors?.map((vendor) => {
                 return { name: vendor?.name, id: vendor?.id };

@@ -130,7 +130,7 @@ const AddProviderDialog = ({ setShowAddProviderDialog }) => {
             </div>
           </div>
 
-          <div className="row mb-2 w-100">
+          <div className="mb-2 w-100">
             <div className="col-lg-12">
               <AutoCompleteVendor
                 options={allVendors?.map((vendor) => {
@@ -140,7 +140,7 @@ const AddProviderDialog = ({ setShowAddProviderDialog }) => {
               />
             </div>
           </div>
-          <div className="row mb-4 w-100">
+          <div className="mb-4 w-100">
             <div className="col-lg-12">
               <AutoCompleteExperience
                 options={allExperience?.map((experience) => {
