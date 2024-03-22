@@ -11,11 +11,12 @@ import Pagination from "@mui/material/Pagination";
 import AddOptionDialog from "./components/AddOptionDialog.jsx";
 import DeleteOptionDialog from "./components/DeleteOptionDialog.jsx";
 import EditOptionDialog from "./components/edit-option/EditOptionDialog.jsx";
-import { setupGetAllProviderWithOutParams } from "../../global-redux/reducers/providers/slice.jsx";
+import { setupGetAllVendors } from "../../global-redux/reducers/vendor/slice.jsx";
 
 const Options = ({ setShowAddOptionDialog, showAddOptionDialog }) => {
   const dispatch = useDispatch();
   const [showEditOptionDialog, setShowEditOptionDialog] = React.useState(false);
+  const { providerAddSuccess } = useSelector((state) => state?.providers);
   const [showDeleteOptionDialog, setShowDeleteOptionDialog] =
     React.useState(false);
   const [currentOptionId, setCurrentOptionId] = React.useState("");
@@ -29,20 +30,20 @@ const Options = ({ setShowAddOptionDialog, showAddOptionDialog }) => {
   };
 
   React.useEffect(() => {
-    if (optionAddSuccess) {
+    if (optionAddSuccess || providerAddSuccess) {
       setSelectedOption({});
       setCurrentOptionId("");
       dispatch(resetOptionAddSuccess());
       dispatch(setupGetAllExperienceWithOutParams());
       dispatch(setupGetAllOptionsWithOutParams());
-      dispatch(setupGetAllProviderWithOutParams());
+      dispatch(setupGetAllVendors());
     }
-  }, [optionAddSuccess]);
+  }, [optionAddSuccess, providerAddSuccess]);
 
   React.useEffect(() => {
     dispatch(setupGetAllExperienceWithOutParams());
     dispatch(setupGetAllOptionsWithOutParams());
-    dispatch(setupGetAllProviderWithOutParams());
+    dispatch(setupGetAllVendors());
   }, []);
 
   return (

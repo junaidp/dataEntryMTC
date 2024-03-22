@@ -87,6 +87,9 @@ const AddExperienceDialog = ({ setShowAddExperienceDialog }) => {
             setupAddExperience([
               {
                 ...values,
+                providers: [
+                  allProvider?.find((all) => all?.id === values?.providerId),
+                ],
                 links: links?.map((item) => {
                   return {
                     link: item.link,

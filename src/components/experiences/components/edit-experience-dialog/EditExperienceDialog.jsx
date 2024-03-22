@@ -91,6 +91,9 @@ const EditExperienceDialog = ({
               {
                 ...values,
                 id: selectedExperience?.id,
+                providers: [
+                  allProvider?.find((all) => all?.id === values?.providerId),
+                ],
                 links: links?.map((item) => {
                   return {
                     link: item.link,
@@ -278,7 +281,7 @@ const EditExperienceDialog = ({
           address: selectedExperience?.address,
           description: selectedExperience?.description,
           termsAndConditions: selectedExperience?.termsAndConditions,
-          providerId: selectedExperience?.providerId,
+          providerId: selectedExperience?.providers[0]?.id,
           vendorId: selectedExperience?.vendorId,
         },
       });

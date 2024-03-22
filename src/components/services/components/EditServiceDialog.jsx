@@ -85,6 +85,9 @@ const EditServiceDialog = ({ setShowEditServiceDialog, selectedService }) => {
             setupAddService([
               {
                 ...values,
+                providers: [
+                  allProvider?.find((all) => all?.id === values?.providerId),
+                ],
                 id: selectedService?.id,
                 links: links?.map((item) => item?.link),
                 linkWithOtherService:
@@ -267,7 +270,7 @@ const EditServiceDialog = ({ setShowEditServiceDialog, selectedService }) => {
           address: selectedService?.address,
           description: selectedService?.description,
           termsAndConditions: selectedService?.termsAndConditions,
-          providerId: selectedService?.providerId,
+          providerId: selectedService?.providers[0]?.id,
           vendorId: selectedService?.vendorId,
         },
       });

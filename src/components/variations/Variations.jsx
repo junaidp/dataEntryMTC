@@ -11,12 +11,13 @@ import Pagination from "@mui/material/Pagination";
 import AddVariationDialog from "./components/AddVariationDialog.jsx";
 import DeleteVariationDialog from "./components/DeleteVariationDialog.jsx";
 import EditVariationDialog from "./components/edit-variation/EditVariationDialog.jsx";
-import { setupGetAllProviderWithOutParams } from "../../global-redux/reducers/providers/slice.jsx";
+import { setupGetAllVendors } from "../../global-redux/reducers/vendor/slice.jsx";
 
 const Variation = ({ showAddVariationDialog, setShowAddVariationDialog }) => {
   const dispatch = useDispatch();
   const [showEditVariationDialog, setShowEditVariationDialog] =
     React.useState(false);
+  const { providerAddSuccess } = useSelector((state) => state?.providers);
   const [showDeleteVariationDialog, setShowDeleteVariationDialog] =
     React.useState(false);
   const [currentVariationId, setCurrentVariationId] = React.useState("");
@@ -30,20 +31,20 @@ const Variation = ({ showAddVariationDialog, setShowAddVariationDialog }) => {
   };
 
   React.useEffect(() => {
-    if (variationAddSuccess) {
+    if (variationAddSuccess || providerAddSuccess) {
       setSelectedVariation({});
       setCurrentVariationId("");
       dispatch(resetVariationAddSuccess());
       dispatch(setupGetAllExperienceWithOutParams());
       dispatch(setupGetAllVariationsWithOutParams());
-      dispatch(setupGetAllProviderWithOutParams());
+      dispatch(setupGetAllVendors());
     }
-  }, [variationAddSuccess]);
+  }, [variationAddSuccess, providerAddSuccess]);
 
   React.useEffect(() => {
     dispatch(setupGetAllExperienceWithOutParams());
     dispatch(setupGetAllVariationsWithOutParams());
-    dispatch(setupGetAllProviderWithOutParams());
+    dispatch(setupGetAllVendors());
   }, []);
 
   return (

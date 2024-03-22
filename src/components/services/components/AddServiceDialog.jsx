@@ -85,6 +85,9 @@ const AddServiceDialog = ({ setShowAddServiceDialog }) => {
             setupAddService([
               {
                 ...values,
+                providers: [
+                  allProvider?.find((all) => all?.id === values?.providerId),
+                ],
                 links: links?.map((item) => item?.link),
                 linkWithOtherService:
                   linkWithOtherServices?.map((item) => {

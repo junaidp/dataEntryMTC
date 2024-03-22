@@ -203,11 +203,11 @@ export default function BasicTabs() {
           aria-label="basic tabs example"
         >
           <Tab label="Vendors" {...a11yProps(0)} />
-          <Tab label="Providers" {...a11yProps(1)} />
-          <Tab label="Experiences" {...a11yProps(2)} />
-          <Tab label="Services" {...a11yProps(3)} />
-          <Tab label="Options" {...a11yProps(4)} />
-          <Tab label="Variations" {...a11yProps(5)} />
+          {/* <Tab label="Providers" {...a11yProps(1)} /> */}
+          <Tab label="Experiences" {...a11yProps(1)} />
+          <Tab label="Services" {...a11yProps(2)} />
+          <Tab label="Options" {...a11yProps(3)} />
+          <Tab label="Variations" {...a11yProps(4)} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
@@ -235,7 +235,7 @@ export default function BasicTabs() {
           setShowAddVendorDialog={setShowAddVendorDialog}
         />
       </CustomTabPanel>
-      <CustomTabPanel value={value} index={1}>
+      {/* <CustomTabPanel value={value} index={1}>
         <div className="mb-4 " style={{ marginLeft: "-10px" }}>
           <Button size="medium" onClick={() => setShowAddProviderDialog(true)}>
             <h2 className="heading mt-2">Add Provider</h2>
@@ -259,8 +259,8 @@ export default function BasicTabs() {
           showAddProvidereDialog={showAddProvidereDialog}
           setShowAddProviderDialog={setShowAddProviderDialog}
         />
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={2}>
+      </CustomTabPanel> */}
+      <CustomTabPanel value={value} index={1}>
         <div className="mb-4 " style={{ marginLeft: "-10px" }}>
           <Button
             size="medium"
@@ -288,7 +288,7 @@ export default function BasicTabs() {
           setShowAddExperienceDialog={setShowAddExperienceDialog}
         />
       </CustomTabPanel>
-      <CustomTabPanel value={value} index={3}>
+      <CustomTabPanel value={value} index={2}>
         <div className="mb-4 " style={{ marginLeft: "-10px" }}>
           <Button size="medium" onClick={() => setShowAddServiceDialog(true)}>
             <h2 className="heading mt-2">Add Service</h2>
@@ -313,7 +313,7 @@ export default function BasicTabs() {
           setShowAddServiceDialog={setShowAddServiceDialog}
         />
       </CustomTabPanel>
-      <CustomTabPanel value={value} index={4}>
+      <CustomTabPanel value={value} index={3}>
         <div className="mb-4 " style={{ marginLeft: "-10px" }}>
           <Button size="medium" onClick={() => setShowAddOptionDialog(true)}>
             <h2 className="heading mt-2">Add Option</h2>
@@ -338,7 +338,7 @@ export default function BasicTabs() {
           setShowAddOptionDialog={setShowAddOptionDialog}
         />
       </CustomTabPanel>
-      <CustomTabPanel value={value} index={5}>
+      <CustomTabPanel value={value} index={4}>
         <div className="mb-4 " style={{ marginLeft: "-10px" }}>
           <Button size="medium" onClick={() => setShowAddVariationDialog(true)}>
             <h2 className="heading mt-2">Add Variation</h2>

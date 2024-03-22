@@ -46,8 +46,6 @@ const EditOptionDialog = ({ setShowEditOptionDialog, selectedOption }) => {
   const validationSchema = Yup.object({
     title: Yup.string().required("Title is required"),
     xpAddress: Yup.string().required("Address is required"),
-    experienceId: Yup.string().required("Experience is required"),
-    providerId: Yup.string().required("Provider is required"),
     description: Yup.string().required("Description is required"),
     termsAndConditions: Yup.string().required("Terms & Condition is required"),
   });
@@ -64,6 +62,9 @@ const EditOptionDialog = ({ setShowEditOptionDialog, selectedOption }) => {
         if (prices?.length === 0) {
           toast.error("Provide Prices");
         }
+        if (keywords?.length === 0) {
+          toast.error("Provide Keywords");
+        }
         if (durations?.length === 0) {
           toast.error("Provide Durations");
         }
@@ -74,12 +75,16 @@ const EditOptionDialog = ({ setShowEditOptionDialog, selectedOption }) => {
           links?.length !== 0 &&
           prices?.length !== 0 &&
           durations?.length !== 0 &&
-          avialableTimes?.length !== 0
+          avialableTimes?.length !== 0 &&
+          keywords?.length !== 0
         ) {
           dispatch(
             setupAddOption([
               {
                 ...values,
+                providers: [
+                  allProvider?.find((all) => all?.id === values?.providerId),
+                ],
                 linkWithOtherExperience: null,
                 id: selectedOption?.id,
                 links: links?.map((item) => {
@@ -229,7 +234,7 @@ const EditOptionDialog = ({ setShowEditOptionDialog, selectedOption }) => {
           title: selectedOption?.title,
           xpAddress: selectedOption?.xpAddress,
           experienceId: selectedOption?.experienceId,
-          providerId: selectedOption?.providerId,
+          providerId: selectedOption?.providers[0]?.id,
           description: selectedOption?.description,
           termsAndConditions: selectedOption?.termsAndConditions,
         },

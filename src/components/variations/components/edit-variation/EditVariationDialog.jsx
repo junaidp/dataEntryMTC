@@ -51,8 +51,6 @@ const EditVariationDialog = ({
   const validationSchema = Yup.object({
     title: Yup.string().required("Title is required"),
     xpAddress: Yup.string().required("Address is required"),
-    experienceId: Yup.string().required("Experience is required"),
-    providerId: Yup.string().required("Provider is required"),
     description: Yup.string().required("Description is required"),
     termsAndConditions: Yup.string().required("Terms & Condition is required"),
   });
@@ -65,6 +63,9 @@ const EditVariationDialog = ({
       if (!loading) {
         if (links?.length === 0) {
           toast.error("Provide Links");
+        }
+        if (keywords?.length === 0) {
+          toast.error("Provide Keywords");
         }
         if (prices?.length === 0) {
           toast.error("Provide Prices");
@@ -79,12 +80,16 @@ const EditVariationDialog = ({
           links?.length !== 0 &&
           prices?.length !== 0 &&
           durations?.length !== 0 &&
-          avialableTimes?.length !== 0
+          avialableTimes?.length !== 0 &&
+          keywords?.length !== 0
         ) {
           dispatch(
             setupAddVariation([
               {
                 ...values,
+                providers: [
+                  allProvider?.find((all) => all?.id === values?.providerId),
+                ],
                 id: selectedVaraition?.id,
                 links: links?.map((item) => {
                   return item.link;
@@ -233,7 +238,7 @@ const EditVariationDialog = ({
           title: selectedVaraition?.title,
           xpAddress: selectedVaraition?.xpAddress,
           experienceId: selectedVaraition?.experienceId,
-          providerId: selectedVaraition?.providerId,
+          providerId: selectedVaraition?.providers[0]?.id,
           description: selectedVaraition?.description,
           termsAndConditions: selectedVaraition?.termsAndConditions,
         },

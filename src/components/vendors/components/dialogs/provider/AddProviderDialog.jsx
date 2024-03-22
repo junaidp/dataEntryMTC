@@ -10,11 +10,9 @@ import { useSelector, useDispatch } from "react-redux";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import { toast } from "react-toastify";
-import AutoSelectExperience from "./ExperienceAutoComplete";
 
 const AddProviderDialog = ({ setShowAddProviderDialog, currentVendorId }) => {
   const dispatch = useDispatch();
-  let { allExperience } = useSelector((state) => state?.experiences);
   const { providerAddSuccess, loading } = useSelector(
     (state) => state?.providers
   );
@@ -27,7 +25,7 @@ const AddProviderDialog = ({ setShowAddProviderDialog, currentVendorId }) => {
     regionsCovered: "",
     manageVenue: "",
     description: "",
-    experienceId: "",
+    termsNConditions: "",
   };
   const validationSchema = Yup.object({
     name: Yup.string().required("Provider name is required"),
@@ -42,6 +40,7 @@ const AddProviderDialog = ({ setShowAddProviderDialog, currentVendorId }) => {
       "Please select Yes or No for managing venue"
     ),
     description: Yup.string().required("Please provide description"),
+    termsNConditions: Yup.string().required("Please Terms & Conditions"),
   });
 
   // Formik hook
@@ -64,6 +63,9 @@ const AddProviderDialog = ({ setShowAddProviderDialog, currentVendorId }) => {
 
   function handleChangeDescription(value) {
     formik.resetForm({ values: { ...formik.values, description: value } });
+  }
+  function handleChangeTermsAndConditions(value) {
+    formik.resetForm({ values: { ...formik.values, termsNConditions: value } });
   }
 
   function handleClose() {
@@ -98,7 +100,7 @@ const AddProviderDialog = ({ setShowAddProviderDialog, currentVendorId }) => {
           </div>
 
           <div className="row">
-            <div className="col-lg-6 mb-2">
+            <div className="col-lg-6 mb-4">
               <TextField
                 id="address"
                 name="address"
@@ -110,7 +112,7 @@ const AddProviderDialog = ({ setShowAddProviderDialog, currentVendorId }) => {
                 helperText={formik.touched.address && formik.errors.address}
               />
             </div>
-            <div className="col-lg-6 mb-2">
+            <div className="col-lg-6 mb-4">
               <TextField
                 id="pointOfContact"
                 name="pointOfContact"
@@ -127,15 +129,6 @@ const AddProviderDialog = ({ setShowAddProviderDialog, currentVendorId }) => {
                 }
               />
             </div>
-          </div>
-
-          <div className="mb-4 w-100">
-            <AutoSelectExperience
-              options={allExperience?.map((experience) => {
-                return { name: experience?.title, id: experience?.id };
-              })}
-              formik={formik}
-            />
           </div>
 
           <div className="row">
@@ -227,6 +220,20 @@ const AddProviderDialog = ({ setShowAddProviderDialog, currentVendorId }) => {
               {formik.touched.description && formik.errors.description && (
                 <div className="error">{formik.errors.description}</div>
               )}
+            </div>
+          </div>
+          <div className="row mb-4">
+            <div className="col-lg-12">
+              <label>Terms & Conditions:</label>
+              <RichTextEditor
+                initialValue={formik.values.termsNConditions}
+                handleChangeTermsAndConditions={handleChangeTermsAndConditions}
+                readonly={false}
+              />
+              {formik.touched.termsNConditions &&
+                formik.errors.termsNConditions && (
+                  <div className="error">{formik.errors.termsNConditions}</div>
+                )}
             </div>
           </div>
         </div>

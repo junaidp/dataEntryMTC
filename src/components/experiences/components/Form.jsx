@@ -2,19 +2,73 @@ import React from "react";
 import RichTextEditor from "../../../components/common/RichText";
 import Chip from "@mui/material/Chip";
 import { useSelector } from "react-redux";
+import OptionRecord from "./records/OptionsRecord";
+import VariationRecord from "./records/VariationRecord";
+import ViewSelectedOptionDialog from "./view-dialogs/ViewOption";
+import ViewSelectedVariationDialog from "./view-dialogs/ViewVariation";
+import AddOptionDialog from "./extras-add-dialogs.jsx/options/AddOptionDialog";
+import AddVariationDialog from "./extras-add-dialogs.jsx/variations/AddVariationDialog";
+import ProviderRecord from "./records/ProviderRecord";
 
-const Form = ({ experience }) => {
+const Form = ({ experience, currentExperienceId }) => {
+  const [selectedOption, setSelectedOption] = React.useState({});
+  const [showAddOptionDialog, setShowAddOptionDialog] = React.useState(false);
+  const [showViewOptionDialog, setShowViewOptionDialog] = React.useState(false);
+  const [selectedVariation, setSelectedVariation] = React.useState({});
+  const [showAddVariationDialog, setShowAddVariationDialog] =
+    React.useState(false);
+  const [showViewVariationDialog, setShowViewVariationDialog] =
+    React.useState(false);
   const { allVendors } = useSelector((state) => state?.vendors);
-  const { allProvider } = useSelector((state) => state?.providers);
   return (
     <div className="px-4 py-4">
+      {showViewOptionDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <ViewSelectedOptionDialog
+              selectedOption={selectedOption}
+              setShowViewOptionDialog={setShowViewOptionDialog}
+            />
+          </div>
+        </div>
+      )}
+      {showAddOptionDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <AddOptionDialog
+              currentExperienceId={currentExperienceId}
+              setShowAddOptionDialog={setShowAddOptionDialog}
+            />
+          </div>
+        </div>
+      )}
+      {showViewVariationDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <ViewSelectedVariationDialog
+              selectedVariation={selectedVariation}
+              setShowViewVariationDialog={setShowViewVariationDialog}
+            />
+          </div>
+        </div>
+      )}
+      {showAddVariationDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <AddVariationDialog
+              currentExperienceId={currentExperienceId}
+              setShowAddVariationDialog={setShowAddVariationDialog}
+            />
+          </div>
+        </div>
+      )}
       <div>
         <div className="row mx-0" style={{ margin: "0px" }}>
-          <div className="col-lg-6 mb-4 p-0">
+          <div className="col-lg-4 mb-4 p-0">
             <label>Experience title</label>
             <p>{experience?.title ? experience?.title : "No Title Provided"}</p>
           </div>
-          <div className="col-lg-6 mb-4">
+          <div className="col-lg-4 mb-4">
             <label>Experience address</label>
             <p>
               {experience?.address
@@ -22,23 +76,15 @@ const Form = ({ experience }) => {
                 : "No Address Provided"}
             </p>
           </div>
-        </div>
-        <div className="row mx-0" style={{ margin: "0px" }}>
-          <div className="col-lg-5 mb-4 p-0">
+          <div className="col-lg-4 mb-4 ">
             <label>Vendor</label>
             <p>
               {allVendors?.find((item) => item?.id === experience?.vendorId)
                 ?.name || "No Vendor Provided"}
             </p>
           </div>
-          <div className="col-lg-6 mb-4 p-0">
-            <label>Provider</label>
-            <p>
-              {allProvider?.find((item) => item?.id === experience?.providerId)
-                ?.name || "No Provider Provided"}
-            </p>
-          </div>
         </div>
+
         <div className="row">
           <div>
             <label className="mb-2">List Of Prices</label>
@@ -129,7 +175,7 @@ const Form = ({ experience }) => {
           <div>
             {!experience?.linkWithOtherExperience ||
             experience?.linkWithOtherExperience?.length === 0 ? (
-              <p className="mx-2">No Link With Other Experince Provided</p>
+              <p>No Link With Other Experince Provided</p>
             ) : (
               experience?.linkWithOtherExperience?.map((key, index) => {
                 return (
@@ -162,6 +208,23 @@ const Form = ({ experience }) => {
               })
             )}
           </div>
+        </div>
+        <div className="max-height-200 overflow-y-auto">
+          <OptionRecord
+            setShowAddOptionDialog={setShowAddOptionDialog}
+            setShowViewOptionDialog={setShowViewOptionDialog}
+            setSelectedOption={setSelectedOption}
+          />
+        </div>
+        <div className="max-height-200 overflow-y-auto">
+          <VariationRecord
+            setShowAddVariationDialog={setShowAddVariationDialog}
+            setShowViewVariationDialog={setShowViewVariationDialog}
+            setSelectedVariation={setSelectedVariation}
+          />
+        </div>
+        <div className="max-height-200 overflow-y-auto ">
+          <ProviderRecord experience={experience} />
         </div>
 
         <div className="row mb-4">

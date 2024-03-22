@@ -1,26 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
-import RichTextEditor from "../../../components/common/RichText";
-import { setupAddProvider } from "../../../global-redux/reducers/providers/slice";
+import RichTextEditor from "../../../common/RichText";
+import { setupAddProvider } from "../../../../global-redux/reducers/providers/slice";
 import { useSelector, useDispatch } from "react-redux";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import { toast } from "react-toastify";
 
-const EditProviderDialog = ({
-  setShowEditProviderDialog,
-  selectedProvider,
-}) => {
+const AddProviderDialog = ({ setShowAddProviderDialog }) => {
   const dispatch = useDispatch();
   const { providerAddSuccess, loading } = useSelector(
     (state) => state?.providers
   );
-  const { allVendors } = useSelector((state) => state.vendors);
-  const { allExperience } = useSelector((state) => state.experiences);
+  const { allVendors } = useSelector((state) => state?.vendors);
   let initialValues = {
     name: "",
     address: "",
@@ -30,8 +26,8 @@ const EditProviderDialog = ({
     regionsCovered: "",
     manageVenue: "",
     description: "",
+    termsNConditions: "",
     vendorId: "",
-    experienceId: "",
   };
   const validationSchema = Yup.object({
     name: Yup.string().required("Provider name is required"),
@@ -46,7 +42,7 @@ const EditProviderDialog = ({
       "Please select Yes or No for managing venue"
     ),
     description: Yup.string().required("Please provide description"),
-    vendorId: Yup.string().required("Vendor is required"),
+    termsNConditions: Yup.string().required("Please Terms & Conditions"),
   });
 
   // Formik hook
@@ -55,14 +51,7 @@ const EditProviderDialog = ({
     validationSchema: validationSchema,
     onSubmit: (values) => {
       if (!loading) {
-        dispatch(
-          setupAddProvider([
-            {
-              id: selectedProvider?.id,
-              ...values,
-            },
-          ])
-        );
+        dispatch(setupAddProvider([values]));
       }
     },
   });
@@ -70,44 +59,27 @@ const EditProviderDialog = ({
   function handleChangeDescription(value) {
     formik.resetForm({ values: { ...formik.values, description: value } });
   }
+  function handleChangeTermsAndConditions(value) {
+    formik.resetForm({ values: { ...formik.values, termsNConditions: value } });
+  }
 
   function handleClose() {
     formik.resetForm({ values: initialValues });
-    setShowEditProviderDialog(false);
+    setShowAddProviderDialog(false);
   }
 
   React.useEffect(() => {
     if (providerAddSuccess) {
       formik.resetForm({ values: initialValues });
-      setShowEditProviderDialog(false);
-      toast.success("Provider Updated Successfully")
+      setShowAddProviderDialog(false);
+      toast.success("Provider Added Successfully");
     }
   }, [providerAddSuccess]);
-
-  React.useEffect(() => {
-    if (Object.keys(selectedProvider)?.length !== 0) {
-      formik.resetForm({
-        values: {
-          ...formik.values,
-          name: selectedProvider?.name,
-          address: selectedProvider?.address,
-          pointOfContact: selectedProvider?.pointOfContact,
-          website: selectedProvider?.website,
-          email: selectedProvider?.email,
-          regionsCovered: selectedProvider?.regionsCovered,
-          manageVenue: selectedProvider?.manageVenue,
-          description: selectedProvider?.description,
-          vendorId: selectedProvider?.vendorId,
-          experienceId: selectedProvider?.experienceId,
-        },
-      });
-    }
-  }, [selectedProvider]);
 
   return (
     <form onSubmit={formik.handleSubmit}>
       <div className="px-4 py-4">
-        <h2 className="pb-4 heading">Edit Provider</h2>
+        <h2 className="pb-4 heading">Add Provider</h2>
         <div>
           <div className="col-lg-8 mb-4">
             <TextField
@@ -155,9 +127,11 @@ const EditProviderDialog = ({
           </div>
 
           <div className="row">
-            <div className="col-lg-6 mb-4">
+            <div className="col-lg-12 mb-4">
               <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Vendor</InputLabel>
+                <InputLabel id="demo-simple-select-label">
+                  Select Vendor
+                </InputLabel>
                 <Select
                   id="vendorId"
                   name="vendorId"
@@ -170,29 +144,6 @@ const EditProviderDialog = ({
                     return (
                       <MenuItem value={vendor?.id} key={index}>
                         {vendor?.name}
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
-              </FormControl>
-            </div>
-            <div className="col-lg-6 mb-4">
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">
-                  Experience
-                </InputLabel>
-                <Select
-                  id="experienceId"
-                  name="experienceId"
-                  className="form-control w-100 "
-                  label="Experience"
-                  {...formik.getFieldProps("experienceId")}
-                >
-                  <MenuItem value="">Select Experience</MenuItem>
-                  {allExperience?.map((experience, index) => {
-                    return (
-                      <MenuItem value={experience?.id} key={index}>
-                        {experience?.title}
                       </MenuItem>
                     );
                   })}
@@ -292,6 +243,20 @@ const EditProviderDialog = ({
               )}
             </div>
           </div>
+          <div className="row mb-4">
+            <div className="col-lg-12">
+              <label>Terms & Conditions:</label>
+              <RichTextEditor
+                initialValue={formik.values.termsNConditions}
+                handleChangeTermsAndConditions={handleChangeTermsAndConditions}
+                readonly={false}
+              />
+              {formik.touched.termsNConditions &&
+                formik.errors.termsNConditions && (
+                  <div className="error">{formik.errors.termsNConditions}</div>
+                )}
+            </div>
+          </div>
         </div>
         <div className="flex mb-2 flex-end">
           <div>
@@ -319,4 +284,4 @@ const EditProviderDialog = ({
   );
 };
 
-export default EditProviderDialog;
+export default AddProviderDialog;

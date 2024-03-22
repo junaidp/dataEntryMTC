@@ -6,9 +6,9 @@ import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
-import RichTextEditor from "../../../components/common/RichText";
+import RichTextEditor from "../../../../common/RichText";
 
-const ServiceDialogForm = ({
+const OptionDialogForm = ({
   formik,
   handleClose,
   loading,
@@ -50,14 +50,14 @@ const ServiceDialogForm = ({
   return (
     <form onSubmit={formik.handleSubmit}>
       <div className="px-4 py-4">
-        <h2 className="pb-4 heading">Add Variation</h2>
+        <h2 className="pb-4 heading">Add Option</h2>
         <div>
           <div className="row">
             <div className="col-lg-12 mb-4">
               <TextField
                 id="title"
                 name="title"
-                label="Variation title"
+                label="Option title"
                 variant="outlined"
                 className="form-control"
                 {...formik.getFieldProps("title")}
@@ -66,6 +66,7 @@ const ServiceDialogForm = ({
               />
             </div>
           </div>
+
           <div className="row mb-4">
             <div className="col-lg-12">
               <label>Description:</label>
@@ -96,35 +97,7 @@ const ServiceDialogForm = ({
               />
             </div>
           </div>
-          <div className="row">
-            <div className="col-lg-12 mb-4">
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">
-                  Select Experience
-                </InputLabel>
-                <Select
-                  id="experienceId"
-                  name="experienceId"
-                  className="form-control w-100 "
-                  label="Select Experince"
-                  defaultValue=""
-                  {...formik.getFieldProps("experienceId")}
-                >
-                  <MenuItem value="">Select Experience</MenuItem>
-                  {allExperience?.map((item, index) => {
-                    return (
-                      <MenuItem value={item?.id} key={index}>
-                        {item?.title}
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
-              </FormControl>
-              {formik.touched.experienceId && formik.errors.experienceId && (
-                <div className="error">{formik.errors.experienceId}</div>
-              )}
-            </div>
-          </div>
+
           <div className="row">
             <div className="col-lg-12 mb-4">
               <FormControl fullWidth>
@@ -441,4 +414,4 @@ const ServiceDialogForm = ({
   );
 };
 
-export default ServiceDialogForm;
+export default OptionDialogForm;

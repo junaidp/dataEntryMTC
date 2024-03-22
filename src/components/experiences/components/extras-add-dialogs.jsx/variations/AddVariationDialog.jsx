@@ -2,17 +2,15 @@ import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { v4 as uuidv4 } from "uuid";
-import {
-  setupAddOption,
-  resetOptions,
-} from "../../../global-redux/reducers/options/slice";
+import { setupAddVariation } from "../../../../../global-redux/reducers/variations/slice";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import OptionDialogForm from "./OptionDialogForm";
-import { setupGetAllExperienceWithOutParams } from "../../../global-redux/reducers/experiences/slice";
-import { setupGetAllProviderWithOutParams } from "../../../global-redux/reducers/providers/slice";
+import VariationDialogForm from "./VariationDialogForm";
 
-const AddOptionDialog = ({ setShowAddOptionDialog }) => {
+const AddVariationDialog = ({
+  setShowAddVariationDialog,
+  currentExperienceId,
+}) => {
   const dispatch = useDispatch();
   const [link, setLink] = React.useState("");
   const [links, setLinks] = React.useState([]);
@@ -32,13 +30,14 @@ const AddOptionDialog = ({ setShowAddOptionDialog }) => {
   const linkRef = React.useRef(null);
   const keywordRef = React.useRef(null);
 
-  const { optionAddSuccess, loading } = useSelector((state) => state?.options);
+  const { variationAddSuccess, loading } = useSelector(
+    (state) => state?.variations
+  );
   const { allExperience } = useSelector((state) => state.experiences);
   const { allProvider } = useSelector((state) => state.providers);
   let initialValues = {
     title: "",
     xpAddress: "",
-    experienceId: "",
     providerId: "",
     description: "",
     termsAndConditions: "",
@@ -60,7 +59,7 @@ const AddOptionDialog = ({ setShowAddOptionDialog }) => {
           toast.error("Provide Links");
         }
         if (keywords?.length === 0) {
-          toast.error("Provide Keyword");
+          toast.error("Provide Keywords");
         }
         if (prices?.length === 0) {
           toast.error("Provide Prices");
@@ -79,12 +78,10 @@ const AddOptionDialog = ({ setShowAddOptionDialog }) => {
           keywords?.length !== 0
         ) {
           dispatch(
-            setupAddOption([
+            setupAddVariation([
               {
                 ...values,
-                providers: [
-                  allProvider?.find((all) => all?.id === values?.providerId),
-                ],
+                experienceId: currentExperienceId,
                 linkWithOtherExperience: null,
                 links: links?.map((item) => {
                   return item.link;
@@ -181,7 +178,7 @@ const AddOptionDialog = ({ setShowAddOptionDialog }) => {
 
   function handleClose() {
     formik.resetForm({ values: initialValues });
-    setShowAddOptionDialog(false);
+    setShowAddVariationDialog(false);
   }
 
   function handleChangeDescription(value) {
@@ -212,21 +209,15 @@ const AddOptionDialog = ({ setShowAddOptionDialog }) => {
   }
 
   React.useEffect(() => {
-    if (optionAddSuccess) {
-      toast.success("Option Added Successfully");
-      dispatch(resetOptions());
+    if (variationAddSuccess) {
+      toast.success("Variation Added Successfully");
       formik.resetForm({ values: initialValues });
-      setShowAddOptionDialog(false);
+      setShowAddVariationDialog(false);
     }
-  }, [optionAddSuccess]);
-
-  React.useEffect(() => {
-    dispatch(setupGetAllExperienceWithOutParams());
-    dispatch(setupGetAllProviderWithOutParams());
-  }, []);
+  }, [variationAddSuccess]);
 
   return (
-    <OptionDialogForm
+    <VariationDialogForm
       formik={formik}
       handleClose={handleClose}
       loading={loading}
@@ -268,4 +259,4 @@ const AddOptionDialog = ({ setShowAddOptionDialog }) => {
   );
 };
 
-export default AddOptionDialog;
+export default AddVariationDialog;

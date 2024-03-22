@@ -1,9 +1,10 @@
 import React from "react";
-import RichTextEditor from "../../../../common/RichText";
-import { useSelector } from "react-redux";
+import RichTextEditor from "../../../common/RichText";
 
-const ViewProviderDialog = ({ setShowViewSelectedProvider }) => {
-  const { selectedProvider } = useSelector((state) => state.providers);
+const ViewProviderDialog = ({
+  selectedProvider,
+  setShowViewSelectedProvider,
+}) => {
   return (
     <div className="px-4 py-4">
       <h2 className="pb-4 heading">View Provider</h2>

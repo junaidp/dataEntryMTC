@@ -2,34 +2,51 @@ import React from "react";
 import Chip from "@mui/material/Chip";
 import RichTextEditor from "../../common/RichText";
 import { useSelector } from "react-redux";
+import Button from "@mui/material/Button";
+import ViewSelectedProvider from "./view-provider/Provider";
+import AddProviderDialog from "./add-provider/Provider";
 
 const optionForm = ({ option }) => {
-  const { allProvider } = useSelector((state) => state?.providers);
   const { allExperience } = useSelector((state) => state?.experiences);
+  const [selectedProvider, setSelectedProvider] = React.useState({});
+  const [showViewSelectedProvider, setShowViewSelectedProvider] =
+    React.useState(false);
+  const [showAddProviderDialog, setShowAddProviderDialog] =
+    React.useState(false);
   return (
     <div className="px-4 py-4">
+      {showViewSelectedProvider && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <ViewSelectedProvider
+              selectedProvider={selectedProvider}
+              setShowViewSelectedProvider={setShowViewSelectedProvider}
+            />
+          </div>
+        </div>
+      )}
+      {showAddProviderDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <AddProviderDialog
+              setShowAddProviderDialog={setShowAddProviderDialog}
+            />
+          </div>
+        </div>
+      )}
       <div>
         <div className="row">
-          <div className="col-lg-6 mb-4 p-0" style={{ marginLeft: "-12px" }}>
+          <div className="col-lg-4 mb-4" style={{ marginLeft: "-12px" }}>
             <label>Title</label>
             <p>{option?.title ? option?.title : "No Title Provided"}</p>
           </div>
-          <div className="col-lg-6 mb-4">
+          <div className="col-lg-4 mb-4">
             <label>Address</label>
             <p>
               {option?.xpAddress ? option?.xpAddress : "No Address Provided"}
             </p>
           </div>
-        </div>
-        <div className="row">
-          <div className="col-lg-5 mb-4 p-0">
-            <label>Vendor</label>
-            <p>
-              {allProvider?.find((all) => all?.id === option?.providerId)
-                ?.name || "No Vendor Provided"}
-            </p>
-          </div>
-          <div className="col-lg-6 mb-4" style={{ marginLeft: "-25px" }}>
+          <div className="col-lg-4 mb-4" style={{ marginLeft: "-25px" }}>
             <label>Experience</label>
             <p>
               {allExperience?.find((all) => all?.id === option?.experienceId)
@@ -140,6 +157,61 @@ const optionForm = ({ option }) => {
                 );
               })
             )}
+          </div>
+        </div>
+        <div className="max-height-200 overflow-y-auto mb-4">
+          <div className="row">
+            <div className={`col-lg-12`}>
+              <div className="row">
+                <div
+                  className="btn btn-labeled btn-primary px-3 col-lg-2 h-40 shadow h-40 text-between mb-4"
+                  onClick={() => setShowAddProviderDialog(true)}
+                >
+                  <span className="btn-label me-4">
+                    <i className="fa fa-plus"></i>
+                  </span>
+                  Provider
+                </div>
+                <div className="col-lg-10">
+                  <table className="table table-bordered  table-hover rounded mb-0">
+                    <thead className="bg-secondary text-white">
+                      <tr>
+                        <th className="per80">Provider List</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {!option?.providers || option?.providers?.length === 0 ? (
+                        <tr>
+                          <td className="per80">
+                            <Button className="cursor-pointer">
+                              No Provider Found. Please Add One
+                            </Button>
+                          </td>
+                        </tr>
+                      ) : (
+                        option?.providers?.map((provider, index) => {
+                          return (
+                            <tr key={index}>
+                              <td className="per80">
+                                <Button
+                                  className="cursor-pointer"
+                                  onClick={() => {
+                                    setSelectedProvider(provider);
+                                    setShowViewSelectedProvider(true);
+                                  }}
+                                >
+                                  {provider?.name}
+                                </Button>
+                              </td>
+                            </tr>
+                          );
+                        })
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <div className="row mb-4 mt-4">

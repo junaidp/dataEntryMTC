@@ -110,13 +110,6 @@ const ServiceDialogForm = ({
                   label="Select Experince"
                   defaultValue=""
                   {...formik.getFieldProps("experienceId")}
-                  error={
-                    formik.touched.experienceId &&
-                    Boolean(formik.errors.experienceId)
-                  }
-                  helperText={
-                    formik.touched.experienceId && formik.errors.experienceId
-                  }
                 >
                   <MenuItem value="">Select Experience</MenuItem>
                   {allExperience?.map((item, index) => {
@@ -128,9 +121,7 @@ const ServiceDialogForm = ({
                   })}
                 </Select>
               </FormControl>
-              {formik.touched.experienceId && formik.errors.experienceId && (
-                <div className="error">{formik.errors.experienceId}</div>
-              )}
+             
             </div>
           </div>
           <div className="row">
@@ -144,15 +135,7 @@ const ServiceDialogForm = ({
                   name="providerId"
                   className="form-control w-100 "
                   label="Select Provider"
-                  defaultValue=""
                   {...formik.getFieldProps("providerId")}
-                  error={
-                    formik.touched.providerId &&
-                    Boolean(formik.errors.providerId)
-                  }
-                  helperText={
-                    formik.touched.providerId && formik.errors.providerId
-                  }
                 >
                   <MenuItem value="">Select Provider</MenuItem>
                   {allProvider?.map((item, index) => {
@@ -164,9 +147,6 @@ const ServiceDialogForm = ({
                   })}
                 </Select>
               </FormControl>
-              {formik.touched.providerId && formik.errors.providerId && (
-                <div className="error">{formik.errors.providerId}</div>
-              )}
             </div>
           </div>
           <div className="row">

@@ -196,7 +196,7 @@ const Vendor = ({ setShowAddVendorDialog, showAddVendorDialog }) => {
       ) : (
         <div className="accordion" id="accordionFlushExample">
           {allVendors
-            ?.slice((vendorPage - 1) * 20, vendorPage * 20)
+            ?.slice((vendorPage - 1) * 10, vendorPage * 10)
             ?.map((vendor, index) => {
               return (
                 <div className="accordion-item" key={index}>
@@ -303,7 +303,7 @@ const Vendor = ({ setShowAddVendorDialog, showAddVendorDialog }) => {
         </div>
       )}
       <Pagination
-        count={Math.ceil(allVendors?.length / 20)}
+        count={Math.ceil(allVendors?.length / 10)}
         page={vendorPage}
         onChange={handleChangeVendorPage}
       />

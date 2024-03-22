@@ -13,6 +13,10 @@ import EditExperienceDialog from "./components/edit-experience-dialog/EditExperi
 import { useSelector } from "react-redux";
 import Form from "./components/Form";
 import { setupGetAllProviderWithOutParams } from "../../global-redux/reducers/providers/slice";
+import { setupGetAllOptions } from "../../global-redux/reducers/options/slice";
+import { setupGetAllVariations } from "../../global-redux/reducers/variations/slice";
+import { resetOptionAddSuccess } from "../../global-redux/reducers/options/slice";
+import { resetVariationAddSuccess } from "../../global-redux/reducers/variations/slice";
 
 const Experiences = ({
   showAddExperienceDialog,
@@ -22,6 +26,10 @@ const Experiences = ({
   const { allExperience, experienceAddSuccess, loading } = useSelector(
     (state) => state.experiences
   );
+  const { providerAddSuccess } = useSelector((state) => state?.providers);
+  const { optionAddSuccess } = useSelector((state) => state.options);
+  const { variationAddSuccess } = useSelector((state) => state.variations);
+
   const [showDeleteExperienceDialog, setShowDeleteExperienceDialog] =
     React.useState(false);
   const [showEditExperienceDialog, setShowEditExperienceDialog] =
@@ -34,14 +42,28 @@ const Experiences = ({
   };
 
   React.useEffect(() => {
-    if (experienceAddSuccess) {
+    dispatch(setupGetAllOptions(`?experienceId=${currentExperienceId}`));
+    dispatch(setupGetAllVariations(`?experienceId=${currentExperienceId}`));
+  }, [currentExperienceId]);
+
+  React.useEffect(() => {
+    dispatch(setupGetAllOptions(`?experienceId=${currentExperienceId}`));
+    dispatch(resetOptionAddSuccess());
+  }, [optionAddSuccess]);
+  React.useEffect(() => {
+    dispatch(setupGetAllVariations(`?experienceId=${currentExperienceId}`));
+    dispatch(resetVariationAddSuccess());
+  }, [variationAddSuccess]);
+
+  React.useEffect(() => {
+    if (experienceAddSuccess || providerAddSuccess) {
       setShowCurrentExperienceId("");
       dispatch(setupGetAllExperienceWithOutParams());
       dispatch(setupGetAllVendors());
       dispatch(setupGetAllProviderWithOutParams());
       dispatch(resetExperienceAddSuccess());
     }
-  }, [experienceAddSuccess]);
+  }, [experienceAddSuccess, providerAddSuccess]);
 
   React.useEffect(() => {
     dispatch(setupGetAllExperienceWithOutParams());
@@ -138,7 +160,10 @@ const Experiences = ({
                             Delete
                           </div>
                         </div>
-                        <Form experience={experience} />
+                        <Form
+                          experience={experience}
+                          currentExperienceId={currentExperienceId}
+                        />
                       </div>
                     </div>
                   </div>

@@ -2,17 +2,12 @@ import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { v4 as uuidv4 } from "uuid";
-import {
-  setupAddOption,
-  resetOptions,
-} from "../../../global-redux/reducers/options/slice";
+import { setupAddOption } from "../../../../../global-redux/reducers/options/slice";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import OptionDialogForm from "./OptionDialogForm";
-import { setupGetAllExperienceWithOutParams } from "../../../global-redux/reducers/experiences/slice";
-import { setupGetAllProviderWithOutParams } from "../../../global-redux/reducers/providers/slice";
 
-const AddOptionDialog = ({ setShowAddOptionDialog }) => {
+const AddOptionDialog = ({ setShowAddOptionDialog, currentExperienceId }) => {
   const dispatch = useDispatch();
   const [link, setLink] = React.useState("");
   const [links, setLinks] = React.useState([]);
@@ -38,7 +33,6 @@ const AddOptionDialog = ({ setShowAddOptionDialog }) => {
   let initialValues = {
     title: "",
     xpAddress: "",
-    experienceId: "",
     providerId: "",
     description: "",
     termsAndConditions: "",
@@ -82,9 +76,7 @@ const AddOptionDialog = ({ setShowAddOptionDialog }) => {
             setupAddOption([
               {
                 ...values,
-                providers: [
-                  allProvider?.find((all) => all?.id === values?.providerId),
-                ],
+                experienceId: currentExperienceId,
                 linkWithOtherExperience: null,
                 links: links?.map((item) => {
                   return item.link;
@@ -214,16 +206,10 @@ const AddOptionDialog = ({ setShowAddOptionDialog }) => {
   React.useEffect(() => {
     if (optionAddSuccess) {
       toast.success("Option Added Successfully");
-      dispatch(resetOptions());
       formik.resetForm({ values: initialValues });
       setShowAddOptionDialog(false);
     }
   }, [optionAddSuccess]);
-
-  React.useEffect(() => {
-    dispatch(setupGetAllExperienceWithOutParams());
-    dispatch(setupGetAllProviderWithOutParams());
-  }, []);
 
   return (
     <OptionDialogForm
