@@ -263,17 +263,31 @@ const EditServiceDialog = ({ setShowEditServiceDialog, selectedService }) => {
 
   React.useEffect(() => {
     if (Object.keys(selectedService)?.length !== 0) {
-      formik.resetForm({
-        values: {
-          ...formik.values,
-          title: selectedService?.title,
-          address: selectedService?.address,
-          description: selectedService?.description,
-          termsAndConditions: selectedService?.termsAndConditions,
-          providerId: selectedService?.providers[0]?.id,
-          vendorId: selectedService?.vendorId,
-        },
-      });
+      if (selectedService?.providers) {
+        formik.resetForm({
+          values: {
+            ...formik.values,
+            title: selectedService?.title,
+            address: selectedService?.address,
+            description: selectedService?.description,
+            termsAndConditions: selectedService?.termsAndConditions,
+            providerId: selectedService?.providers[0]?.id,
+            vendorId: selectedService?.vendorId,
+          },
+        });
+      }
+      if (!selectedService?.providers) {
+        formik.resetForm({
+          values: {
+            ...formik.values,
+            title: selectedService?.title,
+            address: selectedService?.address,
+            description: selectedService?.description,
+            termsAndConditions: selectedService?.termsAndConditions,
+            vendorId: selectedService?.vendorId,
+          },
+        });
+      }
       setPrices(
         selectedService?.price?.map((singleItem) => {
           return {

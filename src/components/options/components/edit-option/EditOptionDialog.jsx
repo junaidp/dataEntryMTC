@@ -228,17 +228,31 @@ const EditOptionDialog = ({ setShowEditOptionDialog, selectedOption }) => {
 
   React.useEffect(() => {
     if (Object.keys(selectedOption)?.length !== 0) {
-      formik.resetForm({
-        values: {
-          ...formik.values,
-          title: selectedOption?.title,
-          xpAddress: selectedOption?.xpAddress,
-          experienceId: selectedOption?.experienceId,
-          providerId: selectedOption?.providers[0]?.id,
-          description: selectedOption?.description,
-          termsAndConditions: selectedOption?.termsAndConditions,
-        },
-      });
+      if (selectedOption?.providers) {
+        formik.resetForm({
+          values: {
+            ...formik.values,
+            title: selectedOption?.title,
+            xpAddress: selectedOption?.xpAddress,
+            experienceId: selectedOption?.experienceId,
+            providerId: selectedOption?.providers[0]?.id,
+            description: selectedOption?.description,
+            termsAndConditions: selectedOption?.termsAndConditions,
+          },
+        });
+      }
+      if (!selectedOption?.providers) {
+        formik.resetForm({
+          values: {
+            ...formik.values,
+            title: selectedOption?.title,
+            xpAddress: selectedOption?.xpAddress,
+            experienceId: selectedOption?.experienceId,
+            description: selectedOption?.description,
+            termsAndConditions: selectedOption?.termsAndConditions,
+          },
+        });
+      }
 
       setPrices(
         selectedOption?.price?.map((singleItem) => {

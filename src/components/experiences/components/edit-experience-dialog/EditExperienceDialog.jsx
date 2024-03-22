@@ -274,17 +274,31 @@ const EditExperienceDialog = ({
 
   React.useEffect(() => {
     if (Object.keys(selectedExperience)?.length !== 0) {
-      formik.resetForm({
-        values: {
-          ...formik.values,
-          title: selectedExperience?.title,
-          address: selectedExperience?.address,
-          description: selectedExperience?.description,
-          termsAndConditions: selectedExperience?.termsAndConditions,
-          providerId: selectedExperience?.providers[0]?.id,
-          vendorId: selectedExperience?.vendorId,
-        },
-      });
+      if (selectedExperience?.providers) {
+        formik.resetForm({
+          values: {
+            ...formik.values,
+            title: selectedExperience?.title,
+            address: selectedExperience?.address,
+            description: selectedExperience?.description,
+            termsAndConditions: selectedExperience?.termsAndConditions,
+            providerId: selectedExperience?.providers[0]?.id,
+            vendorId: selectedExperience?.vendorId,
+          },
+        });
+      }
+      if (!selectedExperience?.providers) {
+        formik.resetForm({
+          values: {
+            ...formik.values,
+            title: selectedExperience?.title,
+            address: selectedExperience?.address,
+            description: selectedExperience?.description,
+            termsAndConditions: selectedExperience?.termsAndConditions,
+            vendorId: selectedExperience?.vendorId,
+          },
+        });
+      }
       setPrices(
         selectedExperience?.price?.map((singleItem) => {
           return {

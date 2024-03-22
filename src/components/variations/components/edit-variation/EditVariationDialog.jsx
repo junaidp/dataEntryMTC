@@ -232,17 +232,31 @@ const EditVariationDialog = ({
 
   React.useEffect(() => {
     if (Object.keys(selectedVaraition)?.length !== 0) {
-      formik.resetForm({
-        values: {
-          ...formik.values,
-          title: selectedVaraition?.title,
-          xpAddress: selectedVaraition?.xpAddress,
-          experienceId: selectedVaraition?.experienceId,
-          providerId: selectedVaraition?.providers[0]?.id,
-          description: selectedVaraition?.description,
-          termsAndConditions: selectedVaraition?.termsAndConditions,
-        },
-      });
+      if (selectedVaraition?.providers) {
+        formik.resetForm({
+          values: {
+            ...formik.values,
+            title: selectedVaraition?.title,
+            xpAddress: selectedVaraition?.xpAddress,
+            experienceId: selectedVaraition?.experienceId,
+            providerId: selectedVaraition?.providers[0]?.id,
+            description: selectedVaraition?.description,
+            termsAndConditions: selectedVaraition?.termsAndConditions,
+          },
+        });
+      }
+      if (!selectedVaraition?.providers) {
+        formik.resetForm({
+          values: {
+            ...formik.values,
+            title: selectedVaraition?.title,
+            xpAddress: selectedVaraition?.xpAddress,
+            experienceId: selectedVaraition?.experienceId,
+            description: selectedVaraition?.description,
+            termsAndConditions: selectedVaraition?.termsAndConditions,
+          },
+        });
+      }
 
       setPrices(
         selectedVaraition?.price?.map((singleItem) => {
