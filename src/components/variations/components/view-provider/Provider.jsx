@@ -1,10 +1,18 @@
 import React from "react";
 import RichTextEditor from "../../../common/RichText";
+import { useSelector } from "react-redux";
 
 const ViewProviderDialog = ({
   selectedProvider,
   setShowViewSelectedProvider,
 }) => {
+  const { allProvider } = useSelector((state) => state?.providers);
+  const [provider, setProvider] = React.useState({});
+  React.useEffect(() => {
+    setProvider(
+      allProvider?.find((all) => all?.id === selectedProvider?.providerId)
+    );
+  }, []);
   return (
     <div className="px-4 py-4">
       <h2 className="pb-4 heading">View Provider</h2>
@@ -12,11 +20,7 @@ const ViewProviderDialog = ({
         <div className="row">
           <div className="col-lg-12 mb-4">
             <label>Provider name:</label>
-            <p>
-              {selectedProvider?.name
-                ? selectedProvider?.name
-                : "No Name Provided"}
-            </p>
+            <p>{provider?.name ? provider?.name : "No Name Provided"}</p>
           </div>
         </div>
 
@@ -24,16 +28,14 @@ const ViewProviderDialog = ({
           <div className="col-lg-6 mb-4">
             <label>Provider address:</label>
             <p>
-              {selectedProvider?.address
-                ? selectedProvider?.address
-                : "No Address Provided"}
+              {provider?.address ? provider?.address : "No Address Provided"}
             </p>
           </div>
           <div className="col-lg-6 mb-4">
             <label>Point of Contact:</label>
             <p>
-              {selectedProvider?.pointOfContact
-                ? selectedProvider?.pointOfContact
+              {provider?.pointOfContact
+                ? provider?.pointOfContact
                 : "No Point Of Contact Provided"}
             </p>
           </div>
@@ -42,34 +44,24 @@ const ViewProviderDialog = ({
           <div className="col-lg-6 mb-4">
             <label>Website:</label>
             <p>
-              {selectedProvider?.website
-                ? selectedProvider?.website
-                : "No Website Provided"}
+              {provider?.website ? provider?.website : "No Website Provided"}
             </p>
           </div>
           <div className="col-lg-6 mb-4">
             <label>Email:</label>
-            <p>
-              {selectedProvider?.email
-                ? selectedProvider?.email
-                : "No Email Provided"}
-            </p>
+            <p>{provider?.email ? provider?.email : "No Email Provided"}</p>
           </div>
         </div>
         <div className="row">
           <div className="col-lg-6 mb-4">
             <label>Manage Venue:</label>
-            <p>
-              {Boolean(selectedProvider.manageVenue) === true
-                ? "True"
-                : "False"}
-            </p>
+            <p>{Boolean(provider.manageVenue) === true ? "True" : "False"}</p>
           </div>
           <div className="col-lg-6 mb-4">
             <label>Regions:</label>
             <p>
-              {selectedProvider?.regionsCovered
-                ? selectedProvider?.regionsCovered
+              {provider?.regionsCovered
+                ? provider?.regionsCovered
                 : "No Regions Covered Provided"}
             </p>
           </div>
@@ -78,7 +70,7 @@ const ViewProviderDialog = ({
           <div className="col-lg-12">
             <label>Description:</label>
             <RichTextEditor
-              initialValue={selectedProvider.description}
+              initialValue={provider.description}
               readonly={true}
             />
           </div>
@@ -87,7 +79,7 @@ const ViewProviderDialog = ({
           <div className="col-lg-12">
             <label>Terms & Conditions:</label>
             <RichTextEditor
-              initialValue={selectedProvider.termsNConditions}
+              initialValue={provider.termsNConditions}
               readonly={true}
             />
           </div>

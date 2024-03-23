@@ -24,6 +24,7 @@ const EditOptionDialog = ({ setShowEditOptionDialog, selectedOption }) => {
   const [avialableTimes, setAvailableTimes] = React.useState([]);
   const [keywords, setKeywords] = React.useState([]);
   const [keyword, setKeyword] = React.useState("");
+  const [providers, setProviders] = React.useState([]);
 
   // Input Refs
   const priceRef = React.useRef(null);
@@ -39,7 +40,6 @@ const EditOptionDialog = ({ setShowEditOptionDialog, selectedOption }) => {
     title: "",
     xpAddress: "",
     experienceId: "",
-    providerId: "",
     description: "",
     termsAndConditions: "",
   };
@@ -78,15 +78,22 @@ const EditOptionDialog = ({ setShowEditOptionDialog, selectedOption }) => {
           avialableTimes?.length !== 0 &&
           keywords?.length !== 0
         ) {
+          const filteredProvidersArray = allProvider.filter((item) =>
+            providers.includes(item?.name)
+          );
           dispatch(
             setupAddOption([
               {
                 ...values,
-                providers: [
-                  allProvider?.find((all) => all?.id === values?.providerId),
-                ],
-                linkWithOtherExperience: null,
                 id: selectedOption?.id,
+                providers:
+                  filteredProvidersArray?.map((item) => {
+                    return {
+                      providerId: item?.id,
+                      providerName: item?.name,
+                    };
+                  }) || [],
+                linkWithOtherExperience: null,
                 links: links?.map((item) => {
                   return item.link;
                 }),
@@ -228,32 +235,16 @@ const EditOptionDialog = ({ setShowEditOptionDialog, selectedOption }) => {
 
   React.useEffect(() => {
     if (Object.keys(selectedOption)?.length !== 0) {
-      if (selectedOption?.providers) {
-        formik.resetForm({
-          values: {
-            ...formik.values,
-            title: selectedOption?.title,
-            xpAddress: selectedOption?.xpAddress,
-            experienceId: selectedOption?.experienceId,
-            providerId: selectedOption?.providers[0]?.id,
-            description: selectedOption?.description,
-            termsAndConditions: selectedOption?.termsAndConditions,
-          },
-        });
-      }
-      if (!selectedOption?.providers) {
-        formik.resetForm({
-          values: {
-            ...formik.values,
-            title: selectedOption?.title,
-            xpAddress: selectedOption?.xpAddress,
-            experienceId: selectedOption?.experienceId,
-            description: selectedOption?.description,
-            termsAndConditions: selectedOption?.termsAndConditions,
-          },
-        });
-      }
-
+      formik.resetForm({
+        values: {
+          ...formik.values,
+          title: selectedOption?.title,
+          xpAddress: selectedOption?.xpAddress,
+          experienceId: selectedOption?.experienceId,
+          description: selectedOption?.description,
+          termsAndConditions: selectedOption?.termsAndConditions,
+        },
+      });
       setPrices(
         selectedOption?.price?.map((singleItem) => {
           return {
@@ -294,6 +285,14 @@ const EditOptionDialog = ({ setShowEditOptionDialog, selectedOption }) => {
           };
         })
       );
+      if (
+        selectedOption?.providers &&
+        selectedOption?.providers?.length !== 0
+      ) {
+        setProviders(
+          selectedOption?.providers?.map((all) => all?.providerName)
+        );
+      }
     }
   }, [selectedOption]);
 
@@ -336,6 +335,8 @@ const EditOptionDialog = ({ setShowEditOptionDialog, selectedOption }) => {
       setKeyword={setKeyword}
       handleChangeDescription={handleChangeDescription}
       handleChangeTermsAndConditions={handleChangeTermsAndConditions}
+      providers={providers}
+      setProviders={setProviders}
     />
   );
 };

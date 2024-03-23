@@ -202,7 +202,6 @@ const EditVendorDialog = ({ setShowEditVendorDialog, currentVendorId }) => {
                 >
                   <MenuItem value="">Select Region</MenuItem>
                   <MenuItem value="EU">EU</MenuItem>
-                 
                 </Select>
               </FormControl>
               {formik.touched.regionsCovered &&

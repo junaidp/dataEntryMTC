@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import {
   setupGetAllExperienceWithOutParams,
   resetExperienceAddSuccess,
+  setupAddExperience,
 } from "../../global-redux/reducers/experiences/slice";
 import AddExperienceDialog from "./components/AddExperieneDialog";
 import { setupGetAllVendors } from "../../global-redux/reducers/vendor/slice";
@@ -12,7 +13,10 @@ import DeleteExperienceDialog from "./components/DeleteExperienceDialog";
 import EditExperienceDialog from "./components/edit-experience-dialog/EditExperienceDialog";
 import { useSelector } from "react-redux";
 import Form from "./components/Form";
-import { setupGetAllProviderWithOutParams } from "../../global-redux/reducers/providers/slice";
+import {
+  setupGetAllProviderWithOutParams,
+  resetProviderAddSuccess,
+} from "../../global-redux/reducers/providers/slice";
 import { setupGetAllOptions } from "../../global-redux/reducers/options/slice";
 import { setupGetAllVariations } from "../../global-redux/reducers/variations/slice";
 import { resetOptionAddSuccess } from "../../global-redux/reducers/options/slice";
@@ -26,7 +30,9 @@ const Experiences = ({
   const { allExperience, experienceAddSuccess, loading } = useSelector(
     (state) => state.experiences
   );
-  const { providerAddSuccess } = useSelector((state) => state?.providers);
+  const { providerAddSuccess, currentProviderObject } = useSelector(
+    (state) => state?.providers
+  );
   const { optionAddSuccess } = useSelector((state) => state.options);
   const { variationAddSuccess } = useSelector((state) => state.variations);
 
@@ -42,28 +48,86 @@ const Experiences = ({
   };
 
   React.useEffect(() => {
-    dispatch(setupGetAllOptions(`?experienceId=${currentExperienceId}`));
-    dispatch(setupGetAllVariations(`?experienceId=${currentExperienceId}`));
+    if (currentExperienceId !== "" && currentExperienceId) {
+      dispatch(setupGetAllOptions(`?experienceId=${currentExperienceId}`));
+      dispatch(setupGetAllVariations(`?experienceId=${currentExperienceId}`));
+    }
   }, [currentExperienceId]);
 
   React.useEffect(() => {
-    dispatch(setupGetAllOptions(`?experienceId=${currentExperienceId}`));
-    dispatch(resetOptionAddSuccess());
+    if (optionAddSuccess) {
+      dispatch(setupGetAllOptions(`?experienceId=${currentExperienceId}`));
+      dispatch(resetOptionAddSuccess());
+    }
   }, [optionAddSuccess]);
   React.useEffect(() => {
-    dispatch(setupGetAllVariations(`?experienceId=${currentExperienceId}`));
-    dispatch(resetVariationAddSuccess());
+    if (variationAddSuccess) {
+      dispatch(setupGetAllVariations(`?experienceId=${currentExperienceId}`));
+      dispatch(resetVariationAddSuccess());
+    }
   }, [variationAddSuccess]);
 
   React.useEffect(() => {
-    if (experienceAddSuccess || providerAddSuccess) {
+    if (providerAddSuccess) {
+      let currentExperience = allExperience?.find(
+        (all) => all?.id === currentExperienceId
+      );
+      let currentExperienceProviders = allExperience?.find(
+        (all) => all?.id === currentExperienceId
+      )?.providers;
+      if (
+        currentExperienceProviders &&
+        currentExperienceProviders?.length !== 0
+      ) {
+        dispatch(
+          setupAddExperience([
+            {
+              ...currentExperience,
+              providers: [
+                ...currentExperienceProviders,
+                {
+                  providerId: currentProviderObject?.id,
+                  providerName: currentProviderObject?.name,
+                },
+              ],
+            },
+          ])
+        );
+      }
+      if (
+        !currentExperienceProviders ||
+        currentExperienceProviders?.length === 0
+      ) {
+        dispatch(
+          setupAddExperience([
+            {
+              ...currentExperience,
+              providers: [
+                {
+                  providerId: currentProviderObject?.id,
+                  providerName: currentProviderObject?.name,
+                },
+              ],
+            },
+          ])
+        );
+      }
+
+      setTimeout(() => {
+        dispatch(resetProviderAddSuccess());
+      }, 2000);
+    }
+  }, [providerAddSuccess]);
+
+  React.useEffect(() => {
+    if (experienceAddSuccess) {
       setShowCurrentExperienceId("");
       dispatch(setupGetAllExperienceWithOutParams());
       dispatch(setupGetAllVendors());
       dispatch(setupGetAllProviderWithOutParams());
       dispatch(resetExperienceAddSuccess());
     }
-  }, [experienceAddSuccess, providerAddSuccess]);
+  }, [experienceAddSuccess]);
 
   React.useEffect(() => {
     dispatch(setupGetAllExperienceWithOutParams());

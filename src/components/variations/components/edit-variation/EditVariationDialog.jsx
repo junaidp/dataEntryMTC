@@ -27,6 +27,7 @@ const EditVariationDialog = ({
   const [avialableTimes, setAvailableTimes] = React.useState([]);
   const [keywords, setKeywords] = React.useState([]);
   const [keyword, setKeyword] = React.useState("");
+  const [providers, setProviders] = React.useState([]);
 
   // Input Refs
   const priceRef = React.useRef(null);
@@ -44,7 +45,6 @@ const EditVariationDialog = ({
     title: "",
     xpAddress: "",
     experienceId: "",
-    providerId: "",
     description: "",
     termsAndConditions: "",
   };
@@ -83,14 +83,21 @@ const EditVariationDialog = ({
           avialableTimes?.length !== 0 &&
           keywords?.length !== 0
         ) {
+          const filteredProvidersArray = allProvider.filter((item) =>
+            providers.includes(item?.name)
+          );
           dispatch(
             setupAddVariation([
               {
                 ...values,
-                providers: [
-                  allProvider?.find((all) => all?.id === values?.providerId),
-                ],
                 id: selectedVaraition?.id,
+                providers:
+                  filteredProvidersArray?.map((item) => {
+                    return {
+                      providerId: item?.id,
+                      providerName: item?.name,
+                    };
+                  }) || [],
                 links: links?.map((item) => {
                   return item.link;
                 }),
@@ -232,31 +239,16 @@ const EditVariationDialog = ({
 
   React.useEffect(() => {
     if (Object.keys(selectedVaraition)?.length !== 0) {
-      if (selectedVaraition?.providers) {
-        formik.resetForm({
-          values: {
-            ...formik.values,
-            title: selectedVaraition?.title,
-            xpAddress: selectedVaraition?.xpAddress,
-            experienceId: selectedVaraition?.experienceId,
-            providerId: selectedVaraition?.providers[0]?.id,
-            description: selectedVaraition?.description,
-            termsAndConditions: selectedVaraition?.termsAndConditions,
-          },
-        });
-      }
-      if (!selectedVaraition?.providers) {
-        formik.resetForm({
-          values: {
-            ...formik.values,
-            title: selectedVaraition?.title,
-            xpAddress: selectedVaraition?.xpAddress,
-            experienceId: selectedVaraition?.experienceId,
-            description: selectedVaraition?.description,
-            termsAndConditions: selectedVaraition?.termsAndConditions,
-          },
-        });
-      }
+      formik.resetForm({
+        values: {
+          ...formik.values,
+          title: selectedVaraition?.title,
+          xpAddress: selectedVaraition?.xpAddress,
+          experienceId: selectedVaraition?.experienceId,
+          description: selectedVaraition?.description,
+          termsAndConditions: selectedVaraition?.termsAndConditions,
+        },
+      });
 
       setPrices(
         selectedVaraition?.price?.map((singleItem) => {
@@ -298,6 +290,14 @@ const EditVariationDialog = ({
           };
         })
       );
+      if (
+        selectedVaraition?.providers &&
+        selectedVaraition?.providers?.length !== 0
+      ) {
+        setProviders(
+          selectedVaraition?.providers?.map((all) => all?.providerName)
+        );
+      }
     }
   }, [selectedVaraition]);
 
@@ -340,6 +340,8 @@ const EditVariationDialog = ({
       setKeyword={setKeyword}
       handleChangeDescription={handleChangeDescription}
       handleChangeTermsAndConditions={handleChangeTermsAndConditions}
+      providers={providers}
+      setProviders={setProviders}
     />
   );
 };

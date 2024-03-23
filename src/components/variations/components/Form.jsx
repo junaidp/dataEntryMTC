@@ -205,7 +205,7 @@ const variationForm = ({ variation }) => {
                                     setShowViewSelectedProvider(true);
                                   }}
                                 >
-                                  {provider?.name}
+                                  {provider?.providerName}
                                 </Button>
                               </td>
                             </tr>

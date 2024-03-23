@@ -2,6 +2,7 @@ import React from "react";
 import {
   resetVariationAddSuccess,
   setupGetAllVariationsWithOutParams,
+  setupAddVariation,
 } from "../../global-redux/reducers/variations/slice.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { setupGetAllExperienceWithOutParams } from "../../global-redux/reducers/experiences/slice";
@@ -12,12 +13,18 @@ import AddVariationDialog from "./components/AddVariationDialog.jsx";
 import DeleteVariationDialog from "./components/DeleteVariationDialog.jsx";
 import EditVariationDialog from "./components/edit-variation/EditVariationDialog.jsx";
 import { setupGetAllVendors } from "../../global-redux/reducers/vendor/slice.jsx";
+import {
+  setupGetAllProviderWithOutParams,
+  resetProviderAddSuccess,
+} from "../../global-redux/reducers/providers/slice.jsx";
 
 const Variation = ({ showAddVariationDialog, setShowAddVariationDialog }) => {
   const dispatch = useDispatch();
   const [showEditVariationDialog, setShowEditVariationDialog] =
     React.useState(false);
-  const { providerAddSuccess } = useSelector((state) => state?.providers);
+  const { providerAddSuccess, currentProviderObject } = useSelector(
+    (state) => state?.providers
+  );
   const [showDeleteVariationDialog, setShowDeleteVariationDialog] =
     React.useState(false);
   const [currentVariationId, setCurrentVariationId] = React.useState("");
@@ -31,19 +38,73 @@ const Variation = ({ showAddVariationDialog, setShowAddVariationDialog }) => {
   };
 
   React.useEffect(() => {
-    if (variationAddSuccess || providerAddSuccess) {
+    if (providerAddSuccess) {
+      let currentVariation = allVariations?.find(
+        (all) => all?.id === currentVariationId
+      );
+      let currentVariationProviders = allVariations?.find(
+        (all) => all?.id === currentVariationId
+      )?.providers;
+      if (
+        currentVariationProviders &&
+        currentVariationProviders?.length !== 0
+      ) {
+        dispatch(
+          setupAddVariation([
+            {
+              ...currentVariation,
+              providers: [
+                ...currentVariationProviders,
+                {
+                  providerId: currentProviderObject?.id,
+                  providerName: currentProviderObject?.name,
+                },
+              ],
+            },
+          ])
+        );
+      }
+      if (
+        !currentVariationProviders ||
+        currentVariationProviders?.length === 0
+      ) {
+        dispatch(
+          setupAddVariation([
+            {
+              ...currentVariation,
+              providers: [
+                {
+                  providerId: currentProviderObject?.id,
+                  providerName: currentProviderObject?.name,
+                },
+              ],
+            },
+          ])
+        );
+      }
+
+      setTimeout(() => {
+        dispatch(resetProviderAddSuccess());
+      }, 2000);
+    }
+  }, [providerAddSuccess]);
+
+  React.useEffect(() => {
+    if (variationAddSuccess) {
       setSelectedVariation({});
       setCurrentVariationId("");
       dispatch(resetVariationAddSuccess());
       dispatch(setupGetAllExperienceWithOutParams());
       dispatch(setupGetAllVariationsWithOutParams());
+      dispatch(setupGetAllProviderWithOutParams());
       dispatch(setupGetAllVendors());
     }
-  }, [variationAddSuccess, providerAddSuccess]);
+  }, [variationAddSuccess]);
 
   React.useEffect(() => {
     dispatch(setupGetAllExperienceWithOutParams());
     dispatch(setupGetAllVariationsWithOutParams());
+    dispatch(setupGetAllProviderWithOutParams());
     dispatch(setupGetAllVendors());
   }, []);
 

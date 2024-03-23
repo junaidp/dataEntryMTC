@@ -2,6 +2,7 @@ import React from "react";
 import {
   resetOptionAddSuccess,
   setupGetAllOptionsWithOutParams,
+  setupAddOption,
 } from "../../global-redux/reducers/options/slice";
 import { useDispatch, useSelector } from "react-redux";
 import { setupGetAllExperienceWithOutParams } from "../../global-redux/reducers/experiences/slice";
@@ -12,11 +13,17 @@ import AddOptionDialog from "./components/AddOptionDialog.jsx";
 import DeleteOptionDialog from "./components/DeleteOptionDialog.jsx";
 import EditOptionDialog from "./components/edit-option/EditOptionDialog.jsx";
 import { setupGetAllVendors } from "../../global-redux/reducers/vendor/slice.jsx";
+import {
+  setupGetAllProviderWithOutParams,
+  resetProviderAddSuccess,
+} from "../../global-redux/reducers/providers/slice";
 
 const Options = ({ setShowAddOptionDialog, showAddOptionDialog }) => {
   const dispatch = useDispatch();
   const [showEditOptionDialog, setShowEditOptionDialog] = React.useState(false);
-  const { providerAddSuccess } = useSelector((state) => state?.providers);
+  const { providerAddSuccess, currentProviderObject } = useSelector(
+    (state) => state?.providers
+  );
   const [showDeleteOptionDialog, setShowDeleteOptionDialog] =
     React.useState(false);
   const [currentOptionId, setCurrentOptionId] = React.useState("");
@@ -30,20 +37,68 @@ const Options = ({ setShowAddOptionDialog, showAddOptionDialog }) => {
   };
 
   React.useEffect(() => {
-    if (optionAddSuccess || providerAddSuccess) {
+    if (providerAddSuccess) {
+      let currentOption = allOptions?.find(
+        (all) => all?.id === currentOptionId
+      );
+      let currentOptionProviders = allOptions?.find(
+        (all) => all?.id === currentOptionId
+      )?.providers;
+      if (currentOptionProviders && currentOptionProviders?.length !== 0) {
+        dispatch(
+          setupAddOption([
+            {
+              ...currentOption,
+              providers: [
+                ...currentOptionProviders,
+                {
+                  providerId: currentProviderObject?.id,
+                  providerName: currentProviderObject?.name,
+                },
+              ],
+            },
+          ])
+        );
+      }
+      if (!currentOptionProviders || currentOptionProviders?.length === 0) {
+        dispatch(
+          setupAddOption([
+            {
+              ...currentOption,
+              providers: [
+                {
+                  providerId: currentProviderObject?.id,
+                  providerName: currentProviderObject?.name,
+                },
+              ],
+            },
+          ])
+        );
+      }
+
+      setTimeout(() => {
+        dispatch(resetProviderAddSuccess());
+      }, 2000);
+    }
+  }, [providerAddSuccess]);
+
+  React.useEffect(() => {
+    if (optionAddSuccess) {
       setSelectedOption({});
       setCurrentOptionId("");
       dispatch(resetOptionAddSuccess());
       dispatch(setupGetAllExperienceWithOutParams());
       dispatch(setupGetAllOptionsWithOutParams());
       dispatch(setupGetAllVendors());
+      dispatch(setupGetAllProviderWithOutParams());
     }
-  }, [optionAddSuccess, providerAddSuccess]);
+  }, [optionAddSuccess]);
 
   React.useEffect(() => {
     dispatch(setupGetAllExperienceWithOutParams());
     dispatch(setupGetAllOptionsWithOutParams());
     dispatch(setupGetAllVendors());
+    dispatch(setupGetAllProviderWithOutParams());
   }, []);
 
   return (

@@ -200,7 +200,7 @@ const optionForm = ({ option }) => {
                                     setShowViewSelectedProvider(true);
                                   }}
                                 >
-                                  {provider?.name}
+                                  {provider?.providerName}
                                 </Button>
                               </td>
                             </tr>

@@ -30,6 +30,7 @@ const EditExperienceDialog = ({
   const [experienceWhy, setExperienceWhy] = React.useState("");
   const [linkWithOtherExperiences, setLinkWithOtherExperiences] =
     React.useState([]);
+  const [providers, setProviders] = React.useState([]);
 
   // Input Refs
   const priceRef = React.useRef(null);
@@ -46,7 +47,6 @@ const EditExperienceDialog = ({
     address: "",
     description: "",
     termsAndConditions: "",
-    providerId: "",
     vendorId: "",
   };
   const validationSchema = Yup.object({
@@ -86,14 +86,21 @@ const EditExperienceDialog = ({
           durations?.length !== 0 &&
           avialableTimes?.length !== 0
         ) {
+          const filteredProvidersArray = allProvider.filter((item) =>
+            providers.includes(item?.name)
+          );
           dispatch(
             setupAddExperience([
               {
                 ...values,
                 id: selectedExperience?.id,
-                providers: [
-                  allProvider?.find((all) => all?.id === values?.providerId),
-                ],
+                providers:
+                  filteredProvidersArray?.map((item) => {
+                    return {
+                      providerId: item?.id,
+                      providerName: item?.name,
+                    };
+                  }) || [],
                 links: links?.map((item) => {
                   return {
                     link: item.link,
@@ -274,31 +281,17 @@ const EditExperienceDialog = ({
 
   React.useEffect(() => {
     if (Object.keys(selectedExperience)?.length !== 0) {
-      if (selectedExperience?.providers) {
-        formik.resetForm({
-          values: {
-            ...formik.values,
-            title: selectedExperience?.title,
-            address: selectedExperience?.address,
-            description: selectedExperience?.description,
-            termsAndConditions: selectedExperience?.termsAndConditions,
-            providerId: selectedExperience?.providers[0]?.id,
-            vendorId: selectedExperience?.vendorId,
-          },
-        });
-      }
-      if (!selectedExperience?.providers) {
-        formik.resetForm({
-          values: {
-            ...formik.values,
-            title: selectedExperience?.title,
-            address: selectedExperience?.address,
-            description: selectedExperience?.description,
-            termsAndConditions: selectedExperience?.termsAndConditions,
-            vendorId: selectedExperience?.vendorId,
-          },
-        });
-      }
+      formik.resetForm({
+        values: {
+          ...formik.values,
+          title: selectedExperience?.title,
+          address: selectedExperience?.address,
+          description: selectedExperience?.description,
+          termsAndConditions: selectedExperience?.termsAndConditions,
+          vendorId: selectedExperience?.vendorId,
+        },
+      });
+
       setPrices(
         selectedExperience?.price?.map((singleItem) => {
           return {
@@ -350,6 +343,14 @@ const EditExperienceDialog = ({
           };
         })
       );
+      if (
+        selectedExperience?.providers &&
+        selectedExperience?.providers?.length !== 0
+      ) {
+        setProviders(
+          selectedExperience?.providers?.map((all) => all?.providerName)
+        );
+      }
     }
   }, [selectedExperience]);
 
@@ -402,6 +403,8 @@ const EditExperienceDialog = ({
       linkWithOtherExperiences={linkWithOtherExperiences}
       handleDeleteLinkWithOtherExperience={handleDeleteLinkWithOtherExperience}
       allVendors={allVendors}
+      providers={providers}
+      setProviders={setProviders}
     />
   );
 };

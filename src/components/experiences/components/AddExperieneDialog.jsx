@@ -27,6 +27,7 @@ const AddExperienceDialog = ({ setShowAddExperienceDialog }) => {
   const [experienceWhy, setExperienceWhy] = React.useState("");
   const [linkWithOtherExperiences, setLinkWithOtherExperiences] =
     React.useState([]);
+  const [providers, setProviders] = React.useState([]);
 
   // Input Refs
   const priceRef = React.useRef(null);
@@ -43,7 +44,6 @@ const AddExperienceDialog = ({ setShowAddExperienceDialog }) => {
     address: "",
     description: "",
     termsAndConditions: "",
-    providerId: "",
     vendorId: "",
   };
   const validationSchema = Yup.object({
@@ -83,13 +83,20 @@ const AddExperienceDialog = ({ setShowAddExperienceDialog }) => {
           durations?.length !== 0 &&
           avialableTimes?.length !== 0
         ) {
+          const filteredProvidersArray = allProvider.filter((item) =>
+            providers.includes(item?.name)
+          );
           dispatch(
             setupAddExperience([
               {
                 ...values,
-                providers: [
-                  allProvider?.find((all) => all?.id === values?.providerId),
-                ],
+                providers:
+                  filteredProvidersArray?.map((item) => {
+                    return {
+                      providerId: item?.id,
+                      providerName: item?.name,
+                    };
+                  }) || [],
                 links: links?.map((item) => {
                   return {
                     link: item.link,
@@ -268,6 +275,7 @@ const AddExperienceDialog = ({ setShowAddExperienceDialog }) => {
     }
   }, [experienceAddSuccess]);
 
+
   return (
     <ExperienceDialogForm
       formik={formik}
@@ -317,6 +325,8 @@ const AddExperienceDialog = ({ setShowAddExperienceDialog }) => {
       linkWithOtherExperiences={linkWithOtherExperiences}
       handleDeleteLinkWithOtherExperience={handleDeleteLinkWithOtherExperience}
       allVendors={allVendors}
+      providers={providers}
+      setProviders={setProviders}
     />
   );
 };

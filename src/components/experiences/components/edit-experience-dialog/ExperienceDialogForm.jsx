@@ -8,6 +8,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
+import MultipleSelectProviders from "../MultiSelectProviders";
 
 const ExperienceDialogForm = ({
   formik,
@@ -57,6 +58,8 @@ const ExperienceDialogForm = ({
   linkWithOtherExperiences,
   handleDeleteLinkWithOtherExperience,
   allVendors,
+  providers,
+  setProviders,
 }) => {
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -91,27 +94,14 @@ const ExperienceDialogForm = ({
             </div>
           </div>
 
-          <FormControl fullWidth className="my-4">
-            <InputLabel id="demo-simple-select-label">
-              Select Provider
-            </InputLabel>
-            <Select
-              id="providerId"
-              name="providerId"
-              className="form-control w-100 "
-              label="Provider"
-              {...formik.getFieldProps("providerId")}
-            >
-              <MenuItem value="">Select Provider</MenuItem>
-              {allProvider?.map((provider, index) => {
-                return (
-                  <MenuItem value={provider?.id} key={index}>
-                    {provider?.name}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-          </FormControl>
+          <div className="mb-4 mt-4 w-100">
+            <MultipleSelectProviders
+              setProviders={setProviders}
+              providers={providers}
+              names={allProvider?.map((all) => all?.name)}
+            />
+          </div>
+
           <FormControl fullWidth className="mb-4">
             <InputLabel id="demo-simple-select-label">Select Vendor</InputLabel>
             <Select

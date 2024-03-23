@@ -9,8 +9,6 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import OptionDialogForm from "./OptionDialogForm";
-import { setupGetAllExperienceWithOutParams } from "../../../global-redux/reducers/experiences/slice";
-import { setupGetAllProviderWithOutParams } from "../../../global-redux/reducers/providers/slice";
 
 const AddOptionDialog = ({ setShowAddOptionDialog }) => {
   const dispatch = useDispatch();
@@ -24,6 +22,7 @@ const AddOptionDialog = ({ setShowAddOptionDialog }) => {
   const [avialableTimes, setAvailableTimes] = React.useState([]);
   const [keywords, setKeywords] = React.useState([]);
   const [keyword, setKeyword] = React.useState("");
+  const [providers, setProviders] = React.useState([]);
 
   // Input Refs
   const priceRef = React.useRef(null);
@@ -39,7 +38,6 @@ const AddOptionDialog = ({ setShowAddOptionDialog }) => {
     title: "",
     xpAddress: "",
     experienceId: "",
-    providerId: "",
     description: "",
     termsAndConditions: "",
   };
@@ -78,13 +76,20 @@ const AddOptionDialog = ({ setShowAddOptionDialog }) => {
           avialableTimes?.length !== 0 &&
           keywords?.length !== 0
         ) {
+          const filteredProvidersArray = allProvider.filter((item) =>
+            providers.includes(item?.name)
+          );
           dispatch(
             setupAddOption([
               {
                 ...values,
-                providers: [
-                  allProvider?.find((all) => all?.id === values?.providerId),
-                ],
+                providers:
+                  filteredProvidersArray?.map((item) => {
+                    return {
+                      providerId: item?.id,
+                      providerName: item?.name,
+                    };
+                  }) || [],
                 linkWithOtherExperience: null,
                 links: links?.map((item) => {
                   return item.link;
@@ -220,11 +225,6 @@ const AddOptionDialog = ({ setShowAddOptionDialog }) => {
     }
   }, [optionAddSuccess]);
 
-  React.useEffect(() => {
-    dispatch(setupGetAllExperienceWithOutParams());
-    dispatch(setupGetAllProviderWithOutParams());
-  }, []);
-
   return (
     <OptionDialogForm
       formik={formik}
@@ -264,6 +264,8 @@ const AddOptionDialog = ({ setShowAddOptionDialog }) => {
       keyword={keyword}
       keywords={keywords}
       setKeyword={setKeyword}
+      providers={providers}
+      setProviders={setProviders}
     />
   );
 };

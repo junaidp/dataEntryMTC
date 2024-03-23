@@ -3,8 +3,8 @@ import TextField from "@mui/material/TextField";
 import RichTextEditor from "../../common/RichText";
 import Chip from "@mui/material/Chip";
 import { Card } from "@mui/material";
-import MultipleSelect from "./MultiSelect";
-import AutoCompleteProvider from "./ProviderAutoComplete";
+import MultipleSelectExperiences from "./MultiSelectExperiences";
+import MultipleSelectProviders from "./MultiSelectProviders";
 import AutoCompleteVendor from "./AutoCompleteVendor";
 
 const ExperienceDialogForm = ({
@@ -55,6 +55,8 @@ const ExperienceDialogForm = ({
   linkWithOtherExperiences,
   handleDeleteLinkWithOtherExperience,
   allVendors,
+  providers,
+  setProviders,
 }) => {
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -89,13 +91,13 @@ const ExperienceDialogForm = ({
             </div>
           </div>
           <div className="mb-2 w-100">
-            <AutoCompleteProvider
-              options={allProvider?.map((provider) => {
-                return { name: provider?.name, id: provider?.id };
-              })}
-              formik={formik}
+            <MultipleSelectProviders
+              setProviders={setProviders}
+              providers={providers}
+              names={allProvider?.map((all) => all?.name)}
             />
           </div>
+
           <div className="mb-4 w-100">
             <AutoCompleteVendor
               options={allVendors?.map((vendor) => {
@@ -306,7 +308,7 @@ const ExperienceDialogForm = ({
           </div>
           <div className="row mb-4">
             <div className="col-lg-6">
-              <MultipleSelect
+              <MultipleSelectExperiences
                 setExperiences={setExperiences}
                 experience={experience}
                 names={allExperience?.map((all) => all?.title)}

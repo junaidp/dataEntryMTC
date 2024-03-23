@@ -7,6 +7,7 @@ import FormControl from "@mui/material/FormControl";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import RichTextEditor from "../../../common/RichText";
+import MultipleSelectProviders from "../MultiSelectProviders";
 
 const ServiceDialogForm = ({
   formik,
@@ -46,6 +47,8 @@ const ServiceDialogForm = ({
   keyword,
   keywords,
   setKeyword,
+  providers,
+  setProviders,
 }) => {
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -124,28 +127,12 @@ const ServiceDialogForm = ({
             </div>
           </div>
           <div className="row">
-            <div className="col-lg-12 mb-4">
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">
-                  Select Provider
-                </InputLabel>
-                <Select
-                  id="providerId"
-                  name="providerId"
-                  className="form-control w-100 "
-                  label="Select Provider"
-                  {...formik.getFieldProps("providerId")}
-                >
-                  <MenuItem value="">Select Provider</MenuItem>
-                  {allProvider?.map((item, index) => {
-                    return (
-                      <MenuItem value={item?.id} key={index}>
-                        {item?.name}
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
-              </FormControl>
+            <div className="mb-4  w-100">
+              <MultipleSelectProviders
+                setProviders={setProviders}
+                providers={providers}
+                names={allProvider?.map((all) => all?.name)}
+              />
             </div>
           </div>
           <div className="row">

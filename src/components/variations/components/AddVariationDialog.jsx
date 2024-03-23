@@ -9,8 +9,6 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import VariationDialogForm from "./VariationDialogForm";
-import { setupGetAllExperienceWithOutParams } from "../../../global-redux/reducers/experiences/slice";
-import { setupGetAllProviderWithOutParams } from "../../../global-redux/reducers/providers/slice";
 
 const AddVariationDialog = ({ setShowAddVariationDialog }) => {
   const dispatch = useDispatch();
@@ -24,6 +22,7 @@ const AddVariationDialog = ({ setShowAddVariationDialog }) => {
   const [avialableTimes, setAvailableTimes] = React.useState([]);
   const [keywords, setKeywords] = React.useState([]);
   const [keyword, setKeyword] = React.useState("");
+  const [providers, setProviders] = React.useState([]);
 
   // Input Refs
   const priceRef = React.useRef(null);
@@ -41,7 +40,6 @@ const AddVariationDialog = ({ setShowAddVariationDialog }) => {
     title: "",
     xpAddress: "",
     experienceId: "",
-    providerId: "",
     description: "",
     termsAndConditions: "",
   };
@@ -80,13 +78,20 @@ const AddVariationDialog = ({ setShowAddVariationDialog }) => {
           avialableTimes?.length !== 0 &&
           keywords?.length !== 0
         ) {
+          const filteredProvidersArray = allProvider.filter((item) =>
+            providers.includes(item?.name)
+          );
           dispatch(
             setupAddVariation([
               {
                 ...values,
-                providers: [
-                  allProvider?.find((all) => all?.id === values?.providerId),
-                ],
+                providers:
+                  filteredProvidersArray?.map((item) => {
+                    return {
+                      providerId: item?.id,
+                      providerName: item?.name,
+                    };
+                  }) || [],
                 linkWithOtherExperience: null,
                 links: links?.map((item) => {
                   return item.link;
@@ -222,11 +227,6 @@ const AddVariationDialog = ({ setShowAddVariationDialog }) => {
     }
   }, [variationAddSuccess]);
 
-  React.useEffect(() => {
-    dispatch(setupGetAllExperienceWithOutParams());
-    dispatch(setupGetAllProviderWithOutParams());
-  }, []);
-
   return (
     <VariationDialogForm
       formik={formik}
@@ -266,6 +266,8 @@ const AddVariationDialog = ({ setShowAddVariationDialog }) => {
       keyword={keyword}
       keywords={keywords}
       setKeyword={setKeyword}
+      providers={providers}
+      setProviders={setProviders}
     />
   );
 };

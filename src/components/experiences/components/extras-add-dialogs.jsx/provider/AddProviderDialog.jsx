@@ -201,10 +201,7 @@ const AddProviderDialog = ({ setShowAddProviderDialog }) => {
                   }
                 >
                   <MenuItem value="">Select Region</MenuItem>
-                  <MenuItem value="UK">UK</MenuItem>
-                  <MenuItem value="US">US</MenuItem>
-                  <MenuItem value="Germany">Germany</MenuItem>
-                  <MenuItem value="Pakistan">Pakistan</MenuItem>
+                  <MenuItem value="EU">EU</MenuItem>
                 </Select>
               </FormControl>
               {formik.touched.regionsCovered &&

@@ -178,7 +178,7 @@ const AddVendorDialog = ({ setShowAddVendorDialog }) => {
                   }
                 >
                   <MenuItem value="">Select Region</MenuItem>
-                  <MenuItem value="UK">EU</MenuItem>
+                  <MenuItem value="EU">EU</MenuItem>
                 </Select>
               </FormControl>
               {formik.touched.regionsCovered &&

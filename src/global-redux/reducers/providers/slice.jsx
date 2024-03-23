@@ -13,6 +13,7 @@ const initialState = {
   allProvider: [],
   providerAddSuccess: false,
   selectedProvider: {},
+  currentProviderObject: {},
 };
 
 export const setupGetAllProvider = createAsyncThunk(
@@ -52,6 +53,7 @@ export const slice = createSlice({
   reducers: {
     resetProviderAddSuccess: (state) => {
       state.providerAddSuccess = false;
+      state.currentProviderObject = {};
     },
     changeSelectedProvider: (state, action) => {
       state.selectedProvider = action?.payload;
@@ -117,6 +119,7 @@ export const slice = createSlice({
         state.loading = true;
       })
       .addCase(setupAddProvider.fulfilled, (state, { payload }) => {
+        state.currentProviderObject = payload[0];
         state.loading = false;
         state.providerAddSuccess = true;
       })
