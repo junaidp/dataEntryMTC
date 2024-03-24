@@ -6,7 +6,7 @@ const RichTextEditor = ({
   initialValue,
   placeholder,
   readonly,
-  handleChangeTermsAndConditions
+  handleChangeTermsAndConditions,
 }) => {
   const editor = useRef(null);
   const [content, setContent] = React.useState("");

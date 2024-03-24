@@ -4,7 +4,6 @@ import Chip from "@mui/material/Chip";
 import { useSelector } from "react-redux";
 
 const ServiceForm = ({ service }) => {
-  const { allProvider } = useSelector((state) => state?.providers);
   const { allVendors } = useSelector((state) => state?.vendors);
   return (
     <div className="px-4 py-4">
@@ -21,19 +20,11 @@ const ServiceForm = ({ service }) => {
           </div>
         </div>
         <div className="row">
-          <div className="col-lg-5 mb-4">
+          <div className="col-lg-12 mb-4">
             <label>Vendor</label>
             <p>
               {allVendors?.find((all) => all?.id === service?.vendorId)?.name ||
                 "No Vendor Provided"}
-            </p>
-          </div>
-
-          <div className="col-lg-7 mb-4" style={{ marginLeft: "-25px" }}>
-            <label>Provider</label>
-            <p>
-              {allProvider?.find((all) => all?.id === service?.providerId)
-                ?.name || "No Provider Provided"}
             </p>
           </div>
         </div>
@@ -42,7 +33,7 @@ const ServiceForm = ({ service }) => {
             <label className="mb-2">List Of Prices</label>
             <div>
               {!service?.price || service?.price?.length === 0 ? (
-                <lable className="mx-2">No Price Provided</lable>
+                <lable>No Price Provided</lable>
               ) : (
                 service?.price?.map((key, index) => {
                   return (
@@ -63,7 +54,7 @@ const ServiceForm = ({ service }) => {
             <label className="mb-2">List Of Durations</label>
             <div>
               {!service?.duration || service?.duration?.length === 0 ? (
-                <lable className="mx-2">No Duration Provided</lable>
+                <lable>No Duration Provided</lable>
               ) : (
                 service.duration?.map((key, index) => {
                   return (
@@ -85,7 +76,7 @@ const ServiceForm = ({ service }) => {
             <div>
               {!service?.availableTime ||
               service?.availableTime?.length === 0 ? (
-                <lable className="mx-2">No Time Provided</lable>
+                <lable>No Time Provided</lable>
               ) : (
                 service?.availableTime?.map((key, index) => {
                   return (
@@ -106,7 +97,7 @@ const ServiceForm = ({ service }) => {
           <label className="mb-2">List Of Links</label>
           <div>
             {service?.links?.length === 0 ? (
-              <lable className="mx-2">No Link Provided</lable>
+              <lable>No Link Provided</lable>
             ) : (
               service?.links?.map((key, index) => {
                 return (
@@ -165,7 +156,11 @@ const ServiceForm = ({ service }) => {
           <div className="col-lg-12">
             <label>Description</label>
             <RichTextEditor
-              initialValue={service.description}
+              initialValue={
+                service?.description !== ""
+                  ? service?.description
+                  : "No Description Provided"
+              }
               readonly={true}
             />
           </div>
@@ -174,7 +169,11 @@ const ServiceForm = ({ service }) => {
           <div className="col-lg-12">
             <label>Terms & Condition</label>
             <RichTextEditor
-              initialValue={service.termsAndConditions}
+              initialValue={
+                service?.termsAndConditions !== ""
+                  ? service?.termsAndConditions
+                  : "No Terms & Conditions Provided"
+              }
               readonly={true}
             />
           </div>

@@ -25,6 +25,7 @@ const AddServiceDialog = ({ setShowAddServiceDialog }) => {
   const [services, setServices] = React.useState([]);
   const [serviceWhy, setServiceWhy] = React.useState("");
   const [linkWithOtherServices, setLinkWithOtherServices] = React.useState([]);
+  const [providers, setProviders] = React.useState([]);
 
   // Input Refs
   const priceRef = React.useRef(null);
@@ -32,6 +33,8 @@ const AddServiceDialog = ({ setShowAddServiceDialog }) => {
   const availableTimeRef = React.useRef(null);
   const keywordRef = React.useRef(null);
   const linkRef = React.useRef(null);
+  const whyRef = React.useRef(null);
+
 
   const { serviceAddSuccess, loading } = useSelector(
     (state) => state?.services
@@ -41,16 +44,10 @@ const AddServiceDialog = ({ setShowAddServiceDialog }) => {
     address: "",
     description: "",
     termsAndConditions: "",
-    providerId: "",
     vendorId: "",
   };
   const validationSchema = Yup.object({
     title: Yup.string().required("Title is required"),
-    address: Yup.string().required("Address is required"),
-    description: Yup.string().required("Please provide description"),
-    termsAndConditions: Yup.string().required(
-      "Please provide Terms And Conditions"
-    ),
   });
 
   // Formik hook
@@ -59,60 +56,42 @@ const AddServiceDialog = ({ setShowAddServiceDialog }) => {
     validationSchema: validationSchema,
     onSubmit: (values) => {
       if (!loading) {
-        if (keywords.length === 0) {
-          toast.error("Provide keywords");
-        }
-        if (links?.length === 0) {
-          toast.error("Provide Links");
-        }
-        if (prices?.length === 0) {
-          toast.error("Provide Prices");
-        }
-        if (durations?.length === 0) {
-          toast.error("Provide Durations");
-        }
-        if (avialableTimes?.length === 0) {
-          toast.error("Provide Available Times");
-        }
-        if (
-          keywords.length !== 0 &&
-          links?.length !== 0 &&
-          prices?.length !== 0 &&
-          durations?.length !== 0 &&
-          avialableTimes?.length !== 0
-        ) {
-          dispatch(
-            setupAddService([
-              {
-                ...values,
-                providers: [
-                  allProvider?.find((all) => all?.id === values?.providerId),
-                ],
-                links: links?.map((item) => item?.link),
-                linkWithOtherService:
-                  linkWithOtherServices?.map((item) => {
-                    return {
-                      serviceId: item?.serviceId,
-                      serviceName: item?.serviceName,
-                      why: item?.why,
-                    };
-                  }) || [],
-                storyLineKeywords: keywords.map((item) => {
+        const filteredProvidersArray = allProvider?.filter((item) =>
+          providers.includes(item?.name)
+        );
+        dispatch(
+          setupAddService([
+            {
+              ...values,
+              providers: filteredProvidersArray || [],
+              links: links?.map((item) => item?.link) || [],
+              linkWithOtherService:
+                linkWithOtherServices?.map((item) => {
+                  return {
+                    serviceId: item?.serviceId,
+                    serviceName: item?.serviceName,
+                    why: item?.why,
+                  };
+                }) || [],
+              storyLineKeywords:
+                keywords.map((item) => {
                   return item?.name;
-                }),
-                price: prices?.map((item) => {
+                }) || [],
+              price:
+                prices?.map((item) => {
                   return item.price;
-                }),
-                duration: durations?.map((item) => {
+                }) || [],
+              duration:
+                durations?.map((item) => {
                   return item.duration;
-                }),
-                availableTime: avialableTimes?.map((item) => {
+                }) || [],
+              availableTime:
+                avialableTimes?.map((item) => {
                   return item.time;
-                }),
-              },
-            ])
-          );
-        }
+                }) || [],
+            },
+          ])
+        );
       }
     },
   });
@@ -197,7 +176,7 @@ const AddServiceDialog = ({ setShowAddServiceDialog }) => {
   function handleAddLink(event) {
     event.preventDefault();
     if (link === "") {
-      toast.error("Provide Both Values");
+      toast.error("Provide Link");
     }
     if (linkRef.current) {
       linkRef.current.focus();
@@ -221,9 +200,10 @@ const AddServiceDialog = ({ setShowAddServiceDialog }) => {
     setShowAddServiceDialog(false);
   }
 
-  function handleAddServices() {
-    if (services?.length === 0 || serviceWhy === "") {
-      toast.error("Provide all values");
+  function handleAddServices(event) {
+    event.preventDefault();
+    if (whyRef.current) {
+      whyRef.current.focus();
     }
     if (services?.length !== 0 && serviceWhy !== "") {
       let filteredArray = allService.filter((item) =>
@@ -307,6 +287,9 @@ const AddServiceDialog = ({ setShowAddServiceDialog }) => {
       linkWithOtherServices={linkWithOtherServices}
       handleDeleteLinkWithOtherServices={handleDeleteLinkWithOtherServices}
       allVendors={allVendors}
+      providers={providers}
+      setProviders={setProviders}
+      whyRef={whyRef}
     />
   );
 };

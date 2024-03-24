@@ -29,18 +29,7 @@ const AddProviderDialog = ({ setShowAddProviderDialog, currentVendorId }) => {
   };
   const validationSchema = Yup.object({
     name: Yup.string().required("Provider name is required"),
-    address: Yup.string().required("Provider address is required"),
-    pointOfContact: Yup.string().required("Point of contact is required"),
-    website: Yup.string().required("Website of contact is required"),
-    email: Yup.string()
-      .email("Invalid email address")
-      .required("Email of contact is required"),
-    regionsCovered: Yup.string().required("Regions covered is required"),
-    manageVenue: Yup.boolean().required(
-      "Please select Yes or No for managing venue"
-    ),
-    description: Yup.string().required("Please provide description"),
-    termsNConditions: Yup.string().required("Please Terms & Conditions"),
+    email: Yup.string().email("Invalid email address"),
   });
 
   // Formik hook
@@ -108,8 +97,6 @@ const AddProviderDialog = ({ setShowAddProviderDialog, currentVendorId }) => {
                 variant="outlined"
                 className="form-control"
                 {...formik.getFieldProps("address")}
-                error={formik.touched.address && Boolean(formik.errors.address)}
-                helperText={formik.touched.address && formik.errors.address}
               />
             </div>
             <div className="col-lg-6 mb-4">
@@ -120,13 +107,6 @@ const AddProviderDialog = ({ setShowAddProviderDialog, currentVendorId }) => {
                 variant="outlined"
                 className="form-control"
                 {...formik.getFieldProps("pointOfContact")}
-                error={
-                  formik.touched.pointOfContact &&
-                  Boolean(formik.errors.pointOfContact)
-                }
-                helperText={
-                  formik.touched.pointOfContact && formik.errors.pointOfContact
-                }
               />
             </div>
           </div>
@@ -140,8 +120,6 @@ const AddProviderDialog = ({ setShowAddProviderDialog, currentVendorId }) => {
                 variant="outlined"
                 className="form-control"
                 {...formik.getFieldProps("website")}
-                error={formik.touched.website && Boolean(formik.errors.website)}
-                helperText={formik.touched.website && formik.errors.website}
               />
             </div>
             <div className="col-lg-6 mb-4">
@@ -152,8 +130,6 @@ const AddProviderDialog = ({ setShowAddProviderDialog, currentVendorId }) => {
                 variant="outlined"
                 className="form-control"
                 {...formik.getFieldProps("email")}
-                error={formik.touched.email && Boolean(formik.errors.email)}
-                helperText={formik.touched.email && formik.errors.email}
               />
             </div>
           </div>
@@ -170,23 +146,11 @@ const AddProviderDialog = ({ setShowAddProviderDialog, currentVendorId }) => {
                   label="Regions Covered"
                   defaultValue="Germany"
                   {...formik.getFieldProps("regionsCovered")}
-                  error={
-                    formik.touched.regionsCovered &&
-                    Boolean(formik.errors.regionsCovered)
-                  }
-                  helperText={
-                    formik.touched.regionsCovered &&
-                    formik.errors.regionsCovered
-                  }
                 >
                   <MenuItem value="">Select Region</MenuItem>
                   <MenuItem value="EU">EU</MenuItem>
                 </Select>
               </FormControl>
-              {formik.touched.regionsCovered &&
-                formik.errors.regionsCovered && (
-                  <div className="error">{formik.errors.regionsCovered}</div>
-                )}
             </div>
             <div className="col-lg-6 mb-4">
               <div className="form-check form-switch ">
@@ -199,10 +163,6 @@ const AddProviderDialog = ({ setShowAddProviderDialog, currentVendorId }) => {
                   id="flexSwitchCheckDefault"
                 />
               </div>
-
-              {formik.touched.manageVenue && formik.errors.manageVenue && (
-                <div className="error">{formik.errors.manageVenue}</div>
-              )}
             </div>
           </div>
 
@@ -214,9 +174,6 @@ const AddProviderDialog = ({ setShowAddProviderDialog, currentVendorId }) => {
                 handleChangeDescription={handleChangeDescription}
                 readonly={false}
               />
-              {formik.touched.description && formik.errors.description && (
-                <div className="error">{formik.errors.description}</div>
-              )}
             </div>
           </div>
           <div className="row mb-4">
@@ -227,10 +184,6 @@ const AddProviderDialog = ({ setShowAddProviderDialog, currentVendorId }) => {
                 handleChangeTermsAndConditions={handleChangeTermsAndConditions}
                 readonly={false}
               />
-              {formik.touched.termsNConditions &&
-                formik.errors.termsNConditions && (
-                  <div className="error">{formik.errors.termsNConditions}</div>
-                )}
             </div>
           </div>
         </div>

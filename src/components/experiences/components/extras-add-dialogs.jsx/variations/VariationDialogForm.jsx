@@ -2,11 +2,8 @@ import React from "react";
 import TextField from "@mui/material/TextField";
 import Chip from "@mui/material/Chip";
 import { Card } from "@mui/material";
-import InputLabel from "@mui/material/InputLabel";
-import FormControl from "@mui/material/FormControl";
-import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
 import RichTextEditor from "../../../../common/RichText";
+import MultipleSelectProviders from "../../MultiSelectProviders";
 
 const ServiceDialogForm = ({
   formik,
@@ -36,7 +33,6 @@ const ServiceDialogForm = ({
   durationRef,
   availableTimeRef,
   linkRef,
-  allExperience,
   allProvider,
   handleChangeDescription,
   handleChangeTermsAndConditions,
@@ -46,6 +42,8 @@ const ServiceDialogForm = ({
   keyword,
   keywords,
   setKeyword,
+  providers,
+  setProviders,
 }) => {
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -74,9 +72,6 @@ const ServiceDialogForm = ({
                 handleChangeDescription={handleChangeDescription}
                 readonly={false}
               />
-              {formik.touched.description && formik.errors.description && (
-                <div className="error">{formik.errors.description}</div>
-              )}
             </div>
           </div>
 
@@ -89,38 +84,17 @@ const ServiceDialogForm = ({
                 variant="outlined"
                 className="form-control"
                 {...formik.getFieldProps("xpAddress")}
-                error={
-                  formik.touched.xpAddress && Boolean(formik.errors.xpAddress)
-                }
-                helperText={formik.touched.xpAddress && formik.errors.xpAddress}
               />
             </div>
           </div>
 
           <div className="row">
-            <div className="col-lg-12 mb-4">
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">
-                  Select Provider
-                </InputLabel>
-                <Select
-                  id="providerId"
-                  name="providerId"
-                  className="form-control w-100 "
-                  label="Select Provider"
-                  defaultValue=""
-                  {...formik.getFieldProps("providerId")}
-                >
-                  <MenuItem value="">Select Provider</MenuItem>
-                  {allProvider?.map((item, index) => {
-                    return (
-                      <MenuItem value={item?.id} key={index}>
-                        {item?.name}
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
-              </FormControl>
+            <div className="mb-2 w-100">
+              <MultipleSelectProviders
+                setProviders={setProviders}
+                providers={providers}
+                names={allProvider?.map((all) => all?.name)}
+              />
             </div>
           </div>
           <div className="row">
@@ -333,10 +307,6 @@ const ServiceDialogForm = ({
               handleChangeDescription={handleChangeTermsAndConditions}
               readonly={false}
             />
-            {formik.touched.termsAndConditions &&
-              formik.errors.termsAndConditions && (
-                <div className="error">{formik.errors.termsAndConditions}</div>
-              )}
           </div>
         </div>
         <div className="mb-4 mt-4">

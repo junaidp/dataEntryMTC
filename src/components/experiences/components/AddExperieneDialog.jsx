@@ -35,6 +35,7 @@ const AddExperienceDialog = ({ setShowAddExperienceDialog }) => {
   const availableTimeRef = React.useRef(null);
   const keywordRef = React.useRef(null);
   const linkRef = React.useRef(null);
+  const whyRef = React.useRef(null);
 
   const { experienceAddSuccess, loading } = useSelector(
     (state) => state?.experiences
@@ -48,11 +49,6 @@ const AddExperienceDialog = ({ setShowAddExperienceDialog }) => {
   };
   const validationSchema = Yup.object({
     title: Yup.string().required("Title is required"),
-    address: Yup.string().required("Address is required"),
-    description: Yup.string().required("Please provide description"),
-    termsAndConditions: Yup.string().required(
-      "Please provide Terms And Conditions"
-    ),
   });
 
   // Formik hook
@@ -61,72 +57,54 @@ const AddExperienceDialog = ({ setShowAddExperienceDialog }) => {
     validationSchema: validationSchema,
     onSubmit: (values) => {
       if (!loading) {
-        if (keywords.length === 0) {
-          toast.error("Provide keywords");
-        }
-        if (links?.length === 0) {
-          toast.error("Provide Links");
-        }
-        if (prices?.length === 0) {
-          toast.error("Provide Prices");
-        }
-        if (durations?.length === 0) {
-          toast.error("Provide Durations");
-        }
-        if (avialableTimes?.length === 0) {
-          toast.error("Provide Available Times");
-        }
-        if (
-          keywords.length !== 0 &&
-          links?.length !== 0 &&
-          prices?.length !== 0 &&
-          durations?.length !== 0 &&
-          avialableTimes?.length !== 0
-        ) {
-          const filteredProvidersArray = allProvider.filter((item) =>
-            providers.includes(item?.name)
-          );
-          dispatch(
-            setupAddExperience([
-              {
-                ...values,
-                providers:
-                  filteredProvidersArray?.map((item) => {
-                    return {
-                      providerId: item?.id,
-                      providerName: item?.name,
-                    };
-                  }) || [],
-                links: links?.map((item) => {
+        const filteredProvidersArray = allProvider?.filter((item) =>
+          providers.includes(item?.name)
+        );
+        dispatch(
+          setupAddExperience([
+            {
+              ...values,
+              providers:
+                filteredProvidersArray?.map((item) => {
+                  return {
+                    providerId: item?.id,
+                    providerName: item?.name,
+                  };
+                }) || [],
+              links:
+                links?.map((item) => {
                   return {
                     link: item.link,
                     explanation: item.linkExplanation,
                   };
-                }),
-                linkWithOtherExperience:
-                  linkWithOtherExperiences?.map((item) => {
-                    return {
-                      experienceId: item?.experienceId,
-                      experienceName: item?.experienceName,
-                      why: item?.why,
-                    };
-                  }) || [],
-                storyLineKeywords: keywords.map((item) => {
+                }) || [],
+              linkWithOtherExperience:
+                linkWithOtherExperiences?.map((item) => {
+                  return {
+                    experienceId: item?.experienceId,
+                    experienceName: item?.experienceName,
+                    why: item?.why,
+                  };
+                }) || [],
+              storyLineKeywords:
+                keywords.map((item) => {
                   return item?.name;
-                }),
-                price: prices?.map((item) => {
+                }) || [],
+              price:
+                prices?.map((item) => {
                   return item.price;
-                }),
-                duration: durations?.map((item) => {
+                }) || [],
+              duration:
+                durations?.map((item) => {
                   return item.duration;
-                }),
-                availableTime: avialableTimes?.map((item) => {
+                }) || [],
+              availableTime:
+                avialableTimes?.map((item) => {
                   return item.time;
-                }),
-              },
-            ])
-          );
-        }
+                }) || [],
+            },
+          ])
+        );
       }
     },
   });
@@ -236,9 +214,10 @@ const AddExperienceDialog = ({ setShowAddExperienceDialog }) => {
     setShowAddExperienceDialog(false);
   }
 
-  function handleAddExperience() {
-    if (experience?.length === 0 || experienceWhy === "") {
-      toast.error("Provide all values");
+  function handleAddExperience(event) {
+    event.preventDefault();
+    if (whyRef.current) {
+      whyRef.current.focus();
     }
     if (experience?.length !== 0 && experienceWhy !== "") {
       let filteredArray = allExperience.filter((item) =>
@@ -274,7 +253,6 @@ const AddExperienceDialog = ({ setShowAddExperienceDialog }) => {
       toast.success("Experience Added Successfully");
     }
   }, [experienceAddSuccess]);
-
 
   return (
     <ExperienceDialogForm
@@ -327,6 +305,7 @@ const AddExperienceDialog = ({ setShowAddExperienceDialog }) => {
       allVendors={allVendors}
       providers={providers}
       setProviders={setProviders}
+      whyRef={whyRef}
     />
   );
 };

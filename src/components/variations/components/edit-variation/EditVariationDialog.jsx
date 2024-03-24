@@ -50,9 +50,6 @@ const EditVariationDialog = ({
   };
   const validationSchema = Yup.object({
     title: Yup.string().required("Title is required"),
-    xpAddress: Yup.string().required("Address is required"),
-    description: Yup.string().required("Description is required"),
-    termsAndConditions: Yup.string().required("Terms & Condition is required"),
   });
 
   // Formik hook
@@ -61,62 +58,44 @@ const EditVariationDialog = ({
     validationSchema: validationSchema,
     onSubmit: (values) => {
       if (!loading) {
-        if (links?.length === 0) {
-          toast.error("Provide Links");
-        }
-        if (keywords?.length === 0) {
-          toast.error("Provide Keywords");
-        }
-        if (prices?.length === 0) {
-          toast.error("Provide Prices");
-        }
-        if (durations?.length === 0) {
-          toast.error("Provide Durations");
-        }
-        if (avialableTimes?.length === 0) {
-          toast.error("Provide Available Times");
-        }
-        if (
-          links?.length !== 0 &&
-          prices?.length !== 0 &&
-          durations?.length !== 0 &&
-          avialableTimes?.length !== 0 &&
-          keywords?.length !== 0
-        ) {
-          const filteredProvidersArray = allProvider.filter((item) =>
-            providers.includes(item?.name)
-          );
-          dispatch(
-            setupAddVariation([
-              {
-                ...values,
-                id: selectedVaraition?.id,
-                providers:
-                  filteredProvidersArray?.map((item) => {
-                    return {
-                      providerId: item?.id,
-                      providerName: item?.name,
-                    };
-                  }) || [],
-                links: links?.map((item) => {
+        const filteredProvidersArray = allProvider?.filter((item) =>
+          providers.includes(item?.name)
+        );
+        dispatch(
+          setupAddVariation([
+            {
+              ...values,
+              id: selectedVaraition?.id,
+              providers:
+                filteredProvidersArray?.map((item) => {
+                  return {
+                    providerId: item?.id,
+                    providerName: item?.name,
+                  };
+                }) || [],
+              links:
+                links?.map((item) => {
                   return item.link;
-                }),
-                storyLineKeywords: keywords.map((item) => {
+                }) || [],
+              storyLineKeywords:
+                keywords.map((item) => {
                   return item?.name;
-                }),
-                price: prices?.map((item) => {
+                }) || [],
+              price:
+                prices?.map((item) => {
                   return item.price;
-                }),
-                duration: durations?.map((item) => {
+                }) || [],
+              duration:
+                durations?.map((item) => {
                   return item.duration;
-                }),
-                availableTime: avialableTimes?.map((item) => {
+                }) || [],
+              availableTime:
+                avialableTimes?.map((item) => {
                   return item.time;
-                }),
-              },
-            ])
-          );
-        }
+                }) || [],
+            },
+          ])
+        );
       }
     },
   });

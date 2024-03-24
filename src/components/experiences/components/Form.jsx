@@ -90,7 +90,7 @@ const Form = ({ experience, currentExperienceId }) => {
             <label className="mb-2">List Of Prices</label>
             <div>
               {!experience?.price || experience?.price?.length === 0 ? (
-                <lable className="mx-2">No Price Provided</lable>
+                <lable>No Price Provided</lable>
               ) : (
                 experience?.price?.map((key, index) => {
                   return (
@@ -108,10 +108,10 @@ const Form = ({ experience, currentExperienceId }) => {
         </div>
         <div className="row mt-4">
           <div>
-            <label className="mb-2">List Of Durations</label>
+            <label>List Of Durations</label>
             <div>
               {!experience?.duration || experience?.duration?.length === 0 ? (
-                <lable className="mx-2">No Duration Provided</lable>
+                <lable>No Duration Provided</lable>
               ) : (
                 experience?.duration?.map((key, index) => {
                   return (
@@ -133,7 +133,7 @@ const Form = ({ experience, currentExperienceId }) => {
             <div>
               {!experience?.availableTime ||
               experience?.availableTime?.length === 0 ? (
-                <lable className="mx-2">No Time Provided</lable>
+                <lable>No Time Provided</lable>
               ) : (
                 experience?.availableTime?.map((key, index) => {
                   return (
@@ -154,7 +154,7 @@ const Form = ({ experience, currentExperienceId }) => {
           <div>
             {!experience?.storyLineKeywords ||
             experience?.storyLineKeywords?.length === 0 ? (
-              <lable className="mx-2">No Keyword Provided</lable>
+              <lable>No Keyword Provided</lable>
             ) : (
               experience?.storyLineKeywords?.map((key, index) => {
                 return (
@@ -194,7 +194,7 @@ const Form = ({ experience, currentExperienceId }) => {
           <label className="mb-2">List Of Links</label>
           <div>
             {!experience?.links || experience?.links?.length === 0 ? (
-              <lable className="mx-2">No Link Provided</lable>
+              <lable>No Link Provided</lable>
             ) : (
               experience?.links.map((key, index) => {
                 return (
@@ -231,7 +231,11 @@ const Form = ({ experience, currentExperienceId }) => {
           <div className="col-lg-12">
             <label>Description</label>
             <RichTextEditor
-              initialValue={experience?.description}
+              initialValue={
+                experience?.description !== ""
+                  ? experience?.description
+                  : "No Description Provided"
+              }
               readonly={true}
             />
           </div>
@@ -240,7 +244,11 @@ const Form = ({ experience, currentExperienceId }) => {
           <div className="col-lg-12">
             <label>Terms & Conditions</label>
             <RichTextEditor
-              initialValue={experience?.termsAndConditions}
+              initialValue={
+                experience?.termsAndConditions !== ""
+                  ? experience?.termsAndConditions
+                  : "No Terms & Conditionn Provided Provided"
+              }
               readonly={true}
             />
           </div>

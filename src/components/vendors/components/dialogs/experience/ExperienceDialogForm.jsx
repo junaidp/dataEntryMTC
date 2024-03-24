@@ -4,7 +4,7 @@ import RichTextEditor from "../../../../common/RichText";
 import Chip from "@mui/material/Chip";
 import { Card } from "@mui/material";
 import MultipleSelect from "./MultiSelect";
-import AutoCompleteProvider from "./ProviderAutoComplete";
+import MultipleSelectProviders from "./MultiSelectProviders";
 
 const ExperienceDialogForm = ({
   formik,
@@ -53,6 +53,9 @@ const ExperienceDialogForm = ({
   experienceWhy,
   linkWithOtherExperiences,
   handleDeleteLinkWithOtherExperience,
+  providers,
+  setProviders,
+  whyRef,
 }) => {
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -81,18 +84,15 @@ const ExperienceDialogForm = ({
                 variant="outlined"
                 className="form-control"
                 {...formik.getFieldProps("address")}
-                error={formik.touched.address && Boolean(formik.errors.address)}
-                helperText={formik.touched.address && formik.errors.address}
               />
             </div>
           </div>
-          <div className="mb-4 w-100">
-            <div className="col-lg-12 w-100">
-              <AutoCompleteProvider
-                options={allProvider?.map((provider) => {
-                  return { name: provider?.name, id: provider?.id };
-                })}
-                formik={formik}
+          <div className="row">
+            <div className="mb-2 w-100">
+              <MultipleSelectProviders
+                setProviders={setProviders}
+                providers={providers}
+                names={allProvider?.map((all) => all?.name)}
               />
             </div>
           </div>
@@ -310,6 +310,7 @@ const ExperienceDialogForm = ({
                 className="form-control"
                 value={experienceWhy}
                 onChange={(event) => setExperienceWhy(event.target.value)}
+                ref={whyRef}
               />
             </div>
             <div className={`col-lg-2 text-end float-end align-self-end mb-4`}>
@@ -411,9 +412,6 @@ const ExperienceDialogForm = ({
                 handleChangeDescription={handleChangeDescription}
                 readonly={false}
               />
-              {formik.touched.description && formik.errors.description && (
-                <div className="error">{formik.errors.description}</div>
-              )}
             </div>
           </div>
           <div className="row mb-4">
@@ -424,12 +422,6 @@ const ExperienceDialogForm = ({
                 handleChangeTermsAndConditions={handleChangeTermsAndConditions}
                 readonly={false}
               />
-              {formik.touched.termsAndConditions &&
-                formik.errors.termsAndConditions && (
-                  <div className="error">
-                    {formik.errors.termsAndConditions}
-                  </div>
-                )}
             </div>
           </div>
         </div>

@@ -60,6 +60,7 @@ const ExperienceDialogForm = ({
   allVendors,
   providers,
   setProviders,
+  whyRef
 }) => {
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -88,8 +89,6 @@ const ExperienceDialogForm = ({
                 variant="outlined"
                 className="form-control"
                 {...formik.getFieldProps("address")}
-                error={formik.touched.address && Boolean(formik.errors.address)}
-                helperText={formik.touched.address && formik.errors.address}
               />
             </div>
           </div>
@@ -336,6 +335,7 @@ const ExperienceDialogForm = ({
                 className="form-control"
                 value={experienceWhy}
                 onChange={(event) => setExperienceWhy(event.target.value)}
+                ref={whyRef}
               />
             </div>
             <div className={`col-lg-2 text-end float-end align-self-end mb-4`}>
@@ -437,9 +437,6 @@ const ExperienceDialogForm = ({
                 handleChangeDescription={handleChangeDescription}
                 readonly={false}
               />
-              {formik.touched.description && formik.errors.description && (
-                <div className="error">{formik.errors.description}</div>
-              )}
             </div>
           </div>
           <div className="row mb-4">
@@ -450,12 +447,6 @@ const ExperienceDialogForm = ({
                 handleChangeTermsAndConditions={handleChangeTermsAndConditions}
                 readonly={false}
               />
-              {formik.touched.termsAndConditions &&
-                formik.errors.termsAndConditions && (
-                  <div className="error">
-                    {formik.errors.termsAndConditions}
-                  </div>
-                )}
             </div>
           </div>
         </div>

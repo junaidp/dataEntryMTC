@@ -8,6 +8,7 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
+import MultipleSelectProviders from "./MultiSelectProviders";
 
 const ServiceDialogForm = ({
   formik,
@@ -55,6 +56,9 @@ const ServiceDialogForm = ({
   linkWithOtherServices,
   handleDeleteLinkWithOtherServices,
   allVendors,
+  providers,
+  setProviders,
+  whyRef,
 }) => {
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -83,30 +87,18 @@ const ServiceDialogForm = ({
                 variant="outlined"
                 className="form-control"
                 {...formik.getFieldProps("address")}
-                error={formik.touched.address && Boolean(formik.errors.address)}
-                helperText={formik.touched.address && formik.errors.address}
               />
             </div>
           </div>
-          <FormControl fullWidth className="mt-4 mb-2">
-            <InputLabel id="demo-simple-select-label">Provider</InputLabel>
-            <Select
-              id="providerId"
-              name="providerId"
-              className="form-control w-100 "
-              label="Provider"
-              {...formik.getFieldProps("providerId")}
-            >
-              <MenuItem value="">Select Provider</MenuItem>
-              {allProvider?.map((item, index) => {
-                return (
-                  <MenuItem key={index} value={item?.id}>
-                    {item?.name}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-          </FormControl>
+          <div className="row">
+            <div className="mb-2 w-100">
+              <MultipleSelectProviders
+                setProviders={setProviders}
+                providers={providers}
+                names={allProvider?.map((all) => all?.name)}
+              />
+            </div>
+          </div>
           <FormControl fullWidth className="mt-4 mb-4">
             <InputLabel id="demo-simple-select-label">Vendor</InputLabel>
             <Select
@@ -340,6 +332,7 @@ const ServiceDialogForm = ({
                 className="form-control"
                 value={serviceWhy}
                 onChange={(event) => setServiceWhy(event.target.value)}
+                ref={whyRef}
               />
             </div>
             <div className={`col-lg-2 text-end float-end align-self-end mb-4`}>
@@ -433,9 +426,6 @@ const ServiceDialogForm = ({
                 handleChangeDescription={handleChangeDescription}
                 readonly={false}
               />
-              {formik.touched.description && formik.errors.description && (
-                <div className="error">{formik.errors.description}</div>
-              )}
             </div>
           </div>
           <div className="row mb-4">
@@ -446,12 +436,6 @@ const ServiceDialogForm = ({
                 handleChangeTermsAndConditions={handleChangeTermsAndConditions}
                 readonly={false}
               />
-              {formik.touched.termsAndConditions &&
-                formik.errors.termsAndConditions && (
-                  <div className="error">
-                    {formik.errors.termsAndConditions}
-                  </div>
-                )}
             </div>
           </div>
         </div>

@@ -7,7 +7,6 @@ const ViewselectedOptionDialog = ({
   selectedOption,
   setShowViewOptionDialog,
 }) => {
-  const { allProvider } = useSelector((state) => state?.providers);
   const { allExperience } = useSelector((state) => state?.experiences);
   return (
     <div className="px-4 py-4">
@@ -32,15 +31,7 @@ const ViewselectedOptionDialog = ({
           </div>
         </div>
         <div className="row">
-          <div className="col-lg-6 mb-4">
-            <label>Provider</label>
-            <p>
-              {allProvider?.find(
-                (all) => all?.id === selectedOption?.providerId
-              )?.name || "No Provider Provided"}
-            </p>
-          </div>
-          <div className="col-lg-6 mb-4">
+          <div className="col-lg-12 mb-4">
             <label>Experience</label>
             <p>
               {allExperience?.find(
@@ -55,7 +46,7 @@ const ViewselectedOptionDialog = ({
             <label className="mb-2">List Of Prices</label>
             <div>
               {!selectedOption?.price || selectedOption?.price?.length === 0 ? (
-                <lable className="mx-2">No Price Provided</lable>
+                <lable>No Price Provided</lable>
               ) : (
                 selectedOption?.price?.map((key, index) => {
                   return (
@@ -77,7 +68,7 @@ const ViewselectedOptionDialog = ({
             <div>
               {!selectedOption?.duration ||
               selectedOption?.duration?.length === 0 ? (
-                <lable className="mx-2">No Duration Provided</lable>
+                <lable>No Duration Provided</lable>
               ) : (
                 selectedOption.duration?.map((key, index) => {
                   return (
@@ -99,7 +90,7 @@ const ViewselectedOptionDialog = ({
             <div>
               {!selectedOption?.availableTime ||
               selectedOption?.availableTime?.length === 0 ? (
-                <lable className="mx-2">No Time Provided</lable>
+                <lable>No Time Provided</lable>
               ) : (
                 selectedOption?.availableTime?.map((key, index) => {
                   return (
@@ -120,7 +111,7 @@ const ViewselectedOptionDialog = ({
           <label className="mb-2">List Of Links</label>
           <div>
             {selectedOption?.links?.length === 0 ? (
-              <lable className="mx-2">No Link Provided</lable>
+              <lable>No Link Provided</lable>
             ) : (
               selectedOption?.links?.map((key, index) => {
                 return (

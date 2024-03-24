@@ -49,7 +49,7 @@ const variationForm = ({ variation }) => {
             </p>
           </div>
 
-          <div className="col-lg-4 mb-4" style={{ marginLeft: "-25px" }}>
+          <div className="col-lg-4 mb-4">
             <label>Experience</label>
             <p>
               {allExperience?.find((all) => all?.id === variation?.experienceId)
@@ -63,7 +63,7 @@ const variationForm = ({ variation }) => {
             <label className="mb-2">List Of Prices</label>
             <div>
               {!variation?.price || variation?.price?.length === 0 ? (
-                <lable className="mx-2">No Price Provided</lable>
+                <lable>No Price Provided</lable>
               ) : (
                 variation?.price?.map((key, index) => {
                   return (
@@ -84,7 +84,7 @@ const variationForm = ({ variation }) => {
             <label className="mb-2">List Of Durations</label>
             <div>
               {!variation?.duration || variation?.duration?.length === 0 ? (
-                <lable className="mx-2">No Duration Provided</lable>
+                <lable>No Duration Provided</lable>
               ) : (
                 variation.duration?.map((key, index) => {
                   return (
@@ -106,7 +106,7 @@ const variationForm = ({ variation }) => {
             <div>
               {!variation?.availableTime ||
               variation?.availableTime?.length === 0 ? (
-                <lable className="mx-2">No Time Provided</lable>
+                <lable>No Time Provided</lable>
               ) : (
                 variation?.availableTime?.map((key, index) => {
                   return (
@@ -127,7 +127,7 @@ const variationForm = ({ variation }) => {
           <label className="mb-2">List Of Links</label>
           <div>
             {variation?.links?.length === 0 ? (
-              <lable className="mx-2">No Link Provided</lable>
+              <lable>No Link Provided</lable>
             ) : (
               variation?.links?.map((key, index) => {
                 return (
@@ -224,7 +224,11 @@ const variationForm = ({ variation }) => {
           <div className="col-lg-12">
             <label>Description</label>
             <RichTextEditor
-              initialValue={variation?.description}
+              initialValue={
+                variation?.description !== ""
+                  ? variation?.description
+                  : "No Description Provided"
+              }
               readonly={true}
             />
           </div>
@@ -233,7 +237,11 @@ const variationForm = ({ variation }) => {
           <div className="col-lg-12">
             <label>Terms & Conditions</label>
             <RichTextEditor
-              initialValue={variation?.termsAndConditions}
+              initialValue={
+                variation?.termsAndConditions !== ""
+                  ? variation?.termsAndConditions
+                  : "No Terms & Condition Provided"
+              }
               readonly={true}
             />
           </div>

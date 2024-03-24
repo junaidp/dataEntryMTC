@@ -6,13 +6,12 @@ import { useSelector } from "react-redux";
 
 const ViewServiceeDialog = ({ setShowViewSelectedService }) => {
   const { selectedService } = useSelector((state) => state.services);
-  const { allProvider } = useSelector((state) => state?.providers);
   return (
     <div className="px-4 py-4">
       <h2 className="pb-4 heading">View Service</h2>
       <div>
         <div className="row">
-          <div className="col-lg-4 mb-4">
+          <div className="col-lg-6 mb-4">
             <label>Service title:</label>
             <p>
               {selectedService?.title
@@ -20,20 +19,12 @@ const ViewServiceeDialog = ({ setShowViewSelectedService }) => {
                 : "No Title Provided"}
             </p>
           </div>
-          <div className="col-lg-4 mb-4">
+          <div className="col-lg-6 mb-4">
             <label>Service address:</label>
             <p>
               {selectedService?.address
                 ? selectedService?.address
                 : "No Address Provided"}
-            </p>
-          </div>
-          <div className="col-lg-4 mb-4">
-            <label>Provider:</label>
-            <p>
-              {allProvider?.find(
-                (all) => all?.id === selectedService?.providerId
-              )?.name || "No Provider Provided"}
             </p>
           </div>
         </div>

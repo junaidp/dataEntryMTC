@@ -77,9 +77,6 @@ const ServiceDialogForm = ({
                 handleChangeDescription={handleChangeDescription}
                 readonly={false}
               />
-              {formik.touched.description && formik.errors.description && (
-                <div className="error">{formik.errors.description}</div>
-              )}
             </div>
           </div>
 
@@ -92,10 +89,6 @@ const ServiceDialogForm = ({
                 variant="outlined"
                 className="form-control"
                 {...formik.getFieldProps("xpAddress")}
-                error={
-                  formik.touched.xpAddress && Boolean(formik.errors.xpAddress)
-                }
-                helperText={formik.touched.xpAddress && formik.errors.xpAddress}
               />
             </div>
           </div>
@@ -344,10 +337,6 @@ const ServiceDialogForm = ({
               handleChangeDescription={handleChangeTermsAndConditions}
               readonly={false}
             />
-            {formik.touched.termsAndConditions &&
-              formik.errors.termsAndConditions && (
-                <div className="error">{formik.errors.termsAndConditions}</div>
-              )}
           </div>
         </div>
         <div className="mb-4 mt-4">

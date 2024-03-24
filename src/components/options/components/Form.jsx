@@ -46,7 +46,7 @@ const optionForm = ({ option }) => {
               {option?.xpAddress ? option?.xpAddress : "No Address Provided"}
             </p>
           </div>
-          <div className="col-lg-4 mb-4" style={{ marginLeft: "-25px" }}>
+          <div className="col-lg-4 mb-4">
             <label>Experience</label>
             <p>
               {allExperience?.find((all) => all?.id === option?.experienceId)
@@ -60,7 +60,7 @@ const optionForm = ({ option }) => {
             <label className="mb-2">List Of Prices</label>
             <div>
               {!option?.price || option?.price?.length === 0 ? (
-                <lable className="mx-2">No Price Provided</lable>
+                <lable>No Price Provided</lable>
               ) : (
                 option?.price?.map((key, index) => {
                   return (
@@ -81,7 +81,7 @@ const optionForm = ({ option }) => {
             <label className="mb-2">List Of Durations</label>
             <div>
               {!option?.duration || option?.duration?.length === 0 ? (
-                <lable className="mx-2">No Duration Provided</lable>
+                <lable>No Duration Provided</lable>
               ) : (
                 option.duration?.map((key, index) => {
                   return (
@@ -102,7 +102,7 @@ const optionForm = ({ option }) => {
             <label className="mb-2">List Of Available Times</label>
             <div>
               {!option?.availableTime || option?.availableTime?.length === 0 ? (
-                <lable className="mx-2">No Time Provided</lable>
+                <lable>No Time Provided</lable>
               ) : (
                 option?.availableTime?.map((key, index) => {
                   return (
@@ -123,7 +123,7 @@ const optionForm = ({ option }) => {
           <label className="mb-2">List Of Links</label>
           <div>
             {option?.links?.length === 0 ? (
-              <lable className="mx-2">No Link Provided</lable>
+              <lable>No Link Provided</lable>
             ) : (
               option?.links?.map((key, index) => {
                 return (
@@ -218,7 +218,11 @@ const optionForm = ({ option }) => {
           <div className="col-lg-12">
             <label>Description</label>
             <RichTextEditor
-              initialValue={option?.description}
+              initialValue={
+                option?.description !== ""
+                  ? option?.description
+                  : "No Description Provided"
+              }
               readonly={true}
             />
           </div>
@@ -227,7 +231,11 @@ const optionForm = ({ option }) => {
           <div className="col-lg-12">
             <label>Terms & Conditions</label>
             <RichTextEditor
-              initialValue={option?.termsAndConditions}
+              initialValue={
+                option?.termsAndConditions !== ""
+                  ? option?.termsAndConditions
+                  : "No Terms & Condition Provided"
+              }
               readonly={true}
             />
           </div>

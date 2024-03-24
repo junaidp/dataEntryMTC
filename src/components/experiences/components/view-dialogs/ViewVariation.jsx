@@ -7,7 +7,6 @@ const ViewSelectedVariationDialog = ({
   selectedVariation,
   setShowViewVariationDialog,
 }) => {
-  const { allProvider } = useSelector((state) => state?.providers);
   const { allExperience } = useSelector((state) => state?.experiences);
   return (
     <div className="px-4 py-4">
@@ -32,15 +31,7 @@ const ViewSelectedVariationDialog = ({
           </div>
         </div>
         <div className="row">
-          <div className="col-lg-6 mb-4">
-            <label>Provider</label>
-            <p>
-              {allProvider?.find(
-                (all) => all?.id === selectedVariation?.providerId
-              )?.name || "No Provider Provided"}
-            </p>
-          </div>
-          <div className="col-lg-6 mb-4">
+          <div className="col-lg-12 mb-4">
             <label>Experience</label>
             <p>
               {allExperience?.find(
@@ -56,7 +47,7 @@ const ViewSelectedVariationDialog = ({
             <div>
               {!selectedVariation?.price ||
               selectedVariation?.price?.length === 0 ? (
-                <lable className="mx-2">No Price Provided</lable>
+                <lable>No Price Provided</lable>
               ) : (
                 selectedVariation?.price?.map((key, index) => {
                   return (
@@ -78,7 +69,7 @@ const ViewSelectedVariationDialog = ({
             <div>
               {!selectedVariation?.duration ||
               selectedVariation?.duration?.length === 0 ? (
-                <lable className="mx-2">No Duration Provided</lable>
+                <lable>No Duration Provided</lable>
               ) : (
                 selectedVariation.duration?.map((key, index) => {
                   return (
@@ -100,7 +91,7 @@ const ViewSelectedVariationDialog = ({
             <div>
               {!selectedVariation?.availableTime ||
               selectedVariation?.availableTime?.length === 0 ? (
-                <lable className="mx-2">No Time Provided</lable>
+                <lable>No Time Provided</lable>
               ) : (
                 selectedVariation?.availableTime?.map((key, index) => {
                   return (
@@ -121,7 +112,7 @@ const ViewSelectedVariationDialog = ({
           <label className="mb-2">List Of Links</label>
           <div>
             {selectedVariation?.links?.length === 0 ? (
-              <lable className="mx-2">No Link Provided</lable>
+              <lable>No Link Provided</lable>
             ) : (
               selectedVariation?.links?.map((key, index) => {
                 return (
