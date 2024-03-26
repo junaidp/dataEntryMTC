@@ -180,7 +180,7 @@ const Form = ({ experience, currentExperienceId }) => {
               experience?.linkWithOtherExperience?.map((key, index) => {
                 return (
                   <Chip
-                    label={key?.experienceName ? key?.experienceName : key?.why}
+                    label={`${key?.experienceName}-${key?.why}`}
                     key={index}
                     variant="outlined"
                     className={`mr-2 mb-2`}
@@ -190,6 +190,27 @@ const Form = ({ experience, currentExperienceId }) => {
             )}
           </div>
         </div>
+        <div className="mb-4">
+          <label className="mb-2">List Of Link With Other Services</label>
+          <div>
+            {!experience?.linkWithOtherService ||
+            experience?.linkWithOtherService?.length === 0 ? (
+              <p>No Link With Other Service Provided</p>
+            ) : (
+              experience?.linkWithOtherService?.map((key, index) => {
+                return (
+                  <Chip
+                    label={`${key?.serviceName}-${key?.why}`}
+                    key={index}
+                    variant="outlined"
+                    className={`mr-2 mb-2`}
+                  />
+                );
+              })
+            )}
+          </div>
+        </div>
+
         <div className="mb-4">
           <label className="mb-2">List Of Links</label>
           <div>

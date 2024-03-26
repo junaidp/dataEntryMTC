@@ -21,6 +21,7 @@ import { setupGetAllOptions } from "../../global-redux/reducers/options/slice";
 import { setupGetAllVariations } from "../../global-redux/reducers/variations/slice";
 import { resetOptionAddSuccess } from "../../global-redux/reducers/options/slice";
 import { resetVariationAddSuccess } from "../../global-redux/reducers/variations/slice";
+import { setupGetAllServiceWithOutParama } from "../../global-redux/reducers/services/slice";
 
 const Experiences = ({
   showAddExperienceDialog,
@@ -121,10 +122,11 @@ const Experiences = ({
 
   React.useEffect(() => {
     if (experienceAddSuccess) {
-      setShowCurrentExperienceId("");
       dispatch(setupGetAllExperienceWithOutParams());
       dispatch(setupGetAllVendors());
       dispatch(setupGetAllProviderWithOutParams());
+      dispatch(setupGetAllServiceWithOutParama());
+      setShowCurrentExperienceId("");
       dispatch(resetExperienceAddSuccess());
     }
   }, [experienceAddSuccess]);
@@ -133,6 +135,7 @@ const Experiences = ({
     dispatch(setupGetAllExperienceWithOutParams());
     dispatch(setupGetAllProviderWithOutParams());
     dispatch(setupGetAllVendors());
+    dispatch(setupGetAllServiceWithOutParama());
   }, []);
 
   return (

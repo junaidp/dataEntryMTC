@@ -101,17 +101,14 @@ const RichTextEditor = ({
     }
   };
 
-  return React.useMemo(
-    () => (
-      <JoditEditor
-        ref={editor}
-        config={config}
-        tabIndex={1}
-        value={content}
-        onChange={handleEditorChange}
-      />
-    ),
-    []
+  return (
+    <JoditEditor
+      ref={editor}
+      config={config}
+      tabIndex={1}
+      value={content}
+      onChange={handleEditorChange}
+    />
   );
 };
 

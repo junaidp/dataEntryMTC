@@ -13,6 +13,7 @@ import { useSelector, useDispatch } from "react-redux";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import { toast } from "react-toastify";
+import { regions } from "../../../../../constants/index";
 
 const AddVendorDialog = ({ setShowAddVendorDialog }) => {
   const dispatch = useDispatch();
@@ -146,7 +147,13 @@ const AddVendorDialog = ({ setShowAddVendorDialog }) => {
                   {...formik.getFieldProps("regionsCovered")}
                 >
                   <MenuItem value="">Select Region</MenuItem>
-                  <MenuItem value="EU">EU</MenuItem>
+                  {regions?.map((region, index) => {
+                    return (
+                      <MenuItem value={region} key={index}>
+                        {region}
+                      </MenuItem>
+                    );
+                  })}
                 </Select>
               </FormControl>
             </div>

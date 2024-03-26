@@ -13,6 +13,7 @@ import { useSelector } from "react-redux";
 import Form from "./components/Form";
 import EditServiceDialog from "./components/EditServiceDialog";
 import { setupGetAllProviderWithOutParams } from "../../global-redux/reducers/providers/slice";
+import { setupGetAllExperienceWithOutParams } from "../../global-redux/reducers/experiences/slice";
 
 const Services = ({ showAddServiceDialog, setShowAddServiceDialog }) => {
   const dispatch = useDispatch();
@@ -32,10 +33,11 @@ const Services = ({ showAddServiceDialog, setShowAddServiceDialog }) => {
 
   React.useEffect(() => {
     if (serviceAddSuccess) {
-      setCurrentServiceId("");
       dispatch(setupGetAllServiceWithOutParama());
       dispatch(setupGetAllProviderWithOutParams());
       dispatch(setupGetAllVendors());
+      dispatch(setupGetAllExperienceWithOutParams());
+      setCurrentServiceId("");
       dispatch(resetServiceAddSuccess());
     }
   }, [serviceAddSuccess]);
@@ -43,6 +45,7 @@ const Services = ({ showAddServiceDialog, setShowAddServiceDialog }) => {
   React.useEffect(() => {
     dispatch(setupGetAllServiceWithOutParama());
     dispatch(setupGetAllVendors());
+    dispatch(setupGetAllExperienceWithOutParams());
     dispatch(setupGetAllProviderWithOutParams());
   }, []);
 

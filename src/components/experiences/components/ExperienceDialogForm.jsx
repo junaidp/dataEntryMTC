@@ -6,6 +6,7 @@ import { Card } from "@mui/material";
 import MultipleSelectExperiences from "./MultiSelectExperiences";
 import MultipleSelectProviders from "./MultiSelectProviders";
 import AutoCompleteVendor from "./AutoCompleteVendor";
+import MultiSelectServices from "./MultiSelectServices";
 
 const ExperienceDialogForm = ({
   formik,
@@ -58,6 +59,15 @@ const ExperienceDialogForm = ({
   providers,
   setProviders,
   whyRef,
+  allService,
+  serviceWhyRef,
+  services,
+  setServices,
+  serviceWhy,
+  setServiceWhy,
+  linkWithOtherServices,
+  handleAddService,
+  handleDeleteLinkWithOtherServices,
 }) => {
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -89,7 +99,7 @@ const ExperienceDialogForm = ({
               />
             </div>
           </div>
-          <div className="mb-2 w-100">
+          <div className="mb-2 mt-4 w-100">
             <MultipleSelectProviders
               setProviders={setProviders}
               providers={providers}
@@ -355,6 +365,66 @@ const ExperienceDialogForm = ({
               )}
             </Card>
           </div>
+          {/*  */}
+          <div className="row mb-4 p-0">
+            <div className="col-lg-6">
+              <MultiSelectServices
+                setServices={setServices}
+                services={services}
+                names={allService?.map((all) => all?.title)}
+              />
+            </div>
+            <form
+              className="col-lg-6 mb-4 row"
+              onSubmit={() => handleAddService()}
+            >
+              <div className="col-lg-8">
+                <label className="w-100 mb-2">Why:</label>
+                <TextField
+                  className="form-control"
+                  value={serviceWhy}
+                  onChange={(event) => setServiceWhy(event.target.value)}
+                  ref={serviceWhyRef}
+                />
+              </div>
+              <div
+                className={`col-lg-4 text-end float-end align-self-end mb-4`}
+              >
+                <button
+                  className="btn btn-labeled btn-primary w-100 shadow"
+                  type="submit"
+                  onClick={handleAddService}
+                >
+                  <span className="btn-label me-2">
+                    <i className="fa fa-plus"></i>
+                  </span>
+                  Add Service
+                </button>
+              </div>
+            </form>
+
+            <label className="mb-2">List Of Services:</label>
+            <Card className="py-4 col-lg-12">
+              {linkWithOtherServices?.length === 0 ? (
+                <lable>No Service Provided</lable>
+              ) : (
+                linkWithOtherServices.map((key, index) => {
+                  return (
+                    <Chip
+                      label={`${key?.serviceName}-${key?.why}`}
+                      key={index}
+                      variant="outlined"
+                      className="mx-2 mb-2"
+                      onDelete={() =>
+                        handleDeleteLinkWithOtherServices(key?.id)
+                      }
+                    />
+                  );
+                })
+              )}
+            </Card>
+          </div>
+          {/*  */}
           <div className="mb-4">
             <h5>Links:</h5>
             <div>

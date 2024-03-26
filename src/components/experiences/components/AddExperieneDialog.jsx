@@ -12,6 +12,7 @@ const AddExperienceDialog = ({ setShowAddExperienceDialog }) => {
   const { allExperience } = useSelector((state) => state.experiences);
   const { allProvider } = useSelector((state) => state.providers);
   const { allVendors } = useSelector((state) => state.vendors);
+  const { allService } = useSelector((state) => state.services);
   const [experience, setExperiences] = React.useState([]);
   const [keywords, setKeywords] = React.useState([]);
   const [keyword, setKeyword] = React.useState("");
@@ -28,6 +29,9 @@ const AddExperienceDialog = ({ setShowAddExperienceDialog }) => {
   const [linkWithOtherExperiences, setLinkWithOtherExperiences] =
     React.useState([]);
   const [providers, setProviders] = React.useState([]);
+  const [services, setServices] = React.useState([]);
+  const [serviceWhy, setServiceWhy] = React.useState("");
+  const [linkWithOtherServices, setLinkWithOtherServices] = React.useState([]);
 
   // Input Refs
   const priceRef = React.useRef(null);
@@ -36,6 +40,7 @@ const AddExperienceDialog = ({ setShowAddExperienceDialog }) => {
   const keywordRef = React.useRef(null);
   const linkRef = React.useRef(null);
   const whyRef = React.useRef(null);
+  const serviceWhyRef = React.useRef(null);
 
   const { experienceAddSuccess, loading } = useSelector(
     (state) => state?.experiences
@@ -83,6 +88,14 @@ const AddExperienceDialog = ({ setShowAddExperienceDialog }) => {
                   return {
                     experienceId: item?.experienceId,
                     experienceName: item?.experienceName,
+                    why: item?.why,
+                  };
+                }) || [],
+              linkWithOtherService:
+                linkWithOtherServices?.map((item) => {
+                  return {
+                    serviceId: item?.serviceId,
+                    serviceName: item?.serviceName,
                     why: item?.why,
                   };
                 }) || [],
@@ -246,6 +259,38 @@ const AddExperienceDialog = ({ setShowAddExperienceDialog }) => {
     );
   }
 
+  function handleAddService(event) {
+    event.preventDefault();
+    if (serviceWhyRef.current) {
+      serviceWhyRef.current.focus();
+    }
+    if (services?.length !== 0 && serviceWhy !== "") {
+      let filteredArray = allService.filter((item) =>
+        services.includes(item?.title)
+      );
+      let finalArray = [
+        ...linkWithOtherServices,
+        ...filteredArray?.map((all) => {
+          return {
+            serviceId: all?.id,
+            serviceName: all?.title,
+            why: serviceWhy,
+            id: uuidv4(),
+          };
+        }),
+      ];
+      setLinkWithOtherServices(finalArray);
+      setServiceWhy("");
+      setServices([]);
+    }
+  }
+
+  function handleDeleteLinkWithOtherServices(id) {
+    setLinkWithOtherServices((pre) =>
+      pre?.filter((singleItem) => singleItem?.id !== id)
+    );
+  }
+
   React.useEffect(() => {
     if (experienceAddSuccess) {
       formik.resetForm({ values: initialValues });
@@ -306,6 +351,15 @@ const AddExperienceDialog = ({ setShowAddExperienceDialog }) => {
       providers={providers}
       setProviders={setProviders}
       whyRef={whyRef}
+      allService={allService}
+      serviceWhyRef={serviceWhyRef}
+      services={services}
+      setServices={setServices}
+      serviceWhy={serviceWhy}
+      setServiceWhy={setServiceWhy}
+      linkWithOtherServices={linkWithOtherServices}
+      handleAddService={handleAddService}
+      handleDeleteLinkWithOtherServices={handleDeleteLinkWithOtherServices}
     />
   );
 };

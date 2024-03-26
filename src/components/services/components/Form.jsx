@@ -125,7 +125,27 @@ const ServiceForm = ({ service }) => {
                     label={`${key?.serviceName}-${key?.why}`}
                     key={index}
                     variant="outlined"
-                    className="mb-2"
+                    className="mb-2 mr-2"
+                  />
+                );
+              })
+            )}
+          </div>
+        </div>
+        <div className="mb-4">
+          <label className="mb-2">List Of Link With Other Experiences</label>
+          <div>
+            {!service?.linkWithOtherExperience ||
+            service?.linkWithOtherExperience?.length === 0 ? (
+              <p>No Link With Other Experience Provided</p>
+            ) : (
+              service?.linkWithOtherExperience?.map((key, index) => {
+                return (
+                  <Chip
+                    label={`${key?.experienceName}-${key?.why}`}
+                    key={index}
+                    variant="outlined"
+                    className="mb-2 mr-2"
                   />
                 );
               })

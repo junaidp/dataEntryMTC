@@ -1,7 +1,7 @@
 import React, { useRef, useMemo } from "react";
 import JoditEditor from "jodit-react";
 
-const RichTextEditor = ({ initialValue, readonly, placeholder }) => {
+const RichTextEditor = ({ initialValue, readonly,placeholder }) => {
   const editor = useRef(null);
   const [content, setContent] = React.useState("");
 
@@ -22,6 +22,7 @@ const RichTextEditor = ({ initialValue, readonly, placeholder }) => {
       spellcheck: true,
       readonly: readonly,
       placeholder: placeholder || "",
+
 
       buttons: [
         "bold",
@@ -85,17 +86,8 @@ const RichTextEditor = ({ initialValue, readonly, placeholder }) => {
     }
   }, [initialValue]);
 
-  return React.useMemo(
-    () => (
-      <JoditEditor
-        ref={editor}
-        config={config}
-        tabIndex={1}
-        value={content}
-        onChange={handleEditorChange}
-      />
-    ),
-    []
+  return (
+    <JoditEditor ref={editor} config={config} tabIndex={1} value={content} />
   );
 };
 

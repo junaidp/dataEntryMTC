@@ -15,6 +15,7 @@ const EditExperienceDialog = ({
   const { allExperience } = useSelector((state) => state.experiences);
   const { allProvider } = useSelector((state) => state.providers);
   const { allVendors } = useSelector((state) => state.vendors);
+  const { allService } = useSelector((state) => state.services);
   const [experience, setExperiences] = React.useState([]);
   const [keywords, setKeywords] = React.useState([]);
   const [keyword, setKeyword] = React.useState("");
@@ -31,6 +32,9 @@ const EditExperienceDialog = ({
   const [linkWithOtherExperiences, setLinkWithOtherExperiences] =
     React.useState([]);
   const [providers, setProviders] = React.useState([]);
+  const [services, setServices] = React.useState([]);
+  const [serviceWhy, setServiceWhy] = React.useState("");
+  const [linkWithOtherServices, setLinkWithOtherServices] = React.useState([]);
 
   // Input Refs
   const priceRef = React.useRef(null);
@@ -39,6 +43,7 @@ const EditExperienceDialog = ({
   const keywordRef = React.useRef(null);
   const linkRef = React.useRef(null);
   const whyRef = React.useRef(null);
+  const serviceWhyRef = React.useRef(null);
 
   const { experienceAddSuccess, loading } = useSelector(
     (state) => state?.experiences
@@ -87,6 +92,14 @@ const EditExperienceDialog = ({
                   return {
                     experienceId: item?.experienceId,
                     experienceName: item?.experienceName,
+                    why: item?.why,
+                  };
+                }) || [],
+              linkWithOtherService:
+                linkWithOtherServices?.map((item) => {
+                  return {
+                    serviceId: item?.serviceId,
+                    serviceName: item?.serviceName,
                     why: item?.why,
                   };
                 }) || [],
@@ -250,6 +263,38 @@ const EditExperienceDialog = ({
     );
   }
 
+  function handleAddService(event) {
+    event.preventDefault();
+    if (serviceWhyRef.current) {
+      serviceWhyRef.current.focus();
+    }
+    if (services?.length !== 0 && serviceWhy !== "") {
+      let filteredArray = allService.filter((item) =>
+        services.includes(item?.title)
+      );
+      let finalArray = [
+        ...linkWithOtherServices,
+        ...filteredArray?.map((all) => {
+          return {
+            serviceId: all?.id,
+            serviceName: all?.title,
+            why: serviceWhy,
+            id: uuidv4(),
+          };
+        }),
+      ];
+      setLinkWithOtherServices(finalArray);
+      setServiceWhy("");
+      setServices([]);
+    }
+  }
+
+  function handleDeleteLinkWithOtherServices(id) {
+    setLinkWithOtherServices((pre) =>
+      pre?.filter((singleItem) => singleItem?.id !== id)
+    );
+  }
+
   React.useEffect(() => {
     if (experienceAddSuccess) {
       formik.resetForm({ values: initialValues });
@@ -312,16 +357,30 @@ const EditExperienceDialog = ({
           };
         })
       );
-      setLinkWithOtherExperiences(
-        selectedExperience?.linkWithOtherExperience?.map((singleItem) => {
-          return {
-            experienceId: singleItem?.experienceId,
-            experienceName: singleItem?.experienceName,
-            why: singleItem?.why,
-            id: uuidv4(),
-          };
-        })
-      );
+      if (selectedExperience?.linkWithOtherExperience) {
+        setLinkWithOtherExperiences(
+          selectedExperience?.linkWithOtherExperience?.map((singleItem) => {
+            return {
+              experienceId: singleItem?.experienceId,
+              experienceName: singleItem?.experienceName,
+              why: singleItem?.why,
+              id: uuidv4(),
+            };
+          })
+        );
+      }
+      if (selectedExperience?.linkWithOtherService) {
+        setLinkWithOtherServices(
+          selectedExperience?.linkWithOtherService?.map((singleItem) => {
+            return {
+              serviceId: singleItem?.serviceId,
+              serviceName: singleItem?.serviceName,
+              why: singleItem?.why,
+              id: uuidv4(),
+            };
+          })
+        );
+      }
       if (
         selectedExperience?.providers &&
         selectedExperience?.providers?.length !== 0
@@ -385,6 +444,15 @@ const EditExperienceDialog = ({
       providers={providers}
       setProviders={setProviders}
       whyRef={whyRef}
+      allService={allService}
+      serviceWhyRef={serviceWhyRef}
+      services={services}
+      setServices={setServices}
+      serviceWhy={serviceWhy}
+      setServiceWhy={setServiceWhy}
+      linkWithOtherServices={linkWithOtherServices}
+      handleAddService={handleAddService}
+      handleDeleteLinkWithOtherServices={handleDeleteLinkWithOtherServices}
     />
   );
 };

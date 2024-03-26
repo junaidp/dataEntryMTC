@@ -9,6 +9,7 @@ import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import MultipleSelectProviders from "./MultiSelectProviders";
+import MultiSelectExperiences from "./MultiSelectExperiences";
 
 const ServiceDialogForm = ({
   formik,
@@ -59,6 +60,15 @@ const ServiceDialogForm = ({
   providers,
   setProviders,
   whyRef,
+  setExperiences,
+  experience,
+  allExperience,
+  experienceWhyRef,
+  setExperienceWhy,
+  experienceWhy,
+  handleAddExperience,
+  linkWithOtherExperiences,
+  handleDeleteLinkWithOtherExperience,
 }) => {
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -326,27 +336,35 @@ const ServiceDialogForm = ({
                 names={allService?.map((all) => all?.title)}
               />
             </div>
-            <div className="col-lg-4 mb-4">
-              <label className="w-100 mb-2">Why:</label>
-              <TextField
-                className="form-control"
-                value={serviceWhy}
-                onChange={(event) => setServiceWhy(event.target.value)}
-                ref={whyRef}
-              />
-            </div>
-            <div className={`col-lg-2 text-end float-end align-self-end mb-4`}>
-              <button
-                className="btn btn-labeled btn-primary w-100 shadow"
-                type="submit"
-                onClick={handleAddServices}
+            <form
+              onSubmit={() => handleAddExperience()}
+              className="col-lg-6 mb-4 row"
+            >
+              <div className="col-lg-8">
+                <label className="w-100 mb-2">Why:</label>
+                <TextField
+                  className="form-control"
+                  ref={experienceWhyRef}
+                  value={experienceWhy}
+                  onChange={(event) => setExperienceWhy(event.target.value)}
+                />
+              </div>
+              <div
+                className={`col-lg-4 text-end float-end align-self-end mb-4`}
               >
-                <span className="btn-label me-2">
-                  <i className="fa fa-plus"></i>
-                </span>
-                Add Service
-              </button>
-            </div>
+                <button
+                  className="btn btn-labeled btn-primary w-100 shadow"
+                  type="submit"
+                  onClick={handleAddExperience}
+                >
+                  <span className="btn-label me-2">
+                    <i className="fa fa-plus"></i>
+                  </span>
+                  Add Experience
+                </button>
+              </div>
+            </form>
+
             <label className="mb-2">List Of Services:</label>
             <Card className="py-4">
               {linkWithOtherServices?.length === 0 ? (
@@ -361,6 +379,56 @@ const ServiceDialogForm = ({
                       className="mx-2 mb-2"
                       onDelete={() =>
                         handleDeleteLinkWithOtherServices(key?.id)
+                      }
+                    />
+                  );
+                })
+              )}
+            </Card>
+          </div>
+          <div className="row mb-4">
+            <div className="col-lg-6">
+              <MultiSelectExperiences
+                setExperiences={setExperiences}
+                experience={experience}
+                names={allExperience?.map((all) => all?.title)}
+              />
+            </div>
+            <div className="col-lg-4 mb-4">
+              <label className="w-100 mb-2">Why:</label>
+              <TextField
+                className="form-control"
+                value={experienceWhy}
+                onChange={(event) => setExperienceWhy(event.target.value)}
+                ref={experienceWhyRef}
+              />
+            </div>
+            <div className={`col-lg-2 text-end float-end align-self-end mb-4`}>
+              <button
+                className="btn btn-labeled btn-primary w-100 shadow"
+                type="submit"
+                onClick={handleAddExperience}
+              >
+                <span className="btn-label me-2">
+                  <i className="fa fa-plus"></i>
+                </span>
+                Add Experience
+              </button>
+            </div>
+            <label className="mb-2">List Of Experiences:</label>
+            <Card className="py-4">
+              {linkWithOtherExperiences?.length === 0 ? (
+                <lable className="mx-2">No Experience Provided</lable>
+              ) : (
+                linkWithOtherExperiences.map((key, index) => {
+                  return (
+                    <Chip
+                      label={`${key?.experienceName}-${key?.why}`}
+                      key={index}
+                      variant="outlined"
+                      className="mx-2 mb-2"
+                      onDelete={() =>
+                        handleDeleteLinkWithOtherExperience(key?.id)
                       }
                     />
                   );
