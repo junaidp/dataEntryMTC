@@ -3,6 +3,7 @@ import Button from "@mui/material/Button";
 import { useSelector, useDispatch } from "react-redux";
 import { CircularProgress } from "@mui/material";
 import { changeSelectedService } from "../../../../global-redux/reducers/services/slice";
+import { setupDeleteService } from "../../../../global-redux/reducers/services/slice";
 
 const serviceRecord = ({
   setShowAddServiceDialog,
@@ -31,7 +32,10 @@ const serviceRecord = ({
                 <table className="table table-bordered  table-hover rounded mb-0">
                   <thead className="bg-secondary text-white">
                     <tr>
-                      <th className="per80">Service List</th>
+                      <th>Service List</th>
+                      {allService && allService?.length !== 0 && (
+                        <th>Actions</th>
+                      )}
                     </tr>
                   </thead>
                   <tbody>
@@ -57,6 +61,25 @@ const serviceRecord = ({
                               >
                                 {service?.title}
                               </Button>
+                            </td>
+                            <td>
+                              <i
+                                className="fa-eye fa f-18 cursor-pointer"
+                                onClick={() => {
+                                  dispatch(changeSelectedService(service));
+                                  setShowViewSelectedService(true);
+                                }}
+                              ></i>
+                              <i
+                                className="fa fa-trash text-danger f-18 px-3 cursor-pointer"
+                                onClick={() =>
+                                  dispatch(
+                                    setupDeleteService(
+                                      `?serviceId=${service?.id}`
+                                    )
+                                  )
+                                }
+                              ></i>
                             </td>
                           </tr>
                         );

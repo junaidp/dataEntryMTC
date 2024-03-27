@@ -2,13 +2,25 @@ import React from "react";
 import Button from "@mui/material/Button";
 import ViewSelectedProvider from "../view-dialogs/ViewProvider";
 import AddProviderDialog from "../extras-add-dialogs.jsx/provider/AddProviderDialog";
+import { useDispatch } from "react-redux";
+import { setupAddExperience } from "../../../../global-redux/reducers/experiences/slice";
 
 const ProviderRecord = ({ experience }) => {
+  const dispatch = useDispatch();
   const [selectedProvider, setSelectedProvider] = React.useState({});
   const [showViewSelectedProvider, setShowViewSelectedProvider] =
     React.useState(false);
   const [showAddProviderDialog, setShowAddProviderDialog] =
     React.useState(false);
+
+  function handleDeleteProvider(id) {
+    let filteredExperienceObject = {
+      ...experience,
+      providers: experience?.providers?.filter((all) => all?.providerId !== id),
+    };
+    dispatch(setupAddExperience([filteredExperienceObject]));
+  }
+
   return (
     <div className="row mt-4 mb-4">
       {showViewSelectedProvider && (
@@ -46,6 +58,10 @@ const ProviderRecord = ({ experience }) => {
               <thead className="bg-secondary text-white">
                 <tr>
                   <th className="per80">Provider List</th>
+                  {experience?.providers &&
+                    experience?.providers?.length !== 0 && (
+                      <th className="per80">Actions</th>
+                    )}
                 </tr>
               </thead>
               <tbody>
@@ -72,6 +88,21 @@ const ProviderRecord = ({ experience }) => {
                           >
                             {provider?.providerName}
                           </Button>
+                        </td>
+                        <td>
+                          <i
+                            className="fa-eye fa f-18 cursor-pointer"
+                            onClick={() => {
+                              setSelectedProvider(provider);
+                              setShowViewSelectedProvider(true);
+                            }}
+                          ></i>
+                          <i
+                            className="fa fa-trash text-danger f-18 px-3 cursor-pointer"
+                            onClick={() =>
+                              handleDeleteProvider(provider?.providerId)
+                            }
+                          ></i>
                         </td>
                       </tr>
                     );

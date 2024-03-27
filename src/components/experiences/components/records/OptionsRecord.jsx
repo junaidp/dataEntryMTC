@@ -1,7 +1,8 @@
 import React from "react";
 import Button from "@mui/material/Button";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { CircularProgress } from "@mui/material";
+import { setupDeleteOption } from "../../../../global-redux/reducers/options/slice";
 
 const OptionRecord = ({
   setShowAddOptionDialog,
@@ -9,6 +10,7 @@ const OptionRecord = ({
   setSelectedOption,
 }) => {
   const { allOptions, loading } = useSelector((state) => state?.options);
+  const dispatch = useDispatch();
   return (
     <div className="mt-4 mb-4">
       {loading ? (
@@ -30,11 +32,14 @@ const OptionRecord = ({
                 <table className="table table-bordered  table-hover rounded mb-0">
                   <thead className="bg-secondary text-white">
                     <tr>
-                      <th className="per80">Option List</th>
+                      <th>Option List</th>
+                      {allOptions && allOptions?.length !== 0 && (
+                        <th>Actions</th>
+                      )}
                     </tr>
                   </thead>
                   <tbody>
-                    {allOptions?.length === 0 ? (
+                    {!allOptions || allOptions?.length === 0 ? (
                       <tr>
                         <td className="per80">
                           <Button className="cursor-pointer">
@@ -56,6 +61,23 @@ const OptionRecord = ({
                               >
                                 {option?.title}
                               </Button>
+                            </td>
+                            <td>
+                              <i
+                                className="fa-eye fa f-18 cursor-pointer"
+                                onClick={() => {
+                                  setSelectedOption(option);
+                                  setShowViewOptionDialog(true);
+                                }}
+                              ></i>
+                              <i
+                                className="fa fa-trash text-danger f-18 px-3 cursor-pointer"
+                                onClick={() =>
+                                  dispatch(
+                                    setupDeleteOption(`?optionId=${option?.id}`)
+                                  )
+                                }
+                              ></i>
                             </td>
                           </tr>
                         );

@@ -2,7 +2,10 @@ import React from "react";
 import Button from "@mui/material/Button";
 import { useSelector, useDispatch } from "react-redux";
 import { CircularProgress } from "@mui/material";
-import { changeSelectedProvider } from "../../../../global-redux/reducers/providers/slice";
+import {
+  changeSelectedProvider,
+  setupDeleteProvider,
+} from "../../../../global-redux/reducers/providers/slice";
 
 const providersRecord = ({
   setShowAddProviderDialog,
@@ -31,7 +34,10 @@ const providersRecord = ({
                 <table className="table table-bordered  table-hover rounded mb-0">
                   <thead className="bg-secondary text-white">
                     <tr>
-                      <th className="per80">Provider List</th>
+                      <th>Provider List</th>
+                      {allProvider && allProvider?.length !== 0 && (
+                        <th>Actions</th>
+                      )}
                     </tr>
                   </thead>
                   <tbody>
@@ -57,6 +63,25 @@ const providersRecord = ({
                               >
                                 {provider?.name}
                               </Button>
+                            </td>
+                            <td>
+                              <i
+                                className="fa-eye fa f-18 cursor-pointer"
+                                onClick={() => {
+                                  dispatch(changeSelectedProvider(provider));
+                                  setShowViewSelectedProvider(true);
+                                }}
+                              ></i>
+                              <i
+                                className="fa fa-trash text-danger f-18 px-3 cursor-pointer"
+                                onClick={() =>
+                                  dispatch(
+                                    setupDeleteProvider(
+                                      `?providerId=${provider?.id}`
+                                    )
+                                  )
+                                }
+                              ></i>
                             </td>
                           </tr>
                         );

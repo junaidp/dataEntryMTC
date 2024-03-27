@@ -1,18 +1,27 @@
 import React from "react";
 import Chip from "@mui/material/Chip";
 import RichTextEditor from "../../common/RichText";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import ViewSelectedProvider from "./view-provider/Provider";
 import AddProviderDialog from "./add-provider/Provider";
 import Button from "@mui/material/Button";
+import { setupAddVariation } from "../../../global-redux/reducers/variations/slice";
 
 const variationForm = ({ variation }) => {
+  const dispatch = useDispatch();
   const { allExperience } = useSelector((state) => state?.experiences);
   const [selectedProvider, setSelectedProvider] = React.useState({});
   const [showViewSelectedProvider, setShowViewSelectedProvider] =
     React.useState(false);
   const [showAddProviderDialog, setShowAddProviderDialog] =
     React.useState(false);
+  function handleDeleteProvider(id) {
+    let filteredVariationObject = {
+      ...variation,
+      providers: variation?.providers?.filter((all) => all?.providerId !== id),
+    };
+    dispatch(setupAddVariation([filteredVariationObject]));
+  }
   return (
     <div className="px-4 py-4">
       {showViewSelectedProvider && (
@@ -180,12 +189,18 @@ const variationForm = ({ variation }) => {
                   <table className="table table-bordered  table-hover rounded mb-0">
                     <thead className="bg-secondary text-white">
                       <tr>
-                        <th className="per80">Provider List</th>
+                        <th>Provider List</th>
+                        {variation?.providers &&
+                          variation?.providers?.filter(
+                            (singleItem) => singleItem !== null
+                          )?.length !== 0 && <th>Actions</th>}
                       </tr>
                     </thead>
                     <tbody>
                       {!variation?.providers ||
-                      variation?.providers?.length === 0 ? (
+                      variation?.providers?.filter(
+                        (singleItem) => singleItem !== null
+                      )?.length === 0 ? (
                         <tr>
                           <td className="per80">
                             <Button className="cursor-pointer">
@@ -194,23 +209,40 @@ const variationForm = ({ variation }) => {
                           </td>
                         </tr>
                       ) : (
-                        variation?.providers?.map((provider, index) => {
-                          return (
-                            <tr key={index}>
-                              <td className="per80">
-                                <Button
-                                  className="cursor-pointer"
-                                  onClick={() => {
-                                    setSelectedProvider(provider);
-                                    setShowViewSelectedProvider(true);
-                                  }}
-                                >
-                                  {provider?.providerName}
-                                </Button>
-                              </td>
-                            </tr>
-                          );
-                        })
+                        variation?.providers
+                          ?.filter((singleItem) => singleItem !== null)
+                          ?.map((provider, index) => {
+                            return (
+                              <tr key={index}>
+                                <td className="per80">
+                                  <Button
+                                    className="cursor-pointer"
+                                    onClick={() => {
+                                      setSelectedProvider(provider);
+                                      setShowViewSelectedProvider(true);
+                                    }}
+                                  >
+                                    {provider?.providerName}
+                                  </Button>
+                                </td>
+                                <td>
+                                  <i
+                                    className="fa-eye fa f-18 cursor-pointer"
+                                    onClick={() => {
+                                      setSelectedProvider(provider);
+                                      setShowViewSelectedProvider(true);
+                                    }}
+                                  ></i>
+                                  <i
+                                    className="fa fa-trash text-danger f-18 px-3 cursor-pointer"
+                                    onClick={() =>
+                                      handleDeleteProvider(provider?.providerId)
+                                    }
+                                  ></i>
+                                </td>
+                              </tr>
+                            );
+                          })
                       )}
                     </tbody>
                   </table>

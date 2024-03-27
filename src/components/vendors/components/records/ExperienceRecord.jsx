@@ -3,6 +3,7 @@ import Button from "@mui/material/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { CircularProgress } from "@mui/material";
 import { changeSelectedExperience } from "../../../../global-redux/reducers/experiences/slice";
+import { setupDeleteExperience } from "../../../../global-redux/reducers/experiences/slice";
 
 const experienceRecord = ({
   setShowAddExperienceDialog,
@@ -31,7 +32,10 @@ const experienceRecord = ({
                 <table className="table table-bordered  table-hover rounded mb-0">
                   <thead className="bg-secondary text-white">
                     <tr>
-                      <th className="per80">Experience List</th>
+                      <th>Experience List</th>
+                      {allExperience && allExperience?.length !== 0 && (
+                        <th>Actions</th>
+                      )}
                     </tr>
                   </thead>
                   <tbody>
@@ -59,6 +63,28 @@ const experienceRecord = ({
                               >
                                 {experience?.title}
                               </Button>
+                            </td>
+
+                            <td>
+                              <i
+                                className="fa-eye fa f-18 cursor-pointer"
+                                onClick={() => {
+                                  dispatch(
+                                    changeSelectedExperience(experience)
+                                  );
+                                  setShowViewSelectedExperience(true);
+                                }}
+                              ></i>
+                              <i
+                                className="fa fa-trash text-danger f-18 px-3 cursor-pointer"
+                                onClick={() =>
+                                  dispatch(
+                                    setupDeleteExperience(
+                                      `?experienceId=${experience?.id}`
+                                    )
+                                  )
+                                }
+                              ></i>
                             </td>
                           </tr>
                         );
