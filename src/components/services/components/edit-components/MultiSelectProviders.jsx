@@ -3,12 +3,32 @@ import Chip from "@mui/material/Chip";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 
-export default function MultiSelectProviders({ names, setProviders }) {
+export default function MultiSelectProviders({
+  names,
+  setProviders,
+  selectedService,
+}) {
   const [value, setValue] = React.useState([]);
 
   React.useEffect(() => {
     setProviders(value);
   }, [value]);
+
+  React.useEffect(() => {
+    if (
+      selectedService?.providers &&
+      selectedService?.providers?.length !== 0
+    ) {
+      setValue(
+        selectedService?.providers?.map((all) => {
+          return {
+            title: all?.name,
+            id: all?.id,
+          };
+        })
+      );
+    }
+  }, [selectedService]);
 
   return (
     <Autocomplete

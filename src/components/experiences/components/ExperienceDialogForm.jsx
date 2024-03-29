@@ -48,7 +48,6 @@ const ExperienceDialogForm = ({
   keywordRef,
   linkRef,
   setExperiences,
-  experience,
   allExperience,
   allProvider,
   setExperienceWhy,
@@ -56,7 +55,6 @@ const ExperienceDialogForm = ({
   linkWithOtherExperiences,
   handleDeleteLinkWithOtherExperience,
   allVendors,
-  providers,
   setProviders,
   whyRef,
   allService,
@@ -68,6 +66,10 @@ const ExperienceDialogForm = ({
   linkWithOtherServices,
   handleAddService,
   handleDeleteLinkWithOtherServices,
+  resetExperienceMultiSelect,
+  setResetExperienceMultiSelect,
+  resetServiceMultiSelect,
+  setResetServiceMultiSelect,
 }) => {
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -84,6 +86,11 @@ const ExperienceDialogForm = ({
               {...formik.getFieldProps("title")}
               error={formik.touched.title && Boolean(formik.errors.title)}
               helperText={formik.touched.title && formik.errors.title}
+              onKeyPress={(event) => {
+                if (event.key === "Enter") {
+                  formik.handleSubmit();
+                }
+              }}
             />
           </div>
 
@@ -96,14 +103,25 @@ const ExperienceDialogForm = ({
                 variant="outlined"
                 className="form-control"
                 {...formik.getFieldProps("address")}
+                onKeyPress={(event) => {
+                  if (event.key === "Enter") {
+                    formik.handleSubmit();
+                  }
+                }}
               />
             </div>
           </div>
-          <div className="mb-2 mt-4 w-100">
+          <div className="mb-2 mt-3 w-100">
             <MultipleSelectProviders
               setProviders={setProviders}
-              providers={providers}
-              names={allProvider?.map((all) => all?.name)}
+              names={
+                allProvider?.map((all) => {
+                  return {
+                    title: all?.name,
+                    id: all?.id,
+                  };
+                }) || []
+              }
             />
           </div>
 
@@ -318,9 +336,17 @@ const ExperienceDialogForm = ({
           <div className="row mb-4">
             <div className="col-lg-6">
               <MultipleSelectExperiences
+                resetExperienceMultiSelect={resetExperienceMultiSelect}
+                setResetExperienceMultiSelect={setResetExperienceMultiSelect}
                 setExperiences={setExperiences}
-                experience={experience}
-                names={allExperience?.map((all) => all?.title)}
+                names={
+                  allExperience?.map((all) => {
+                    return {
+                      title: all?.title,
+                      id: all?.id,
+                    };
+                  }) || []
+                }
               />
             </div>
             <div className="col-lg-4 mb-4">
@@ -369,9 +395,17 @@ const ExperienceDialogForm = ({
           <div className="row mb-4 p-0">
             <div className="col-lg-6">
               <MultiSelectServices
+                resetServiceMultiSelect={resetServiceMultiSelect}
+                setResetServiceMultiSelect={setResetServiceMultiSelect}
                 setServices={setServices}
-                services={services}
-                names={allService?.map((all) => all?.title)}
+                names={
+                  allService?.map((all) => {
+                    return {
+                      title: all?.title,
+                      id: all?.id,
+                    };
+                  }) || []
+                }
               />
             </div>
             <form

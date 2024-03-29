@@ -52,8 +52,9 @@ const ServiceDialogForm = ({
   linkWithOtherServices,
   handleDeleteLinkWithOtherServices,
   whyRef,
-  providers,
   setProviders,
+  setResetServiceMultiSelect,
+  resetServiceMultiSelect,
 }) => {
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -70,6 +71,11 @@ const ServiceDialogForm = ({
               {...formik.getFieldProps("title")}
               error={formik.touched.title && Boolean(formik.errors.title)}
               helperText={formik.touched.title && formik.errors.title}
+              onKeyPress={(event) => {
+                if (event.key === "Enter") {
+                  formik.handleSubmit();
+                }
+              }}
             />
           </div>
 
@@ -82,15 +88,26 @@ const ServiceDialogForm = ({
                 variant="outlined"
                 className="form-control"
                 {...formik.getFieldProps("address")}
+                onKeyPress={(event) => {
+                  if (event.key === "Enter") {
+                    formik.handleSubmit();
+                  }
+                }}
               />
             </div>
           </div>
           <div className="row">
-            <div className="mb-2 w-100">
+            <div className="mb-4 mt-3 w-100">
               <MultipleSelectProviders
                 setProviders={setProviders}
-                providers={providers}
-                names={allProvider?.map((all) => all?.name)}
+                names={
+                  allProvider?.map((all) => {
+                    return {
+                      title: all?.name,
+                      id: all?.id,
+                    };
+                  }) || []
+                }
               />
             </div>
           </div>
@@ -297,9 +314,17 @@ const ServiceDialogForm = ({
           <div className="row mb-4">
             <div className="col-lg-6">
               <MultipleSelect
+                resetServiceMultiSelect={resetServiceMultiSelect}
+                setResetServiceMultiSelect={setResetServiceMultiSelect}
                 setServices={setServices}
-                services={services}
-                names={allService?.map((all) => all?.title)}
+                names={
+                  allService?.map((all) => {
+                    return {
+                      title: all?.title,
+                      id: all?.id,
+                    };
+                  }) || []
+                }
               />
             </div>
             <div className="col-lg-4 mb-4">

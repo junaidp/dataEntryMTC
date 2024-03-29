@@ -90,11 +90,17 @@ const OptionDialogForm = ({
           </div>
 
           <div className="row">
-            <div className="mb-2 w-100">
+            <div className="mb-4 w-100">
               <MultipleSelectProviders
                 setProviders={setProviders}
-                providers={providers}
-                names={allProvider?.map((all) => all?.name)}
+                names={
+                  allProvider?.map((all) => {
+                    return {
+                      title: all?.name,
+                      id: all?.id,
+                    };
+                  }) || []
+                }
               />
             </div>
           </div>

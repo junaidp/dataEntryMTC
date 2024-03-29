@@ -22,6 +22,7 @@ import { setupGetAllVariations } from "../../global-redux/reducers/variations/sl
 import { resetOptionAddSuccess } from "../../global-redux/reducers/options/slice";
 import { resetVariationAddSuccess } from "../../global-redux/reducers/variations/slice";
 import { setupGetAllServiceWithOutParama } from "../../global-redux/reducers/services/slice";
+import DuplicateExperienceDialog from "./components/DuplicateExperienceDialog";
 
 const Experiences = ({
   showAddExperienceDialog,
@@ -34,6 +35,7 @@ const Experiences = ({
   const { providerAddSuccess, currentProviderObject } = useSelector(
     (state) => state?.providers
   );
+  const [showDuplicateDialog, setShowDuplicateDialog] = React.useState(false);
   const { optionAddSuccess } = useSelector((state) => state.options);
   const { variationAddSuccess } = useSelector((state) => state.variations);
 
@@ -128,6 +130,7 @@ const Experiences = ({
       dispatch(setupGetAllServiceWithOutParama());
       setShowCurrentExperienceId("");
       dispatch(resetExperienceAddSuccess());
+      setPage(1);
     }
   }, [experienceAddSuccess]);
 
@@ -145,6 +148,16 @@ const Experiences = ({
           <div className="model-wrap">
             <AddExperienceDialog
               setShowAddExperienceDialog={setShowAddExperienceDialog}
+            />
+          </div>
+        </div>
+      )}
+      {showDuplicateDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <DuplicateExperienceDialog
+              setShowDuplicateDialog={setShowDuplicateDialog}
+              selectedExperience={selectedExperience}
             />
           </div>
         </div>
@@ -225,6 +238,18 @@ const Experiences = ({
                               <i className="fa fa-check-circle f-18"></i>
                             </span>
                             Delete
+                          </div>
+                          <div
+                            className={`btn btn-labeled btn-secondary px-3 shadow  my-4 `}
+                            onClick={() => {
+                              setSelectedExperience(experience);
+                              setShowDuplicateDialog(true);
+                            }}
+                          >
+                            <span className="btn-label me-2">
+                              <i className="fa fa-check-circle f-18"></i>
+                            </span>
+                            Duplicate
                           </div>
                         </div>
                         <Form

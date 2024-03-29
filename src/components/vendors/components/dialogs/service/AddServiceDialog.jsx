@@ -25,6 +25,8 @@ const AddServiceDialog = ({ setShowAddServiceDialog, currentVendorId }) => {
   const [serviceWhy, setServiceWhy] = React.useState("");
   const [linkWithOtherServices, setLinkWithOtherServices] = React.useState([]);
   const [providers, setProviders] = React.useState([]);
+  const [resetServiceMultiSelect, setResetServiceMultiSelect] =
+    React.useState(false);
 
   // Input Refs
   const priceRef = React.useRef(null);
@@ -54,7 +56,7 @@ const AddServiceDialog = ({ setShowAddServiceDialog, currentVendorId }) => {
     onSubmit: (values) => {
       if (!loading) {
         const filteredProvidersArray = allProvider?.filter((item) =>
-          providers.includes(item?.name)
+          providers?.map((singleItem) => singleItem?.id)?.includes(item?.id)
         );
         dispatch(
           setupAddService([
@@ -218,6 +220,7 @@ const AddServiceDialog = ({ setShowAddServiceDialog, currentVendorId }) => {
           };
         }),
       ];
+      setResetServiceMultiSelect(true);
       setLinkWithOtherServices(finalArray);
       setServiceWhy("");
       setServices([]);
@@ -287,6 +290,8 @@ const AddServiceDialog = ({ setShowAddServiceDialog, currentVendorId }) => {
       whyRef={whyRef}
       providers={providers}
       setProviders={setProviders}
+      setResetServiceMultiSelect={setResetServiceMultiSelect}
+      resetServiceMultiSelect={resetServiceMultiSelect}
     />
   );
 };

@@ -3,9 +3,9 @@ import TextField from "@mui/material/TextField";
 import RichTextEditor from "../../common/RichText";
 import Chip from "@mui/material/Chip";
 import { Card } from "@mui/material";
-import MultipleSelect from "./MultiSelect";
+import MultiSelectServices from "./MultiSelect";
 import AutoCompleteVendor from "./VendorAutoComplete";
-import MultipleSelectProviders from "./MultiSelectProviders";
+import MultiSelectProviders from "./MultiSelectProviders";
 import MultiSelectExperiences from "./MultiSelectExperiences";
 
 const ServiceDialogForm = ({
@@ -46,7 +46,6 @@ const ServiceDialogForm = ({
   keywordRef,
   linkRef,
   setServices,
-  services,
   allService,
   allProvider,
   setServiceWhy,
@@ -54,11 +53,9 @@ const ServiceDialogForm = ({
   linkWithOtherServices,
   handleDeleteLinkWithOtherServices,
   allVendors,
-  providers,
   setProviders,
   whyRef,
   setExperiences,
-  experience,
   allExperience,
   experienceWhyRef,
   setExperienceWhy,
@@ -66,6 +63,10 @@ const ServiceDialogForm = ({
   handleAddExperience,
   linkWithOtherExperiences,
   handleDeleteLinkWithOtherExperience,
+  resetExperienceMultiSelect,
+  setResetExperienceMultiSelect,
+  resetServiceMultiSelect,
+  setResetServiceMultiSelect,
 }) => {
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -82,6 +83,11 @@ const ServiceDialogForm = ({
               {...formik.getFieldProps("title")}
               error={formik.touched.title && Boolean(formik.errors.title)}
               helperText={formik.touched.title && formik.errors.title}
+              onKeyPress={(event) => {
+                if (event.key === "Enter") {
+                  formik.handleSubmit();
+                }
+              }}
             />
           </div>
 
@@ -94,15 +100,26 @@ const ServiceDialogForm = ({
                 variant="outlined"
                 className="form-control"
                 {...formik.getFieldProps("address")}
+                onKeyPress={(event) => {
+                  if (event.key === "Enter") {
+                    formik.handleSubmit();
+                  }
+                }}
               />
             </div>
           </div>
           <div className="row">
-            <div className="mt-2 w-100">
-              <MultipleSelectProviders
+            <div className="mt-4 w-100">
+              <MultiSelectProviders
                 setProviders={setProviders}
-                providers={providers}
-                names={allProvider?.map((all) => all?.name)}
+                names={
+                  allProvider?.map((all) => {
+                    return {
+                      title: all?.name,
+                      id: all?.id,
+                    };
+                  }) || []
+                }
               />
             </div>
           </div>
@@ -316,10 +333,18 @@ const ServiceDialogForm = ({
           </div>
           <div className="row mb-4">
             <div className="col-lg-6">
-              <MultipleSelect
+              <MultiSelectServices
+                resetServiceMultiSelect={resetServiceMultiSelect}
+                setResetServiceMultiSelect={setResetServiceMultiSelect}
                 setServices={setServices}
-                services={services}
-                names={allService?.map((all) => all?.title)}
+                names={
+                  allService?.map((all) => {
+                    return {
+                      title: all?.title,
+                      id: all?.id,
+                    };
+                  }) || []
+                }
               />
             </div>
             <div className="col-lg-4 mb-4">
@@ -367,9 +392,17 @@ const ServiceDialogForm = ({
           <div className="row mb-4">
             <div className="col-lg-6">
               <MultiSelectExperiences
+                resetExperienceMultiSelect={resetExperienceMultiSelect}
+                setResetExperienceMultiSelect={setResetExperienceMultiSelect}
                 setExperiences={setExperiences}
-                experience={experience}
-                names={allExperience?.map((all) => all?.title)}
+                names={
+                  allExperience?.map((all) => {
+                    return {
+                      title: all?.title,
+                      id: all?.id,
+                    };
+                  }) || []
+                }
               />
             </div>
             <form

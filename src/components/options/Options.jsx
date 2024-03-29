@@ -17,6 +17,7 @@ import {
   setupGetAllProviderWithOutParams,
   resetProviderAddSuccess,
 } from "../../global-redux/reducers/providers/slice";
+import DuplicateDialog from "./components/DuplicateDialog.jsx";
 
 const Options = ({ setShowAddOptionDialog, showAddOptionDialog }) => {
   const dispatch = useDispatch();
@@ -24,6 +25,7 @@ const Options = ({ setShowAddOptionDialog, showAddOptionDialog }) => {
   const { providerAddSuccess, currentProviderObject } = useSelector(
     (state) => state?.providers
   );
+  const [showDuplicateDialog, setShowDuplicateDialog] = React.useState(false);
   const [showDeleteOptionDialog, setShowDeleteOptionDialog] =
     React.useState(false);
   const [currentOptionId, setCurrentOptionId] = React.useState("");
@@ -91,6 +93,7 @@ const Options = ({ setShowAddOptionDialog, showAddOptionDialog }) => {
       dispatch(setupGetAllOptionsWithOutParams());
       dispatch(setupGetAllVendors());
       dispatch(setupGetAllProviderWithOutParams());
+      setPage(1)
     }
   }, [optionAddSuccess]);
 
@@ -107,6 +110,16 @@ const Options = ({ setShowAddOptionDialog, showAddOptionDialog }) => {
         <div className="modal-objective">
           <div className="model-wrap">
             <AddOptionDialog setShowAddOptionDialog={setShowAddOptionDialog} />
+          </div>
+        </div>
+      )}
+      {showDuplicateDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <DuplicateDialog
+              setShowDuplicateDialog={setShowDuplicateDialog}
+              selectedOption={selectedOption}
+            />
           </div>
         </div>
       )}
@@ -188,7 +201,20 @@ const Options = ({ setShowAddOptionDialog, showAddOptionDialog }) => {
                               </span>
                               Delete
                             </div>
+                            <div
+                              className={`btn btn-labeled btn-secondary px-3 shadow  my-4 `}
+                              onClick={() => {
+                                setSelectedOption(option);
+                                setShowDuplicateDialog(true);
+                              }}
+                            >
+                              <span className="btn-label me-2">
+                                <i className="fa fa-check-circle f-18"></i>
+                              </span>
+                              Duplicate
+                            </div>
                           </div>
+
                           <Form option={option} />
                         </div>
                       </div>

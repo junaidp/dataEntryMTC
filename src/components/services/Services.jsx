@@ -12,6 +12,7 @@ import DeleteVendorDialog from "./components/DeleteServiceDialog";
 import { useSelector } from "react-redux";
 import Form from "./components/Form";
 import EditServiceDialog from "./components/EditServiceDialog";
+import DuplicateDialogForm from "./components/DuplicateDialog";
 import { setupGetAllProviderWithOutParams } from "../../global-redux/reducers/providers/slice";
 import { setupGetAllExperienceWithOutParams } from "../../global-redux/reducers/experiences/slice";
 
@@ -26,6 +27,8 @@ const Services = ({ showAddServiceDialog, setShowAddServiceDialog }) => {
   const [selectedService, setSelectedService] = React.useState({});
   const [showEditServiceDialog, setShowEditServiceDialog] =
     React.useState(false);
+  const [showDuplicateDialogForm, setShowDuplicateDialogForm] =
+    React.useState(false);
   const [page, setPage] = React.useState(1);
   const handleChangePage = (_, value) => {
     setPage(value);
@@ -39,6 +42,7 @@ const Services = ({ showAddServiceDialog, setShowAddServiceDialog }) => {
       dispatch(setupGetAllExperienceWithOutParams());
       setCurrentServiceId("");
       dispatch(resetServiceAddSuccess());
+      setPage(1)
     }
   }, [serviceAddSuccess]);
 
@@ -56,6 +60,16 @@ const Services = ({ showAddServiceDialog, setShowAddServiceDialog }) => {
           <div className="model-wrap">
             <AddServiceDialog
               setShowAddServiceDialog={setShowAddServiceDialog}
+            />
+          </div>
+        </div>
+      )}
+      {showDuplicateDialogForm && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <DuplicateDialogForm
+              setShowDuplicateDialogForm={setShowDuplicateDialogForm}
+              selectedService={selectedService}
             />
           </div>
         </div>
@@ -133,6 +147,18 @@ const Services = ({ showAddServiceDialog, setShowAddServiceDialog }) => {
                               <i className="fa fa-check-circle f-18"></i>
                             </span>
                             Delete
+                          </div>
+                          <div
+                            className={`btn btn-labeled btn-secondary px-3 shadow  my-4 `}
+                            onClick={() => {
+                              setSelectedService(service);
+                              setShowDuplicateDialogForm(true);
+                            }}
+                          >
+                            <span className="btn-label me-2">
+                              <i className="fa fa-check-circle f-18"></i>
+                            </span>
+                            Duplicate
                           </div>
                         </div>
                         <Form service={service} />

@@ -2,12 +2,9 @@ import React from "react";
 import TextField from "@mui/material/TextField";
 import Chip from "@mui/material/Chip";
 import { Card } from "@mui/material";
-import InputLabel from "@mui/material/InputLabel";
-import FormControl from "@mui/material/FormControl";
-import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
 import RichTextEditor from "../../../components/common/RichText";
 import MultipleSelectProviders from "./MultiSelectProviders";
+import AutoCompleteExperience from "./AutoCompleteExperience";
 
 const ServiceDialogForm = ({
   formik,
@@ -47,7 +44,6 @@ const ServiceDialogForm = ({
   keyword,
   keywords,
   setKeyword,
-  providers,
   setProviders,
 }) => {
   return (
@@ -82,7 +78,7 @@ const ServiceDialogForm = ({
           </div>
 
           <div className="row">
-            <div className="col-lg-12 mb-4">
+            <div className="col-lg-12 mb-2">
               <TextField
                 id="xpAddress"
                 name="xpAddress"
@@ -95,36 +91,26 @@ const ServiceDialogForm = ({
           </div>
           <div className="row">
             <div className="col-lg-12 mb-4">
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">
-                  Select Experience
-                </InputLabel>
-                <Select
-                  id="experienceId"
-                  name="experienceId"
-                  className="form-control w-100 "
-                  label="Select Experince"
-                  defaultValue=""
-                  {...formik.getFieldProps("experienceId")}
-                >
-                  <MenuItem value="">Select Experience</MenuItem>
-                  {allExperience?.map((item, index) => {
-                    return (
-                      <MenuItem value={item?.id} key={index}>
-                        {item?.title}
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
-              </FormControl>
+              <AutoCompleteExperience
+                options={allExperience?.map((experience) => {
+                  return { name: experience?.title, id: experience?.id };
+                })}
+                formik={formik}
+              />
             </div>
           </div>
           <div className="row">
-            <div className="mb-2 w-100">
+            <div className="mb-4 w-100">
               <MultipleSelectProviders
                 setProviders={setProviders}
-                providers={providers}
-                names={allProvider?.map((all) => all?.name)}
+                names={
+                  allProvider?.map((all) => {
+                    return {
+                      title: all?.name,
+                      id: all?.id,
+                    };
+                  }) || []
+                }
               />
             </div>
           </div>

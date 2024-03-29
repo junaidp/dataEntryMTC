@@ -2,17 +2,16 @@ import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
 import RichTextEditor from "../../../../common/RichText";
 import { setupAddProvider } from "../../../../../global-redux/reducers/providers/slice";
 import { useSelector, useDispatch } from "react-redux";
-import InputLabel from "@mui/material/InputLabel";
-import FormControl from "@mui/material/FormControl";
 import { toast } from "react-toastify";
 import { regions } from "../../../../../constants";
+import Autocomplete from "@mui/material/Autocomplete";
+import AutoCompleteVendor from "../../AutoCompleteVendor";
 
 const AddProviderDialog = ({ setShowAddProviderDialog }) => {
+  const [value, setValue] = React.useState("");
   const dispatch = useDispatch();
   const { providerAddSuccess, loading } = useSelector(
     (state) => state?.providers
@@ -45,6 +44,12 @@ const AddProviderDialog = ({ setShowAddProviderDialog }) => {
       }
     },
   });
+
+  React.useEffect(() => {
+    if (value !== "") {
+      formik.resetForm({ values: { ...formik.values, regionsCovered: value } });
+    }
+  }, [value]);
 
   function handleChangeDescription(value) {
     formik.resetForm({ values: { ...formik.values, description: value } });
@@ -85,7 +90,7 @@ const AddProviderDialog = ({ setShowAddProviderDialog }) => {
           </div>
 
           <div className="row">
-            <div className="col-lg-6 mb-4">
+            <div className="col-lg-6 mb-2">
               <TextField
                 id="address"
                 name="address"
@@ -95,7 +100,7 @@ const AddProviderDialog = ({ setShowAddProviderDialog }) => {
                 {...formik.getFieldProps("address")}
               />
             </div>
-            <div className="col-lg-6 mb-4">
+            <div className="col-lg-6 mb-2">
               <TextField
                 id="pointOfContact"
                 name="pointOfContact"
@@ -108,28 +113,13 @@ const AddProviderDialog = ({ setShowAddProviderDialog }) => {
           </div>
 
           <div className="row">
-            <div className="col-lg-12 mb-4">
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">
-                  Select Vendor
-                </InputLabel>
-                <Select
-                  id="vendorId"
-                  name="vendorId"
-                  className="form-control w-100 "
-                  label="Vendor"
-                  {...formik.getFieldProps("vendorId")}
-                >
-                  <MenuItem value="">Select Vendor</MenuItem>
-                  {allVendors?.map((vendor, index) => {
-                    return (
-                      <MenuItem value={vendor?.id} key={index}>
-                        {vendor?.name}
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
-              </FormControl>
+            <div className="mb-4 w-100">
+              <AutoCompleteVendor
+                options={allVendors?.map((vendor) => {
+                  return { name: vendor?.name, id: vendor?.id };
+                })}
+                formik={formik}
+              />
             </div>
           </div>
 
@@ -157,28 +147,18 @@ const AddProviderDialog = ({ setShowAddProviderDialog }) => {
           </div>
           <div className="row">
             <div className="col-lg-6 mb-4">
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">
-                  Regions Covered
-                </InputLabel>
-                <Select
-                  id="regionsCovered"
-                  name="regionsCovered"
-                  className="form-control w-100 "
-                  label="Regions Covered"
-                  defaultValue="Germany"
-                  {...formik.getFieldProps("regionsCovered")}
-                >
-                  <MenuItem value="">Select Region</MenuItem>
-                  {regions?.map((region, index) => {
-                    return (
-                      <MenuItem value={region} key={index}>
-                        {region}
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
-              </FormControl>
+              <Autocomplete
+                id="regionsCovered"
+                name="regionsCovered"
+                options={regions}
+                renderInput={(params) => (
+                  <TextField {...params} label="Select Region" />
+                )}
+                value={value}
+                onChange={(_, newValue) => {
+                  setValue(newValue);
+                }}
+              />
             </div>
             <div className="col-lg-6 mb-4">
               <div className="form-check form-switch ">

@@ -17,6 +17,7 @@ import {
   setupGetAllProviderWithOutParams,
   resetProviderAddSuccess,
 } from "../../global-redux/reducers/providers/slice.jsx";
+import DuplicateVariationDialog from "./components/DuplicateVariationDialog.jsx";
 
 const Variation = ({ showAddVariationDialog, setShowAddVariationDialog }) => {
   const dispatch = useDispatch();
@@ -25,6 +26,7 @@ const Variation = ({ showAddVariationDialog, setShowAddVariationDialog }) => {
   const { providerAddSuccess, currentProviderObject } = useSelector(
     (state) => state?.providers
   );
+  const [showDuplicateDialog, setShowDuplicateDialog] = React.useState(false);
   const [showDeleteVariationDialog, setShowDeleteVariationDialog] =
     React.useState(false);
   const [currentVariationId, setCurrentVariationId] = React.useState("");
@@ -98,6 +100,7 @@ const Variation = ({ showAddVariationDialog, setShowAddVariationDialog }) => {
       dispatch(setupGetAllVariationsWithOutParams());
       dispatch(setupGetAllProviderWithOutParams());
       dispatch(setupGetAllVendors());
+      setPage(1);
     }
   }, [variationAddSuccess]);
 
@@ -115,6 +118,16 @@ const Variation = ({ showAddVariationDialog, setShowAddVariationDialog }) => {
           <div className="model-wrap">
             <AddVariationDialog
               setShowAddVariationDialog={setShowAddVariationDialog}
+            />
+          </div>
+        </div>
+      )}
+      {showDuplicateDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <DuplicateVariationDialog
+              setShowDuplicateDialog={setShowDuplicateDialog}
+              selectedVaraition={selectedVaraition}
             />
           </div>
         </div>
@@ -198,6 +211,18 @@ const Variation = ({ showAddVariationDialog, setShowAddVariationDialog }) => {
                                 <i className="fa fa-check-circle f-18"></i>
                               </span>
                               Delete
+                            </div>
+                            <div
+                              className={`btn btn-labeled btn-secondary px-3 shadow  my-4 `}
+                              onClick={() => {
+                                setSelectedVariation(variation);
+                                setShowDuplicateDialog(true);
+                              }}
+                            >
+                              <span className="btn-label me-2">
+                                <i className="fa fa-check-circle f-18"></i>
+                              </span>
+                              Duplicate
                             </div>
                           </div>
                           <Form variation={variation} />

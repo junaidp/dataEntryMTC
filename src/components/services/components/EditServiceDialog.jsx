@@ -27,11 +27,14 @@ const EditServiceDialog = ({ setShowEditServiceDialog, selectedService }) => {
   const [serviceWhy, setServiceWhy] = React.useState("");
   const [linkWithOtherServices, setLinkWithOtherServices] = React.useState([]);
   const [providers, setProviders] = React.useState([]);
-
   const [experience, setExperiences] = React.useState([]);
   const [experienceWhy, setExperienceWhy] = React.useState("");
   const [linkWithOtherExperiences, setLinkWithOtherExperiences] =
     React.useState([]);
+  const [resetExperienceMultiSelect, setResetExperienceMultiSelect] =
+    React.useState(false);
+  const [resetServiceMultiSelect, setResetServiceMultiSelect] =
+    React.useState(false);
 
   // Input Refs
   const priceRef = React.useRef(null);
@@ -63,8 +66,9 @@ const EditServiceDialog = ({ setShowEditServiceDialog, selectedService }) => {
     onSubmit: (values) => {
       if (!loading) {
         const filteredProvidersArray = allProvider?.filter((item) =>
-          providers.includes(item?.name)
+          providers?.map((singleItem) => singleItem?.id)?.includes(item?.id)
         );
+
         dispatch(
           setupAddService([
             {
@@ -235,6 +239,7 @@ const EditServiceDialog = ({ setShowEditServiceDialog, selectedService }) => {
           };
         }),
       ];
+      setResetServiceMultiSelect(true);
       setLinkWithOtherServices(finalArray);
       setServiceWhy("");
       setServices([]);
@@ -267,6 +272,7 @@ const EditServiceDialog = ({ setShowEditServiceDialog, selectedService }) => {
           };
         }),
       ];
+      setResetExperienceMultiSelect(true);
       setLinkWithOtherExperiences(finalArray);
       setExperienceWhy("");
       setExperiences([]);
@@ -365,12 +371,18 @@ const EditServiceDialog = ({ setShowEditServiceDialog, selectedService }) => {
           })
         );
       }
-
       if (
         selectedService?.providers &&
         selectedService?.providers?.length !== 0
       ) {
-        setProviders(selectedService?.providers?.map((all) => all?.name));
+        setProviders(
+          selectedService?.providers?.map((all) => {
+            return {
+              title: all?.name,
+              id: all?.id,
+            };
+          })
+        );
       }
     }
   }, [selectedService]);
@@ -434,6 +446,11 @@ const EditServiceDialog = ({ setShowEditServiceDialog, selectedService }) => {
       handleAddExperience={handleAddExperience}
       linkWithOtherExperiences={linkWithOtherExperiences}
       handleDeleteLinkWithOtherExperience={handleDeleteLinkWithOtherExperience}
+      resetExperienceMultiSelect={resetExperienceMultiSelect}
+      setResetExperienceMultiSelect={setResetExperienceMultiSelect}
+      resetServiceMultiSelect={resetServiceMultiSelect}
+      setResetServiceMultiSelect={setResetServiceMultiSelect}
+      selectedService={selectedService}
     />
   );
 };

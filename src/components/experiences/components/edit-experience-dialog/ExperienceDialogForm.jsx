@@ -3,16 +3,15 @@ import TextField from "@mui/material/TextField";
 import RichTextEditor from "../../../common/RichText";
 import Chip from "@mui/material/Chip";
 import { Card } from "@mui/material";
-import MultipleSelect from "./MultiSelect";
-import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import MultipleSelectProviders from "../MultiSelectProviders";
+import MultipleSelectExperiences from "./MultiSelect";
+import MultipleSelectProviders from "./MultiSelectProviders";
 import MultiSelectServices from "../MultiSelectServices";
+import AutoCompleteVendor from "./AutoSelectVendor";
 
 const ExperienceDialogForm = ({
   formik,
+  selectedExperience,
+  duplicate,
   keyword,
   setKeyword,
   handleAddKeyword,
@@ -51,7 +50,6 @@ const ExperienceDialogForm = ({
   keywordRef,
   linkRef,
   setExperiences,
-  experience,
   allExperience,
   allProvider,
   setExperienceWhy,
@@ -59,23 +57,29 @@ const ExperienceDialogForm = ({
   linkWithOtherExperiences,
   handleDeleteLinkWithOtherExperience,
   allVendors,
-  providers,
   setProviders,
   whyRef,
   allService,
   serviceWhyRef,
-  services,
   setServices,
   serviceWhy,
   setServiceWhy,
   linkWithOtherServices,
   handleAddService,
   handleDeleteLinkWithOtherServices,
+  resetExperienceMultiSelect,
+  setResetExperienceMultiSelect,
+  resetServiceMultiSelect,
+  setResetServiceMultiSelect,
 }) => {
   return (
     <form onSubmit={formik.handleSubmit}>
       <div className="px-4 py-4">
-        <h2 className="pb-4 heading">Edit Experience</h2>
+        <h2 className="pb-4 heading">
+          {duplicate && duplicate === true
+            ? "Duplicate Experience"
+            : "Edit Experience"}
+        </h2>
         <div>
           <div className="col-lg-12 mb-4">
             <TextField
@@ -87,6 +91,11 @@ const ExperienceDialogForm = ({
               {...formik.getFieldProps("title")}
               error={formik.touched.title && Boolean(formik.errors.title)}
               helperText={formik.touched.title && formik.errors.title}
+              onKeyPress={(event) => {
+                if (event.key === "Enter") {
+                  formik.handleSubmit();
+                }
+              }}
             />
           </div>
 
@@ -99,37 +108,39 @@ const ExperienceDialogForm = ({
                 variant="outlined"
                 className="form-control"
                 {...formik.getFieldProps("address")}
+                onKeyPress={(event) => {
+                  if (event.key === "Enter") {
+                    formik.handleSubmit();
+                  }
+                }}
               />
             </div>
           </div>
 
-          <div className="mb-4 mt-4 w-100">
+          <div className="mb-2 mt-3 w-100">
             <MultipleSelectProviders
+              selectedExperience={selectedExperience}
               setProviders={setProviders}
-              providers={providers}
-              names={allProvider?.map((all) => all?.name)}
+              names={
+                allProvider?.map((all) => {
+                  return {
+                    title: all?.name,
+                    id: all?.id,
+                  };
+                }) || []
+              }
             />
           </div>
 
-          <FormControl fullWidth className="mb-4">
-            <InputLabel id="demo-simple-select-label">Select Vendor</InputLabel>
-            <Select
-              id="vendorId"
-              name="vendorId"
-              className="form-control w-100 "
-              label="Vendor"
-              {...formik.getFieldProps("vendorId")}
-            >
-              <MenuItem value="">Select Vendor</MenuItem>
-              {allVendors?.map((vendor, index) => {
-                return (
-                  <MenuItem value={vendor?.id} key={index}>
-                    {vendor?.name}
-                  </MenuItem>
-                );
+          <div className="mb-4 w-100">
+            <AutoCompleteVendor
+              options={allVendors?.map((vendor) => {
+                return { name: vendor?.name, id: vendor?.id };
               })}
-            </Select>
-          </FormControl>
+              selectedExperience={selectedExperience}
+              formik={formik}
+            />
+          </div>
 
           <div className="row">
             <div>
@@ -333,10 +344,18 @@ const ExperienceDialogForm = ({
           </div>
           <div className="row mb-4">
             <div className="col-lg-6">
-              <MultipleSelect
+              <MultipleSelectExperiences
+                resetExperienceMultiSelect={resetExperienceMultiSelect}
+                setResetExperienceMultiSelect={setResetExperienceMultiSelect}
                 setExperiences={setExperiences}
-                experience={experience}
-                names={allExperience?.map((all) => all?.title)}
+                names={
+                  allExperience?.map((all) => {
+                    return {
+                      title: all?.title,
+                      id: all?.id,
+                    };
+                  }) || []
+                }
               />
             </div>
             <div className="col-lg-4 mb-4">
@@ -384,9 +403,17 @@ const ExperienceDialogForm = ({
           <div className="row mb-4 p-0">
             <div className="col-lg-6">
               <MultiSelectServices
+                resetServiceMultiSelect={resetServiceMultiSelect}
+                setResetServiceMultiSelect={setResetServiceMultiSelect}
                 setServices={setServices}
-                services={services}
-                names={allService?.map((all) => all?.title)}
+                names={
+                  allService?.map((all) => {
+                    return {
+                      title: all?.title,
+                      id: all?.id,
+                    };
+                  }) || []
+                }
               />
             </div>
             <form

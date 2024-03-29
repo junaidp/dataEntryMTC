@@ -46,16 +46,16 @@ const ExperienceDialogForm = ({
   keywordRef,
   linkRef,
   setExperiences,
-  experience,
   allExperience,
   allProvider,
   setExperienceWhy,
   experienceWhy,
   linkWithOtherExperiences,
   handleDeleteLinkWithOtherExperience,
-  providers,
   setProviders,
   whyRef,
+  resetExperienceMultiSelect,
+  setResetExperienceMultiSelect,
 }) => {
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -72,6 +72,11 @@ const ExperienceDialogForm = ({
               {...formik.getFieldProps("title")}
               error={formik.touched.title && Boolean(formik.errors.title)}
               helperText={formik.touched.title && formik.errors.title}
+              onKeyPress={(event) => {
+                if (event.key === "Enter") {
+                  formik.handleSubmit();
+                }
+              }}
             />
           </div>
 
@@ -84,15 +89,26 @@ const ExperienceDialogForm = ({
                 variant="outlined"
                 className="form-control"
                 {...formik.getFieldProps("address")}
+                onKeyPress={(event) => {
+                  if (event.key === "Enter") {
+                    formik.handleSubmit();
+                  }
+                }}
               />
             </div>
           </div>
           <div className="row">
-            <div className="mb-2 w-100">
+            <div className="mb-4 mt-3 w-100">
               <MultipleSelectProviders
                 setProviders={setProviders}
-                providers={providers}
-                names={allProvider?.map((all) => all?.name)}
+                names={
+                  allProvider?.map((all) => {
+                    return {
+                      title: all?.name,
+                      id: all?.id,
+                    };
+                  }) || []
+                }
               />
             </div>
           </div>
@@ -299,9 +315,17 @@ const ExperienceDialogForm = ({
           <div className="row mb-4">
             <div className="col-lg-6">
               <MultipleSelect
+                resetExperienceMultiSelect={resetExperienceMultiSelect}
+                setResetExperienceMultiSelect={setResetExperienceMultiSelect}
                 setExperiences={setExperiences}
-                experience={experience}
-                names={allExperience?.map((all) => all?.title)}
+                names={
+                  allExperience?.map((all) => {
+                    return {
+                      title: all?.title,
+                      id: all?.id,
+                    };
+                  }) || []
+                }
               />
             </div>
             <div className="col-lg-4 mb-4">

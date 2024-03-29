@@ -3,14 +3,19 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { v4 as uuidv4 } from "uuid";
 import {
-  setupAddOption,
-  resetOptions,
-} from "../../../global-redux/reducers/options/slice";
+  setupAddVariation,
+  resetVariations,
+} from "../../../global-redux/reducers/variations/slice";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import OptionDialogForm from "./OptionDialogForm";
+import EditVariationDialogForm from "./edit-variation/EditVariationDialogForm";
+import { setupGetAllExperienceWithOutParams } from "../../../global-redux/reducers/experiences/slice";
+import { setupGetAllProviderWithOutParams } from "../../../global-redux/reducers/providers/slice";
 
-const AddOptionDialog = ({ setShowAddOptionDialog }) => {
+const DuplicateVariationDialog = ({
+  setShowDuplicateDialog,
+  selectedVaraition,
+}) => {
   const dispatch = useDispatch();
   const [link, setLink] = React.useState("");
   const [links, setLinks] = React.useState([]);
@@ -31,7 +36,9 @@ const AddOptionDialog = ({ setShowAddOptionDialog }) => {
   const linkRef = React.useRef(null);
   const keywordRef = React.useRef(null);
 
-  const { optionAddSuccess, loading } = useSelector((state) => state?.options);
+  const { variationAddSuccess, loading } = useSelector(
+    (state) => state?.variations
+  );
   const { allExperience } = useSelector((state) => state.experiences);
   const { allProvider } = useSelector((state) => state.providers);
   let initialValues = {
@@ -55,7 +62,7 @@ const AddOptionDialog = ({ setShowAddOptionDialog }) => {
           providers?.map((singleItem) => singleItem?.id)?.includes(item?.id)
         );
         dispatch(
-          setupAddOption([
+          setupAddVariation([
             {
               ...values,
               providers:
@@ -65,7 +72,6 @@ const AddOptionDialog = ({ setShowAddOptionDialog }) => {
                     providerName: item?.name,
                   };
                 }) || [],
-              linkWithOtherExperience: null,
               links:
                 links?.map((item) => {
                   return item.link;
@@ -165,7 +171,7 @@ const AddOptionDialog = ({ setShowAddOptionDialog }) => {
 
   function handleClose() {
     formik.resetForm({ values: initialValues });
-    setShowAddOptionDialog(false);
+    setShowDuplicateDialog(false);
   }
 
   function handleChangeDescription(value) {
@@ -196,16 +202,91 @@ const AddOptionDialog = ({ setShowAddOptionDialog }) => {
   }
 
   React.useEffect(() => {
-    if (optionAddSuccess) {
-      toast.success("Option Added Successfully");
-      dispatch(resetOptions());
+    if (variationAddSuccess) {
+      toast.success("Variation Duplicated Successfully");
+      dispatch(resetVariations());
       formik.resetForm({ values: initialValues });
-      setShowAddOptionDialog(false);
+      setShowDuplicateDialog(false);
     }
-  }, [optionAddSuccess]);
+  }, [variationAddSuccess]);
+
+  React.useEffect(() => {
+    dispatch(setupGetAllExperienceWithOutParams());
+    dispatch(setupGetAllProviderWithOutParams());
+  }, []);
+
+  React.useEffect(() => {
+    if (Object.keys(selectedVaraition)?.length !== 0) {
+      formik.resetForm({
+        values: {
+          ...formik.values,
+          title: selectedVaraition?.title,
+          xpAddress: selectedVaraition?.xpAddress,
+          experienceId: selectedVaraition?.experienceId,
+          description: selectedVaraition?.description,
+          termsAndConditions: selectedVaraition?.termsAndConditions,
+        },
+      });
+
+      setPrices(
+        selectedVaraition?.price?.map((singleItem) => {
+          return {
+            id: uuidv4(),
+            price: singleItem,
+          };
+        })
+      );
+      setDurations(
+        selectedVaraition?.duration?.map((singleItem) => {
+          return {
+            id: uuidv4(),
+            duration: singleItem,
+          };
+        })
+      );
+      setKeywords(
+        selectedVaraition?.storyLineKeywords?.map((singleItem) => {
+          return {
+            id: uuidv4(),
+            name: singleItem,
+          };
+        })
+      );
+      setAvailableTimes(
+        selectedVaraition?.availableTime?.map((singleItem) => {
+          return {
+            id: uuidv4(),
+            time: singleItem,
+          };
+        })
+      );
+      setLinks(
+        selectedVaraition?.links?.map((singleItem) => {
+          return {
+            id: uuidv4(),
+            link: singleItem,
+          };
+        })
+      );
+      if (
+        selectedVaraition?.providers &&
+        selectedVaraition?.providers?.length !== 0
+      ) {
+        setProviders(
+          selectedVaraition?.providers?.map((all) => {
+            return {
+              title: all?.providerName,
+              id: all?.providerId,
+            };
+          })
+        );
+      }
+    }
+  }, [selectedVaraition]);
 
   return (
-    <OptionDialogForm
+    <EditVariationDialogForm
+      duplicate={true}
       formik={formik}
       handleClose={handleClose}
       loading={loading}
@@ -235,18 +316,19 @@ const AddOptionDialog = ({ setShowAddOptionDialog }) => {
       linkRef={linkRef}
       allExperience={allExperience}
       allProvider={allProvider}
-      handleChangeDescription={handleChangeDescription}
-      handleChangeTermsAndConditions={handleChangeTermsAndConditions}
       handleAddKeyword={handleAddKeyword}
       handleDeleteKeyword={handleDeleteKeyword}
       keywordRef={keywordRef}
       keyword={keyword}
       keywords={keywords}
       setKeyword={setKeyword}
+      handleChangeDescription={handleChangeDescription}
+      handleChangeTermsAndConditions={handleChangeTermsAndConditions}
       providers={providers}
       setProviders={setProviders}
+      selectedVaraition={selectedVaraition}
     />
   );
 };
 
-export default AddOptionDialog;
+export default DuplicateVariationDialog;

@@ -30,6 +30,8 @@ const AddExperienceDialog = ({
   const [linkWithOtherExperiences, setLinkWithOtherExperiences] =
     React.useState([]);
   const [providers, setProviders] = React.useState([]);
+  const [resetExperienceMultiSelect, setResetExperienceMultiSelect] =
+    React.useState(false);
 
   // Input Refs
   const priceRef = React.useRef(null);
@@ -59,7 +61,7 @@ const AddExperienceDialog = ({
     onSubmit: (values) => {
       if (!loading) {
         const filteredProvidersArray = allProvider?.filter((item) =>
-          providers.includes(item?.name)
+          providers?.map((singleItem) => singleItem?.id)?.includes(item?.id)
         );
         dispatch(
           setupAddExperience([
@@ -236,6 +238,7 @@ const AddExperienceDialog = ({
           };
         }),
       ];
+      setResetExperienceMultiSelect(true);
       setLinkWithOtherExperiences(finalArray);
       setExperienceWhy("");
       setExperiences([]);
@@ -307,6 +310,8 @@ const AddExperienceDialog = ({
       providers={providers}
       setProviders={setProviders}
       whyRef={whyRef}
+      resetExperienceMultiSelect={resetExperienceMultiSelect}
+      setResetExperienceMultiSelect={setResetExperienceMultiSelect}
     />
   );
 };

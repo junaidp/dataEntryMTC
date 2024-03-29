@@ -81,6 +81,19 @@ p {
 .css-11lqbxm {
   font-family: "Poppins", sans-serif !important;
 }
+.css-1wuilmg-MuiAutocomplete-root
+  .MuiOutlinedInput-root
+  .MuiAutocomplete-input {
+  font-family: "Poppins", sans-serif !important;
+}
+
+.css-wb57ya-MuiFormControl-root-MuiTextField-root {
+  font-family: "Poppins", sans-serif !important;
+}
+
+.MuiFormLabel-root {
+  font-family: "Poppins", sans-serif !important;
+}
 
 .css-1h9z7r5-MuiButtonBase-root-MuiTab-root.Mui-selected {
   font-family: "Poppins", sans-serif !important;
@@ -112,11 +125,11 @@ body {
   font-family: "Poppins", sans-serif !important;
 }
 
-.css-18nc3u2 .MuiOutlinedInput-root .MuiAutocomplete-input{
+.css-18nc3u2 .MuiOutlinedInput-root .MuiAutocomplete-input {
   font-family: "Poppins", sans-serif !important;
 }
 
-.css-feqhe6{
+.css-feqhe6 {
   font-family: "Poppins", sans-serif !important;
 }
 

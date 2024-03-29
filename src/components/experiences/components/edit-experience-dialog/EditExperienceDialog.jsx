@@ -35,6 +35,10 @@ const EditExperienceDialog = ({
   const [services, setServices] = React.useState([]);
   const [serviceWhy, setServiceWhy] = React.useState("");
   const [linkWithOtherServices, setLinkWithOtherServices] = React.useState([]);
+  const [resetExperienceMultiSelect, setResetExperienceMultiSelect] =
+    React.useState(false);
+  const [resetServiceMultiSelect, setResetServiceMultiSelect] =
+    React.useState(false);
 
   // Input Refs
   const priceRef = React.useRef(null);
@@ -66,7 +70,7 @@ const EditExperienceDialog = ({
     onSubmit: (values) => {
       if (!loading) {
         const filteredProvidersArray = allProvider?.filter((item) =>
-          providers.includes(item?.name)
+          providers?.map((singleItem) => singleItem?.id)?.includes(item?.id)
         );
         dispatch(
           setupAddExperience([
@@ -251,6 +255,7 @@ const EditExperienceDialog = ({
           };
         }),
       ];
+      setResetExperienceMultiSelect(true);
       setLinkWithOtherExperiences(finalArray);
       setExperienceWhy("");
       setExperiences([]);
@@ -283,6 +288,7 @@ const EditExperienceDialog = ({
           };
         }),
       ];
+      setResetServiceMultiSelect(true);
       setLinkWithOtherServices(finalArray);
       setServiceWhy("");
       setServices([]);
@@ -386,7 +392,12 @@ const EditExperienceDialog = ({
         selectedExperience?.providers?.length !== 0
       ) {
         setProviders(
-          selectedExperience?.providers?.map((all) => all?.providerName)
+          selectedExperience?.providers?.map((all) => {
+            return {
+              title: all?.providerName,
+              id: all?.providerId,
+            };
+          })
         );
       }
     }
@@ -453,6 +464,11 @@ const EditExperienceDialog = ({
       linkWithOtherServices={linkWithOtherServices}
       handleAddService={handleAddService}
       handleDeleteLinkWithOtherServices={handleDeleteLinkWithOtherServices}
+      resetExperienceMultiSelect={resetExperienceMultiSelect}
+      setResetExperienceMultiSelect={setResetExperienceMultiSelect}
+      resetServiceMultiSelect={resetServiceMultiSelect}
+      setResetServiceMultiSelect={setResetServiceMultiSelect}
+      selectedExperience={selectedExperience}
     />
   );
 };

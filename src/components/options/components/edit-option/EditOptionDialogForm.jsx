@@ -2,15 +2,14 @@ import React from "react";
 import TextField from "@mui/material/TextField";
 import Chip from "@mui/material/Chip";
 import { Card } from "@mui/material";
-import InputLabel from "@mui/material/InputLabel";
-import FormControl from "@mui/material/FormControl";
-import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
 import RichTextEditor from "../../../common/RichText";
-import MultipleSelectProviders from "../MultiSelectProviders";
+import MultipleSelectProviders from "./MultiSelectProviders";
+import AutoCompleteExperience from "./AutoCompleteExperience";
 
 const ServiceDialogForm = ({
   formik,
+  selectedOption,
+  duplicate,
   handleClose,
   loading,
   link,
@@ -47,13 +46,14 @@ const ServiceDialogForm = ({
   keyword,
   keywords,
   setKeyword,
-  providers,
   setProviders,
 }) => {
   return (
     <form onSubmit={formik.handleSubmit}>
       <div className="px-4 py-4">
-        <h2 className="pb-4 heading">Edit Option</h2>
+        <h2 className="pb-4 heading">
+          {duplicate === true && duplicate ? "Duplicate Option" : "Edit Option"}
+        </h2>
         <div>
           <div className="row">
             <div className="col-lg-12 mb-4">
@@ -95,36 +95,28 @@ const ServiceDialogForm = ({
           </div>
           <div className="row">
             <div className="col-lg-12 mb-4">
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">
-                  Select Experience
-                </InputLabel>
-                <Select
-                  id="experienceId"
-                  name="experienceId"
-                  className="form-control w-100 "
-                  label="Select Experince"
-                  defaultValue=""
-                  {...formik.getFieldProps("experienceId")}
-                >
-                  <MenuItem value="">Select Experience</MenuItem>
-                  {allExperience?.map((item, index) => {
-                    return (
-                      <MenuItem value={item?.id} key={index}>
-                        {item?.title}
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
-              </FormControl>
+              <AutoCompleteExperience
+                options={allExperience?.map((experience) => {
+                  return { name: experience?.title, id: experience?.id };
+                })}
+                formik={formik}
+                selectedOption={selectedOption}
+              />
             </div>
           </div>
           <div className="row">
             <div className="mb-4  w-100">
               <MultipleSelectProviders
                 setProviders={setProviders}
-                providers={providers}
-                names={allProvider?.map((all) => all?.name)}
+                selectedOption={selectedOption}
+                names={
+                  allProvider?.map((all) => {
+                    return {
+                      title: all?.name,
+                      id: all?.id,
+                    };
+                  }) || []
+                }
               />
             </div>
           </div>

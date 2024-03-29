@@ -8,9 +8,11 @@ import {
 } from "../../../global-redux/reducers/options/slice";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import OptionDialogForm from "./OptionDialogForm";
+import OptionDialogForm from "./edit-option/EditOptionDialogForm";
+import { setupGetAllExperienceWithOutParams } from "../../../global-redux/reducers/experiences/slice";
+import { setupGetAllProviderWithOutParams } from "../../../global-redux/reducers/providers/slice";
 
-const AddOptionDialog = ({ setShowAddOptionDialog }) => {
+const DuplicateOptionDialog = ({ setShowDuplicateDialog, selectedOption }) => {
   const dispatch = useDispatch();
   const [link, setLink] = React.useState("");
   const [links, setLinks] = React.useState([]);
@@ -165,7 +167,7 @@ const AddOptionDialog = ({ setShowAddOptionDialog }) => {
 
   function handleClose() {
     formik.resetForm({ values: initialValues });
-    setShowAddOptionDialog(false);
+    setShowDuplicateDialog(false);
   }
 
   function handleChangeDescription(value) {
@@ -197,15 +199,89 @@ const AddOptionDialog = ({ setShowAddOptionDialog }) => {
 
   React.useEffect(() => {
     if (optionAddSuccess) {
-      toast.success("Option Added Successfully");
+      toast.success("Option Duplicated Successfully");
       dispatch(resetOptions());
       formik.resetForm({ values: initialValues });
-      setShowAddOptionDialog(false);
+      setShowDuplicateDialog(false);
     }
   }, [optionAddSuccess]);
 
+  React.useEffect(() => {
+    dispatch(setupGetAllExperienceWithOutParams());
+    dispatch(setupGetAllProviderWithOutParams());
+  }, []);
+
+  React.useEffect(() => {
+    if (Object.keys(selectedOption)?.length !== 0) {
+      formik.resetForm({
+        values: {
+          ...formik.values,
+          title: selectedOption?.title,
+          xpAddress: selectedOption?.xpAddress,
+          experienceId: selectedOption?.experienceId,
+          description: selectedOption?.description,
+          termsAndConditions: selectedOption?.termsAndConditions,
+        },
+      });
+      setPrices(
+        selectedOption?.price?.map((singleItem) => {
+          return {
+            id: uuidv4(),
+            price: singleItem,
+          };
+        })
+      );
+      setDurations(
+        selectedOption?.duration?.map((singleItem) => {
+          return {
+            id: uuidv4(),
+            duration: singleItem,
+          };
+        })
+      );
+      setAvailableTimes(
+        selectedOption?.availableTime?.map((singleItem) => {
+          return {
+            id: uuidv4(),
+            time: singleItem,
+          };
+        })
+      );
+      setKeywords(
+        selectedOption?.storyLineKeywords?.map((singleItem) => {
+          return {
+            id: uuidv4(),
+            name: singleItem,
+          };
+        })
+      );
+      setLinks(
+        selectedOption?.links?.map((singleItem) => {
+          return {
+            id: uuidv4(),
+            link: singleItem,
+          };
+        })
+      );
+      if (
+        selectedOption?.providers &&
+        selectedOption?.providers?.length !== 0
+      ) {
+        setProviders(
+          selectedOption?.providers?.map((all) => {
+            return {
+              title: all?.providerName,
+              id: all?.providerId,
+            };
+          })
+        );
+      }
+    }
+  }, [selectedOption]);
+
   return (
     <OptionDialogForm
+      duplicate={true}
       formik={formik}
       handleClose={handleClose}
       loading={loading}
@@ -235,18 +311,19 @@ const AddOptionDialog = ({ setShowAddOptionDialog }) => {
       linkRef={linkRef}
       allExperience={allExperience}
       allProvider={allProvider}
-      handleChangeDescription={handleChangeDescription}
-      handleChangeTermsAndConditions={handleChangeTermsAndConditions}
       handleAddKeyword={handleAddKeyword}
       handleDeleteKeyword={handleDeleteKeyword}
       keywordRef={keywordRef}
       keyword={keyword}
       keywords={keywords}
       setKeyword={setKeyword}
+      handleChangeDescription={handleChangeDescription}
+      handleChangeTermsAndConditions={handleChangeTermsAndConditions}
       providers={providers}
       setProviders={setProviders}
+      selectedOption={selectedOption}
     />
   );
 };
 
-export default AddOptionDialog;
+export default DuplicateOptionDialog;

@@ -54,7 +54,7 @@ const EditOptionDialog = ({ setShowEditOptionDialog, selectedOption }) => {
     onSubmit: (values) => {
       if (!loading) {
         const filteredProvidersArray = allProvider?.filter((item) =>
-          providers.includes(item?.name)
+          providers?.map((singleItem) => singleItem?.id)?.includes(item?.id)
         );
         dispatch(
           setupAddOption([
@@ -269,7 +269,12 @@ const EditOptionDialog = ({ setShowEditOptionDialog, selectedOption }) => {
         selectedOption?.providers?.length !== 0
       ) {
         setProviders(
-          selectedOption?.providers?.map((all) => all?.providerName)
+          selectedOption?.providers?.map((all) => {
+            return {
+              title: all?.providerName,
+              id: all?.providerId,
+            };
+          })
         );
       }
     }
@@ -316,6 +321,7 @@ const EditOptionDialog = ({ setShowEditOptionDialog, selectedOption }) => {
       handleChangeTermsAndConditions={handleChangeTermsAndConditions}
       providers={providers}
       setProviders={setProviders}
+      selectedOption={selectedOption}
     />
   );
 };

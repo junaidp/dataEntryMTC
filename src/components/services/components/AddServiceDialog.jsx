@@ -32,6 +32,10 @@ const AddServiceDialog = ({ setShowAddServiceDialog }) => {
   const [experienceWhy, setExperienceWhy] = React.useState("");
   const [linkWithOtherExperiences, setLinkWithOtherExperiences] =
     React.useState([]);
+  const [resetExperienceMultiSelect, setResetExperienceMultiSelect] =
+    React.useState(false);
+  const [resetServiceMultiSelect, setResetServiceMultiSelect] =
+    React.useState(false);
 
   // Input Refs
   const priceRef = React.useRef(null);
@@ -63,7 +67,7 @@ const AddServiceDialog = ({ setShowAddServiceDialog }) => {
     onSubmit: (values) => {
       if (!loading) {
         const filteredProvidersArray = allProvider?.filter((item) =>
-          providers.includes(item?.name)
+          providers?.map((singleItem) => singleItem?.id)?.includes(item?.id)
         );
         dispatch(
           setupAddService([
@@ -234,6 +238,7 @@ const AddServiceDialog = ({ setShowAddServiceDialog }) => {
           };
         }),
       ];
+      setResetServiceMultiSelect(true);
       setLinkWithOtherServices(finalArray);
       setServiceWhy("");
       setServices([]);
@@ -266,6 +271,7 @@ const AddServiceDialog = ({ setShowAddServiceDialog }) => {
           };
         }),
       ];
+      setResetExperienceMultiSelect(true);
       setLinkWithOtherExperiences(finalArray);
       setExperienceWhy("");
       setExperiences([]);
@@ -345,6 +351,10 @@ const AddServiceDialog = ({ setShowAddServiceDialog }) => {
       handleAddExperience={handleAddExperience}
       linkWithOtherExperiences={linkWithOtherExperiences}
       handleDeleteLinkWithOtherExperience={handleDeleteLinkWithOtherExperience}
+      resetExperienceMultiSelect={resetExperienceMultiSelect}
+      setResetExperienceMultiSelect={setResetExperienceMultiSelect}
+      resetServiceMultiSelect={resetServiceMultiSelect}
+      setResetServiceMultiSelect={setResetServiceMultiSelect}
     />
   );
 };

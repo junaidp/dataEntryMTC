@@ -5,9 +5,12 @@ import { v4 as uuidv4 } from "uuid";
 import { setupAddExperience } from "../../../global-redux/reducers/experiences/slice";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import ExperienceDialogForm from "./ExperienceDialogForm";
+import ExperienceDialogForm from "./edit-experience-dialog/ExperienceDialogForm";
 
-const AddExperienceDialog = ({ setShowAddExperienceDialog }) => {
+const DuplicateExperienceDialog = ({
+  setShowDuplicateDialog,
+  selectedExperience,
+}) => {
   const dispatch = useDispatch();
   const { allExperience } = useSelector((state) => state.experiences);
   const { allProvider } = useSelector((state) => state.providers);
@@ -228,7 +231,7 @@ const AddExperienceDialog = ({ setShowAddExperienceDialog }) => {
 
   function handleClose() {
     formik.resetForm({ values: initialValues });
-    setShowAddExperienceDialog(false);
+    setShowDuplicateDialog(false);
   }
 
   function handleAddExperience(event) {
@@ -300,13 +303,108 @@ const AddExperienceDialog = ({ setShowAddExperienceDialog }) => {
   React.useEffect(() => {
     if (experienceAddSuccess) {
       formik.resetForm({ values: initialValues });
-      setShowAddExperienceDialog(false);
-      toast.success("Experience Added Successfully");
+      setShowDuplicateDialog(false);
+      toast.success("Experience Duplicated Successfully");
     }
   }, [experienceAddSuccess]);
 
+  React.useEffect(() => {
+    if (Object.keys(selectedExperience)?.length !== 0) {
+      formik.resetForm({
+        values: {
+          ...formik.values,
+          title: selectedExperience?.title,
+          address: selectedExperience?.address,
+          description: selectedExperience?.description,
+          termsAndConditions: selectedExperience?.termsAndConditions,
+          vendorId: selectedExperience?.vendorId,
+        },
+      });
+
+      setPrices(
+        selectedExperience?.price?.map((singleItem) => {
+          return {
+            id: uuidv4(),
+            price: singleItem,
+          };
+        })
+      );
+      setDurations(
+        selectedExperience?.duration?.map((singleItem) => {
+          return {
+            id: uuidv4(),
+            duration: singleItem,
+          };
+        })
+      );
+      setAvailableTimes(
+        selectedExperience?.availableTime?.map((singleItem) => {
+          return {
+            id: uuidv4(),
+            time: singleItem,
+          };
+        })
+      );
+      setLinks(
+        selectedExperience?.links?.map((singleItem) => {
+          return {
+            id: uuidv4(),
+            link: singleItem?.link,
+            linkExplanation: singleItem?.explanation,
+          };
+        })
+      );
+      setKeywords(
+        selectedExperience?.storyLineKeywords?.map((singleItem) => {
+          return {
+            id: uuidv4(),
+            name: singleItem,
+          };
+        })
+      );
+      if (selectedExperience?.linkWithOtherExperience) {
+        setLinkWithOtherExperiences(
+          selectedExperience?.linkWithOtherExperience?.map((singleItem) => {
+            return {
+              experienceId: singleItem?.experienceId,
+              experienceName: singleItem?.experienceName,
+              why: singleItem?.why,
+              id: uuidv4(),
+            };
+          })
+        );
+      }
+      if (selectedExperience?.linkWithOtherService) {
+        setLinkWithOtherServices(
+          selectedExperience?.linkWithOtherService?.map((singleItem) => {
+            return {
+              serviceId: singleItem?.serviceId,
+              serviceName: singleItem?.serviceName,
+              why: singleItem?.why,
+              id: uuidv4(),
+            };
+          })
+        );
+      }
+      if (
+        selectedExperience?.providers &&
+        selectedExperience?.providers?.length !== 0
+      ) {
+        setProviders(
+          selectedExperience?.providers?.map((all) => {
+            return {
+              title: all?.providerName,
+              id: all?.providerId,
+            };
+          })
+        );
+      }
+    }
+  }, [selectedExperience]);
+
   return (
     <ExperienceDialogForm
+      duplicate={true}
       formik={formik}
       keyword={keyword}
       setKeyword={setKeyword}
@@ -370,8 +468,9 @@ const AddExperienceDialog = ({ setShowAddExperienceDialog }) => {
       setResetExperienceMultiSelect={setResetExperienceMultiSelect}
       resetServiceMultiSelect={resetServiceMultiSelect}
       setResetServiceMultiSelect={setResetServiceMultiSelect}
+      selectedExperience={selectedExperience}
     />
   );
 };
 
-export default AddExperienceDialog;
+export default DuplicateExperienceDialog;

@@ -48,7 +48,7 @@ const AddOptionDialog = ({ setShowAddOptionDialog, currentExperienceId }) => {
     onSubmit: (values) => {
       if (!loading) {
         const filteredProvidersArray = allProvider?.filter((item) =>
-          providers.includes(item?.name)
+          providers?.map((singleItem) => singleItem?.id)?.includes(item?.id)
         );
         dispatch(
           setupAddOption([

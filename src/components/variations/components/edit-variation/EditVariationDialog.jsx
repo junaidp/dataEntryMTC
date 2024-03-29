@@ -59,7 +59,7 @@ const EditVariationDialog = ({
     onSubmit: (values) => {
       if (!loading) {
         const filteredProvidersArray = allProvider?.filter((item) =>
-          providers.includes(item?.name)
+          providers?.map((singleItem) => singleItem?.id)?.includes(item?.id)
         );
         dispatch(
           setupAddVariation([
@@ -274,7 +274,12 @@ const EditVariationDialog = ({
         selectedVaraition?.providers?.length !== 0
       ) {
         setProviders(
-          selectedVaraition?.providers?.map((all) => all?.providerName)
+          selectedVaraition?.providers?.map((all) => {
+            return {
+              title: all?.providerName,
+              id: all?.providerId,
+            };
+          })
         );
       }
     }
@@ -321,6 +326,7 @@ const EditVariationDialog = ({
       handleChangeTermsAndConditions={handleChangeTermsAndConditions}
       providers={providers}
       setProviders={setProviders}
+      selectedVaraition={selectedVaraition}
     />
   );
 };

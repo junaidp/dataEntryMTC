@@ -3,16 +3,14 @@ import TextField from "@mui/material/TextField";
 import RichTextEditor from "../../common/RichText";
 import Chip from "@mui/material/Chip";
 import { Card } from "@mui/material";
-import MultipleSelect from "./MultiSelect";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import InputLabel from "@mui/material/InputLabel";
-import FormControl from "@mui/material/FormControl";
-import MultipleSelectProviders from "./MultiSelectProviders";
+import MultiSelectServices from "./MultiSelect";
 import MultiSelectExperiences from "./MultiSelectExperiences";
+import MultipleSelectProviders from "./edit-components/MultiSelectProviders";
+import AutoSelectVendor from "./edit-components/AutoSelectVendor";
 
 const ServiceDialogForm = ({
   formik,
+  duplicate,
   keyword,
   setKeyword,
   handleAddKeyword,
@@ -49,7 +47,6 @@ const ServiceDialogForm = ({
   keywordRef,
   linkRef,
   setServices,
-  services,
   allService,
   allProvider,
   setServiceWhy,
@@ -57,11 +54,9 @@ const ServiceDialogForm = ({
   linkWithOtherServices,
   handleDeleteLinkWithOtherServices,
   allVendors,
-  providers,
   setProviders,
   whyRef,
   setExperiences,
-  experience,
   allExperience,
   experienceWhyRef,
   setExperienceWhy,
@@ -69,11 +64,20 @@ const ServiceDialogForm = ({
   handleAddExperience,
   linkWithOtherExperiences,
   handleDeleteLinkWithOtherExperience,
+  resetExperienceMultiSelect,
+  setResetExperienceMultiSelect,
+  resetServiceMultiSelect,
+  setResetServiceMultiSelect,
+  selectedService,
 }) => {
   return (
     <form onSubmit={formik.handleSubmit}>
       <div className="px-4 py-4">
-        <h2 className="pb-4 heading">Edit Service</h2>
+        <h2 className="pb-4 heading">
+          {duplicate && duplicate === true
+            ? "Duplicate Service"
+            : "Edit Service"}
+        </h2>
         <div>
           <div className="col-lg-12 mb-4">
             <TextField
@@ -85,6 +89,11 @@ const ServiceDialogForm = ({
               {...formik.getFieldProps("title")}
               error={formik.touched.title && Boolean(formik.errors.title)}
               helperText={formik.touched.title && formik.errors.title}
+              onKeyPress={(event) => {
+                if (event.key === "Enter") {
+                  formik.handleSubmit();
+                }
+              }}
             />
           </div>
 
@@ -97,37 +106,39 @@ const ServiceDialogForm = ({
                 variant="outlined"
                 className="form-control"
                 {...formik.getFieldProps("address")}
+                onKeyPress={(event) => {
+                  if (event.key === "Enter") {
+                    formik.handleSubmit();
+                  }
+                }}
               />
             </div>
           </div>
           <div className="row">
-            <div className="mb-2 w-100">
+            <div className="mb-2 mt-4 w-100">
               <MultipleSelectProviders
+                selectedService={selectedService}
                 setProviders={setProviders}
-                providers={providers}
-                names={allProvider?.map((all) => all?.name)}
+                names={
+                  allProvider?.map((all) => {
+                    return {
+                      title: all?.name,
+                      id: all?.id,
+                    };
+                  }) || []
+                }
               />
             </div>
           </div>
-          <FormControl fullWidth className="mt-4 mb-4">
-            <InputLabel id="demo-simple-select-label">Vendor</InputLabel>
-            <Select
-              id="vendorId"
-              name="vendorId"
-              className="form-control w-100 "
-              label="Provider"
-              {...formik.getFieldProps("vendorId")}
-            >
-              <MenuItem value="">Select Vendor</MenuItem>
-              {allVendors?.map((vendor, index) => {
-                return (
-                  <MenuItem key={index} value={vendor?.id}>
-                    {vendor?.name}
-                  </MenuItem>
-                );
+          <div className="mb-4 w-100">
+            <AutoSelectVendor
+              options={allVendors?.map((vendor) => {
+                return { name: vendor?.name, id: vendor?.id };
               })}
-            </Select>
-          </FormControl>
+              selectedService={selectedService}
+              formik={formik}
+            />
+          </div>
           <div className="row">
             <div>
               <h5>Price:</h5>
@@ -330,10 +341,18 @@ const ServiceDialogForm = ({
           </div>
           <div className="row mb-4">
             <div className="col-lg-6">
-              <MultipleSelect
+              <MultiSelectServices
+                resetServiceMultiSelect={resetServiceMultiSelect}
+                setResetServiceMultiSelect={setResetServiceMultiSelect}
                 setServices={setServices}
-                services={services}
-                names={allService?.map((all) => all?.title)}
+                names={
+                  allService?.map((all) => {
+                    return {
+                      title: all?.title,
+                      id: all?.id,
+                    };
+                  }) || []
+                }
               />
             </div>
             <div className="col-lg-4 mb-4">
@@ -381,9 +400,17 @@ const ServiceDialogForm = ({
           <div className="row mb-4">
             <div className="col-lg-6">
               <MultiSelectExperiences
+                resetExperienceMultiSelect={resetExperienceMultiSelect}
+                setResetExperienceMultiSelect={setResetExperienceMultiSelect}
                 setExperiences={setExperiences}
-                experience={experience}
-                names={allExperience?.map((all) => all?.title)}
+                names={
+                  allExperience?.map((all) => {
+                    return {
+                      title: all?.title,
+                      id: all?.id,
+                    };
+                  }) || []
+                }
               />
             </div>
             <form

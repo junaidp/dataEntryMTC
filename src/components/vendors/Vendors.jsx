@@ -77,6 +77,7 @@ const Vendor = ({ setShowAddVendorDialog, showAddVendorDialog }) => {
     if (vendorAddSuccess) {
       setCurrentVendorId("");
       dispatch(setupGetAllVendors());
+      setVendorPage(1);
     }
   }, [vendorAddSuccess]);
 
