@@ -142,6 +142,8 @@ const AddProviderDialog = ({ setShowAddProviderDialog }) => {
                 variant="outlined"
                 className="form-control"
                 {...formik.getFieldProps("email")}
+                error={formik.touched.email && Boolean(formik.errors.email)}
+                helperText={formik.touched.email && formik.errors.email}
               />
             </div>
           </div>

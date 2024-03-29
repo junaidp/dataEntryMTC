@@ -84,7 +84,7 @@ const ServiceDialogForm = ({
           </div>
 
           <div className="row">
-            <div className="col-lg-12 mb-4">
+            <div className="col-lg-12 mb-2">
               <TextField
                 id="xpAddress"
                 name="xpAddress"
@@ -106,7 +106,7 @@ const ServiceDialogForm = ({
               />
             </div>
           </div>
-          <div className="row">
+          <div className="row mt-2">
             <div className="mb-4 w-100">
               <MultipleSelectProviders
                 setProviders={setProviders}
