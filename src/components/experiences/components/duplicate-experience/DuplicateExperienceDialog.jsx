@@ -2,7 +2,7 @@ import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { v4 as uuidv4 } from "uuid";
-import { setupAddExperience } from "../../../../global-redux/reducers/experiences/slice";
+import { setupAddDuplicateExperience } from "../../../../global-redux/reducers/experiences/slice";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import ExperienceDialogForm from "./DuplicateExperienceDialogForm";
@@ -10,8 +10,14 @@ import ExperienceDialogForm from "./DuplicateExperienceDialogForm";
 const DuplicateExperienceDialog = ({
   setShowDuplicateDialog,
   selectedExperience,
+  duplicateOptions,
+  setDuplicateOptions,
+  duplicateVariations,
+  setDuplicateVariations,
 }) => {
   const dispatch = useDispatch();
+  const { allOptions } = useSelector((state) => state?.options);
+  const { allVariations } = useSelector((state) => state?.variations);
   const { allExperience } = useSelector((state) => state.experiences);
   const { allProvider } = useSelector((state) => state.providers);
   const { allVendors } = useSelector((state) => state.vendors);
@@ -49,7 +55,7 @@ const DuplicateExperienceDialog = ({
   const whyRef = React.useRef(null);
   const serviceWhyRef = React.useRef(null);
 
-  const { experienceAddSuccess, loading } = useSelector(
+  const { duplicateExperienceAddSuccess, loading } = useSelector(
     (state) => state?.experiences
   );
   let initialValues = {
@@ -73,7 +79,7 @@ const DuplicateExperienceDialog = ({
           providers?.map((singleItem) => singleItem?.id)?.includes(item?.id)
         );
         dispatch(
-          setupAddExperience([
+          setupAddDuplicateExperience([
             {
               ...values,
               providers:
@@ -301,12 +307,12 @@ const DuplicateExperienceDialog = ({
   }
 
   React.useEffect(() => {
-    if (experienceAddSuccess) {
-      formik.resetForm({ values: initialValues });
+    if (duplicateExperienceAddSuccess) {
       setShowDuplicateDialog(false);
+      formik.resetForm({ values: initialValues });
       toast.success("Experience Duplicated Successfully");
     }
-  }, [experienceAddSuccess]);
+  }, [duplicateExperienceAddSuccess]);
 
   React.useEffect(() => {
     if (Object.keys(selectedExperience)?.length !== 0) {
@@ -402,6 +408,21 @@ const DuplicateExperienceDialog = ({
     }
   }, [selectedExperience]);
 
+  React.useEffect(() => {
+    if (allOptions && allOptions?.length !== 0) {
+      setDuplicateOptions(allOptions);
+    }
+    if (!allOptions || allOptions?.length === 0) {
+      setDuplicateOptions([]);
+    }
+    if (allVariations && allVariations?.length !== 0) {
+      setDuplicateVariations(allVariations);
+    }
+    if (!allVariations || allVariations?.length === 0) {
+      setDuplicateVariations([]);
+    }
+  }, []);
+
   return (
     <ExperienceDialogForm
       duplicate={true}
@@ -469,6 +490,10 @@ const DuplicateExperienceDialog = ({
       resetServiceMultiSelect={resetServiceMultiSelect}
       setResetServiceMultiSelect={setResetServiceMultiSelect}
       selectedExperience={selectedExperience}
+      duplicateOptions={duplicateOptions}
+      setDuplicateOptions={setDuplicateOptions}
+      setDuplicateVariations={setDuplicateVariations}
+      duplicateVariations={duplicateVariations}
     />
   );
 };

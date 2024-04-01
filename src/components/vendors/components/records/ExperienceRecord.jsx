@@ -2,15 +2,58 @@ import React from "react";
 import Button from "@mui/material/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { CircularProgress } from "@mui/material";
-import { changeSelectedExperience } from "../../../../global-redux/reducers/experiences/slice";
-import { setupDeleteExperience } from "../../../../global-redux/reducers/experiences/slice";
+import {
+  setupDeleteExperience,
+  setupAddExperience,
+  changeSelectedExperience,
+} from "../../../../global-redux/reducers/experiences/slice";
+import Tooltip from "@mui/material/Tooltip";
+import { toast } from "react-toastify";
 
 const experienceRecord = ({
   setShowAddExperienceDialog,
   setShowViewSelectedExperience,
 }) => {
   const dispatch = useDispatch();
-  const { allExperience, loading } = useSelector((state) => state.experiences);
+  const [duplicateExperienceCall, setDuplicateExperienceCall] =
+    React.useState(false);
+  const { allExperience, loading, experienceAddSuccess } = useSelector(
+    (state) => state.experiences
+  );
+
+  function handleDuplicateExperience(item) {
+    if (item) {
+      if (!loading) {
+        dispatch(
+          setupAddExperience([
+            {
+              title: item?.title,
+              vendorId: item?.vendorId,
+              providers: item?.providers || [],
+              description: item?.description,
+              address: item?.address,
+              price: item?.price || [],
+              duration: item?.duration || [],
+              availableTime: item?.availableTime || [],
+              links: item?.links || [],
+              linkWithOtherExperience: item?.linkWithOtherExperience || [],
+              linkWithOtherService: item?.linkWithOtherService || [],
+              termsAndConditions: item?.termsAndConditions,
+              storyLineKeywords: item?.storyLineKeywords || [],
+            },
+          ])
+        );
+        setDuplicateExperienceCall(true);
+      }
+    }
+  }
+
+  React.useEffect(() => {
+    if (experienceAddSuccess === true && duplicateExperienceCall === true) {
+      toast.success("Experience Duplicated Successfully");
+      setDuplicateExperienceCall(false);
+    }
+  }, [experienceAddSuccess]);
   return (
     <div>
       {loading ? (
@@ -85,6 +128,14 @@ const experienceRecord = ({
                                   )
                                 }
                               ></i>
+                              <Tooltip title="Duplicate" placement="top">
+                                <i
+                                  className="bi bi-copy f-18 cursor-pointer"
+                                  onClick={() =>
+                                    handleDuplicateExperience(experience)
+                                  }
+                                ></i>
+                              </Tooltip>
                             </td>
                           </tr>
                         );

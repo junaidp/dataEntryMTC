@@ -2,15 +2,57 @@ import React from "react";
 import Button from "@mui/material/Button";
 import { useSelector, useDispatch } from "react-redux";
 import { CircularProgress } from "@mui/material";
-import { setupDeleteVaration } from "../../../../global-redux/reducers/variations/slice";
+import {
+  setupDeleteVaration,
+  setupAddVariation,
+} from "../../../../global-redux/reducers/variations/slice";
+import Tooltip from "@mui/material/Tooltip";
+import { toast } from "react-toastify";
 
 const VariationRecord = ({
   setShowAddVariationDialog,
   setShowViewVariationDialog,
   setSelectedVariation,
 }) => {
-  const { allVariations, loading } = useSelector((state) => state?.variations);
   const dispatch = useDispatch();
+  const { allVariations, loading, variationAddSuccess } = useSelector(
+    (state) => state?.variations
+  );
+  const [duplicateVariationCall, setDuplicateVariationCall] =
+    React.useState(false);
+  function handleDuplicateVariation(item) {
+    if (item) {
+      if (!loading) {
+        dispatch(
+          setupAddVariation([
+            {
+              experienceId: item?.experienceId,
+              title: item?.title,
+              xpAddress: item?.xpAddress,
+              price: item?.price || [],
+              duration: item?.duration || [],
+              availableTime: item?.availableTime || [],
+              links: item?.links || [],
+              linkWithOtherExperience: item?.linkWithOtherExperience || [],
+              providers: item?.providers || [],
+              description: item?.description,
+              termsAndConditions: item?.termsAndConditions,
+              storyLineKeywords: item?.storyLineKeywords || [],
+            },
+          ])
+        );
+        setDuplicateVariationCall(true);
+      }
+    }
+  }
+
+  React.useEffect(() => {
+    if (variationAddSuccess === true && duplicateVariationCall === true) {
+      toast.success("Variation Duplicated Successfully");
+      setDuplicateVariationCall(false);
+    }
+  }, [variationAddSuccess]);
+
   return (
     <div className="mt-4 mb-4">
       {loading ? (
@@ -80,6 +122,14 @@ const VariationRecord = ({
                                   )
                                 }
                               ></i>
+                              <Tooltip title="Duplicate" placement="top">
+                                <i
+                                  className="bi bi-copy f-18 cursor-pointer"
+                                  onClick={() =>
+                                    handleDuplicateVariation(variation)
+                                  }
+                                ></i>
+                              </Tooltip>
                             </td>
                           </tr>
                         );

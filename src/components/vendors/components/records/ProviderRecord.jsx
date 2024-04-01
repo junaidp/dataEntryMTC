@@ -5,14 +5,51 @@ import { CircularProgress } from "@mui/material";
 import {
   changeSelectedProvider,
   setupDeleteProvider,
+  setupAddProvider,
 } from "../../../../global-redux/reducers/providers/slice";
+import Tooltip from "@mui/material/Tooltip";
+import { toast } from "react-toastify";
 
 const providersRecord = ({
   setShowAddProviderDialog,
   setShowViewSelectedProvider,
 }) => {
   const dispatch = useDispatch();
-  const { allProvider, loading } = useSelector((state) => state.providers);
+  const { allProvider, loading, providerAddSuccess } = useSelector(
+    (state) => state.providers
+  );
+  const [duplicateProviderCall, setDuplicateProviderCall] =
+    React.useState(false);
+  function handleDuplicateProvider(item) {
+    if (item) {
+      if (!loading) {
+        dispatch(
+          setupAddProvider([
+            {
+              name: item?.name,
+              address: item?.address,
+              website: item?.website,
+              pointOfContact: item?.pointOfContact,
+              email: item?.email,
+              manageVenue: item?.manageVenue,
+              regionsCovered: item?.regionsCovered,
+              vendorId: item?.vendorId,
+              description: item?.description,
+              termsNConditions: item?.termsNConditions,
+            },
+          ])
+        );
+        setDuplicateProviderCall(true);
+      }
+    }
+  }
+  React.useEffect(() => {
+    if (providerAddSuccess === true && duplicateProviderCall === true) {
+      toast.success("Provider Duplicated Successfully");
+      setDuplicateProviderCall(false);
+    }
+  }, [providerAddSuccess]);
+
   return (
     <div>
       {loading ? (
@@ -82,6 +119,14 @@ const providersRecord = ({
                                   )
                                 }
                               ></i>
+                              <Tooltip title="Duplicate" placement="top">
+                                <i
+                                  className="bi bi-copy f-18 cursor-pointer"
+                                  onClick={() =>
+                                    handleDuplicateProvider(provider)
+                                  }
+                                ></i>
+                              </Tooltip>
                             </td>
                           </tr>
                         );

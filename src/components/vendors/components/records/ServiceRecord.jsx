@@ -2,15 +2,57 @@ import React from "react";
 import Button from "@mui/material/Button";
 import { useSelector, useDispatch } from "react-redux";
 import { CircularProgress } from "@mui/material";
-import { changeSelectedService } from "../../../../global-redux/reducers/services/slice";
-import { setupDeleteService } from "../../../../global-redux/reducers/services/slice";
+import {
+  changeSelectedService,
+  setupDeleteService,
+  setupAddService,
+} from "../../../../global-redux/reducers/services/slice";
+import Tooltip from "@mui/material/Tooltip";
+import { toast } from "react-toastify";
 
 const serviceRecord = ({
   setShowAddServiceDialog,
   setShowViewSelectedService,
 }) => {
   const dispatch = useDispatch();
-  const { allService, loading } = useSelector((state) => state.services);
+  const [duplicateServiceCall, setDuplicateServiceCall] = React.useState(false);
+  const { allService, loading, serviceAddSuccess } = useSelector(
+    (state) => state.services
+  );
+  function handleDuplicateService(item) {
+    if (item) {
+      if (!loading) {
+        dispatch(
+          setupAddService([
+            {
+              title: item?.title,
+              vendorId: item?.vendorId,
+              providers: item?.providers || [],
+              description: item?.description,
+              address: item?.address,
+              price: item?.price || [],
+              duration: item?.duration || [],
+              availableTime: item?.availableTime || [],
+              links: item?.links || [],
+              linkWithOtherService: item?.linkWithOtherService || [],
+              linkWithOtherExperience: item?.linkWithOtherExperience || [],
+              termsAndConditions: item?.termsAndConditions,
+              storyLineKeywords: item?.storyLineKeywords || [],
+            },
+          ])
+        );
+        setDuplicateServiceCall(true);
+      }
+    }
+  }
+
+  React.useEffect(() => {
+    if (serviceAddSuccess === true && duplicateServiceCall === true) {
+      toast.success("Service Duplicated Successfully");
+      setDuplicateServiceCall(false);
+    }
+  }, [serviceAddSuccess]);
+
   return (
     <div>
       {loading ? (
@@ -80,6 +122,14 @@ const serviceRecord = ({
                                   )
                                 }
                               ></i>
+                              <Tooltip title="Duplicate" placement="top">
+                                <i
+                                  className="bi bi-copy f-18 cursor-pointer"
+                                  onClick={() =>
+                                    handleDuplicateService(service)
+                                  }
+                                ></i>
+                              </Tooltip>
                             </td>
                           </tr>
                         );

@@ -6,10 +6,17 @@ import ViewSelectedProvider from "./view-provider/Provider";
 import AddProviderDialog from "./add-provider/Provider";
 import Button from "@mui/material/Button";
 import { setupAddVariation } from "../../../global-redux/reducers/variations/slice";
+import { setupAddProvider } from "../../../global-redux/reducers/providers/slice";
+import Tooltip from "@mui/material/Tooltip";
+import { toast } from "react-toastify";
 
 const variationForm = ({ variation }) => {
   const dispatch = useDispatch();
   const { allExperience } = useSelector((state) => state?.experiences);
+  const { allProvider, providerAddSuccess, loading } = useSelector(
+    (state) => state.providers
+  );
+  const [duplicateProvider, setDuplicateProvider] = React.useState(false);
   const [selectedProvider, setSelectedProvider] = React.useState({});
   const [showViewSelectedProvider, setShowViewSelectedProvider] =
     React.useState(false);
@@ -22,6 +29,39 @@ const variationForm = ({ variation }) => {
     };
     dispatch(setupAddVariation([filteredVariationObject]));
   }
+  function handleDuplicateProvider(item) {
+    let currentDuplicatedProvider = allProvider?.find(
+      (provider) => provider?.id === item?.providerId
+    );
+    if (currentDuplicatedProvider) {
+      if (!loading) {
+        dispatch(
+          setupAddProvider([
+            {
+              name: currentDuplicatedProvider?.name,
+              address: currentDuplicatedProvider?.address,
+              website: currentDuplicatedProvider?.website,
+              pointOfContact: currentDuplicatedProvider?.pointOfContact,
+              email: currentDuplicatedProvider?.email,
+              manageVenue: currentDuplicatedProvider?.manageVenue,
+              regionsCovered: currentDuplicatedProvider?.regionsCovered,
+              vendorId: currentDuplicatedProvider?.vendorId,
+              description: currentDuplicatedProvider?.description,
+              termsNConditions: currentDuplicatedProvider?.termsNConditions,
+            },
+          ])
+        );
+      }
+      setDuplicateProvider(true);
+    }
+  }
+
+  React.useEffect(() => {
+    if (providerAddSuccess === true && duplicateProvider === true) {
+      toast.success("Provider Duplicated Successfully");
+      setDuplicateProvider(false);
+    }
+  }, [providerAddSuccess]);
   return (
     <div className="px-4 py-4">
       {showViewSelectedProvider && (
@@ -239,6 +279,14 @@ const variationForm = ({ variation }) => {
                                       handleDeleteProvider(provider?.providerId)
                                     }
                                   ></i>
+                                  <Tooltip title="Duplicate" placement="top">
+                                    <i
+                                      className="bi bi-copy f-18 cursor-pointer"
+                                      onClick={() =>
+                                        handleDuplicateProvider(provider)
+                                      }
+                                    ></i>
+                                  </Tooltip>
                                 </td>
                               </tr>
                             );

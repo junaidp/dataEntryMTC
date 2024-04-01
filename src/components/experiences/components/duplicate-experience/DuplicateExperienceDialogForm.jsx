@@ -7,6 +7,12 @@ import MultipleSelectExperiences from "../edit-experience-dialog/MultiSelect";
 import MultipleSelectProviders from "../edit-experience-dialog/MultiSelectProviders";
 import MultiSelectServices from "../MultiSelectServices";
 import AutoCompleteVendor from "../edit-experience-dialog/AutoSelectVendor";
+import OptionRecord from "./OptionsRecord";
+import VariationRecord from "./VaraitionRecord";
+import ViewOptionDialog from "../view-dialogs/ViewOption";
+import ViewVaraitionDialog from "../view-dialogs/ViewVariation";
+import AddOptionDialog from "./add-dialogs/options/AddOptionDialog";
+import AddVariationDialog from "./add-dialogs/variations/AddVariationDialog";
 
 const DuplicateExperienceDialogForm = ({
   formik,
@@ -71,9 +77,61 @@ const DuplicateExperienceDialogForm = ({
   setResetExperienceMultiSelect,
   resetServiceMultiSelect,
   setResetServiceMultiSelect,
+  duplicateOptions,
+  duplicateVariations,
+  setDuplicateOptions,
+  setDuplicateVariations,
 }) => {
+  const [showViewVariationDialog, setShowViewVariationDialog] =
+    React.useState(false);
+  const [selectedVariation, setSelectedVariation] = React.useState({});
+  const [showViewOptionDialog, setShowViewOptionDialog] = React.useState(false);
+  const [selectedOption, setSelectedOption] = React.useState({});
+  const [showAddOptionDialog, setShowAddOptionDialog] = React.useState(false);
+  const [showAddVariationDialog, setShowAddVariationDialog] =
+    React.useState(false);
+
   return (
     <form onSubmit={formik.handleSubmit}>
+      {showViewOptionDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap w-100">
+            <ViewOptionDialog
+              selectedOption={selectedOption}
+              setShowViewOptionDialog={setShowViewOptionDialog}
+            />
+          </div>
+        </div>
+      )}
+      {showAddOptionDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap w-100">
+            <AddOptionDialog setShowAddOptionDialog={setShowAddOptionDialog} 
+            setDuplicateOptions={setDuplicateOptions}
+            />
+          </div>
+        </div>
+      )}
+      {showViewVariationDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap w-100">
+            <ViewVaraitionDialog
+              selectedVariation={selectedVariation}
+              setShowViewVariationDialog={setShowViewVariationDialog}
+            />
+          </div>
+        </div>
+      )}
+      {showAddVariationDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap w-100">
+            <AddVariationDialog
+              setShowAddVariationDialog={setShowAddVariationDialog}
+              setDuplicateVariations={setDuplicateVariations}
+            />
+          </div>
+        </div>
+      )}
       <div className="px-4 py-4">
         <h2 className="pb-4 heading">
           {duplicate && duplicate === true
@@ -115,6 +173,25 @@ const DuplicateExperienceDialogForm = ({
                 }}
               />
             </div>
+          </div>
+
+          <div className="max-height-200 overflow-y-auto">
+            <OptionRecord
+              setShowAddOptionDialog={setShowAddOptionDialog}
+              setShowViewOptionDialog={setShowViewOptionDialog}
+              setSelectedOption={setSelectedOption}
+              duplicateOptions={duplicateOptions}
+              setDuplicateOptions={setDuplicateOptions}
+            />
+          </div>
+          <div className="max-height-200 overflow-y-auto">
+            <VariationRecord
+              setShowAddVariationDialog={setShowAddVariationDialog}
+              setShowViewVariationDialog={setShowViewVariationDialog}
+              setSelectedVariation={setSelectedVariation}
+              duplicateVariations={duplicateVariations}
+              setDuplicateVariations={setDuplicateVariations}
+            />
           </div>
 
           <div className="mb-2 mt-3 w-100">

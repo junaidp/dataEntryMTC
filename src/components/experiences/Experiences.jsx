@@ -6,6 +6,7 @@ import {
   setupGetAllExperienceWithOutParams,
   resetExperienceAddSuccess,
   setupAddExperience,
+  resetDuplicateExperienceAddSuccess,
 } from "../../global-redux/reducers/experiences/slice";
 import AddExperienceDialog from "./components/AddExperieneDialog";
 import { setupGetAllVendors } from "../../global-redux/reducers/vendor/slice";
@@ -17,10 +18,16 @@ import {
   setupGetAllProviderWithOutParams,
   resetProviderAddSuccess,
 } from "../../global-redux/reducers/providers/slice";
-import { setupGetAllOptions } from "../../global-redux/reducers/options/slice";
-import { setupGetAllVariations } from "../../global-redux/reducers/variations/slice";
-import { resetOptionAddSuccess } from "../../global-redux/reducers/options/slice";
-import { resetVariationAddSuccess } from "../../global-redux/reducers/variations/slice";
+import {
+  setupGetAllOptions,
+  setupAddOption,
+  resetOptionAddSuccess,
+} from "../../global-redux/reducers/options/slice";
+import {
+  setupGetAllVariations,
+  setupAddVariation,
+  resetVariationAddSuccess,
+} from "../../global-redux/reducers/variations/slice";
 import { setupGetAllServiceWithOutParama } from "../../global-redux/reducers/services/slice";
 import DuplicateExperienceDialog from "./components/duplicate-experience/DuplicateExperienceDialog";
 
@@ -29,15 +36,21 @@ const Experiences = ({
   setShowAddExperienceDialog,
 }) => {
   const dispatch = useDispatch();
-  const { allExperience, experienceAddSuccess, loading } = useSelector(
-    (state) => state.experiences
-  );
+  const {
+    allExperience,
+    experienceAddSuccess,
+    loading,
+    duplicateExperienceAddSuccess,
+    singleDuplicateExperience,
+  } = useSelector((state) => state.experiences);
   const { providerAddSuccess, currentProviderObject } = useSelector(
     (state) => state?.providers
   );
   const [showDuplicateDialog, setShowDuplicateDialog] = React.useState(false);
   const { optionAddSuccess } = useSelector((state) => state.options);
   const { variationAddSuccess } = useSelector((state) => state.variations);
+  const [duplicateOptions, setDuplicateOptions] = React.useState([]);
+  const [duplicateVariations, setDuplicateVariations] = React.useState([]);
 
   const [showDeleteExperienceDialog, setShowDeleteExperienceDialog] =
     React.useState(false);
@@ -123,11 +136,73 @@ const Experiences = ({
   }, [providerAddSuccess]);
 
   React.useEffect(() => {
+    if (duplicateExperienceAddSuccess === true) {
+      if (
+        duplicateOptions &&
+        duplicateOptions?.length !== 0 &&
+        singleDuplicateExperience?.id
+      ) {
+        dispatch(
+          setupAddOption(
+            duplicateOptions?.map((option) => {
+              return {
+                experienceId: singleDuplicateExperience?.id,
+                title: option?.title,
+                xpAddress: option?.xpAddress,
+                price: option?.price || [],
+                duration: option?.duration || [],
+                availableTime: option?.availableTime || [],
+                links: option?.links || [],
+                linkWithOtherExperience: null,
+                providers: option?.providers || [],
+                description: option?.description,
+                termsAndConditions: option?.termsAndConditions,
+                storyLineKeywords: option?.storyLineKeywords || [],
+              };
+            })
+          )
+        );
+      }
+      if (
+        duplicateVariations &&
+        duplicateVariations?.length !== 0 &&
+        singleDuplicateExperience?.id
+      ) {
+        dispatch(
+          setupAddVariation(
+            duplicateVariations?.map((variation) => {
+              return {
+                experienceId: singleDuplicateExperience?.id,
+                title: variation?.title,
+                xpAddress: variation?.xpAddress,
+                price: variation?.price || [],
+                duration: variation?.duration || [],
+                availableTime: variation?.availableTime || [],
+                links: variation?.links || [],
+                linkWithOtherExperience: null,
+                providers: variation?.providers || [],
+                description: variation?.description,
+                termsAndConditions: variation?.termsAndConditions,
+                storyLineKeywords: variation?.storyLineKeywords || [],
+              };
+            })
+          )
+        );
+      }
+      dispatch(setupGetAllExperienceWithOutParams());
+      setShowCurrentExperienceId("");
+      dispatch(resetExperienceAddSuccess());
+      setPage(1);
+      setDuplicateOptions([]);
+      setDuplicateVariations([]);
+      dispatch(resetDuplicateExperienceAddSuccess());
+    }
+  }, [duplicateExperienceAddSuccess]);
+
+  React.useEffect(() => {
     if (experienceAddSuccess) {
       dispatch(setupGetAllExperienceWithOutParams());
-      dispatch(setupGetAllVendors());
       dispatch(setupGetAllProviderWithOutParams());
-      dispatch(setupGetAllServiceWithOutParama());
       setShowCurrentExperienceId("");
       dispatch(resetExperienceAddSuccess());
       setPage(1);
@@ -158,6 +233,10 @@ const Experiences = ({
             <DuplicateExperienceDialog
               setShowDuplicateDialog={setShowDuplicateDialog}
               selectedExperience={selectedExperience}
+              duplicateOptions={duplicateOptions}
+              setDuplicateOptions={setDuplicateOptions}
+              duplicateVariations={duplicateVariations}
+              setDuplicateVariations={setDuplicateVariations}
             />
           </div>
         </div>

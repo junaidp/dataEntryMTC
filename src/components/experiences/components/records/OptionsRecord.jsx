@@ -2,15 +2,57 @@ import React from "react";
 import Button from "@mui/material/Button";
 import { useSelector, useDispatch } from "react-redux";
 import { CircularProgress } from "@mui/material";
-import { setupDeleteOption } from "../../../../global-redux/reducers/options/slice";
+import {
+  setupDeleteOption,
+  setupAddOption,
+} from "../../../../global-redux/reducers/options/slice";
+import Tooltip from "@mui/material/Tooltip";
+import { toast } from "react-toastify";
 
 const OptionRecord = ({
   setShowAddOptionDialog,
   setShowViewOptionDialog,
   setSelectedOption,
 }) => {
-  const { allOptions, loading } = useSelector((state) => state?.options);
   const dispatch = useDispatch();
+  const { allOptions, loading, optionAddSuccess } = useSelector(
+    (state) => state?.options
+  );
+  const [duplicateOptionCall, setDuplicateOptionCall] = React.useState(false);
+
+  function handleDuplicateOption(item) {
+    if (item) {
+      if (!loading) {
+        dispatch(
+          setupAddOption([
+            {
+              experienceId: item?.experienceId,
+              title: item?.title,
+              xpAddress: item?.xpAddress,
+              price: item?.price || [],
+              duration: item?.duration || [],
+              availableTime: item?.availableTime || [],
+              links: item?.links || [],
+              linkWithOtherExperience: item?.linkWithOtherExperience || [],
+              providers: item?.providers || [],
+              description: item?.description,
+              termsAndConditions: item?.termsAndConditions,
+              storyLineKeywords: item?.storyLineKeywords || [],
+            },
+          ])
+        );
+        setDuplicateOptionCall(true);
+      }
+    }
+  }
+
+  React.useEffect(() => {
+    if (optionAddSuccess === true && duplicateOptionCall === true) {
+      toast.success("Option Duplicated Successfully");
+      setDuplicateOptionCall(false);
+    }
+  }, [optionAddSuccess]);
+
   return (
     <div className="mt-4 mb-4">
       {loading ? (
@@ -78,6 +120,12 @@ const OptionRecord = ({
                                   )
                                 }
                               ></i>
+                              <Tooltip title="Duplicate" placement="top">
+                                <i
+                                  className="bi bi-copy f-18 cursor-pointer"
+                                  onClick={() => handleDuplicateOption(option)}
+                                ></i>
+                              </Tooltip>
                             </td>
                           </tr>
                         );

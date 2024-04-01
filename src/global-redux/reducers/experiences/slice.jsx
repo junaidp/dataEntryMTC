@@ -2,6 +2,7 @@ import { toast } from "react-toastify";
 import {
   getAllExperience,
   addExperience,
+  addDuplicateExperience,
   getAllExperienceWithOutParams,
   getExperienceWithQuerySearch,
   deleteExperience,
@@ -13,6 +14,8 @@ const initialState = {
   allExperience: [],
   experienceAddSuccess: false,
   selectedExperience: {},
+  singleDuplicateExperience: {},
+  duplicateExperienceAddSuccess: false,
 };
 
 export const setupGetAllExperience = createAsyncThunk(
@@ -39,6 +42,12 @@ export const setupAddExperience = createAsyncThunk(
     return addExperience(data, thunkAPI);
   }
 );
+export const setupAddDuplicateExperience = createAsyncThunk(
+  "experience/addDuplicateExperience",
+  async (data, thunkAPI) => {
+    return addDuplicateExperience(data, thunkAPI);
+  }
+);
 export const setupDeleteExperience = createAsyncThunk(
   "experience/deleteExperience",
   async (data, thunkAPI) => {
@@ -55,6 +64,10 @@ export const slice = createSlice({
     },
     changeSelectedExperience: (state, action) => {
       state.selectedExperience = action.payload;
+    },
+    resetDuplicateExperienceAddSuccess: (state) => {
+      state.duplicateExperienceAddSuccess = false;
+      state.singleDuplicateExperience = {};
     },
   },
   extraReducers: (builder) => {
@@ -132,6 +145,24 @@ export const slice = createSlice({
           toast.error("An Error has occurred");
         }
       });
+    // Duplicate Experience
+    builder
+      .addCase(setupAddDuplicateExperience.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupAddDuplicateExperience.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.singleDuplicateExperience = payload[0] || [];
+        state.duplicateExperienceAddSuccess = true;
+      })
+      .addCase(setupAddDuplicateExperience.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
     // Delete Experince
     builder
       .addCase(setupDeleteExperience.pending, (state) => {
@@ -153,7 +184,10 @@ export const slice = createSlice({
   },
 });
 
-export const { resetExperienceAddSuccess, changeSelectedExperience } =
-  slice.actions;
+export const {
+  resetExperienceAddSuccess,
+  changeSelectedExperience,
+  resetDuplicateExperienceAddSuccess,
+} = slice.actions;
 
 export default slice.reducer;

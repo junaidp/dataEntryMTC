@@ -2,15 +2,23 @@ import React from "react";
 import Button from "@mui/material/Button";
 import ViewSelectedProvider from "../view-dialogs/ViewProvider";
 import AddProviderDialog from "../extras-add-dialogs.jsx/provider/AddProviderDialog";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setupAddExperience } from "../../../../global-redux/reducers/experiences/slice";
+import { setupAddProvider } from "../../../../global-redux/reducers/providers/slice";
+import Tooltip from "@mui/material/Tooltip";
+import { toast } from "react-toastify";
 
 const ProviderRecord = ({ experience }) => {
   const dispatch = useDispatch();
   const [selectedProvider, setSelectedProvider] = React.useState({});
+  const { allProvider, providerAddSuccess, loading } = useSelector(
+    (state) => state.providers
+  );
   const [showViewSelectedProvider, setShowViewSelectedProvider] =
     React.useState(false);
   const [showAddProviderDialog, setShowAddProviderDialog] =
+    React.useState(false);
+  const [duplicateProviderCall, setDuplicateProviderCall] =
     React.useState(false);
 
   function handleDeleteProvider(id) {
@@ -20,6 +28,40 @@ const ProviderRecord = ({ experience }) => {
     };
     dispatch(setupAddExperience([filteredExperienceObject]));
   }
+
+  function handleDuplicateProvider(item) {
+    let currentDuplicatedProvider = allProvider?.find(
+      (provider) => provider?.id === item?.providerId
+    );
+    if (currentDuplicatedProvider) {
+      if (!loading) {
+        dispatch(
+          setupAddProvider([
+            {
+              name: currentDuplicatedProvider?.name,
+              address: currentDuplicatedProvider?.address,
+              website: currentDuplicatedProvider?.website,
+              pointOfContact: currentDuplicatedProvider?.pointOfContact,
+              email: currentDuplicatedProvider?.email,
+              manageVenue: currentDuplicatedProvider?.manageVenue,
+              regionsCovered: currentDuplicatedProvider?.regionsCovered,
+              vendorId: currentDuplicatedProvider?.vendorId,
+              description: currentDuplicatedProvider?.description,
+              termsNConditions: currentDuplicatedProvider?.termsNConditions,
+            },
+          ])
+        );
+      }
+      setDuplicateProviderCall(true);
+    }
+  }
+
+  React.useEffect(() => {
+    if (providerAddSuccess === true && duplicateProviderCall === true) {
+      toast.success("Provider Duplicated Successfully");
+      setDuplicateProviderCall(false);
+    }
+  }, [providerAddSuccess]);
 
   return (
     <div className="row mt-4 mb-4">
@@ -103,6 +145,12 @@ const ProviderRecord = ({ experience }) => {
                               handleDeleteProvider(provider?.providerId)
                             }
                           ></i>
+                          <Tooltip title="Duplicate" placement="top">
+                            <i
+                              className="bi bi-copy f-18 cursor-pointer"
+                              onClick={() => handleDuplicateProvider(provider)}
+                            ></i>
+                          </Tooltip>
                         </td>
                       </tr>
                     );
