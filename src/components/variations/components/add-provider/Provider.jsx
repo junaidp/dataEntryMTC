@@ -90,7 +90,7 @@ const AddProviderDialog = ({ setShowAddProviderDialog }) => {
           </div>
 
           <div className="row">
-            <div className="col-lg-6 mb-4">
+            <div className="col-lg-6 mb-2">
               <TextField
                 id="address"
                 name="address"
@@ -100,7 +100,7 @@ const AddProviderDialog = ({ setShowAddProviderDialog }) => {
                 {...formik.getFieldProps("address")}
               />
             </div>
-            <div className="col-lg-6 mb-4">
+            <div className="col-lg-6 mb-2">
               <TextField
                 id="pointOfContact"
                 name="pointOfContact"

@@ -22,7 +22,7 @@ import { setupGetAllVariations } from "../../global-redux/reducers/variations/sl
 import { resetOptionAddSuccess } from "../../global-redux/reducers/options/slice";
 import { resetVariationAddSuccess } from "../../global-redux/reducers/variations/slice";
 import { setupGetAllServiceWithOutParama } from "../../global-redux/reducers/services/slice";
-import DuplicateExperienceDialog from "./components/DuplicateExperienceDialog";
+import DuplicateExperienceDialog from "./components/duplicate-experience/DuplicateExperienceDialog";
 
 const Experiences = ({
   showAddExperienceDialog,

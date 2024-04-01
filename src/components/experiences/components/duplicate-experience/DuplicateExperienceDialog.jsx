@@ -2,10 +2,10 @@ import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { v4 as uuidv4 } from "uuid";
-import { setupAddExperience } from "../../../global-redux/reducers/experiences/slice";
+import { setupAddExperience } from "../../../../global-redux/reducers/experiences/slice";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import ExperienceDialogForm from "./edit-experience-dialog/ExperienceDialogForm";
+import ExperienceDialogForm from "./DuplicateExperienceDialogForm";
 
 const DuplicateExperienceDialog = ({
   setShowDuplicateDialog,
