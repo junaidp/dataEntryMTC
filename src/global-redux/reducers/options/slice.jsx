@@ -4,6 +4,7 @@ import {
   getAllOptions,
   getAllOptionsWithOutParams,
   deleteOption,
+  editProvider,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -35,6 +36,12 @@ export const setupDeleteOption = createAsyncThunk(
   "option/deleteOption",
   async (data, thunkAPI) => {
     return deleteOption(data, thunkAPI);
+  }
+);
+export const setupEditProvider = createAsyncThunk(
+  "option/editProvider",
+  async (data, thunkAPI) => {
+    return editProvider(data, thunkAPI);
   }
 );
 
@@ -114,6 +121,23 @@ export const slice = createSlice({
         toast.success("Option Deleted Successfully");
       })
       .addCase(setupDeleteOption.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    builder
+      .addCase(setupEditProvider.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupEditProvider.fulfilled, (state) => {
+        state.loading = false;
+        state.optionAddSuccess = true;
+        toast.success("Provider Updated Successfully");
+      })
+      .addCase(setupEditProvider.rejected, (state, action) => {
         state.loading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);

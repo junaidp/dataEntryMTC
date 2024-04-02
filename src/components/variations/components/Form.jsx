@@ -9,6 +9,7 @@ import { setupAddVariation } from "../../../global-redux/reducers/variations/sli
 import { setupAddProvider } from "../../../global-redux/reducers/providers/slice";
 import Tooltip from "@mui/material/Tooltip";
 import { toast } from "react-toastify";
+import EditProviderDialog from "./edit-provider/EditProvider";
 
 const variationForm = ({ variation }) => {
   const dispatch = useDispatch();
@@ -18,10 +19,13 @@ const variationForm = ({ variation }) => {
   );
   const [duplicateProvider, setDuplicateProvider] = React.useState(false);
   const [selectedProvider, setSelectedProvider] = React.useState({});
+  const [showEditProviderDialog, setShowEditProviderDialog] =
+    React.useState(false);
   const [showViewSelectedProvider, setShowViewSelectedProvider] =
     React.useState(false);
   const [showAddProviderDialog, setShowAddProviderDialog] =
     React.useState(false);
+
   function handleDeleteProvider(id) {
     let filteredVariationObject = {
       ...variation,
@@ -79,6 +83,16 @@ const variationForm = ({ variation }) => {
           <div className="model-wrap">
             <AddProviderDialog
               setShowAddProviderDialog={setShowAddProviderDialog}
+            />
+          </div>
+        </div>
+      )}
+      {showEditProviderDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <EditProviderDialog
+              setShowEditProviderDialog={setShowEditProviderDialog}
+              selectedProvider={selectedProvider}
             />
           </div>
         </div>
@@ -266,22 +280,37 @@ const variationForm = ({ variation }) => {
                                   </Button>
                                 </td>
                                 <td>
-                                  <i
-                                    className="fa-eye fa f-18 cursor-pointer"
-                                    onClick={() => {
-                                      setSelectedProvider(provider);
-                                      setShowViewSelectedProvider(true);
-                                    }}
-                                  ></i>
-                                  <i
-                                    className="fa fa-trash text-danger f-18 px-3 cursor-pointer"
-                                    onClick={() =>
-                                      handleDeleteProvider(provider?.providerId)
-                                    }
-                                  ></i>
+                                  <Tooltip title="View" placement="top">
+                                    <i
+                                      className="fa-eye fa f-18 cursor-pointer"
+                                      onClick={() => {
+                                        setSelectedProvider(provider);
+                                        setShowViewSelectedProvider(true);
+                                      }}
+                                    ></i>
+                                  </Tooltip>
+                                  <Tooltip title="Delete" placement="top">
+                                    <i
+                                      className="fa fa-trash text-danger f-18 px-3 cursor-pointer"
+                                      onClick={() =>
+                                        handleDeleteProvider(
+                                          provider?.providerId
+                                        )
+                                      }
+                                    ></i>
+                                  </Tooltip>
+                                  <Tooltip title="Edit" placement="top">
+                                    <i
+                                      className="bi bi-pencil-square f-18  cursor-pointer"
+                                      onClick={() => {
+                                        setSelectedProvider(provider);
+                                        setShowEditProviderDialog(true);
+                                      }}
+                                    ></i>
+                                  </Tooltip>
                                   <Tooltip title="Duplicate" placement="top">
                                     <i
-                                      className="bi bi-copy f-18 cursor-pointer"
+                                      className="bi bi-copy f-18 px-3 cursor-pointer"
                                       onClick={() =>
                                         handleDuplicateProvider(provider)
                                       }

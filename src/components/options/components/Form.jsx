@@ -9,6 +9,7 @@ import { setupAddOption } from "../../../global-redux/reducers/options/slice";
 import { setupAddProvider } from "../../../global-redux/reducers/providers/slice";
 import Tooltip from "@mui/material/Tooltip";
 import { toast } from "react-toastify";
+import EditProviderDialog from "./edit-provider/EditProvider";
 
 const optionForm = ({ option }) => {
   const dispatch = useDispatch();
@@ -22,6 +23,9 @@ const optionForm = ({ option }) => {
     React.useState(false);
   const [showAddProviderDialog, setShowAddProviderDialog] =
     React.useState(false);
+  const [showEditProviderDialog, setShowEditProviderDialog] =
+    React.useState(false);
+
   function handleDeleteProvider(id) {
     let filteredOptionObject = {
       ...option,
@@ -80,6 +84,16 @@ const optionForm = ({ option }) => {
           <div className="model-wrap">
             <AddProviderDialog
               setShowAddProviderDialog={setShowAddProviderDialog}
+            />
+          </div>
+        </div>
+      )}
+      {showEditProviderDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <EditProviderDialog
+              setShowEditProviderDialog={setShowEditProviderDialog}
+              selectedProvider={selectedProvider}
             />
           </div>
         </div>
@@ -256,22 +270,35 @@ const optionForm = ({ option }) => {
                                 </Button>
                               </td>
                               <td>
-                                <i
-                                  className="fa-eye fa f-18 cursor-pointer"
-                                  onClick={() => {
-                                    setSelectedProvider(provider);
-                                    setShowViewSelectedProvider(true);
-                                  }}
-                                ></i>
-                                <i
-                                  className="fa fa-trash text-danger f-18 px-3 cursor-pointer"
-                                  onClick={() =>
-                                    handleDeleteProvider(provider?.providerId)
-                                  }
-                                ></i>
+                                <Tooltip title="View" placement="top">
+                                  <i
+                                    className="fa-eye fa f-18 cursor-pointer"
+                                    onClick={() => {
+                                      setSelectedProvider(provider);
+                                      setShowViewSelectedProvider(true);
+                                    }}
+                                  ></i>
+                                </Tooltip>
+                                <Tooltip title="Delete" placement="top">
+                                  <i
+                                    className="fa fa-trash text-danger f-18 px-3 cursor-pointer"
+                                    onClick={() =>
+                                      handleDeleteProvider(provider?.providerId)
+                                    }
+                                  ></i>
+                                </Tooltip>
+                                <Tooltip title="Edit" placement="top">
+                                  <i
+                                    className="bi bi-pencil-square f-18  cursor-pointer"
+                                    onClick={() => {
+                                      setSelectedProvider(provider);
+                                      setShowEditProviderDialog(true);
+                                    }}
+                                  ></i>
+                                </Tooltip>
                                 <Tooltip title="Duplicate" placement="top">
                                   <i
-                                    className="bi bi-copy f-18 cursor-pointer"
+                                    className="bi bi-copy f-18 cursor-pointer px-3"
                                     onClick={() =>
                                       handleDuplicateProvider(provider)
                                     }

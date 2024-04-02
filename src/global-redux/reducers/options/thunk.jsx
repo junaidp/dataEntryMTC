@@ -11,6 +11,7 @@ export const addOption = async (data, thunkAPI) => {
     return thunkAPI.rejectWithValue(error);
   }
 };
+
 export const getAllOptions = async (data, thunkAPI) => {
   try {
     let props = await axios.get(
@@ -35,6 +36,18 @@ export const deleteOption = async (data, thunkAPI) => {
   try {
     let props = await axios.delete(
       `https://data-entry-08031d053c68.herokuapp.com/option/deleteOption${data}`
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
+export const editProvider = async (data, thunkAPI) => {
+  try {
+    let props = await axios.post(
+      `https://data-entry-08031d053c68.herokuapp.com/provider/saveProviders`,
+      data
     );
     return props.data;
   } catch (error) {

@@ -4,6 +4,7 @@ import {
   getAllVariations,
   deleteVaration,
   getAllVariationsWithOutParams,
+  editProvider,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -35,6 +36,12 @@ export const setupDeleteVaration = createAsyncThunk(
   "variation/deleteVaration",
   async (data, thunkAPI) => {
     return deleteVaration(data, thunkAPI);
+  }
+);
+export const setupEditProvider = createAsyncThunk(
+  "variation/editProvider",
+  async (data, thunkAPI) => {
+    return editProvider(data, thunkAPI);
   }
 );
 
@@ -114,6 +121,23 @@ export const slice = createSlice({
         toast.success("Variation Deleted Successfully");
       })
       .addCase(setupDeleteVaration.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    builder
+      .addCase(setupEditProvider.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupEditProvider.fulfilled, (state) => {
+        state.loading = false;
+        state.variationAddSuccess = true;
+        toast.success("Provider Updated Successfully");
+      })
+      .addCase(setupEditProvider.rejected, (state, action) => {
         state.loading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);

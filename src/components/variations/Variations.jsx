@@ -93,13 +93,11 @@ const Variation = ({ showAddVariationDialog, setShowAddVariationDialog }) => {
 
   React.useEffect(() => {
     if (variationAddSuccess) {
+      dispatch(setupGetAllVariationsWithOutParams());
+      dispatch(setupGetAllProviderWithOutParams());
       setSelectedVariation({});
       setCurrentVariationId("");
       dispatch(resetVariationAddSuccess());
-      dispatch(setupGetAllExperienceWithOutParams());
-      dispatch(setupGetAllVariationsWithOutParams());
-      dispatch(setupGetAllProviderWithOutParams());
-      dispatch(setupGetAllVendors());
       setPage(1);
     }
   }, [variationAddSuccess]);

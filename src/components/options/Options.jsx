@@ -86,14 +86,12 @@ const Options = ({ setShowAddOptionDialog, showAddOptionDialog }) => {
 
   React.useEffect(() => {
     if (optionAddSuccess) {
+      dispatch(setupGetAllOptionsWithOutParams());
+      dispatch(setupGetAllProviderWithOutParams());
       setSelectedOption({});
       setCurrentOptionId("");
       dispatch(resetOptionAddSuccess());
-      dispatch(setupGetAllExperienceWithOutParams());
-      dispatch(setupGetAllOptionsWithOutParams());
-      dispatch(setupGetAllVendors());
-      dispatch(setupGetAllProviderWithOutParams());
-      setPage(1)
+      setPage(1);
     }
   }, [optionAddSuccess]);
 
