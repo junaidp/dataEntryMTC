@@ -2,14 +2,12 @@ import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { v4 as uuidv4 } from "uuid";
-import {
-  setupAddOption,
-  resetOptions,
-} from "../../../../global-redux/reducers/options/slice";
+import { setupAddOption } from "../../../../../global-redux/reducers/options/slice";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import OptionDialogForm from "./EditOptionDialogForm";
-const EditOptionDialog = ({ setShowEditOptionDialog, selectedOption }) => {
+
+const EditOptionDialog = ({ setShowOptionEditDialog, selectedOption }) => {
   const dispatch = useDispatch();
   const [link, setLink] = React.useState("");
   const [links, setLinks] = React.useState([]);
@@ -165,7 +163,7 @@ const EditOptionDialog = ({ setShowEditOptionDialog, selectedOption }) => {
 
   function handleClose() {
     formik.resetForm({ values: initialValues });
-    setShowEditOptionDialog(false);
+    setShowOptionEditDialog(false);
   }
 
   function handleChangeDescription(value) {
@@ -198,9 +196,8 @@ const EditOptionDialog = ({ setShowEditOptionDialog, selectedOption }) => {
   React.useEffect(() => {
     if (optionAddSuccess) {
       toast.success("Option Updated Successfully");
-      dispatch(resetOptions());
       formik.resetForm({ values: initialValues });
-      setShowEditOptionDialog(false);
+      setShowOptionEditDialog(false);
     }
   }, [optionAddSuccess]);
 

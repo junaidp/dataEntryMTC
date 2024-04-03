@@ -8,17 +8,21 @@ import {
 } from "../../../../global-redux/reducers/variations/slice";
 import Tooltip from "@mui/material/Tooltip";
 import { toast } from "react-toastify";
+import EditVariationDialog from "../edit-dialogs/edit-variation/EditVariationDialog";
 
 const VariationRecord = ({
   setShowAddVariationDialog,
   setShowViewVariationDialog,
   setSelectedVariation,
+  selectedVariation,
 }) => {
   const dispatch = useDispatch();
   const { allVariations, loading, variationAddSuccess } = useSelector(
     (state) => state?.variations
   );
   const [duplicateVariationCall, setDuplicateVariationCall] =
+    React.useState(false);
+  const [showEditVariationDialog, setShowEditVariationDialog] =
     React.useState(false);
   function handleDuplicateVariation(item) {
     if (item) {
@@ -55,6 +59,16 @@ const VariationRecord = ({
 
   return (
     <div className="mt-4 mb-4">
+      {showEditVariationDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <EditVariationDialog
+              setShowEditVariationDialog={setShowEditVariationDialog}
+              selectedVariation={selectedVariation}
+            />
+          </div>
+        </div>
+      )}
       {loading ? (
         <CircularProgress />
       ) : (
@@ -105,26 +119,39 @@ const VariationRecord = ({
                               </Button>
                             </td>
                             <td>
-                              <i
-                                className="fa-eye fa f-18 cursor-pointer"
-                                onClick={() => {
-                                  setSelectedVariation(variation);
-                                  setShowViewVariationDialog(true);
-                                }}
-                              ></i>
-                              <i
-                                className="fa fa-trash text-danger f-18 px-3  cursor-pointer"
-                                onClick={() =>
-                                  dispatch(
-                                    setupDeleteVaration(
-                                      `?variationId=${variation?.id}`
+                              <Tooltip title="View" placement="top">
+                                <i
+                                  className="fa-eye fa f-18 cursor-pointer"
+                                  onClick={() => {
+                                    setSelectedVariation(variation);
+                                    setShowViewVariationDialog(true);
+                                  }}
+                                ></i>
+                              </Tooltip>
+                              <Tooltip title="Delete" placement="top">
+                                <i
+                                  className="fa fa-trash text-danger f-18 px-3  cursor-pointer"
+                                  onClick={() =>
+                                    dispatch(
+                                      setupDeleteVaration(
+                                        `?variationId=${variation?.id}`
+                                      )
                                     )
-                                  )
-                                }
-                              ></i>
+                                  }
+                                ></i>
+                              </Tooltip>
+                              <Tooltip title="Edit" placement="top">
+                                <i
+                                  className="bi bi-pencil-square f-18  cursor-pointer"
+                                  onClick={() => {
+                                    setSelectedVariation(variation);
+                                    setShowEditVariationDialog(true);
+                                  }}
+                                ></i>
+                              </Tooltip>
                               <Tooltip title="Duplicate" placement="top">
                                 <i
-                                  className="bi bi-copy f-18 cursor-pointer"
+                                  className="bi bi-copy f-18 cursor-pointer px-3"
                                   onClick={() =>
                                     handleDuplicateVariation(variation)
                                   }

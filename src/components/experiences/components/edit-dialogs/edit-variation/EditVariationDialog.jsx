@@ -2,14 +2,14 @@ import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { v4 as uuidv4 } from "uuid";
-import {
-  setupAddOption,
-  resetOptions,
-} from "../../../../global-redux/reducers/options/slice";
+import { setupAddVariation } from "../../../../../global-redux/reducers/variations/slice";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import OptionDialogForm from "./EditOptionDialogForm";
-const EditOptionDialog = ({ setShowEditOptionDialog, selectedOption }) => {
+import EditVariationDialogForm from "./EditVariationDialogForm";
+const EditVariationDialog = ({
+  setShowEditVariationDialog,
+  selectedVariation,
+}) => {
   const dispatch = useDispatch();
   const [link, setLink] = React.useState("");
   const [links, setLinks] = React.useState([]);
@@ -30,7 +30,9 @@ const EditOptionDialog = ({ setShowEditOptionDialog, selectedOption }) => {
   const linkRef = React.useRef(null);
   const keywordRef = React.useRef(null);
 
-  const { optionAddSuccess, loading } = useSelector((state) => state?.options);
+  const { variationAddSuccess, loading } = useSelector(
+    (state) => state?.variations
+  );
   const { allExperience } = useSelector((state) => state.experiences);
   const { allProvider } = useSelector((state) => state.providers);
   let initialValues = {
@@ -54,10 +56,10 @@ const EditOptionDialog = ({ setShowEditOptionDialog, selectedOption }) => {
           providers?.map((singleItem) => singleItem?.id)?.includes(item?.id)
         );
         dispatch(
-          setupAddOption([
+          setupAddVariation([
             {
               ...values,
-              id: selectedOption?.id,
+              id: selectedVariation?.id,
               providers:
                 filteredProvidersArray?.map((item) => {
                   return {
@@ -65,7 +67,6 @@ const EditOptionDialog = ({ setShowEditOptionDialog, selectedOption }) => {
                     providerName: item?.name,
                   };
                 }) || [],
-              linkWithOtherExperience: null,
               links:
                 links?.map((item) => {
                   return item.link;
@@ -165,7 +166,7 @@ const EditOptionDialog = ({ setShowEditOptionDialog, selectedOption }) => {
 
   function handleClose() {
     formik.resetForm({ values: initialValues });
-    setShowEditOptionDialog(false);
+    setShowEditVariationDialog(false);
   }
 
   function handleChangeDescription(value) {
@@ -196,28 +197,28 @@ const EditOptionDialog = ({ setShowEditOptionDialog, selectedOption }) => {
   }
 
   React.useEffect(() => {
-    if (optionAddSuccess) {
-      toast.success("Option Updated Successfully");
-      dispatch(resetOptions());
+    if (variationAddSuccess) {
+      toast.success("Variation Updated Successfully");
       formik.resetForm({ values: initialValues });
-      setShowEditOptionDialog(false);
+      setShowEditVariationDialog(false);
     }
-  }, [optionAddSuccess]);
+  }, [variationAddSuccess]);
 
   React.useEffect(() => {
-    if (Object.keys(selectedOption)?.length !== 0) {
+    if (Object.keys(selectedVariation)?.length !== 0) {
       formik.resetForm({
         values: {
           ...formik.values,
-          title: selectedOption?.title,
-          xpAddress: selectedOption?.xpAddress,
-          experienceId: selectedOption?.experienceId,
-          description: selectedOption?.description,
-          termsAndConditions: selectedOption?.termsAndConditions,
+          title: selectedVariation?.title,
+          xpAddress: selectedVariation?.xpAddress,
+          experienceId: selectedVariation?.experienceId,
+          description: selectedVariation?.description,
+          termsAndConditions: selectedVariation?.termsAndConditions,
         },
       });
+
       setPrices(
-        selectedOption?.price?.map((singleItem) => {
+        selectedVariation?.price?.map((singleItem) => {
           return {
             id: uuidv4(),
             price: singleItem,
@@ -225,31 +226,31 @@ const EditOptionDialog = ({ setShowEditOptionDialog, selectedOption }) => {
         })
       );
       setDurations(
-        selectedOption?.duration?.map((singleItem) => {
+        selectedVariation?.duration?.map((singleItem) => {
           return {
             id: uuidv4(),
             duration: singleItem,
           };
         })
       );
-      setAvailableTimes(
-        selectedOption?.availableTime?.map((singleItem) => {
-          return {
-            id: uuidv4(),
-            time: singleItem,
-          };
-        })
-      );
       setKeywords(
-        selectedOption?.storyLineKeywords?.map((singleItem) => {
+        selectedVariation?.storyLineKeywords?.map((singleItem) => {
           return {
             id: uuidv4(),
             name: singleItem,
           };
         })
       );
+      setAvailableTimes(
+        selectedVariation?.availableTime?.map((singleItem) => {
+          return {
+            id: uuidv4(),
+            time: singleItem,
+          };
+        })
+      );
       setLinks(
-        selectedOption?.links?.map((singleItem) => {
+        selectedVariation?.links?.map((singleItem) => {
           return {
             id: uuidv4(),
             link: singleItem,
@@ -257,11 +258,11 @@ const EditOptionDialog = ({ setShowEditOptionDialog, selectedOption }) => {
         })
       );
       if (
-        selectedOption?.providers &&
-        selectedOption?.providers?.length !== 0
+        selectedVariation?.providers &&
+        selectedVariation?.providers?.length !== 0
       ) {
         setProviders(
-          selectedOption?.providers?.map((all) => {
+          selectedVariation?.providers?.map((all) => {
             return {
               title: all?.providerName,
               id: all?.providerId,
@@ -270,10 +271,10 @@ const EditOptionDialog = ({ setShowEditOptionDialog, selectedOption }) => {
         );
       }
     }
-  }, [selectedOption]);
+  }, [selectedVariation]);
 
   return (
-    <OptionDialogForm
+    <EditVariationDialogForm
       formik={formik}
       handleClose={handleClose}
       loading={loading}
@@ -313,9 +314,9 @@ const EditOptionDialog = ({ setShowEditOptionDialog, selectedOption }) => {
       handleChangeTermsAndConditions={handleChangeTermsAndConditions}
       providers={providers}
       setProviders={setProviders}
-      selectedOption={selectedOption}
+      selectedVariation={selectedVariation}
     />
   );
 };
 
-export default EditOptionDialog;
+export default EditVariationDialog;

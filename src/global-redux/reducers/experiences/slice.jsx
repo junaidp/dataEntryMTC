@@ -6,6 +6,7 @@ import {
   getAllExperienceWithOutParams,
   getExperienceWithQuerySearch,
   deleteExperience,
+  editProvider,
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -52,6 +53,13 @@ export const setupDeleteExperience = createAsyncThunk(
   "experience/deleteExperience",
   async (data, thunkAPI) => {
     return deleteExperience(data, thunkAPI);
+  }
+);
+
+export const setupEditProvider = createAsyncThunk(
+  "experience/editProvider",
+  async (data, thunkAPI) => {
+    return editProvider(data, thunkAPI);
   }
 );
 
@@ -174,6 +182,25 @@ export const slice = createSlice({
         toast.success("Experience Deleted Successfully");
       })
       .addCase(setupDeleteExperience.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+
+    // Edit Provider
+    builder
+      .addCase(setupEditProvider.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupEditProvider.fulfilled, (state) => {
+        state.loading = false;
+        state.experienceAddSuccess = true;
+        toast.success("Provider Updated Successfully");
+      })
+      .addCase(setupEditProvider.rejected, (state, action) => {
         state.loading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);

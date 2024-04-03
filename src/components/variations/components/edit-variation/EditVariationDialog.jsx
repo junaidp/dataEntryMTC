@@ -9,9 +9,6 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import EditVariationDialogForm from "./EditVariationDialogForm";
-import { setupGetAllExperienceWithOutParams } from "../../../../global-redux/reducers/experiences/slice";
-import { setupGetAllProviderWithOutParams } from "../../../../global-redux/reducers/providers/slice";
-
 const EditVariationDialog = ({
   setShowEditVariationDialog,
   selectedVaraition,
@@ -211,10 +208,6 @@ const EditVariationDialog = ({
     }
   }, [variationAddSuccess]);
 
-  React.useEffect(() => {
-    dispatch(setupGetAllExperienceWithOutParams());
-    dispatch(setupGetAllProviderWithOutParams());
-  }, []);
 
   React.useEffect(() => {
     if (Object.keys(selectedVaraition)?.length !== 0) {

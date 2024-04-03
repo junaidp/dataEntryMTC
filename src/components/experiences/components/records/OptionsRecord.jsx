@@ -8,17 +8,20 @@ import {
 } from "../../../../global-redux/reducers/options/slice";
 import Tooltip from "@mui/material/Tooltip";
 import { toast } from "react-toastify";
+import EditOptionDialog from "../edit-dialogs/edit-option/EditOptionDialog";
 
 const OptionRecord = ({
   setShowAddOptionDialog,
   setShowViewOptionDialog,
   setSelectedOption,
+  selectedOption,
 }) => {
   const dispatch = useDispatch();
   const { allOptions, loading, optionAddSuccess } = useSelector(
     (state) => state?.options
   );
   const [duplicateOptionCall, setDuplicateOptionCall] = React.useState(false);
+  const [showOptionEditDialog, setShowOptionEditDialog] = React.useState(false);
 
   function handleDuplicateOption(item) {
     if (item) {
@@ -55,6 +58,16 @@ const OptionRecord = ({
 
   return (
     <div className="mt-4 mb-4">
+      {showOptionEditDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <EditOptionDialog
+              setShowOptionEditDialog={setShowOptionEditDialog}
+              selectedOption={selectedOption}
+            />
+          </div>
+        </div>
+      )}
       {loading ? (
         <CircularProgress />
       ) : (
@@ -105,24 +118,39 @@ const OptionRecord = ({
                               </Button>
                             </td>
                             <td>
-                              <i
-                                className="fa-eye fa f-18 cursor-pointer"
-                                onClick={() => {
-                                  setSelectedOption(option);
-                                  setShowViewOptionDialog(true);
-                                }}
-                              ></i>
-                              <i
-                                className="fa fa-trash text-danger f-18 px-3 cursor-pointer"
-                                onClick={() =>
-                                  dispatch(
-                                    setupDeleteOption(`?optionId=${option?.id}`)
-                                  )
-                                }
-                              ></i>
+                              <Tooltip title="View" placement="top">
+                                <i
+                                  className="fa-eye fa f-18 cursor-pointer"
+                                  onClick={() => {
+                                    setSelectedOption(option);
+                                    setShowViewOptionDialog(true);
+                                  }}
+                                ></i>
+                              </Tooltip>
+                              <Tooltip title="Delete" placement="top">
+                                <i
+                                  className="fa fa-trash text-danger f-18 px-3 cursor-pointer"
+                                  onClick={() =>
+                                    dispatch(
+                                      setupDeleteOption(
+                                        `?optionId=${option?.id}`
+                                      )
+                                    )
+                                  }
+                                ></i>
+                              </Tooltip>
+                              <Tooltip title="Edit" placement="top">
+                                <i
+                                  className="bi bi-pencil-square f-18  cursor-pointer"
+                                  onClick={() => {
+                                    setSelectedOption(option);
+                                    setShowOptionEditDialog(true);
+                                  }}
+                                ></i>
+                              </Tooltip>
                               <Tooltip title="Duplicate" placement="top">
                                 <i
-                                  className="bi bi-copy f-18 cursor-pointer"
+                                  className="bi bi-copy f-18 cursor-pointer px-3"
                                   onClick={() => handleDuplicateOption(option)}
                                 ></i>
                               </Tooltip>

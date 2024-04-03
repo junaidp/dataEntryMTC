@@ -235,6 +235,7 @@ const Form = ({ experience, currentExperienceId }) => {
             setShowAddOptionDialog={setShowAddOptionDialog}
             setShowViewOptionDialog={setShowViewOptionDialog}
             setSelectedOption={setSelectedOption}
+            selectedOption={selectedOption}
           />
         </div>
         <div className="max-height-200 overflow-y-auto">
@@ -242,6 +243,7 @@ const Form = ({ experience, currentExperienceId }) => {
             setShowAddVariationDialog={setShowAddVariationDialog}
             setShowViewVariationDialog={setShowViewVariationDialog}
             setSelectedVariation={setSelectedVariation}
+            selectedVariation={selectedVariation}
           />
         </div>
         <div className="max-height-200 overflow-y-auto ">
