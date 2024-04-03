@@ -38,11 +38,9 @@ const Services = ({ showAddServiceDialog, setShowAddServiceDialog }) => {
     if (serviceAddSuccess) {
       dispatch(setupGetAllServiceWithOutParama());
       dispatch(setupGetAllProviderWithOutParams());
-      dispatch(setupGetAllVendors());
-      dispatch(setupGetAllExperienceWithOutParams());
       setCurrentServiceId("");
       dispatch(resetServiceAddSuccess());
-      setPage(1)
+      setPage(1);
     }
   }, [serviceAddSuccess]);
 

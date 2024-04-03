@@ -9,6 +9,7 @@ import {
 } from "../../../../global-redux/reducers/services/slice";
 import Tooltip from "@mui/material/Tooltip";
 import { toast } from "react-toastify";
+import EditServiceDialog from "../edit-dialogs/edit-service/EditServiceDialog";
 
 const serviceRecord = ({
   setShowAddServiceDialog,
@@ -16,6 +17,8 @@ const serviceRecord = ({
 }) => {
   const dispatch = useDispatch();
   const [duplicateServiceCall, setDuplicateServiceCall] = React.useState(false);
+  const [showEditServiceDialog, setShowEditServceDialog] =
+    React.useState(false);
   const { allService, loading, serviceAddSuccess } = useSelector(
     (state) => state.services
   );
@@ -55,6 +58,15 @@ const serviceRecord = ({
 
   return (
     <div>
+      {showEditServiceDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <EditServiceDialog
+              setShowEditServiceDialog={setShowEditServceDialog}
+            />
+          </div>
+        </div>
+      )}
       {loading ? (
         <CircularProgress />
       ) : (
@@ -105,26 +117,39 @@ const serviceRecord = ({
                               </Button>
                             </td>
                             <td>
-                              <i
-                                className="fa-eye fa f-18 cursor-pointer"
-                                onClick={() => {
-                                  dispatch(changeSelectedService(service));
-                                  setShowViewSelectedService(true);
-                                }}
-                              ></i>
-                              <i
-                                className="fa fa-trash text-danger f-18 px-3 cursor-pointer"
-                                onClick={() =>
-                                  dispatch(
-                                    setupDeleteService(
-                                      `?serviceId=${service?.id}`
+                              <Tooltip title="View" placement="top">
+                                <i
+                                  className="fa-eye fa f-18 cursor-pointer"
+                                  onClick={() => {
+                                    dispatch(changeSelectedService(service));
+                                    setShowViewSelectedService(true);
+                                  }}
+                                ></i>
+                              </Tooltip>
+                              <Tooltip title="Delete" placement="top">
+                                <i
+                                  className="fa fa-trash text-danger f-18 px-3 cursor-pointer"
+                                  onClick={() =>
+                                    dispatch(
+                                      setupDeleteService(
+                                        `?serviceId=${service?.id}`
+                                      )
                                     )
-                                  )
-                                }
-                              ></i>
+                                  }
+                                ></i>
+                              </Tooltip>
+                              <Tooltip title="Edit" placement="top">
+                                <i
+                                  className="bi bi-pencil-square f-18  cursor-pointer"
+                                  onClick={() => {
+                                    dispatch(changeSelectedService(service));
+                                    setShowEditServceDialog(true);
+                                  }}
+                                ></i>
+                              </Tooltip>
                               <Tooltip title="Duplicate" placement="top">
                                 <i
-                                  className="bi bi-copy f-18 cursor-pointer"
+                                  className="bi bi-copy f-18 cursor-pointer px-3"
                                   onClick={() =>
                                     handleDuplicateService(service)
                                   }

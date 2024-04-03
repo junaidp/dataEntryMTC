@@ -9,6 +9,7 @@ import {
 } from "../../../../global-redux/reducers/experiences/slice";
 import Tooltip from "@mui/material/Tooltip";
 import { toast } from "react-toastify";
+import EditExperienceDialog from "../edit-dialogs/edit-experience/EditExperienceDialog";
 
 const experienceRecord = ({
   setShowAddExperienceDialog,
@@ -20,6 +21,8 @@ const experienceRecord = ({
   const { allExperience, loading, experienceAddSuccess } = useSelector(
     (state) => state.experiences
   );
+  const [showEditExperienceDialog, setShowEditExperienceDialog] =
+    React.useState(false);
 
   function handleDuplicateExperience(item) {
     if (item) {
@@ -56,6 +59,15 @@ const experienceRecord = ({
   }, [experienceAddSuccess]);
   return (
     <div>
+      {showEditExperienceDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <EditExperienceDialog
+              setShowEditExperienceDialog={setShowEditExperienceDialog}
+            />
+          </div>
+        </div>
+      )}
       {loading ? (
         <CircularProgress />
       ) : (
@@ -109,28 +121,43 @@ const experienceRecord = ({
                             </td>
 
                             <td>
-                              <i
-                                className="fa-eye fa f-18 cursor-pointer"
-                                onClick={() => {
-                                  dispatch(
-                                    changeSelectedExperience(experience)
-                                  );
-                                  setShowViewSelectedExperience(true);
-                                }}
-                              ></i>
-                              <i
-                                className="fa fa-trash text-danger f-18 px-3 cursor-pointer"
-                                onClick={() =>
-                                  dispatch(
-                                    setupDeleteExperience(
-                                      `?experienceId=${experience?.id}`
+                              <Tooltip title="View" placement="top">
+                                <i
+                                  className="fa-eye fa f-18 cursor-pointer"
+                                  onClick={() => {
+                                    dispatch(
+                                      changeSelectedExperience(experience)
+                                    );
+                                    setShowViewSelectedExperience(true);
+                                  }}
+                                ></i>
+                              </Tooltip>
+                              <Tooltip title="Delete" placement="top">
+                                <i
+                                  className="fa fa-trash text-danger f-18 px-3 cursor-pointer"
+                                  onClick={() =>
+                                    dispatch(
+                                      setupDeleteExperience(
+                                        `?experienceId=${experience?.id}`
+                                      )
                                     )
-                                  )
-                                }
-                              ></i>
+                                  }
+                                ></i>
+                              </Tooltip>
+                              <Tooltip title="Edit" placement="top">
+                                <i
+                                  className="bi bi-pencil-square f-18  cursor-pointer"
+                                  onClick={() => {
+                                    dispatch(
+                                      changeSelectedExperience(experience)
+                                    );
+                                    setShowEditExperienceDialog(true);
+                                  }}
+                                ></i>
+                              </Tooltip>
                               <Tooltip title="Duplicate" placement="top">
                                 <i
-                                  className="bi bi-copy f-18 cursor-pointer"
+                                  className="bi bi-copy f-18 cursor-pointer px-3"
                                   onClick={() =>
                                     handleDuplicateExperience(experience)
                                   }
