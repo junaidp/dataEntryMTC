@@ -30,7 +30,7 @@ const OptionRecord = ({
           setupAddOption([
             {
               experienceId: item?.experienceId,
-              title: item?.title,
+              title: item?.title + " Duplicated",
               xpAddress: item?.xpAddress,
               price: item?.price || [],
               duration: item?.duration || [],

@@ -42,7 +42,7 @@ const variationForm = ({ variation }) => {
         dispatch(
           setupAddProvider([
             {
-              name: currentDuplicatedProvider?.name,
+              name: currentDuplicatedProvider?.name + " Duplicated",
               address: currentDuplicatedProvider?.address,
               website: currentDuplicatedProvider?.website,
               pointOfContact: currentDuplicatedProvider?.pointOfContact,

@@ -369,25 +369,29 @@ const ServiceDialogForm = ({
               </button>
             </div>
             <label className="mb-2">List Of Services:</label>
-            <Card className="py-4">
-              {linkWithOtherServices?.length === 0 ? (
-                <lable className="mx-2">No Service Provided</lable>
-              ) : (
-                linkWithOtherServices.map((key, index) => {
-                  return (
-                    <Chip
-                      label={`${key?.serviceName}-${key?.why}`}
-                      key={index}
-                      variant="outlined"
-                      className="mx-2 mb-2"
-                      onDelete={() =>
-                        handleDeleteLinkWithOtherServices(key?.id)
-                      }
-                    />
-                  );
-                })
-              )}
-            </Card>
+            <div className="row">
+              <div className="col-lg-12">
+                <Card className="py-4 px-2">
+                  {linkWithOtherServices?.length === 0 ? (
+                    <lable className="mx-2">No Service Provided</lable>
+                  ) : (
+                    linkWithOtherServices.map((key, index) => {
+                      return (
+                        <Chip
+                          label={`${key?.serviceName}-${key?.why}`}
+                          key={index}
+                          variant="outlined"
+                          className="mx-2 mb-2"
+                          onDelete={() =>
+                            handleDeleteLinkWithOtherServices(key?.id)
+                          }
+                        />
+                      );
+                    })
+                  )}
+                </Card>
+              </div>
+            </div>
           </div>
           <div className="row mb-4">
             <div className="col-lg-6">
@@ -434,25 +438,29 @@ const ServiceDialogForm = ({
               </div>
             </form>
             <label className="mb-2">List Of Experiences:</label>
-            <Card className="py-4">
-              {linkWithOtherExperiences?.length === 0 ? (
-                <lable className="mx-2">No Experience Provided</lable>
-              ) : (
-                linkWithOtherExperiences.map((key, index) => {
-                  return (
-                    <Chip
-                      label={`${key?.experienceName}-${key?.why}`}
-                      key={index}
-                      variant="outlined"
-                      className="mx-2 mb-2"
-                      onDelete={() =>
-                        handleDeleteLinkWithOtherExperience(key?.id)
-                      }
-                    />
-                  );
-                })
-              )}
-            </Card>
+            <div className="row">
+              <div className="col-lg-12">
+                <Card className="py-4 px-2">
+                  {linkWithOtherExperiences?.length === 0 ? (
+                    <lable className="mx-2">No Experience Provided</lable>
+                  ) : (
+                    linkWithOtherExperiences.map((key, index) => {
+                      return (
+                        <Chip
+                          label={`${key?.experienceName}-${key?.why}`}
+                          key={index}
+                          variant="outlined"
+                          className="mx-2 mb-2"
+                          onDelete={() =>
+                            handleDeleteLinkWithOtherExperience(key?.id)
+                          }
+                        />
+                      );
+                    })
+                  )}
+                </Card>
+              </div>
+            </div>
           </div>
           <div className="mb-4">
             <h5>Links:</h5>
@@ -485,7 +493,7 @@ const ServiceDialogForm = ({
               </form>
             </div>
             <label className="mb-2">List Of Links:</label>
-            <Card className="py-4">
+            <Card className="py-4 px-2">
               {links?.length === 0 ? (
                 <lable className="mx-2">No Link Provided</lable>
               ) : (

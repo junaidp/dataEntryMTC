@@ -29,6 +29,15 @@ const ViewExperienceDialog = ({ setShowViewSelectedExperience }) => {
           </div>
         </div>
         <div className="row">
+          <div className="col-lg-4 mb-2">
+            <label>MemberShip</label>
+            <p>
+              {selectedExperience?.memberShip?.toUpperCase() ||
+                "No MemberShip Provided"}
+            </p>
+          </div>
+        </div>
+        <div className="row">
           <div>
             <label className="mb-2">List Of Prices:</label>
             <Card className="py-4">

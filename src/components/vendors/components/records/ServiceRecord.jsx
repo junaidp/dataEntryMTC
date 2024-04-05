@@ -28,7 +28,7 @@ const serviceRecord = ({
         dispatch(
           setupAddService([
             {
-              title: item?.title,
+              title: item?.title + " Duplicated",
               vendorId: item?.vendorId,
               providers: item?.providers || [],
               description: item?.description,

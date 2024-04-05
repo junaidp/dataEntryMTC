@@ -58,6 +58,7 @@ const EditExperienceDialog = ({
     description: "",
     termsAndConditions: "",
     vendorId: "",
+    memberShip: "",
   };
   const validationSchema = Yup.object({
     title: Yup.string().required("Title is required"),
@@ -319,6 +320,7 @@ const EditExperienceDialog = ({
           description: selectedExperience?.description,
           termsAndConditions: selectedExperience?.termsAndConditions,
           vendorId: selectedExperience?.vendorId,
+          memberShip: selectedExperience?.memberShip,
         },
       });
 

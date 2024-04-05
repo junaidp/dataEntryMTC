@@ -30,8 +30,9 @@ const experienceRecord = ({
         dispatch(
           setupAddExperience([
             {
-              title: item?.title,
+              title: item?.title + " Duplicated",
               vendorId: item?.vendorId,
+              memberShip: item?.memberShip,
               providers: item?.providers || [],
               description: item?.description,
               address: item?.address,

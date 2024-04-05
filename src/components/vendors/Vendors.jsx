@@ -19,16 +19,15 @@ import VendorRecord from "./components/records/VendorRecord";
 import ExperienceRecord from "./components/records/ExperienceRecord";
 import ServiceRecord from "./components/records/ServiceRecord";
 import ProviderRecord from "./components/records/ProviderRecord";
-import AddVendorDialog from "./components/dialogs/vendor/AddVendorDialog";
-import RichTextEditor from "./components/common/RichText";
-import AddExperienceDialog from "./components/dialogs/experience/AddExperienceDialog";
-import AddServiceDialog from "./components/dialogs/service/AddServiceDialog";
-import AddProviderDialog from "./components/dialogs/provider/AddProviderDialog";
+import AddVendorDialog from "./components/add-dialogs/add-vendor/AddVendorDialog";
+import AddExperienceDialog from "./components/add-dialogs/add-experience/AddExperienceDialog";
+import AddServiceDialog from "./components/add-dialogs/add-service/AddServiceDialog";
+import AddProviderDialog from "./components/add-dialogs/add-provider/AddProviderDialog";
 import ViewExperieceDialog from "./components/view-dialogs/view-experience";
 import ViewProviderDialog from "./components/view-dialogs/view-provider";
 import ViewServiceDialog from "./components/view-dialogs/view-service";
-import EditVendorDialog from "./components/edit-dialogs/vendor/index";
-import DeleteVendorDialog from "./components/edit-dialogs/delete-vendor/index";
+import EditVendorDialog from "./components/edit-dialogs/edit-vendor/index";
+import DeleteVendorDialog from "./components/delete-vendor/index";
 
 const Vendor = ({ setShowAddVendorDialog, showAddVendorDialog }) => {
   const { allVendors, loading, vendorAddSuccess } = useSelector(

@@ -55,6 +55,7 @@ const AddExperienceDialog = ({ setShowAddExperienceDialog }) => {
     description: "",
     termsAndConditions: "",
     vendorId: "",
+    memberShip: "",
   };
   const validationSchema = Yup.object({
     title: Yup.string().required("Title is required"),

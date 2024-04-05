@@ -13,6 +13,10 @@ import ViewOptionDialog from "../view-dialogs/ViewOption";
 import ViewVaraitionDialog from "../view-dialogs/ViewVariation";
 import AddOptionDialog from "./add-dialogs/options/AddOptionDialog";
 import AddVariationDialog from "./add-dialogs/variations/AddVariationDialog";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import InputLabel from "@mui/material/InputLabel";
+import FormControl from "@mui/material/FormControl";
 
 const DuplicateExperienceDialogForm = ({
   formik,
@@ -106,8 +110,9 @@ const DuplicateExperienceDialogForm = ({
       {showAddOptionDialog && (
         <div className="modal-objective">
           <div className="model-wrap w-100">
-            <AddOptionDialog setShowAddOptionDialog={setShowAddOptionDialog} 
-            setDuplicateOptions={setDuplicateOptions}
+            <AddOptionDialog
+              setShowAddOptionDialog={setShowAddOptionDialog}
+              setDuplicateOptions={setDuplicateOptions}
             />
           </div>
         </div>
@@ -172,6 +177,31 @@ const DuplicateExperienceDialogForm = ({
                   }
                 }}
               />
+            </div>
+          </div>
+
+          <div className="row mt-4 mb-4">
+            <div className="col-lg-12 w-100">
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">
+                  Membership
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="memberShip"
+                  name="memberShip"
+                  label="Membership"
+                  onChange={formik.handleChange}
+                  value={formik.values.memberShip}
+                  className="w-100"
+                >
+                  <MenuItem value="">Select Membership</MenuItem>
+                  <MenuItem value="platinum">Platinum</MenuItem>
+                  <MenuItem value="gold">Gold </MenuItem>
+                  <MenuItem value="silver">Silver </MenuItem>
+                  <MenuItem value="bronze">Bronze </MenuItem>
+                </Select>
+              </FormControl>
             </div>
           </div>
 
@@ -457,25 +487,29 @@ const DuplicateExperienceDialogForm = ({
               </button>
             </div>
             <label className="mb-2">List Of Experiences:</label>
-            <Card className="py-4">
-              {linkWithOtherExperiences?.length === 0 ? (
-                <lable className="mx-2">No Experience Provided</lable>
-              ) : (
-                linkWithOtherExperiences.map((key, index) => {
-                  return (
-                    <Chip
-                      label={`${key?.experienceName}-${key?.why}`}
-                      key={index}
-                      variant="outlined"
-                      className="mx-2 mb-2"
-                      onDelete={() =>
-                        handleDeleteLinkWithOtherExperience(key?.id)
-                      }
-                    />
-                  );
-                })
-              )}
-            </Card>
+            <div className="row">
+              <div className="col-lg-12">
+                <Card className="py-4 px-2">
+                  {linkWithOtherExperiences?.length === 0 ? (
+                    <lable className="mx-2">No Experience Provided</lable>
+                  ) : (
+                    linkWithOtherExperiences.map((key, index) => {
+                      return (
+                        <Chip
+                          label={`${key?.experienceName}-${key?.why}`}
+                          key={index}
+                          variant="outlined"
+                          className="mx-2 mb-2"
+                          onDelete={() =>
+                            handleDeleteLinkWithOtherExperience(key?.id)
+                          }
+                        />
+                      );
+                    })
+                  )}
+                </Card>
+              </div>
+            </div>
           </div>
           <div className="row mb-4 p-0">
             <div className="col-lg-6">
@@ -522,25 +556,29 @@ const DuplicateExperienceDialogForm = ({
               </div>
             </form>
             <label className="mb-2">List Of Services:</label>
-            <Card className="py-4 col-lg-12">
-              {linkWithOtherServices?.length === 0 ? (
-                <lable>No Service Provided</lable>
-              ) : (
-                linkWithOtherServices.map((key, index) => {
-                  return (
-                    <Chip
-                      label={`${key?.serviceName}-${key?.why}`}
-                      key={index}
-                      variant="outlined"
-                      className="mx-2 mb-2"
-                      onDelete={() =>
-                        handleDeleteLinkWithOtherServices(key?.id)
-                      }
-                    />
-                  );
-                })
-              )}
-            </Card>
+            <div className="row">
+              <div className="col-lg-12">
+                <Card className="py-4 px-2">
+                  {linkWithOtherServices?.length === 0 ? (
+                    <lable>No Service Provided</lable>
+                  ) : (
+                    linkWithOtherServices.map((key, index) => {
+                      return (
+                        <Chip
+                          label={`${key?.serviceName}-${key?.why}`}
+                          key={index}
+                          variant="outlined"
+                          className="mx-2 mb-2"
+                          onDelete={() =>
+                            handleDeleteLinkWithOtherServices(key?.id)
+                          }
+                        />
+                      );
+                    })
+                  )}
+                </Card>
+              </div>
+            </div>
           </div>
           <div className="mb-4">
             <h5>Links:</h5>

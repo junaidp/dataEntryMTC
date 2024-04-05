@@ -30,7 +30,7 @@ const providersRecord = ({
         dispatch(
           setupAddProvider([
             {
-              name: item?.name,
+              name: item?.name + " Duplicated",
               address: item?.address,
               website: item?.website,
               pointOfContact: item?.pointOfContact,

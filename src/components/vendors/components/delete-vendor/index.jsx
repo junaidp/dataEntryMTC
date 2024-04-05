@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   setupDeleteVendor,
   resetVendorAddSuccess,
-} from "../../../../../global-redux/reducers/vendor/slice";
+} from "../../../../global-redux/reducers/vendor/slice";
 
 const DeleteVendorDialog = ({ setShowDeleteVendorDialog, currentVendorId }) => {
   const dispatch = useDispatch();
