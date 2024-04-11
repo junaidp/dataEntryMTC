@@ -47,6 +47,7 @@ const ServiceDialogForm = ({
   keywords,
   setKeyword,
   setProviders,
+  setExperienceChange,
 }) => {
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -96,6 +97,7 @@ const ServiceDialogForm = ({
           <div className="row">
             <div className="col-lg-12 mb-4">
               <AutoCompleteExperience
+                setExperienceChange={setExperienceChange}
                 options={allExperience?.map((experience) => {
                   return { name: experience?.title, id: experience?.id };
                 })}
@@ -205,7 +207,7 @@ const ServiceDialogForm = ({
               <label className="mb-2">List Of Durations:</label>
               <Card className="py-4">
                 {durations?.length === 0 ? (
-                  <lable className="mx-2">No Time Provided</lable>
+                  <lable className="mx-2">No Duration Provided</lable>
                 ) : (
                   durations.map((key, index) => {
                     return (

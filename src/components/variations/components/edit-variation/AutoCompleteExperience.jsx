@@ -6,6 +6,7 @@ export default function ControllableStates({
   options,
   formik,
   selectedVaraition,
+  setExperienceChange,
 }) {
   const [value, setValue] = React.useState("");
 
@@ -38,6 +39,9 @@ export default function ControllableStates({
         value={value}
         onChange={(_, newValue) => {
           setValue(newValue);
+          setTimeout(() => {
+            setExperienceChange((pre) => !pre);
+          }, 800);
         }}
         id="controllable-states-demo"
         options={options?.map((all) => all?.name)}

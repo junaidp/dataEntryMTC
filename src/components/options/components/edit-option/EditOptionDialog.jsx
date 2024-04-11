@@ -22,6 +22,7 @@ const EditOptionDialog = ({ setShowEditOptionDialog, selectedOption }) => {
   const [keywords, setKeywords] = React.useState([]);
   const [keyword, setKeyword] = React.useState("");
   const [providers, setProviders] = React.useState([]);
+  const [experienceChange, setExperienceChange] = React.useState(false);
 
   // Input Refs
   const priceRef = React.useRef(null);
@@ -205,6 +206,52 @@ const EditOptionDialog = ({ setShowEditOptionDialog, selectedOption }) => {
   }, [optionAddSuccess]);
 
   React.useEffect(() => {
+    if (formik?.values?.experienceId && formik?.values?.experienceId !== "") {
+      let selectedExperience = allExperience?.find(
+        (exp) => exp?.id === formik?.values?.experienceId
+      );
+      if (
+        selectedExperience?.price &&
+        selectedExperience?.price?.length !== 0
+      ) {
+        setPrices(
+          selectedExperience?.price?.map((singleItem) => {
+            return {
+              id: uuidv4(),
+              price: singleItem,
+            };
+          })
+        );
+      }
+      if (
+        !selectedExperience?.price ||
+        selectedExperience?.price?.length === 0
+      ) {
+        setPrices([]);
+      }
+      if (
+        selectedExperience?.duration &&
+        selectedExperience?.duration?.length !== 0
+      ) {
+        setDurations(
+          selectedExperience?.duration?.map((singleItem) => {
+            return {
+              id: uuidv4(),
+              duration: singleItem,
+            };
+          })
+        );
+      }
+      if (
+        !selectedExperience?.duration ||
+        selectedExperience?.duration?.length === 0
+      ) {
+        setDurations([]);
+      }
+    }
+  }, [experienceChange]);
+
+  React.useEffect(() => {
     if (Object.keys(selectedOption)?.length !== 0) {
       formik.resetForm({
         values: {
@@ -314,6 +361,7 @@ const EditOptionDialog = ({ setShowEditOptionDialog, selectedOption }) => {
       providers={providers}
       setProviders={setProviders}
       selectedOption={selectedOption}
+      setExperienceChange={setExperienceChange}
     />
   );
 };

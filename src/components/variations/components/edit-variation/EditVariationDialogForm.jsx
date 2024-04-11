@@ -47,6 +47,7 @@ const ServiceDialogForm = ({
   keywords,
   setKeyword,
   setProviders,
+  setExperienceChange,
 }) => {
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -98,6 +99,7 @@ const ServiceDialogForm = ({
           <div className="row">
             <div className="col-lg-12 mb-4">
               <AutoCompleteExperience
+                setExperienceChange={setExperienceChange}
                 options={allExperience?.map((experience) => {
                   return { name: experience?.title, id: experience?.id };
                 })}

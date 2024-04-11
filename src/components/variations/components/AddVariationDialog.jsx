@@ -198,6 +198,52 @@ const AddVariationDialog = ({ setShowAddVariationDialog }) => {
   }
 
   React.useEffect(() => {
+    if (formik?.values?.experienceId && formik?.values?.experienceId !== "") {
+      let selectedExperience = allExperience?.find(
+        (exp) => exp?.id === formik?.values?.experienceId
+      );
+      if (
+        selectedExperience?.price &&
+        selectedExperience?.price?.length !== 0
+      ) {
+        setPrices(
+          selectedExperience?.price?.map((singleItem) => {
+            return {
+              id: uuidv4(),
+              price: singleItem,
+            };
+          })
+        );
+      }
+      if (
+        !selectedExperience?.price ||
+        selectedExperience?.price?.length === 0
+      ) {
+        setPrices([]);
+      }
+      if (
+        selectedExperience?.duration &&
+        selectedExperience?.duration?.length !== 0
+      ) {
+        setDurations(
+          selectedExperience?.duration?.map((singleItem) => {
+            return {
+              id: uuidv4(),
+              duration: singleItem,
+            };
+          })
+        );
+      }
+      if (
+        !selectedExperience?.duration ||
+        selectedExperience?.duration?.length === 0
+      ) {
+        setDurations([]);
+      }
+    }
+  }, [formik?.values?.experienceId]);
+
+  React.useEffect(() => {
     if (variationAddSuccess) {
       toast.success("Variation Added Successfully");
       dispatch(resetVariations());
