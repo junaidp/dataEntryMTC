@@ -7,6 +7,26 @@ const ViewProviderDialog = ({ setShowViewSelectedProvider }) => {
   return (
     <div className="px-4 py-4">
       <h2 className="pb-4 heading">View Provider</h2>
+      <div className="float-end ">
+        <div className={`btn btn-labeled btn-primary px-3 shadow  my-4 `}>
+          <span className="btn-label me-2">
+            <i className="fa fa-check-circle f-18"></i>
+          </span>
+          Edit
+        </div>
+        <div className={`btn btn-labeled btn-danger mx-4 px-3 shadow  my-4 `}>
+          <span className="btn-label me-2">
+            <i className="fa fa-check-circle f-18"></i>
+          </span>
+          Delete
+        </div>
+        <div className={`btn btn-labeled btn-secondary px-3 shadow  my-4 `}>
+          <span className="btn-label me-2">
+            <i className="fa fa-check-circle f-18"></i>
+          </span>
+          Duplicate
+        </div>
+      </div>
       <div>
         <div className="row">
           <div className="col-lg-12 mb-4">
