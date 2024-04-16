@@ -13,8 +13,15 @@ import ProviderRecord from "./records/ProviderRecord";
 const Form = ({ experience, currentExperienceId }) => {
   const [selectedOption, setSelectedOption] = React.useState({});
   const [showAddOptionDialog, setShowAddOptionDialog] = React.useState(false);
+  const [duplicateOptionCall, setDuplicateOptionCall] = React.useState(false);
+  const [showOptionEditDialog, setShowOptionEditDialog] = React.useState(false);
+
   const [showViewOptionDialog, setShowViewOptionDialog] = React.useState(false);
   const [selectedVariation, setSelectedVariation] = React.useState({});
+  const [duplicateVariationCall, setDuplicateVariationCall] =
+    React.useState(false);
+  const [showEditVariationDialog, setShowEditVariationDialog] =
+    React.useState(false);
   const [showAddVariationDialog, setShowAddVariationDialog] =
     React.useState(false);
   const [showViewVariationDialog, setShowViewVariationDialog] =
@@ -28,6 +35,8 @@ const Form = ({ experience, currentExperienceId }) => {
             <ViewSelectedOptionDialog
               selectedOption={selectedOption}
               setShowViewOptionDialog={setShowViewOptionDialog}
+              setDuplicateOptionCall={setDuplicateOptionCall}
+              setShowOptionEditDialog={setShowOptionEditDialog}
             />
           </div>
         </div>
@@ -48,6 +57,8 @@ const Form = ({ experience, currentExperienceId }) => {
             <ViewSelectedVariationDialog
               selectedVariation={selectedVariation}
               setShowViewVariationDialog={setShowViewVariationDialog}
+              setDuplicateVariationCall={setDuplicateVariationCall}
+              setShowEditVariationDialog={setShowEditVariationDialog}
             />
           </div>
         </div>
@@ -246,6 +257,10 @@ const Form = ({ experience, currentExperienceId }) => {
             setShowViewOptionDialog={setShowViewOptionDialog}
             setSelectedOption={setSelectedOption}
             selectedOption={selectedOption}
+            duplicateOptionCall={duplicateOptionCall}
+            setDuplicateOptionCall={setDuplicateOptionCall}
+            showOptionEditDialog={showOptionEditDialog}
+            setShowOptionEditDialog={setShowOptionEditDialog}
           />
         </div>
         <div className="max-height-200 overflow-y-auto">
@@ -254,6 +269,10 @@ const Form = ({ experience, currentExperienceId }) => {
             setShowViewVariationDialog={setShowViewVariationDialog}
             setSelectedVariation={setSelectedVariation}
             selectedVariation={selectedVariation}
+            duplicateVariationCall={duplicateVariationCall}
+            setDuplicateVariationCall={setDuplicateVariationCall}
+            showEditVariationDialog={showEditVariationDialog}
+            setShowEditVariationDialog={setShowEditVariationDialog}
           />
         </div>
         <div className="max-height-200 overflow-y-auto ">

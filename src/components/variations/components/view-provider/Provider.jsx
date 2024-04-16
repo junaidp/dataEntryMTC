@@ -1,13 +1,64 @@
 import React from "react";
 import RichTextEditor from "../../../common/RichText";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { setupAddVariation } from "../../../../global-redux/reducers/variations/slice";
+import { setupAddProvider } from "../../../../global-redux/reducers/providers/slice";
 
 const ViewProviderDialog = ({
   selectedProvider,
   setShowViewSelectedProvider,
+  setShowEditProviderDialog,
+  setDuplicateProvider,
+  variation,
 }) => {
-  const { allProvider } = useSelector((state) => state?.providers);
+  const dispatch = useDispatch();
+  const { allProvider, loading, providerAddSuccess } = useSelector(
+    (state) => state?.providers
+  );
+  const { loading: varLoading, variationAddSuccess } = useSelector(
+    (state) => state?.variations
+  );
   const [provider, setProvider] = React.useState({});
+  function handleDeleteProvider(id) {
+    let filteredVariationObject = {
+      ...variation,
+      providers: variation?.providers?.filter((all) => all?.providerId !== id),
+    };
+    dispatch(setupAddVariation([filteredVariationObject]));
+  }
+  function handleDuplicateProvider() {
+    let currentDuplicatedProvider = allProvider?.find(
+      (provider) => provider?.id === selectedProvider?.providerId
+    );
+    if (currentDuplicatedProvider) {
+      if (!loading) {
+        dispatch(
+          setupAddProvider([
+            {
+              name: currentDuplicatedProvider?.name + " Duplicated",
+              address: currentDuplicatedProvider?.address,
+              website: currentDuplicatedProvider?.website,
+              pointOfContact: currentDuplicatedProvider?.pointOfContact,
+              email: currentDuplicatedProvider?.email,
+              manageVenue: currentDuplicatedProvider?.manageVenue,
+              regionsCovered: currentDuplicatedProvider?.regionsCovered,
+              vendorId: currentDuplicatedProvider?.vendorId,
+              description: currentDuplicatedProvider?.description,
+              termsNConditions: currentDuplicatedProvider?.termsNConditions,
+            },
+          ])
+        );
+      }
+      setDuplicateProvider(true);
+    }
+  }
+
+  React.useEffect(() => {
+    if (providerAddSuccess === true || variationAddSuccess === true) {
+      setShowViewSelectedProvider(false);
+    }
+  }, [providerAddSuccess, variationAddSuccess]);
+
   React.useEffect(() => {
     setProvider(
       allProvider?.find((all) => all?.id === selectedProvider?.providerId)
@@ -17,23 +68,39 @@ const ViewProviderDialog = ({
     <div className="px-4 py-4">
       <h2 className="pb-4 heading">View Provider</h2>
       <div className="float-end ">
-        <div className={`btn btn-labeled btn-primary px-3 shadow  my-4 `}>
+        <div
+          className={`btn btn-labeled btn-primary px-3 shadow  my-4 `}
+          onClick={() => {
+            setShowViewSelectedProvider(false);
+            setShowEditProviderDialog(true);
+          }}
+        >
           <span className="btn-label me-2">
             <i className="fa fa-check-circle f-18"></i>
           </span>
           Edit
         </div>
-        <div className={`btn btn-labeled btn-danger mx-4 px-3 shadow  my-4 `}>
+        <div
+          className={`btn btn-labeled btn-danger mx-4 px-3 shadow  my-4  ${
+            varLoading && "disabled"
+          } `}
+          onClick={() => handleDeleteProvider(selectedProvider?.providerId)}
+        >
           <span className="btn-label me-2">
             <i className="fa fa-check-circle f-18"></i>
           </span>
-          Delete
+          {varLoading ? "Loading..." : "Delete"}
         </div>
-        <div className={`btn btn-labeled btn-secondary px-3 shadow  my-4 `}>
+        <div
+          className={`btn btn-labeled btn-secondary px-3 shadow  my-4  ${
+            loading && "disabled"
+          }  `}
+          onClick={handleDuplicateProvider}
+        >
           <span className="btn-label me-2">
             <i className="fa fa-check-circle f-18"></i>
           </span>
-          Duplicate
+          {loading ? "Loading..." : "Duplicate"}
         </div>
       </div>
       <div>

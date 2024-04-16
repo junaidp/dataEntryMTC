@@ -15,15 +15,15 @@ const VariationRecord = ({
   setShowViewVariationDialog,
   setSelectedVariation,
   selectedVariation,
+  duplicateVariationCall,
+  setDuplicateVariationCall,
+  showEditVariationDialog,
+  setShowEditVariationDialog,
 }) => {
   const dispatch = useDispatch();
   const { allVariations, loading, variationAddSuccess } = useSelector(
     (state) => state?.variations
   );
-  const [duplicateVariationCall, setDuplicateVariationCall] =
-    React.useState(false);
-  const [showEditVariationDialog, setShowEditVariationDialog] =
-    React.useState(false);
   function handleDuplicateVariation(item) {
     if (item) {
       if (!loading) {
@@ -52,7 +52,9 @@ const VariationRecord = ({
 
   React.useEffect(() => {
     if (variationAddSuccess === true && duplicateVariationCall === true) {
-      toast.success("Variation Duplicated Successfully");
+      toast.success("Variation Duplicated Successfully", {
+        toastId: "variationDuplicated",
+      });
       setDuplicateVariationCall(false);
     }
   }, [variationAddSuccess]);

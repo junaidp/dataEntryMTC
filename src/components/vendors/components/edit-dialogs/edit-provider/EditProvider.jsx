@@ -74,7 +74,9 @@ const EditProviderDialog = ({ setShowEditProviderDialog }) => {
       formik.resetForm({ values: initialValues });
       setValue("");
       setShowEditProviderDialog(false);
-      toast.success("Provider Updated Successfully");
+      toast.success("Provider Updated Successfully", {
+        toastId: "providerEdited",
+      });
     }
   }, [providerAddSuccess]);
 

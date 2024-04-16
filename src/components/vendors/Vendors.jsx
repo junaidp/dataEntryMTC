@@ -49,10 +49,21 @@ const Vendor = ({ setShowAddVendorDialog, showAddVendorDialog }) => {
   const [showAddExperienceDialog, setShowAddExperienceDialog] =
     React.useState(false);
   const [showAddServiceDialog, setShowAddServiceDialog] = React.useState(false);
+  const [duplicateServiceCall, setDuplicateServiceCall] = React.useState(false);
+  const [showEditServiceDialog, setShowEditServceDialog] =
+    React.useState(false);
   const [showAddProviderDialog, setShowAddProviderDialog] =
+    React.useState(false);
+  const [duplicateProviderCall, setDuplicateProviderCall] =
+    React.useState(false);
+  const [showEditProviderDialog, setShowEditProviderDialog] =
     React.useState(false);
 
   const [showViewSelectedExperience, setShowViewSelectedExperience] =
+    React.useState(false);
+  const [showEditExperienceDialog, setShowEditExperienceDialog] =
+    React.useState(false);
+  const [duplicateExperienceCall, setDuplicateExperienceCall] =
     React.useState(false);
   const [showViewSelectedService, setShowViewSelectedService] =
     React.useState(false);
@@ -147,6 +158,8 @@ const Vendor = ({ setShowAddVendorDialog, showAddVendorDialog }) => {
           <div className="model-wrap">
             <ViewExperieceDialog
               setShowViewSelectedExperience={setShowViewSelectedExperience}
+              setShowEditExperienceDialog={setShowEditExperienceDialog}
+              setDuplicateExperienceCall={setDuplicateExperienceCall}
             />
           </div>
         </div>
@@ -166,6 +179,8 @@ const Vendor = ({ setShowAddVendorDialog, showAddVendorDialog }) => {
           <div className="model-wrap">
             <ViewServiceDialog
               setShowViewSelectedService={setShowViewSelectedService}
+              setShowEditServceDialog={setShowEditServceDialog}
+              setDuplicateServiceCall={setDuplicateServiceCall}
             />
           </div>
         </div>
@@ -176,6 +191,7 @@ const Vendor = ({ setShowAddVendorDialog, showAddVendorDialog }) => {
             <AddProviderDialog
               setShowAddProviderDialog={setShowAddProviderDialog}
               currentVendorId={currentVendorId}
+              
             />
           </div>
         </div>
@@ -185,6 +201,8 @@ const Vendor = ({ setShowAddVendorDialog, showAddVendorDialog }) => {
           <div className="model-wrap">
             <ViewProviderDialog
               setShowViewSelectedProvider={setShowViewSelectedProvider}
+              setDuplicateProviderCall={setDuplicateProviderCall}
+              setShowEditProviderDialog={setShowEditProviderDialog}
             />
           </div>
         </div>
@@ -258,6 +276,16 @@ const Vendor = ({ setShowAddVendorDialog, showAddVendorDialog }) => {
                               setShowViewSelectedExperience={
                                 setShowViewSelectedExperience
                               }
+                              showEditExperienceDialog={
+                                showEditExperienceDialog
+                              }
+                              setShowEditExperienceDialog={
+                                setShowEditExperienceDialog
+                              }
+                              duplicateExperienceCall={duplicateExperienceCall}
+                              setDuplicateExperienceCall={
+                                setDuplicateExperienceCall
+                              }
                             />
                           </div>
                           <div className="max-height-200 overflow-y-auto mb-4">
@@ -266,6 +294,10 @@ const Vendor = ({ setShowAddVendorDialog, showAddVendorDialog }) => {
                               setShowViewSelectedService={
                                 setShowViewSelectedService
                               }
+                              duplicateServiceCall={duplicateServiceCall}
+                              setDuplicateServiceCall={setDuplicateServiceCall}
+                              showEditServiceDialog={showEditServiceDialog}
+                              setShowEditServceDialog={setShowEditServceDialog}
                             />
                           </div>
                           <div className="max-height-200 overflow-y-auto mb-4">
@@ -275,6 +307,14 @@ const Vendor = ({ setShowAddVendorDialog, showAddVendorDialog }) => {
                               }
                               setShowViewSelectedProvider={
                                 setShowViewSelectedProvider
+                              }
+                              duplicateProviderCall={duplicateProviderCall}
+                              setDuplicateProviderCall={
+                                setDuplicateProviderCall
+                              }
+                              showEditProviderDialog={showEditProviderDialog}
+                              setShowEditProviderDialog={
+                                setShowEditProviderDialog
                               }
                             />
                           </div>

@@ -2,31 +2,95 @@ import React from "react";
 import RichTextEditor from "../../../../common/RichText";
 import Chip from "@mui/material/Chip";
 import { Card } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  setupAddService,
+  setupDeleteService,
+} from "../../../../../global-redux/reducers/services/slice";
 
-const ViewServiceeDialog = ({ setShowViewSelectedService }) => {
-  const { selectedService } = useSelector((state) => state.services);
+const ViewServiceeDialog = ({
+  setShowViewSelectedService,
+  setShowEditServceDialog,
+  setDuplicateServiceCall,
+}) => {
+  const dispatch = useDispatch();
+  const { selectedService, serviceAddSuccess, loading } = useSelector(
+    (state) => state.services
+  );
+  function handleDuplicateService() {
+    if (selectedService) {
+      if (!loading) {
+        dispatch(
+          setupAddService([
+            {
+              title: selectedService?.title + " Duplicated",
+              vendorId: selectedService?.vendorId,
+              providers: selectedService?.providers || [],
+              description: selectedService?.description,
+              address: selectedService?.address,
+              price: selectedService?.price || [],
+              duration: selectedService?.duration || [],
+              availableTime: selectedService?.availableTime || [],
+              links: selectedService?.links || [],
+              linkWithOtherService: selectedService?.linkWithOtherService || [],
+              linkWithOtherExperience:
+                selectedService?.linkWithOtherExperience || [],
+              termsAndConditions: selectedService?.termsAndConditions,
+              storyLineKeywords: selectedService?.storyLineKeywords || [],
+            },
+          ])
+        );
+        setDuplicateServiceCall(true);
+      }
+    }
+  }
+
+  React.useEffect(() => {
+    if (serviceAddSuccess === true) {
+      setShowViewSelectedService(false);
+    }
+  }, [serviceAddSuccess]);
   return (
     <div className="px-4 py-4">
       <h2 className="pb-4 heading">View Service</h2>
       <div className="float-end ">
-        <div className={`btn btn-labeled btn-primary px-3 shadow  my-4 `}>
+        <div
+          className={`btn btn-labeled btn-primary px-3 shadow  my-4 `}
+          onClick={() => {
+            setShowViewSelectedService(false);
+            setShowEditServceDialog(true);
+          }}
+        >
           <span className="btn-label me-2">
             <i className="fa fa-check-circle f-18"></i>
           </span>
           Edit
         </div>
-        <div className={`btn btn-labeled btn-danger mx-4 px-3 shadow  my-4 `}>
+        <div
+          className={`btn btn-labeled btn-danger mx-4 px-3 shadow  my-4 ${
+            loading && "disabled"
+          }  `}
+          onClick={() => {
+            if (!loading) {
+              dispatch(setupDeleteService(`?serviceId=${selectedService?.id}`));
+            }
+          }}
+        >
           <span className="btn-label me-2">
             <i className="fa fa-check-circle f-18"></i>
           </span>
-          Delete
+          {loading ? "Loading..." : "Delete"}
         </div>
-        <div className={`btn btn-labeled btn-secondary px-3 shadow  my-4 `}>
+        <div
+          className={`btn btn-labeled btn-secondary px-3 shadow  my-4 ${
+            loading && "disabled"
+          }  `}
+          onClick={handleDuplicateService}
+        >
           <span className="btn-label me-2">
             <i className="fa fa-check-circle f-18"></i>
           </span>
-          Duplicate
+          {loading ? "Loading..." : "Duplicate"}
         </div>
       </div>
       <div>

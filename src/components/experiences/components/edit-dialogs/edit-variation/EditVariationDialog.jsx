@@ -198,7 +198,9 @@ const EditVariationDialog = ({
 
   React.useEffect(() => {
     if (variationAddSuccess) {
-      toast.success("Variation Updated Successfully");
+      toast.success("Variation Updated Successfully", {
+        toastId: "variationUpdated",
+      });
       formik.resetForm({ values: initialValues });
       setShowEditVariationDialog(false);
     }

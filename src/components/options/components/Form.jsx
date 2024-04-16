@@ -63,7 +63,9 @@ const optionForm = ({ option }) => {
 
   React.useEffect(() => {
     if (providerAddSuccess === true && duplicateProvider === true) {
-      toast.success("Provider Duplicated Successfully");
+      toast.success("Provider Duplicated Successfully", {
+        toastId: "optionSectionDuplicated",
+      });
       setDuplicateProvider(false);
     }
   }, [providerAddSuccess]);
@@ -75,6 +77,9 @@ const optionForm = ({ option }) => {
             <ViewSelectedProvider
               selectedProvider={selectedProvider}
               setShowViewSelectedProvider={setShowViewSelectedProvider}
+              setShowEditProviderDialog={setShowEditProviderDialog}
+              setDuplicateProvider={setDuplicateProvider}
+              option={option}
             />
           </div>
         </div>

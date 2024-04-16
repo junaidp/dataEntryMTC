@@ -62,7 +62,9 @@ const variationForm = ({ variation }) => {
 
   React.useEffect(() => {
     if (providerAddSuccess === true && duplicateProvider === true) {
-      toast.success("Provider Duplicated Successfully");
+      toast.success("Provider Duplicated Successfully", {
+        toastId: "variationSectionDuplicated",
+      });
       setDuplicateProvider(false);
     }
   }, [providerAddSuccess]);
@@ -74,6 +76,9 @@ const variationForm = ({ variation }) => {
             <ViewSelectedProvider
               selectedProvider={selectedProvider}
               setShowViewSelectedProvider={setShowViewSelectedProvider}
+              setShowEditProviderDialog={setShowEditProviderDialog}
+              setDuplicateProvider={setDuplicateProvider}
+              variation={variation}
             />
           </div>
         </div>

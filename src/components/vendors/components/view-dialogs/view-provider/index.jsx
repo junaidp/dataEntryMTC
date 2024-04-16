@@ -1,30 +1,92 @@
 import React from "react";
 import RichTextEditor from "../../../../common/RichText";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  setupAddProvider,
+  setupDeleteProvider,
+} from "../../../../../global-redux/reducers/providers/slice";
 
-const ViewProviderDialog = ({ setShowViewSelectedProvider }) => {
-  const { selectedProvider } = useSelector((state) => state.providers);
+const ViewProviderDialog = ({
+  setShowViewSelectedProvider,
+  setDuplicateProviderCall,
+  setShowEditProviderDialog,
+}) => {
+  const dispatch = useDispatch();
+  const { selectedProvider, loading, providerAddSuccess } = useSelector(
+    (state) => state.providers
+  );
+  function handleDuplicateProvider() {
+    if (selectedProvider) {
+      if (!loading) {
+        dispatch(
+          setupAddProvider([
+            {
+              name: selectedProvider?.name + " Duplicated",
+              address: selectedProvider?.address,
+              website: selectedProvider?.website,
+              pointOfContact: selectedProvider?.pointOfContact,
+              email: selectedProvider?.email,
+              manageVenue: selectedProvider?.manageVenue,
+              regionsCovered: selectedProvider?.regionsCovered,
+              vendorId: selectedProvider?.vendorId,
+              description: selectedProvider?.description,
+              termsNConditions: selectedProvider?.termsNConditions,
+            },
+          ])
+        );
+        setDuplicateProviderCall(true);
+      }
+    }
+  }
+  React.useEffect(() => {
+    if (providerAddSuccess === true) {
+      setShowViewSelectedProvider(false);
+    }
+  }, [providerAddSuccess]);
+
   return (
     <div className="px-4 py-4">
       <h2 className="pb-4 heading">View Provider</h2>
       <div className="float-end ">
-        <div className={`btn btn-labeled btn-primary px-3 shadow  my-4 `}>
+        <div
+          className={`btn btn-labeled btn-primary px-3 shadow  my-4 `}
+          onClick={() => {
+            setShowViewSelectedProvider(false);
+            setShowEditProviderDialog(true);
+          }}
+        >
           <span className="btn-label me-2">
             <i className="fa fa-check-circle f-18"></i>
           </span>
           Edit
         </div>
-        <div className={`btn btn-labeled btn-danger mx-4 px-3 shadow  my-4 `}>
+        <div
+          className={`btn btn-labeled btn-danger mx-4 px-3 shadow  my-4 ${
+            loading && "disabled"
+          } `}
+          onClick={() => {
+            if (!loading) {
+              dispatch(
+                setupDeleteProvider(`?providerId=${selectedProvider?.id}`)
+              );
+            }
+          }}
+        >
           <span className="btn-label me-2">
             <i className="fa fa-check-circle f-18"></i>
           </span>
-          Delete
+          {loading ? "Loading..." : "Delete"}
         </div>
-        <div className={`btn btn-labeled btn-secondary px-3 shadow  my-4 `}>
+        <div
+          className={`btn btn-labeled btn-secondary px-3 shadow  my-4 ${
+            loading && "disabled"
+          }`}
+          onClick={handleDuplicateProvider}
+        >
           <span className="btn-label me-2">
             <i className="fa fa-check-circle f-18"></i>
           </span>
-          Duplicate
+          {loading ? "Loading..." : "Duplicate"}
         </div>
       </div>
       <div>

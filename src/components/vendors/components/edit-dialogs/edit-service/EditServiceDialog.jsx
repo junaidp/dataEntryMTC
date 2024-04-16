@@ -290,7 +290,9 @@ const EditServiceDialog = ({ setShowEditServiceDialog }) => {
     if (serviceAddSuccess) {
       formik.resetForm({ values: initialValues });
       setShowEditServiceDialog(false);
-      toast.success("Services Updated Successfully");
+      toast.success("Services Updated Successfully", {
+        toastId: "toastServiceUpdated",
+      });
     }
   }, [serviceAddSuccess]);
 

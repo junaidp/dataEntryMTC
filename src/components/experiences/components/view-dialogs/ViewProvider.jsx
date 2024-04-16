@@ -1,12 +1,63 @@
 import React from "react";
 import RichTextEditor from "../../../common/RichText";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { setupAddProvider } from "../../../../global-redux/reducers/providers/slice";
+import { setupAddExperience } from "../../../../global-redux/reducers/experiences/slice";
 
 const ViewProviderDialog = ({
   selectedProvider,
   setShowViewSelectedProvider,
+  setShowEditProviderDialog,
+  setDuplicateProviderCall,
+  experience,
 }) => {
-  const { allProvider } = useSelector((state) => state?.providers);
+  const dispatch = useDispatch();
+  const { allProvider, providerAddSuccess, loading } = useSelector(
+    (state) => state?.providers
+  );
+  const { experienceAddSuccess } = useSelector((state) => state?.experiences);
+
+  function handleDeleteProvider(id) {
+    let filteredExperienceObject = {
+      ...experience,
+      providers: experience?.providers?.filter((all) => all?.providerId !== id),
+    };
+    dispatch(setupAddExperience([filteredExperienceObject]));
+  }
+
+  function handleDuplicateProvider() {
+    let currentDuplicatedProvider = allProvider?.find(
+      (provider) => provider?.id === selectedProvider?.providerId
+    );
+    if (currentDuplicatedProvider) {
+      if (!loading) {
+        dispatch(
+          setupAddProvider([
+            {
+              name: currentDuplicatedProvider?.name + " Duplicated",
+              address: currentDuplicatedProvider?.address,
+              website: currentDuplicatedProvider?.website,
+              pointOfContact: currentDuplicatedProvider?.pointOfContact,
+              email: currentDuplicatedProvider?.email,
+              manageVenue: currentDuplicatedProvider?.manageVenue,
+              regionsCovered: currentDuplicatedProvider?.regionsCovered,
+              vendorId: currentDuplicatedProvider?.vendorId,
+              description: currentDuplicatedProvider?.description,
+              termsNConditions: currentDuplicatedProvider?.termsNConditions,
+            },
+          ])
+        );
+      }
+      setDuplicateProviderCall(true);
+    }
+  }
+
+  React.useEffect(() => {
+    if (providerAddSuccess === true || experienceAddSuccess === true) {
+      setShowViewSelectedProvider(false);
+    }
+  }, [providerAddSuccess, experienceAddSuccess]);
+
   const [provider, setProvider] = React.useState({});
   React.useEffect(() => {
     setProvider(
@@ -17,23 +68,39 @@ const ViewProviderDialog = ({
     <div className="px-4 py-4">
       <h2 className="pb-4 heading">View Provider</h2>
       <div className="float-end ">
-        <div className={`btn btn-labeled btn-primary px-3 shadow  my-4 `}>
+        <div
+          className={`btn btn-labeled btn-primary px-3 shadow  my-4 `}
+          onClick={() => {
+            setShowViewSelectedProvider(false);
+            setShowEditProviderDialog(true);
+          }}
+        >
           <span className="btn-label me-2">
             <i className="fa fa-check-circle f-18"></i>
           </span>
           Edit
         </div>
-        <div className={`btn btn-labeled btn-danger mx-4 px-3 shadow  my-4 `}>
+        <div
+          className={`btn btn-labeled btn-danger mx-4 px-3 shadow  my-4  ${
+            loading && "disabled"
+          } `}
+          onClick={() => handleDeleteProvider(selectedProvider?.providerId)}
+        >
           <span className="btn-label me-2">
             <i className="fa fa-check-circle f-18"></i>
           </span>
-          Delete
+          {loading ? "Loading..." : "Delete"}
         </div>
-        <div className={`btn btn-labeled btn-secondary px-3 shadow  my-4 `}>
+        <div
+          className={`btn btn-labeled btn-secondary px-3 shadow  my-4  ${
+            loading && "disabled"
+          } `}
+          onClick={handleDuplicateProvider}
+        >
           <span className="btn-label me-2">
             <i className="fa fa-check-circle f-18"></i>
           </span>
-          Duplicate
+          {loading ? "Loading..." : "Duplicate"}
         </div>
       </div>
       <div>

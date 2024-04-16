@@ -14,15 +14,15 @@ import EditExperienceDialog from "../edit-dialogs/edit-experience/EditExperience
 const experienceRecord = ({
   setShowAddExperienceDialog,
   setShowViewSelectedExperience,
+  showEditExperienceDialog,
+  setShowEditExperienceDialog,
+  duplicateExperienceCall,
+  setDuplicateExperienceCall,
 }) => {
   const dispatch = useDispatch();
-  const [duplicateExperienceCall, setDuplicateExperienceCall] =
-    React.useState(false);
   const { allExperience, loading, experienceAddSuccess } = useSelector(
     (state) => state.experiences
   );
-  const [showEditExperienceDialog, setShowEditExperienceDialog] =
-    React.useState(false);
 
   function handleDuplicateExperience(item) {
     if (item) {
@@ -54,7 +54,9 @@ const experienceRecord = ({
 
   React.useEffect(() => {
     if (experienceAddSuccess === true && duplicateExperienceCall === true) {
-      toast.success("Experience Duplicated Successfully");
+      toast.success("Experience Duplicated Successfully", {
+        toastId: "toastDuplicated",
+      });
       setDuplicateExperienceCall(false);
     }
   }, [experienceAddSuccess]);

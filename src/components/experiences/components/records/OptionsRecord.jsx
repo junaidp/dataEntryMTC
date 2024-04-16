@@ -15,13 +15,15 @@ const OptionRecord = ({
   setShowViewOptionDialog,
   setSelectedOption,
   selectedOption,
+  duplicateOptionCall,
+  setDuplicateOptionCall,
+  showOptionEditDialog,
+  setShowOptionEditDialog,
 }) => {
   const dispatch = useDispatch();
   const { allOptions, loading, optionAddSuccess } = useSelector(
     (state) => state?.options
   );
-  const [duplicateOptionCall, setDuplicateOptionCall] = React.useState(false);
-  const [showOptionEditDialog, setShowOptionEditDialog] = React.useState(false);
 
   function handleDuplicateOption(item) {
     if (item) {
@@ -51,7 +53,9 @@ const OptionRecord = ({
 
   React.useEffect(() => {
     if (optionAddSuccess === true && duplicateOptionCall === true) {
-      toast.success("Option Duplicated Successfully");
+      toast.success("Option Duplicated Successfully", {
+        toastId: "optionDuplicated",
+      });
       setDuplicateOptionCall(false);
     }
   }, [optionAddSuccess]);

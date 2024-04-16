@@ -1,37 +1,99 @@
 import React from "react";
 import Chip from "@mui/material/Chip";
 import RichTextEditor from "../../../common/RichText";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  setupAddOption,
+  setupDeleteOption,
+} from "../../../../global-redux/reducers/options/slice";
 
 const ViewselectedOptionDialog = ({
   selectedOption,
   setShowViewOptionDialog,
+  setDuplicateOptionCall,
+  setShowOptionEditDialog,
 }) => {
+  const dispatch = useDispatch();
   const { allExperience } = useSelector((state) => state?.experiences);
+  const { loading, optionAddSuccess } = useSelector((state) => state?.options);
+
+  function handleDuplicateOption() {
+    if (selectedOption) {
+      if (!loading) {
+        dispatch(
+          setupAddOption([
+            {
+              experienceId: selectedOption?.experienceId,
+              title: selectedOption?.title + " Duplicated",
+              xpAddress: selectedOption?.xpAddress,
+              price: selectedOption?.price || [],
+              duration: selectedOption?.duration || [],
+              availableTime: selectedOption?.availableTime || [],
+              links: selectedOption?.links || [],
+              linkWithOtherExperience:
+                selectedOption?.linkWithOtherExperience || [],
+              providers: selectedOption?.providers || [],
+              description: selectedOption?.description,
+              termsAndConditions: selectedOption?.termsAndConditions,
+              storyLineKeywords: selectedOption?.storyLineKeywords || [],
+            },
+          ])
+        );
+        setDuplicateOptionCall(true);
+      }
+    }
+  }
+
+  React.useEffect(() => {
+    if (optionAddSuccess === true) {
+      setShowViewOptionDialog(false);
+    }
+  }, [optionAddSuccess]);
+
   return (
     <div className="px-4 py-4">
       <div>
         <h2 className="pb-4 heading">View Option</h2>
         <div className="float-end ">
-        <div className={`btn btn-labeled btn-primary px-3 shadow  my-4 `}>
-          <span className="btn-label me-2">
-            <i className="fa fa-check-circle f-18"></i>
-          </span>
-          Edit
+          <div
+            className={`btn btn-labeled btn-primary px-3 shadow  my-4 `}
+            onClick={() => {
+              setShowViewOptionDialog(false);
+              setShowOptionEditDialog(true);
+            }}
+          >
+            <span className="btn-label me-2">
+              <i className="fa fa-check-circle f-18"></i>
+            </span>
+            Edit
+          </div>
+          <div
+            className={`btn btn-labeled btn-danger mx-4 px-3 shadow  my-4 ${
+              loading && "disabled"
+            }   `}
+            onClick={() => {
+              if (!loading) {
+                dispatch(setupDeleteOption(`?optionId=${selectedOption?.id}`));
+              }
+            }}
+          >
+            <span className="btn-label me-2">
+              <i className="fa fa-check-circle f-18"></i>
+            </span>
+            {loading ? "Loading..." : "Delete"}
+          </div>
+          <div
+            className={`btn btn-labeled btn-secondary px-3 shadow  my-4 ${
+              loading && "disabled"
+            }  `}
+            onClick={handleDuplicateOption}
+          >
+            <span className="btn-label me-2">
+              <i className="fa fa-check-circle f-18"></i>
+            </span>
+            {loading ? "Loading..." : "Duplicate"}
+          </div>
         </div>
-        <div className={`btn btn-labeled btn-danger mx-4 px-3 shadow  my-4 `}>
-          <span className="btn-label me-2">
-            <i className="fa fa-check-circle f-18"></i>
-          </span>
-          Delete
-        </div>
-        <div className={`btn btn-labeled btn-secondary px-3 shadow  my-4 `}>
-          <span className="btn-label me-2">
-            <i className="fa fa-check-circle f-18"></i>
-          </span>
-          Duplicate
-        </div>
-      </div>
         <div className="row">
           <div className="col-lg-6 mb-4">
             <label>Title</label>

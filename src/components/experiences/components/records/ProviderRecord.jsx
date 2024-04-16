@@ -61,7 +61,9 @@ const ProviderRecord = ({ experience }) => {
 
   React.useEffect(() => {
     if (providerAddSuccess === true && duplicateProviderCall === true) {
-      toast.success("Provider Duplicated Successfully");
+      toast.success("Provider Duplicated Successfully", {
+        toastId: "providerDuplicated",
+      });
       setDuplicateProviderCall(false);
     }
   }, [providerAddSuccess]);
@@ -74,6 +76,9 @@ const ProviderRecord = ({ experience }) => {
             <ViewSelectedProvider
               selectedProvider={selectedProvider}
               setShowViewSelectedProvider={setShowViewSelectedProvider}
+              setShowEditProviderDialog={setShowEditProviderDialog}
+              setDuplicateProviderCall={setDuplicateProviderCall}
+              experience={experience}
             />
           </div>
         </div>

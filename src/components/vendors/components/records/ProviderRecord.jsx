@@ -14,15 +14,15 @@ import EditProviderDialog from "../edit-dialogs/edit-provider/EditProvider";
 const providersRecord = ({
   setShowAddProviderDialog,
   setShowViewSelectedProvider,
+  duplicateProviderCall,
+  setDuplicateProviderCall,
+  showEditProviderDialog,
+  setShowEditProviderDialog,
 }) => {
   const dispatch = useDispatch();
   const { allProvider, loading, providerAddSuccess } = useSelector(
     (state) => state.providers
   );
-  const [duplicateProviderCall, setDuplicateProviderCall] =
-    React.useState(false);
-  const [showEditProviderDialog, setShowEditProviderDialog] =
-    React.useState(false);
 
   function handleDuplicateProvider(item) {
     if (item) {
@@ -49,7 +49,9 @@ const providersRecord = ({
   }
   React.useEffect(() => {
     if (providerAddSuccess === true && duplicateProviderCall === true) {
-      toast.success("Provider Duplicated Successfully");
+      toast.success("Provider Duplicated Successfully", {
+        toastId: "providerDuplicated",
+      });
       setDuplicateProviderCall(false);
     }
   }, [providerAddSuccess]);

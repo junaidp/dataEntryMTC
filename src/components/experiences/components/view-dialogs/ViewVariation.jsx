@@ -1,35 +1,100 @@
 import React from "react";
 import Chip from "@mui/material/Chip";
 import RichTextEditor from "../../../common/RichText";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  setupDeleteVaration,
+  setupAddVariation,
+} from "../../../../global-redux/reducers/variations/slice";
 
 const ViewSelectedVariationDialog = ({
   selectedVariation,
   setShowViewVariationDialog,
+  setDuplicateVariationCall,
+  setShowEditVariationDialog,
 }) => {
+  const dispatch = useDispatch();
   const { allExperience } = useSelector((state) => state?.experiences);
+  const { loading, variationAddSuccess } = useSelector(
+    (state) => state?.variations
+  );
+  function handleDuplicateVariation() {
+    if (selectedVariation) {
+      if (!loading) {
+        dispatch(
+          setupAddVariation([
+            {
+              experienceId: selectedVariation?.experienceId,
+              title: selectedVariation?.title + " Duplicated",
+              xpAddress: selectedVariation?.xpAddress,
+              price: selectedVariation?.price || [],
+              duration: selectedVariation?.duration || [],
+              availableTime: selectedVariation?.availableTime || [],
+              links: selectedVariation?.links || [],
+              linkWithOtherExperience:
+                selectedVariation?.linkWithOtherExperience || [],
+              providers: selectedVariation?.providers || [],
+              description: selectedVariation?.description,
+              termsAndConditions: selectedVariation?.termsAndConditions,
+              storyLineKeywords: selectedVariation?.storyLineKeywords || [],
+            },
+          ])
+        );
+        setDuplicateVariationCall(true);
+      }
+    }
+  }
+
+  React.useEffect(() => {
+    if (variationAddSuccess === true) {
+      setShowViewVariationDialog(false);
+    }
+  }, [variationAddSuccess]);
+
   return (
     <div className="px-4 py-4">
       <div>
         <h2 className="pb-4 heading">View Variation</h2>
         <div className="float-end ">
-          <div className={`btn btn-labeled btn-primary px-3 shadow  my-4 `}>
+          <div
+            className={`btn btn-labeled btn-primary px-3 shadow  my-4 `}
+            onClick={() => {
+              setShowViewVariationDialog(false);
+              setShowEditVariationDialog(true);
+            }}
+          >
             <span className="btn-label me-2">
               <i className="fa fa-check-circle f-18"></i>
             </span>
             Edit
           </div>
-          <div className={`btn btn-labeled btn-danger mx-4 px-3 shadow  my-4 `}>
+          <div
+            className={`btn btn-labeled btn-danger mx-4 px-3 shadow  my-4  ${
+              loading && "disabled"
+            }   `}
+            onClick={() => {
+              if (!loading) {
+                dispatch(
+                  setupDeleteVaration(`?variationId=${selectedVariation?.id}`)
+                );
+              }
+            }}
+          >
             <span className="btn-label me-2">
               <i className="fa fa-check-circle f-18"></i>
             </span>
-            Delete
+            {loading ? "Loading..." : "Delete"}
           </div>
-          <div className={`btn btn-labeled btn-secondary px-3 shadow  my-4 `}>
+          <div
+            className={`btn btn-labeled btn-secondary px-3 shadow  my-4 ${
+              loading && "disabled"
+            }   `}
+            onClick={handleDuplicateVariation}
+          >
             <span className="btn-label me-2">
               <i className="fa fa-check-circle f-18"></i>
             </span>
-            Duplicate
+            {loading ? "Loading..." : "Duplicate"}
           </div>
         </div>
         <div className="row">

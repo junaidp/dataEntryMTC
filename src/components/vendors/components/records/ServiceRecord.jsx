@@ -14,11 +14,13 @@ import EditServiceDialog from "../edit-dialogs/edit-service/EditServiceDialog";
 const serviceRecord = ({
   setShowAddServiceDialog,
   setShowViewSelectedService,
+  duplicateServiceCall,
+  setDuplicateServiceCall,
+  showEditServiceDialog,
+  setShowEditServceDialog,
 }) => {
   const dispatch = useDispatch();
-  const [duplicateServiceCall, setDuplicateServiceCall] = React.useState(false);
-  const [showEditServiceDialog, setShowEditServceDialog] =
-    React.useState(false);
+
   const { allService, loading, serviceAddSuccess } = useSelector(
     (state) => state.services
   );
@@ -51,7 +53,9 @@ const serviceRecord = ({
 
   React.useEffect(() => {
     if (serviceAddSuccess === true && duplicateServiceCall === true) {
-      toast.success("Service Duplicated Successfully");
+      toast.success("Service Duplicated Successfully", {
+        toastId: "toastServiceDuplicated",
+      });
       setDuplicateServiceCall(false);
     }
   }, [serviceAddSuccess]);

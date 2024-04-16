@@ -195,7 +195,9 @@ const EditOptionDialog = ({ setShowOptionEditDialog, selectedOption }) => {
 
   React.useEffect(() => {
     if (optionAddSuccess) {
-      toast.success("Option Updated Successfully");
+      toast.success("Option Updated Successfully", {
+        toastId: "toastUpdated",
+      });
       formik.resetForm({ values: initialValues });
       setShowOptionEditDialog(false);
     }

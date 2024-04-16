@@ -2,31 +2,101 @@ import React from "react";
 import RichTextEditor from "../../../../common/RichText";
 import Chip from "@mui/material/Chip";
 import { Card } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  setupDeleteExperience,
+  setupAddExperience,
+} from "../../../../../global-redux/reducers/experiences/slice";
 
-const ViewExperienceDialog = ({ setShowViewSelectedExperience }) => {
-  const { selectedExperience } = useSelector((state) => state?.experiences);
+const ViewExperienceDialog = ({
+  setShowViewSelectedExperience,
+  setShowEditExperienceDialog,
+  setDuplicateExperienceCall,
+}) => {
+  const { selectedExperience, experienceAddSuccess, loading } = useSelector(
+    (state) => state?.experiences
+  );
+  const dispatch = useDispatch();
+
+  function handleDuplicateExperience() {
+    if (selectedExperience) {
+      if (!loading) {
+        dispatch(
+          setupAddExperience([
+            {
+              title: selectedExperience?.title + " Duplicated",
+              vendorId: selectedExperience?.vendorId,
+              memberShip: selectedExperience?.memberShip,
+              providers: selectedExperience?.providers || [],
+              description: selectedExperience?.description,
+              address: selectedExperience?.address,
+              price: selectedExperience?.price || [],
+              duration: selectedExperience?.duration || [],
+              availableTime: selectedExperience?.availableTime || [],
+              links: selectedExperience?.links || [],
+              linkWithOtherExperience:
+                selectedExperience?.linkWithOtherExperience || [],
+              linkWithOtherService:
+                selectedExperience?.linkWithOtherService || [],
+              termsAndConditions: selectedExperience?.termsAndConditions,
+              storyLineKeywords: selectedExperience?.storyLineKeywords || [],
+            },
+          ])
+        );
+        setDuplicateExperienceCall(true);
+      }
+    }
+  }
+
+  React.useEffect(() => {
+    if (experienceAddSuccess) {
+      setShowViewSelectedExperience(false);
+    }
+  }, [experienceAddSuccess]);
+
   return (
     <div className="px-4 py-4">
       <h2 className="pb-4 heading">View Experience</h2>
       <div className="float-end ">
-        <div className={`btn btn-labeled btn-primary px-3 shadow  my-4 `}>
+        <div
+          className={`btn btn-labeled btn-primary px-3 shadow  my-4 `}
+          onClick={() => {
+            setShowViewSelectedExperience(false);
+            setShowEditExperienceDialog(true);
+          }}
+        >
           <span className="btn-label me-2">
             <i className="fa fa-check-circle f-18"></i>
           </span>
           Edit
         </div>
-        <div className={`btn btn-labeled btn-danger mx-4 px-3 shadow  my-4 `}>
+        <div
+          className={`btn btn-labeled btn-danger mx-4 px-3 shadow  my-4 ${
+            loading && "disabled"
+          }  `}
+          onClick={() => {
+            if (!loading) {
+              dispatch(
+                setupDeleteExperience(`?experienceId=${selectedExperience?.id}`)
+              );
+            }
+          }}
+        >
           <span className="btn-label me-2">
             <i className="fa fa-check-circle f-18"></i>
           </span>
-          Delete
+          {loading ? "Loading..." : "Delete"}
         </div>
-        <div className={`btn btn-labeled btn-secondary px-3 shadow  my-4 `}>
+        <div
+          className={`btn btn-labeled btn-secondary px-3 shadow  my-4 ${
+            loading && "disabled"
+          }  `}
+          onClick={handleDuplicateExperience}
+        >
           <span className="btn-label me-2">
             <i className="fa fa-check-circle f-18"></i>
           </span>
-          Duplicate
+          {loading ? "Loading..." : "Duplicate"}
         </div>
       </div>
 
