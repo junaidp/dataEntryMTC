@@ -3,7 +3,7 @@ import TextField from "@mui/material/TextField";
 import { Card } from "@mui/material";
 import Chip from "@mui/material/Chip";
 
-const PrincipleCustomer = ({
+const Spouse = ({
   data,
   handleChangeText,
   extraData,
@@ -19,7 +19,7 @@ const PrincipleCustomer = ({
 }) => {
   return (
     <div>
-      <h1 className="heading mb-4">Principal Customer</h1>
+      <h1 className="heading mb-4">Spouse</h1>
       <div className="row">
         <div className="col-lg-6 mb-2">
           <TextField
@@ -28,8 +28,8 @@ const PrincipleCustomer = ({
             label="First Name"
             variant="outlined"
             className="form-control"
-            value={data?.principalCustomer?.firstName}
-            onChange={(event) => handleChangeText("principalCustomer", event)}
+            value={data?.spouse?.firstName}
+            onChange={(event) => handleChangeText("spouse", event)}
           />
         </div>
         <div className="col-lg-6 mb-2">
@@ -39,8 +39,8 @@ const PrincipleCustomer = ({
             label="Last Name"
             variant="outlined"
             className="form-control"
-            value={data?.principalCustomer?.lastName}
-            onChange={(event) => handleChangeText("principalCustomer", event)}
+            value={data?.spouse?.lastName}
+            onChange={(event) => handleChangeText("spouse", event)}
           />
         </div>
       </div>
@@ -52,8 +52,8 @@ const PrincipleCustomer = ({
             variant="outlined"
             className="form-control"
             type="date"
-            value={data?.principalCustomer?.date}
-            onChange={(event) => handleChangeText("principalCustomer", event)}
+            value={data?.spouse?.date}
+            onChange={(event) => handleChangeText("spouse", event)}
           />
         </div>
         <div className="col-lg-6 mb-2">
@@ -63,8 +63,8 @@ const PrincipleCustomer = ({
             label="City Of Residence"
             variant="outlined"
             className="form-control"
-            value={data?.principalCustomer?.cityOfResidence}
-            onChange={(event) => handleChangeText("principalCustomer", event)}
+            value={data?.spouse?.cityOfResidence}
+            onChange={(event) => handleChangeText("spouse", event)}
           />
         </div>
       </div>
@@ -76,8 +76,8 @@ const PrincipleCustomer = ({
             label="Email"
             variant="outlined"
             className="form-control"
-            value={data?.principalCustomer?.email}
-            onChange={(event) => handleChangeText("principalCustomer", event)}
+            value={data?.spouse?.email}
+            onChange={(event) => handleChangeText("spouse", event)}
           />
         </div>
         <div className="col-lg-6 mb-2">
@@ -87,8 +87,8 @@ const PrincipleCustomer = ({
             label="Phone Number"
             variant="outlined"
             className="form-control"
-            value={data?.principalCustomer?.phoneNumber}
-            onChange={(event) => handleChangeText("principalCustomer", event)}
+            value={data?.spouse?.phoneNumber}
+            onChange={(event) => handleChangeText("spouse", event)}
           />
         </div>
       </div>
@@ -100,8 +100,8 @@ const PrincipleCustomer = ({
             label="Nationality"
             variant="outlined"
             className="form-control"
-            value={data?.principalCustomer?.nationality}
-            onChange={(event) => handleChangeText("principalCustomer", event)}
+            value={data?.spouse?.nationality}
+            onChange={(event) => handleChangeText("spouse", event)}
           />
         </div>
       </div>
@@ -112,18 +112,16 @@ const PrincipleCustomer = ({
             <div className="row p-0">
               <form
                 className="col-lg-10 mb-2"
-                onSubmit={(event) =>
-                  handleAddInterest("principalCustomer", event)
-                }
+                onSubmit={(event) => handleAddInterest("spouse", event)}
               >
                 <label className="w-100">Add Main Interest:</label>
                 <TextField
                   className="form-control"
                   name="interest"
                   id="interest"
-                  value={extraData?.principalCustomer?.interest}
+                  value={extraData?.spouse?.interest}
                   onChange={(event) =>
-                    handleChangeExtraDataText("principalCustomer", event)
+                    handleChangeExtraDataText("spouse", event)
                   }
                 />
               </form>
@@ -134,7 +132,7 @@ const PrincipleCustomer = ({
                 <button
                   className="btn btn-labeled btn-primary w-100 shadow"
                   type="submit"
-                  onClick={() => handleAddInterest("principalCustomer")}
+                  onClick={() => handleAddInterest("spouse")}
                 >
                   <span className="btn-label me-2">
                     <i className="fa fa-plus"></i>
@@ -146,10 +144,10 @@ const PrincipleCustomer = ({
           </div>
           <label className="mb-2">List Of Available Interests:</label>
           <Card className="py-2">
-            {data?.principalCustomer?.mainInterests?.length === 0 ? (
+            {data?.spouse?.mainInterests?.length === 0 ? (
               <p className="mx-2 mt-3">No Available Interests Found!</p>
             ) : (
-              data?.principalCustomer?.mainInterests?.map((interest, index) => {
+              data?.spouse?.mainInterests?.map((interest, index) => {
                 return (
                   <Chip
                     label={interest?.string}
@@ -157,7 +155,7 @@ const PrincipleCustomer = ({
                     variant="outlined"
                     className="mx-2 mb-2"
                     onDelete={() =>
-                      handleDeleteInterest("principalCustomer", interest?.id)
+                      handleDeleteInterest("spouse", interest?.id)
                     }
                   />
                 );
@@ -172,17 +170,15 @@ const PrincipleCustomer = ({
           <div className="row p-0">
             <form
               className="col-lg-10 mb-2"
-              onSubmit={(event) => handleAddLink("principalCustomer", event)}
+              onSubmit={(event) => handleAddLink("spouse", event)}
             >
               <label className="w-100">Media Link:</label>
               <TextField
                 className="form-control w-100s"
                 name="link"
                 id="link"
-                value={extraData?.principalCustomer?.link}
-                onChange={(event) =>
-                  handleChangeExtraDataText("principalCustomer", event)
-                }
+                value={extraData?.spouse?.link}
+                onChange={(event) => handleChangeExtraDataText("spouse", event)}
               />
             </form>
 
@@ -190,7 +186,7 @@ const PrincipleCustomer = ({
               <button
                 className="btn btn-labeled btn-primary w-100 shadow"
                 type="submit"
-                onClick={() => handleAddLink("principalCustomer")}
+                onClick={() => handleAddLink("spouse")}
               >
                 <span className="btn-label me-2">
                   <i className="fa fa-plus"></i>
@@ -201,21 +197,19 @@ const PrincipleCustomer = ({
           </div>
           <label className="mb-2">List Of Available Media Links:</label>
           <Card className="py-2">
-            {data?.principalCustomer?.socialMediaLinks?.length === 0 ? (
+            {data?.spouse?.socialMediaLinks?.length === 0 ? (
               <p className="mx-2 mt-3">
                 No Available Social Media Links Found!
               </p>
             ) : (
-              data?.principalCustomer?.socialMediaLinks?.map((link, index) => {
+              data?.spouse?.socialMediaLinks?.map((link, index) => {
                 return (
                   <Chip
                     label={link?.string}
                     key={index}
                     variant="outlined"
                     className="mx-2 mb-2"
-                    onDelete={() =>
-                      handleDeleteLink("principalCustomer", link?.id)
-                    }
+                    onDelete={() => handleDeleteLink("spouse", link?.id)}
                   />
                 );
               })
@@ -229,24 +223,22 @@ const PrincipleCustomer = ({
           <div className="row p-0">
             <form
               className="col-lg-10 mb-2"
-              onSubmit={(event) => handleAddProgram("principalCustomer", event)}
+              onSubmit={(event) => handleAddProgram("spouse", event)}
             >
               <label className="w-100">Loyalty Program:</label>
               <TextField
                 className="form-control"
                 name="program"
                 id="program"
-                value={extraData?.principalCustomer?.program}
-                onChange={(event) =>
-                  handleChangeExtraDataText("principalCustomer", event)
-                }
+                value={extraData?.spouse?.program}
+                onChange={(event) => handleChangeExtraDataText("spouse", event)}
               />
             </form>
             <div className={`col-lg-2 text-end float-end align-self-end mb-4`}>
               <button
                 className="btn btn-labeled btn-primary w-100 shadow"
                 type="submit"
-                onClick={() => handleAddProgram("principalCustomer")}
+                onClick={() => handleAddProgram("spouse")}
               >
                 <span className="btn-label me-2">
                   <i className="fa fa-plus"></i>
@@ -257,24 +249,20 @@ const PrincipleCustomer = ({
           </div>
           <label className="mb-2">List Of Available Loyalty Programs:</label>
           <Card className="py-2">
-            {data?.principalCustomer?.loyaltyPrograms?.length === 0 ? (
+            {data?.spouse?.loyaltyPrograms?.length === 0 ? (
               <p className="mx-2 mt-3">No Available Loyalty Programs Found!</p>
             ) : (
-              data?.principalCustomer?.loyaltyPrograms?.map(
-                (program, index) => {
-                  return (
-                    <Chip
-                      label={program?.string}
-                      key={index}
-                      variant="outlined"
-                      className="mx-2 mb-2"
-                      onDelete={() =>
-                        handleDeleteProgram("principalCustomer", program?.id)
-                      }
-                    />
-                  );
-                }
-              )
+              data?.spouse?.loyaltyPrograms?.map((program, index) => {
+                return (
+                  <Chip
+                    label={program?.string}
+                    key={index}
+                    variant="outlined"
+                    className="mx-2 mb-2"
+                    onDelete={() => handleDeleteProgram("spouse", program?.id)}
+                  />
+                );
+              })
             )}
           </Card>
         </div>
@@ -285,24 +273,22 @@ const PrincipleCustomer = ({
           <div className="row p-0">
             <form
               className="col-lg-10 mb-2"
-              onSubmit={(event) => handleAddDoc("principalCustomer", event)}
+              onSubmit={(event) => handleAddDoc("spouse", event)}
             >
               <label className="w-100">Travel Document:</label>
               <TextField
                 className="form-control"
                 name="doc"
                 id="doc"
-                value={extraData?.principalCustomer?.doc}
-                onChange={(event) =>
-                  handleChangeExtraDataText("principalCustomer", event)
-                }
+                value={extraData?.spouse?.doc}
+                onChange={(event) => handleChangeExtraDataText("spouse", event)}
               />
             </form>
             <div className={`col-lg-2 text-end float-end align-self-end mb-4`}>
               <button
                 className="btn btn-labeled btn-primary w-100 shadow"
                 type="submit"
-                onClick={() => handleAddDoc("principalCustomer")}
+                onClick={() => handleAddDoc("spouse")}
               >
                 <span className="btn-label me-2">
                   <i className="fa fa-plus"></i>
@@ -313,19 +299,17 @@ const PrincipleCustomer = ({
           </div>
           <label className="mb-2">List Of Available Travel Documents:</label>
           <Card className="py-2">
-            {data?.principalCustomer?.travelDocuments?.length === 0 ? (
+            {data?.spouse?.travelDocuments?.length === 0 ? (
               <p className="mx-2 mt-3">No Available Travel Documents Found!</p>
             ) : (
-              data?.principalCustomer?.travelDocuments?.map((doc, index) => {
+              data?.spouse?.travelDocuments?.map((doc, index) => {
                 return (
                   <Chip
                     label={doc?.string}
                     key={index}
                     variant="outlined"
                     className="mx-2 mb-2"
-                    onDelete={() =>
-                      handleDeleteDoc("principalCustomer", doc?.id)
-                    }
+                    onDelete={() => handleDeleteDoc("spouse", doc?.id)}
                   />
                 );
               })
@@ -337,4 +321,4 @@ const PrincipleCustomer = ({
   );
 };
 
-export default PrincipleCustomer;
+export default Spouse;

@@ -6,7 +6,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SignUp from "./components/signUp/index";
 
-
 const App = () => {
   return (
     <div className="mx-4 my-4 main-wrapper">

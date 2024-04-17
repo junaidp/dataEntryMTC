@@ -3,7 +3,7 @@ import TextField from "@mui/material/TextField";
 import { Card } from "@mui/material";
 import Chip from "@mui/material/Chip";
 
-const PrincipleCustomer = ({
+const Children = ({
   data,
   handleChangeText,
   extraData,
@@ -19,7 +19,7 @@ const PrincipleCustomer = ({
 }) => {
   return (
     <div>
-      <h1 className="heading mb-4">Principal Customer</h1>
+      <h1 className="heading mb-4">Children</h1>
       <div className="row">
         <div className="col-lg-6 mb-2">
           <TextField
@@ -28,8 +28,8 @@ const PrincipleCustomer = ({
             label="First Name"
             variant="outlined"
             className="form-control"
-            value={data?.principalCustomer?.firstName}
-            onChange={(event) => handleChangeText("principalCustomer", event)}
+            value={data?.children?.firstName}
+            onChange={(event) => handleChangeText("children", event)}
           />
         </div>
         <div className="col-lg-6 mb-2">
@@ -39,8 +39,8 @@ const PrincipleCustomer = ({
             label="Last Name"
             variant="outlined"
             className="form-control"
-            value={data?.principalCustomer?.lastName}
-            onChange={(event) => handleChangeText("principalCustomer", event)}
+            value={data?.children?.lastName}
+            onChange={(event) => handleChangeText("children", event)}
           />
         </div>
       </div>
@@ -52,8 +52,8 @@ const PrincipleCustomer = ({
             variant="outlined"
             className="form-control"
             type="date"
-            value={data?.principalCustomer?.date}
-            onChange={(event) => handleChangeText("principalCustomer", event)}
+            value={data?.children?.date}
+            onChange={(event) => handleChangeText("children", event)}
           />
         </div>
         <div className="col-lg-6 mb-2">
@@ -63,8 +63,8 @@ const PrincipleCustomer = ({
             label="City Of Residence"
             variant="outlined"
             className="form-control"
-            value={data?.principalCustomer?.cityOfResidence}
-            onChange={(event) => handleChangeText("principalCustomer", event)}
+            value={data?.children?.cityOfResidence}
+            onChange={(event) => handleChangeText("children", event)}
           />
         </div>
       </div>
@@ -76,8 +76,8 @@ const PrincipleCustomer = ({
             label="Email"
             variant="outlined"
             className="form-control"
-            value={data?.principalCustomer?.email}
-            onChange={(event) => handleChangeText("principalCustomer", event)}
+            value={data?.children?.email}
+            onChange={(event) => handleChangeText("children", event)}
           />
         </div>
         <div className="col-lg-6 mb-2">
@@ -87,8 +87,8 @@ const PrincipleCustomer = ({
             label="Phone Number"
             variant="outlined"
             className="form-control"
-            value={data?.principalCustomer?.phoneNumber}
-            onChange={(event) => handleChangeText("principalCustomer", event)}
+            value={data?.children?.phoneNumber}
+            onChange={(event) => handleChangeText("children", event)}
           />
         </div>
       </div>
@@ -100,8 +100,8 @@ const PrincipleCustomer = ({
             label="Nationality"
             variant="outlined"
             className="form-control"
-            value={data?.principalCustomer?.nationality}
-            onChange={(event) => handleChangeText("principalCustomer", event)}
+            value={data?.children?.nationality}
+            onChange={(event) => handleChangeText("children", event)}
           />
         </div>
       </div>
@@ -112,18 +112,16 @@ const PrincipleCustomer = ({
             <div className="row p-0">
               <form
                 className="col-lg-10 mb-2"
-                onSubmit={(event) =>
-                  handleAddInterest("principalCustomer", event)
-                }
+                onSubmit={(event) => handleAddInterest("children", event)}
               >
                 <label className="w-100">Add Main Interest:</label>
                 <TextField
                   className="form-control"
                   name="interest"
                   id="interest"
-                  value={extraData?.principalCustomer?.interest}
+                  value={extraData?.children?.interest}
                   onChange={(event) =>
-                    handleChangeExtraDataText("principalCustomer", event)
+                    handleChangeExtraDataText("children", event)
                   }
                 />
               </form>
@@ -134,7 +132,7 @@ const PrincipleCustomer = ({
                 <button
                   className="btn btn-labeled btn-primary w-100 shadow"
                   type="submit"
-                  onClick={() => handleAddInterest("principalCustomer")}
+                  onClick={() => handleAddInterest("children")}
                 >
                   <span className="btn-label me-2">
                     <i className="fa fa-plus"></i>
@@ -146,10 +144,10 @@ const PrincipleCustomer = ({
           </div>
           <label className="mb-2">List Of Available Interests:</label>
           <Card className="py-2">
-            {data?.principalCustomer?.mainInterests?.length === 0 ? (
+            {data?.children?.mainInterests?.length === 0 ? (
               <p className="mx-2 mt-3">No Available Interests Found!</p>
             ) : (
-              data?.principalCustomer?.mainInterests?.map((interest, index) => {
+              data?.children?.mainInterests?.map((interest, index) => {
                 return (
                   <Chip
                     label={interest?.string}
@@ -157,7 +155,7 @@ const PrincipleCustomer = ({
                     variant="outlined"
                     className="mx-2 mb-2"
                     onDelete={() =>
-                      handleDeleteInterest("principalCustomer", interest?.id)
+                      handleDeleteInterest("children", interest?.id)
                     }
                   />
                 );
@@ -172,16 +170,16 @@ const PrincipleCustomer = ({
           <div className="row p-0">
             <form
               className="col-lg-10 mb-2"
-              onSubmit={(event) => handleAddLink("principalCustomer", event)}
+              onSubmit={(event) => handleAddLink("children", event)}
             >
               <label className="w-100">Media Link:</label>
               <TextField
                 className="form-control w-100s"
                 name="link"
                 id="link"
-                value={extraData?.principalCustomer?.link}
+                value={extraData?.children?.link}
                 onChange={(event) =>
-                  handleChangeExtraDataText("principalCustomer", event)
+                  handleChangeExtraDataText("children", event)
                 }
               />
             </form>
@@ -190,7 +188,7 @@ const PrincipleCustomer = ({
               <button
                 className="btn btn-labeled btn-primary w-100 shadow"
                 type="submit"
-                onClick={() => handleAddLink("principalCustomer")}
+                onClick={() => handleAddLink("children")}
               >
                 <span className="btn-label me-2">
                   <i className="fa fa-plus"></i>
@@ -201,21 +199,19 @@ const PrincipleCustomer = ({
           </div>
           <label className="mb-2">List Of Available Media Links:</label>
           <Card className="py-2">
-            {data?.principalCustomer?.socialMediaLinks?.length === 0 ? (
+            {data?.children?.socialMediaLinks?.length === 0 ? (
               <p className="mx-2 mt-3">
                 No Available Social Media Links Found!
               </p>
             ) : (
-              data?.principalCustomer?.socialMediaLinks?.map((link, index) => {
+              data?.children?.socialMediaLinks?.map((link, index) => {
                 return (
                   <Chip
                     label={link?.string}
                     key={index}
                     variant="outlined"
                     className="mx-2 mb-2"
-                    onDelete={() =>
-                      handleDeleteLink("principalCustomer", link?.id)
-                    }
+                    onDelete={() => handleDeleteLink("children", link?.id)}
                   />
                 );
               })
@@ -229,16 +225,16 @@ const PrincipleCustomer = ({
           <div className="row p-0">
             <form
               className="col-lg-10 mb-2"
-              onSubmit={(event) => handleAddProgram("principalCustomer", event)}
+              onSubmit={(event) => handleAddProgram("children", event)}
             >
               <label className="w-100">Loyalty Program:</label>
               <TextField
                 className="form-control"
                 name="program"
                 id="program"
-                value={extraData?.principalCustomer?.program}
+                value={extraData?.children?.program}
                 onChange={(event) =>
-                  handleChangeExtraDataText("principalCustomer", event)
+                  handleChangeExtraDataText("children", event)
                 }
               />
             </form>
@@ -246,7 +242,7 @@ const PrincipleCustomer = ({
               <button
                 className="btn btn-labeled btn-primary w-100 shadow"
                 type="submit"
-                onClick={() => handleAddProgram("principalCustomer")}
+                onClick={() => handleAddProgram("children")}
               >
                 <span className="btn-label me-2">
                   <i className="fa fa-plus"></i>
@@ -257,24 +253,22 @@ const PrincipleCustomer = ({
           </div>
           <label className="mb-2">List Of Available Loyalty Programs:</label>
           <Card className="py-2">
-            {data?.principalCustomer?.loyaltyPrograms?.length === 0 ? (
+            {data?.children?.loyaltyPrograms?.length === 0 ? (
               <p className="mx-2 mt-3">No Available Loyalty Programs Found!</p>
             ) : (
-              data?.principalCustomer?.loyaltyPrograms?.map(
-                (program, index) => {
-                  return (
-                    <Chip
-                      label={program?.string}
-                      key={index}
-                      variant="outlined"
-                      className="mx-2 mb-2"
-                      onDelete={() =>
-                        handleDeleteProgram("principalCustomer", program?.id)
-                      }
-                    />
-                  );
-                }
-              )
+              data?.children?.loyaltyPrograms?.map((program, index) => {
+                return (
+                  <Chip
+                    label={program?.string}
+                    key={index}
+                    variant="outlined"
+                    className="mx-2 mb-2"
+                    onDelete={() =>
+                      handleDeleteProgram("children", program?.id)
+                    }
+                  />
+                );
+              })
             )}
           </Card>
         </div>
@@ -285,16 +279,16 @@ const PrincipleCustomer = ({
           <div className="row p-0">
             <form
               className="col-lg-10 mb-2"
-              onSubmit={(event) => handleAddDoc("principalCustomer", event)}
+              onSubmit={(event) => handleAddDoc("children", event)}
             >
               <label className="w-100">Travel Document:</label>
               <TextField
                 className="form-control"
                 name="doc"
                 id="doc"
-                value={extraData?.principalCustomer?.doc}
+                value={extraData?.children?.doc}
                 onChange={(event) =>
-                  handleChangeExtraDataText("principalCustomer", event)
+                  handleChangeExtraDataText("children", event)
                 }
               />
             </form>
@@ -302,7 +296,7 @@ const PrincipleCustomer = ({
               <button
                 className="btn btn-labeled btn-primary w-100 shadow"
                 type="submit"
-                onClick={() => handleAddDoc("principalCustomer")}
+                onClick={() => handleAddDoc("children")}
               >
                 <span className="btn-label me-2">
                   <i className="fa fa-plus"></i>
@@ -312,20 +306,18 @@ const PrincipleCustomer = ({
             </div>
           </div>
           <label className="mb-2">List Of Available Travel Documents:</label>
-          <Card className="py-2">
-            {data?.principalCustomer?.travelDocuments?.length === 0 ? (
+          <Card className="py-2 mb-4">
+            {data?.children?.travelDocuments?.length === 0 ? (
               <p className="mx-2 mt-3">No Available Travel Documents Found!</p>
             ) : (
-              data?.principalCustomer?.travelDocuments?.map((doc, index) => {
+              data?.children?.travelDocuments?.map((doc, index) => {
                 return (
                   <Chip
                     label={doc?.string}
                     key={index}
                     variant="outlined"
                     className="mx-2 mb-2"
-                    onDelete={() =>
-                      handleDeleteDoc("principalCustomer", doc?.id)
-                    }
+                    onDelete={() => handleDeleteDoc("children", doc?.id)}
                   />
                 );
               })
@@ -337,4 +329,4 @@ const PrincipleCustomer = ({
   );
 };
 
-export default PrincipleCustomer;
+export default Children;
