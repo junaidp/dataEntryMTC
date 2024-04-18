@@ -13,3 +13,14 @@ export const onBoarding = async (data, thunkAPI) => {
     return thunkAPI.rejectWithValue(error);
   }
 };
+
+export const chat = async (data, thunkAPI) => {
+  try {
+    let props = await axios.get(
+      `https://data-entry-08031d053c68.herokuapp.com/onBoard/chat${data}`
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};

@@ -2,24 +2,245 @@ import React from "react";
 import TextField from "@mui/material/TextField";
 import { Card } from "@mui/material";
 import Chip from "@mui/material/Chip";
+import { toast } from "react-toastify";
+import { v4 as uuidv4 } from "uuid";
 
 const Children = ({
   data,
-  handleChangeText,
-  extraData,
-  handleChangeExtraDataText,
-  handleAddInterest,
-  handleDeleteInterest,
-  handleAddLink,
-  handleDeleteLink,
-  handleAddProgram,
-  handleDeleteProgram,
-  handleAddDoc,
-  handleDeleteDoc,
+  childrenExtraData,
+  setChildrenData,
+  setChildrenExtraData,
+  index,
 }) => {
+  function handleChangeText(id, event) {
+    if (id) {
+      setChildrenData((pre) =>
+        pre?.map((item) =>
+          item?.id === id
+            ? {
+                ...item,
+                [event?.target?.name]: event?.target?.value,
+              }
+            : item
+        )
+      );
+    }
+  }
+
+  function handleChangeExtraDataText(family, event) {
+    setChildrenExtraData((pre) => {
+      return {
+        ...pre,
+        [family]: event?.target?.value,
+      };
+    });
+  }
+
+  // For the Interest
+  function handleAddInterest(id, event) {
+    if (event) {
+      event.preventDefault();
+    }
+    if (childrenExtraData?.interest === "") {
+      toast.error("Provide Interest", {
+        toastId: "interest",
+      });
+    } else {
+      setChildrenData((pre) =>
+        pre?.map((item) =>
+          item?.id === id
+            ? {
+                ...item,
+                mainInterests: [
+                  ...item?.mainInterests,
+                  {
+                    id: uuidv4(),
+                    string: childrenExtraData?.interest,
+                  },
+                ],
+              }
+            : item
+        )
+      );
+
+      setChildrenExtraData((pre) => {
+        return {
+          ...pre,
+          interest: "",
+        };
+      });
+    }
+  }
+
+  function handleDeleteInterest(mainId, id) {
+    setChildrenData((pre) =>
+      pre?.map((item) =>
+        item?.id === mainId
+          ? {
+              ...item,
+              mainInterests: item?.mainInterests?.filter(
+                (chip) => chip?.id !== id
+              ),
+            }
+          : item
+      )
+    );
+  }
+  // For the Link
+  function handleAddLink(id, event) {
+    if (event) {
+      event.preventDefault();
+    }
+    if (childrenExtraData?.link === "") {
+      toast.error("Provide Link", {
+        toastId: "link",
+      });
+    } else {
+      setChildrenData((pre) =>
+        pre?.map((item) =>
+          item?.id === id
+            ? {
+                ...item,
+                socialMediaLinks: [
+                  ...item?.socialMediaLinks,
+                  {
+                    id: uuidv4(),
+                    string: childrenExtraData?.link,
+                  },
+                ],
+              }
+            : item
+        )
+      );
+
+      setChildrenExtraData((pre) => {
+        return {
+          ...pre,
+          link: "",
+        };
+      });
+    }
+  }
+
+  function handleDeleteLink(mainId, id) {
+    setChildrenData((pre) =>
+      pre?.map((item) =>
+        item?.id === mainId
+          ? {
+              ...item,
+              socialMediaLinks: item?.socialMediaLinks?.filter(
+                (chip) => chip?.id !== id
+              ),
+            }
+          : item
+      )
+    );
+  }
+  // For the Program
+  function handleAddProgram(id, event) {
+    if (event) {
+      event.preventDefault();
+    }
+    if (childrenExtraData?.program === "") {
+      toast.error("Provide Program", {
+        toastId: "program",
+      });
+    } else {
+      setChildrenData((pre) =>
+        pre?.map((item) =>
+          item?.id === id
+            ? {
+                ...item,
+                loyaltyPrograms: [
+                  ...item?.loyaltyPrograms,
+                  {
+                    id: uuidv4(),
+                    string: childrenExtraData?.program,
+                  },
+                ],
+              }
+            : item
+        )
+      );
+
+      setChildrenExtraData((pre) => {
+        return {
+          ...pre,
+          program: "",
+        };
+      });
+    }
+  }
+
+  function handleDeleteProgram(mainId, id) {
+    setChildrenData((pre) =>
+      pre?.map((item) =>
+        item?.id === mainId
+          ? {
+              ...item,
+              loyaltyPrograms: item?.loyaltyPrograms?.filter(
+                (chip) => chip?.id !== id
+              ),
+            }
+          : item
+      )
+    );
+  }
+  // For the Doc
+  function handleAddDoc(id, event) {
+    if (event) {
+      event.preventDefault();
+    }
+    if (childrenExtraData?.doc === "") {
+      toast.error("Provide Document", {
+        toastId: "doc",
+      });
+    } else {
+      setChildrenData((pre) =>
+        pre?.map((item) =>
+          item?.id === id
+            ? {
+                ...item,
+                travelDocuments: [
+                  ...item?.travelDocuments,
+                  {
+                    id: uuidv4(),
+                    string: childrenExtraData?.doc,
+                  },
+                ],
+              }
+            : item
+        )
+      );
+
+      setChildrenExtraData((pre) => {
+        return {
+          ...pre,
+          doc: "",
+        };
+      });
+    }
+  }
+
+  function handleDeleteDoc(mainId, id) {
+    setChildrenData((pre) =>
+      pre?.map((item) =>
+        item?.id === mainId
+          ? {
+              ...item,
+              travelDocuments: item?.travelDocuments?.filter(
+                (chip) => chip?.id !== id
+              ),
+            }
+          : item
+      )
+    );
+  }
+
+
   return (
     <div>
-      <h1 className="heading mb-4">Children</h1>
+    
       <div className="row">
         <div className="col-lg-6 mb-2">
           <TextField
@@ -28,8 +249,9 @@ const Children = ({
             label="First Name"
             variant="outlined"
             className="form-control"
-            value={data?.children?.firstName}
-            onChange={(event) => handleChangeText("children", event)}
+            s
+            value={data?.firstName}
+            onChange={(event) => handleChangeText(data?.id, event)}
           />
         </div>
         <div className="col-lg-6 mb-2">
@@ -39,8 +261,8 @@ const Children = ({
             label="Last Name"
             variant="outlined"
             className="form-control"
-            value={data?.children?.lastName}
-            onChange={(event) => handleChangeText("children", event)}
+            value={data?.lastName}
+            onChange={(event) => handleChangeText(data?.id, event)}
           />
         </div>
       </div>
@@ -52,8 +274,8 @@ const Children = ({
             variant="outlined"
             className="form-control"
             type="date"
-            value={data?.children?.date}
-            onChange={(event) => handleChangeText("children", event)}
+            value={data?.date}
+            onChange={(event) => handleChangeText(data?.id, event)}
           />
         </div>
         <div className="col-lg-6 mb-2">
@@ -63,8 +285,8 @@ const Children = ({
             label="City Of Residence"
             variant="outlined"
             className="form-control"
-            value={data?.children?.cityOfResidence}
-            onChange={(event) => handleChangeText("children", event)}
+            value={data?.cityOfResidence}
+            onChange={(event) => handleChangeText(data?.id, event)}
           />
         </div>
       </div>
@@ -76,8 +298,8 @@ const Children = ({
             label="Email"
             variant="outlined"
             className="form-control"
-            value={data?.children?.email}
-            onChange={(event) => handleChangeText("children", event)}
+            value={data?.email}
+            onChange={(event) => handleChangeText(data?.id, event)}
           />
         </div>
         <div className="col-lg-6 mb-2">
@@ -87,8 +309,8 @@ const Children = ({
             label="Phone Number"
             variant="outlined"
             className="form-control"
-            value={data?.children?.phoneNumber}
-            onChange={(event) => handleChangeText("children", event)}
+            value={data?.phoneNumber}
+            onChange={(event) => handleChangeText(data?.id, event)}
           />
         </div>
       </div>
@@ -100,8 +322,8 @@ const Children = ({
             label="Nationality"
             variant="outlined"
             className="form-control"
-            value={data?.children?.nationality}
-            onChange={(event) => handleChangeText("children", event)}
+            value={data?.nationality}
+            onChange={(event) => handleChangeText(data?.id, event)}
           />
         </div>
       </div>
@@ -112,16 +334,16 @@ const Children = ({
             <div className="row p-0">
               <form
                 className="col-lg-10 mb-2"
-                onSubmit={(event) => handleAddInterest("children", event)}
+                onSubmit={(event) => handleAddInterest(data?.id, event)}
               >
                 <label className="w-100">Add Main Interest:</label>
                 <TextField
                   className="form-control"
                   name="interest"
                   id="interest"
-                  value={extraData?.children?.interest}
+                  value={childrenExtraData?.interest}
                   onChange={(event) =>
-                    handleChangeExtraDataText("children", event)
+                    handleChangeExtraDataText("interest", event)
                   }
                 />
               </form>
@@ -132,7 +354,7 @@ const Children = ({
                 <button
                   className="btn btn-labeled btn-primary w-100 shadow"
                   type="submit"
-                  onClick={() => handleAddInterest("children")}
+                  onClick={() => handleAddInterest(data?.id)}
                 >
                   <span className="btn-label me-2">
                     <i className="fa fa-plus"></i>
@@ -144,10 +366,10 @@ const Children = ({
           </div>
           <label className="mb-2">List Of Available Interests:</label>
           <Card className="py-2">
-            {data?.children?.mainInterests?.length === 0 ? (
+            {data?.mainInterests?.length === 0 ? (
               <p className="mx-2 mt-3">No Available Interests Found!</p>
             ) : (
-              data?.children?.mainInterests?.map((interest, index) => {
+              data?.mainInterests?.map((interest, index) => {
                 return (
                   <Chip
                     label={interest?.string}
@@ -155,7 +377,7 @@ const Children = ({
                     variant="outlined"
                     className="mx-2 mb-2"
                     onDelete={() =>
-                      handleDeleteInterest("children", interest?.id)
+                      handleDeleteInterest(data?.id, interest?.id)
                     }
                   />
                 );
@@ -170,17 +392,15 @@ const Children = ({
           <div className="row p-0">
             <form
               className="col-lg-10 mb-2"
-              onSubmit={(event) => handleAddLink("children", event)}
+              onSubmit={(event) => handleAddLink(data?.id, event)}
             >
               <label className="w-100">Media Link:</label>
               <TextField
                 className="form-control w-100s"
                 name="link"
                 id="link"
-                value={extraData?.children?.link}
-                onChange={(event) =>
-                  handleChangeExtraDataText("children", event)
-                }
+                value={childrenExtraData?.link}
+                onChange={(event) => handleChangeExtraDataText("link", event)}
               />
             </form>
 
@@ -188,7 +408,7 @@ const Children = ({
               <button
                 className="btn btn-labeled btn-primary w-100 shadow"
                 type="submit"
-                onClick={() => handleAddLink("children")}
+                onClick={() => handleAddLink(data?.id)}
               >
                 <span className="btn-label me-2">
                   <i className="fa fa-plus"></i>
@@ -199,19 +419,19 @@ const Children = ({
           </div>
           <label className="mb-2">List Of Available Media Links:</label>
           <Card className="py-2">
-            {data?.children?.socialMediaLinks?.length === 0 ? (
+            {data?.socialMediaLinks?.length === 0 ? (
               <p className="mx-2 mt-3">
                 No Available Social Media Links Found!
               </p>
             ) : (
-              data?.children?.socialMediaLinks?.map((link, index) => {
+              data?.socialMediaLinks?.map((link, index) => {
                 return (
                   <Chip
                     label={link?.string}
                     key={index}
                     variant="outlined"
                     className="mx-2 mb-2"
-                    onDelete={() => handleDeleteLink("children", link?.id)}
+                    onDelete={() => handleDeleteLink(data?.id, link?.id)}
                   />
                 );
               })
@@ -225,16 +445,16 @@ const Children = ({
           <div className="row p-0">
             <form
               className="col-lg-10 mb-2"
-              onSubmit={(event) => handleAddProgram("children", event)}
+              onSubmit={(event) => handleAddProgram(data?.id, event)}
             >
               <label className="w-100">Loyalty Program:</label>
               <TextField
                 className="form-control"
                 name="program"
                 id="program"
-                value={extraData?.children?.program}
+                value={childrenExtraData?.program}
                 onChange={(event) =>
-                  handleChangeExtraDataText("children", event)
+                  handleChangeExtraDataText("program", event)
                 }
               />
             </form>
@@ -242,7 +462,7 @@ const Children = ({
               <button
                 className="btn btn-labeled btn-primary w-100 shadow"
                 type="submit"
-                onClick={() => handleAddProgram("children")}
+                onClick={() => handleAddProgram(data?.id)}
               >
                 <span className="btn-label me-2">
                   <i className="fa fa-plus"></i>
@@ -253,19 +473,17 @@ const Children = ({
           </div>
           <label className="mb-2">List Of Available Loyalty Programs:</label>
           <Card className="py-2">
-            {data?.children?.loyaltyPrograms?.length === 0 ? (
+            {data?.loyaltyPrograms?.length === 0 ? (
               <p className="mx-2 mt-3">No Available Loyalty Programs Found!</p>
             ) : (
-              data?.children?.loyaltyPrograms?.map((program, index) => {
+              data?.loyaltyPrograms?.map((program, index) => {
                 return (
                   <Chip
                     label={program?.string}
                     key={index}
                     variant="outlined"
                     className="mx-2 mb-2"
-                    onDelete={() =>
-                      handleDeleteProgram("children", program?.id)
-                    }
+                    onDelete={() => handleDeleteProgram(data?.id, program?.id)}
                   />
                 );
               })
@@ -279,24 +497,22 @@ const Children = ({
           <div className="row p-0">
             <form
               className="col-lg-10 mb-2"
-              onSubmit={(event) => handleAddDoc("children", event)}
+              onSubmit={(event) => handleAddDoc(data?.id, event)}
             >
               <label className="w-100">Travel Document:</label>
               <TextField
                 className="form-control"
                 name="doc"
                 id="doc"
-                value={extraData?.children?.doc}
-                onChange={(event) =>
-                  handleChangeExtraDataText("children", event)
-                }
+                value={childrenExtraData?.doc}
+                onChange={(event) => handleChangeExtraDataText("doc", event)}
               />
             </form>
             <div className={`col-lg-2 text-end float-end align-self-end mb-4`}>
               <button
                 className="btn btn-labeled btn-primary w-100 shadow"
                 type="submit"
-                onClick={() => handleAddDoc("children")}
+                onClick={() => handleAddDoc(data?.id)}
               >
                 <span className="btn-label me-2">
                   <i className="fa fa-plus"></i>
@@ -307,17 +523,17 @@ const Children = ({
           </div>
           <label className="mb-2">List Of Available Travel Documents:</label>
           <Card className="py-2 mb-4">
-            {data?.children?.travelDocuments?.length === 0 ? (
+            {data?.travelDocuments?.length === 0 ? (
               <p className="mx-2 mt-3">No Available Travel Documents Found!</p>
             ) : (
-              data?.children?.travelDocuments?.map((doc, index) => {
+              data?.travelDocuments?.map((doc, index) => {
                 return (
                   <Chip
                     label={doc?.string}
                     key={index}
                     variant="outlined"
                     className="mx-2 mb-2"
-                    onDelete={() => handleDeleteDoc("children", doc?.id)}
+                    onDelete={() => handleDeleteDoc(data?.id, doc?.id)}
                   />
                 );
               })

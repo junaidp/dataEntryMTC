@@ -4,6 +4,7 @@ html,
 body {
   height: 100%;
   font-family: "Poppins", sans-serif !important;
+  scroll-behavior: smooth;
 }
 
 .main-font {
@@ -33,6 +34,9 @@ body {
 .css-e4w4as-MuiFormLabel-root-MuiInputLabel-root {
   font-family: "Poppins", sans-serif !important;
 }
+.css-yz9k0d-MuiInputBase-input {
+  font-family: "Poppins", sans-serif !important;
+}
 .css-o943dk-MuiFormLabel-root-MuiInputLabel-root {
   font-family: "Poppins", sans-serif !important;
 }
@@ -59,6 +63,9 @@ body {
 }
 
 .css-qiwgdb.css-qiwgdb.css-qiwgdb {
+  font-family: "Poppins", sans-serif !important;
+}
+.css-1imyiyk {
   font-family: "Poppins", sans-serif !important;
 }
 .css-14x1nlk {
@@ -895,6 +902,64 @@ span[aria-label="Insert Ordered List"] .jodit-toolbar-button__trigger {
   height: 60px !important;
 }
 
+.chat-wrapper {
+  width: 100%;
+  max-width: 90vw;
+  margin: 0 auto;
+  padding: 20px 80px;
+}
+
+.chat-container {
+  margin-top: 20px;
+  margin-bottom: 80px !important;
+}
+
+.chat-message {
+  margin-bottom: 20px;
+}
+
+.chat-wrapper {
+  margin-bottom: 100px !important;
+}
+
+.question,
+.answer {
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 5px;
+}
+
+.question {
+  background-color: #f0f0f0;
+}
+
+.answer {
+  background-color: #e2ffe2;
+}
+
+.char-animation {
+  animation: fadeIn 0.3s ease forwards;
+  opacity: 0;
+}
+
+.lastInputMainWrap {
+  position: fixed;
+  bottom: 0px !important;
+  height: 100px;
+  width: 90vw;
+  z-index: 1000 !important;
+  background-color: white;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 @media screen and (max-width: 600px) {
   .m-50 {
     margin-left: 10px !important;
@@ -906,5 +971,8 @@ span[aria-label="Insert Ordered List"] .jodit-toolbar-button__trigger {
   .main-wrapper {
     margin-left: 10px !important;
     margin-right: 10px !important;
+  }
+  .chat-wrapper {
+    max-width: 95vw !important;
   }
 }

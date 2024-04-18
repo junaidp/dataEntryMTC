@@ -44,7 +44,9 @@ const MainForm = () => {
       loyaltyPrograms: [],
       travelDocuments: [],
     },
-    children: {
+  });
+  const [childrenData, setChildrenData] = React.useState([
+    {
       firstName: "",
       lastName: "",
       dateOfBirth: "",
@@ -56,8 +58,9 @@ const MainForm = () => {
       socialMediaLinks: [],
       loyaltyPrograms: [],
       travelDocuments: [],
+      id: uuidv4(),
     },
-  });
+  ]);
 
   const [extraData, setExtraData] = React.useState({
     principalCustomer: {
@@ -72,13 +75,37 @@ const MainForm = () => {
       program: "",
       doc: "",
     },
-    children: {
-      interest: "",
-      link: "",
-      program: "",
-      doc: "",
-    },
   });
+  const [childrenExtraData, setChildrenExtraData] = React.useState({
+    interest: "",
+    link: "",
+    program: "",
+    doc: "",
+  });
+
+  function handleDeleteAccordion(id) {
+    setChildrenData((pre) => pre?.filter((item) => item?.id !== id));
+  }
+
+  function handleAddChildrenDataObject() {
+    setChildrenData([
+      ...childrenData,
+      {
+        firstName: "",
+        lastName: "",
+        dateOfBirth: "",
+        cityOfResidence: "",
+        email: "",
+        phoneNumber: "",
+        nationality: "",
+        mainInterests: [],
+        socialMediaLinks: [],
+        loyaltyPrograms: [],
+        travelDocuments: [],
+        id: uuidv4(),
+      },
+    ]);
+  }
 
   function handleSubmit() {
     if (!loading) {
@@ -114,23 +141,25 @@ const MainForm = () => {
             travelDocuments:
               data?.spouse?.travelDocuments?.map((item) => item?.string) || [],
           },
-          children: [
-            {
-              ...data?.children,
+          children: childrenData?.map((children) => {
+            return {
+              firstName: children?.firstName,
+              lastName: children?.lastName,
+              dateOfBirth: children?.dateOfBirth,
+              cityOfResidence: children?.cityOfResidence,
+              email: children?.email,
+              phoneNumber: children?.phoneNumber,
+              nationality: children?.nationality,
               mainInterests:
-                data?.children?.mainInterests?.map((item) => item?.string) ||
-                [],
+                children?.mainInterests?.map((item) => item?.string) || [],
               socialMediaLinks:
-                data?.children?.socialMediaLinks?.map((item) => item?.string) ||
-                [],
+                children?.socialMediaLinks?.map((item) => item?.string) || [],
               loyaltyPrograms:
-                data?.children?.loyaltyPrograms?.map((item) => item?.string) ||
-                [],
+                children?.loyaltyPrograms?.map((item) => item?.string) || [],
               travelDocuments:
-                data?.children?.travelDocuments?.map((item) => item?.string) ||
-                [],
-            },
-          ],
+                children?.travelDocuments?.map((item) => item?.string) || [],
+            };
+          }),
         })
       );
     }
@@ -402,20 +431,74 @@ const MainForm = () => {
       </div>
       <hr className="mt-4" />
       <div className="mt-4">
-        <Children
-          data={data}
-          handleChangeText={handleChangeText}
-          extraData={extraData}
-          handleChangeExtraDataText={handleChangeExtraDataText}
-          handleAddInterest={handleAddInterest}
-          handleDeleteInterest={handleDeleteInterest}
-          handleAddLink={handleAddLink}
-          handleDeleteLink={handleDeleteLink}
-          handleAddProgram={handleAddProgram}
-          handleDeleteProgram={handleDeleteProgram}
-          handleAddDoc={handleAddDoc}
-          handleDeleteDoc={handleDeleteDoc}
-        />
+        <header className="section-header my-3 align-items-center text-start d-flex">
+          <div className="mb-0 sub-heading">Add More Childrens</div>
+          <div
+            className="btn btn-labeled btn-primary ms-3 px-3 shadow"
+            onClick={handleAddChildrenDataObject}
+          >
+            <span className="btn-label me-2">
+              <i className="fa fa-plus-circle"></i>
+            </span>
+            Add
+          </div>
+        </header>
+        <div className="accordion" id="accordionFlushExample">
+          {childrenData?.map((children, index) => {
+            return (
+              <div className="accordion-item">
+                <h2 className="accordion-header">
+                  <button
+                    className="accordion-button collapsed br-8"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target={`#flush-collapse${index}`}
+                    aria-expanded="false"
+                    aria-controls={`flush-collapse${index}`}
+                    onClick={() =>
+                      setChildrenExtraData({
+                        interest: "",
+                        link: "",
+                        program: "",
+                        doc: "",
+                      })
+                    }
+                  >
+                    <div className="d-flex w-100 me-3 align-items-center justify-content-between">
+                      <div className="d-flex align-items-center w-100">
+                        <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
+                        <div>Children {index + 1}</div>
+                      </div>
+                      {index !== 0 && (
+                        <i
+                          class="fa fa-trash text-danger f-18 cusrsor-pointer"
+                          onClick={() => handleDeleteAccordion(children?.id)}
+                        ></i>
+                      )}
+                    </div>
+                  </button>
+                </h2>
+                <div
+                  id={`flush-collapse${index}`}
+                  className="accordion-collapse collapse"
+                  data-bs-parent="#accordionFlushExample"
+                >
+                  <div className="accordion-body">
+                    <Children
+                      index={index}
+                      key={index}
+                      data={children}
+                      extraData={extraData}
+                      childrenExtraData={childrenExtraData}
+                      setChildrenData={setChildrenData}
+                      setChildrenExtraData={setChildrenExtraData}
+                    />
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
       <div>
         <div
@@ -443,70 +526,80 @@ const MainForm = () => {
           <Paper elevation={3} className="p-2 w-100">
             <h1 className="heading">Responses:</h1>
             <hr />
-            <h2 className="heading">Claude Response</h2>
-            <p>
-              {response?.claudeResponse
-                ? JSON?.parse(response?.claudeResponse)?.choices?.map(
-                    (choice) => {
-                      return choice?.message?.content
-                        ?.split(/\d+\./)
-                        ?.filter(Boolean)
-                        ?.map((para, index) => {
-                          return (
-                            <div key={index}>
-                              <p>
-                                {index + 1}. {para?.trim() || "null"}
-                              </p>
-                            </div>
-                          );
-                        });
-                    }
-                  )
-                : "null"}
-            </p>
 
-            <h2 className="heading">Open AI Response</h2>
-            <p>
-              {response?.openAiResponse
-                ? JSON?.parse(response?.openAiResponse)?.choices?.map(
-                    (choice) => {
-                      return choice?.message?.content
-                        ?.split(/\d+\./)
-                        ?.filter(Boolean)
-                        ?.map((para, index) => {
-                          return (
-                            <div key={index}>
-                              <p>
-                                {index + 1}. {para?.trim() || "null"}
-                              </p>
-                            </div>
-                          );
-                        });
-                    }
-                  )
-                : "null"}
-            </p>
-            <h2 className="heading">Gemini Response</h2>
-            <p>
-              {response?.geminiResponse
-                ? JSON?.parse(response?.geminiResponse)?.choices?.map(
-                    (choice) => {
-                      return choice?.message?.content
-                        ?.split(/\d+\./)
-                        ?.filter(Boolean)
-                        ?.map((para, index) => {
-                          return (
-                            <div key={index}>
-                              <p>
-                                {index + 1}.{para?.trim()}
-                              </p>
-                            </div>
-                          );
-                        });
-                    }
-                  )
-                : "null"}
-            </p>
+            <table className="table table-bordered  table-hover rounded">
+              <thead className="bg-secondary text-white">
+                <tr>
+                  <th>Claude Response</th>
+                  <th>Open AI Response</th>
+                  <th>Gemini Response</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    {response?.claudeResponse
+                      ? JSON?.parse(response?.claudeResponse)?.choices?.map(
+                          (choice) => {
+                            return choice?.message?.content
+                              ?.split(/\d+\./)
+                              ?.filter(Boolean)
+                              ?.map((para, index) => {
+                                return (
+                                  <div key={index}>
+                                    <p>
+                                      {index + 1}. {para?.trim() || "null"}
+                                    </p>
+                                  </div>
+                                );
+                              });
+                          }
+                        )
+                      : "null"}
+                  </td>
+                  <td>
+                    {response?.openAiResponse
+                      ? JSON?.parse(response?.openAiResponse)?.choices?.map(
+                          (choice) => {
+                            return choice?.message?.content
+                              ?.split(/\d+\./)
+                              ?.filter(Boolean)
+                              ?.map((para, index) => {
+                                return (
+                                  <div key={index}>
+                                    <p>
+                                      {index + 1}. {para?.trim() || "null"}
+                                    </p>
+                                  </div>
+                                );
+                              });
+                          }
+                        )
+                      : "null"}
+                  </td>
+                  <td>
+                    {response?.geminiResponse
+                      ? JSON?.parse(response?.geminiResponse)?.choices?.map(
+                          (choice) => {
+                            return choice?.message?.content
+                              ?.split(/\d+\./)
+                              ?.filter(Boolean)
+                              ?.map((para, index) => {
+                                return (
+                                  <div key={index}>
+                                    <p>
+                                      {index + 1}.{para?.trim()}
+                                    </p>
+                                  </div>
+                                );
+                              });
+                          }
+                        )
+                      : "null"}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </Paper>
         </Box>
       </div>

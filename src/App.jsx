@@ -5,6 +5,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SignUp from "./components/signUp/index";
+import ChatPage from "./components/chat/chat";
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Tabs />} />
+              <Route path="/chat" element={<ChatPage />} />
               <Route path="/onBoarding" element={<SignUp />} />
             </Routes>
           </BrowserRouter>
