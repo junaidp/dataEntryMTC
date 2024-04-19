@@ -66,22 +66,6 @@ const MainForm = () => {
       travelDocuments: [],
       id: uuidv4(),
     },
-    {
-      firstName: "",
-      lastName: "",
-      dateOfBirth: "",
-      cityOfResidence: "",
-      email: "",
-      age: "",
-      upcomingBirthday: "",
-      phoneNumber: "",
-      nationality: "",
-      mainInterests: [],
-      socialMediaLinks: [],
-      loyaltyPrograms: [],
-      travelDocuments: [],
-      id: uuidv4(),
-    },
   ]);
 
   const [extraData, setExtraData] = React.useState({
@@ -137,6 +121,7 @@ const MainForm = () => {
         setupOnBoarding({
           principalCustomer: {
             ...data?.principalCustomer,
+            age: Number(data?.principalCustomer?.age),
             mainInterests:
               data?.principalCustomer?.mainInterests?.map(
                 (item) => item?.string
@@ -156,6 +141,7 @@ const MainForm = () => {
           },
           spouse: {
             ...data?.spouse,
+            age: Number(data?.spouse?.age),
             mainInterests:
               data?.spouse?.mainInterests?.map((item) => item?.string) || [],
             socialMediaLinks:
@@ -174,7 +160,7 @@ const MainForm = () => {
               email: children?.email,
               phoneNumber: children?.phoneNumber,
               nationality: children?.nationality,
-              age: children?.age,
+              age: Number(children?.age),
               upcomingBirthday: children?.upcomingBirthday,
               mainInterests:
                 children?.mainInterests?.map((item) => item?.string) || [],
@@ -539,95 +525,207 @@ const MainForm = () => {
           {loading ? "Loading..." : "Submit"}
         </div>
       </div>
-      <div className="mt-4">
-        <Box
-          sx={{
-            display: "flex",
-            flexWrap: "wrap",
-            "& > :not(style)": {
-              m: 1,
-            },
-          }}
-        >
-          <Paper elevation={3} className="p-2 w-100">
-            <h1 className="heading">Responses:</h1>
-            <hr />
+      <div className="mt-4 ">
+        <table className="table table-bordered  table-hover rounded mb-4">
+          <thead className="bg-secondary text-white">
+            <tr className="row">
+              <th className="col-lg-4">Claude Response</th>
+              <th className="col-lg-4">Open AI Response</th>
+              <th className="col-lg-4">Gemini Response</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr className="row mb-4">
+              <td className="col-lg-4">
+                {response?.claudeResponse
+                  ? JSON?.parse(response?.claudeResponse)?.content?.map(
+                      (choice) => {
+                        return choice?.text
+                          ?.split(/\d+\./)
+                          ?.filter(Boolean)
+                          ?.map((para, index) => {
+                            return (
+                              <div key={index}>
+                                <p>
+                                  {index + 1}. {para?.trim() || "null"}
+                                </p>
+                              </div>
+                            );
+                          });
+                      }
+                    )
+                  : "null"}
+                {response?.claudeResponse && (
+                  <div>
+                    <hr />
+                    <h5 className="heading">Tokens:</h5>
+                    <div className="row">
+                      <p className="col-lg-3">Input Tokens:</p>
+                      <p className="col-lg-1">
+                        {
+                          JSON?.parse(response?.claudeResponse)?.usage
+                            ?.input_tokens
+                        }
+                      </p>
+                    </div>
+                    <div className="row">
+                      <p className="col-lg-4">Output Tokens:</p>
+                      <p className="col-lg-1">
+                        {
+                          JSON?.parse(response?.claudeResponse)?.usage
+                            ?.output_tokens
+                        }
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </td>
+              <td className="col-lg-4">
+                {response?.openAiResponse
+                  ? JSON?.parse(response?.openAiResponse)?.choices?.map(
+                      (choice) => {
+                        return choice?.message?.content
+                          ?.split(/\d+\./)
+                          ?.filter(Boolean)
+                          ?.map((para, index) => {
+                            return (
+                              <div key={index}>
+                                <p>
+                                  {index + 1}. {para?.trim() || "null"}
+                                </p>
+                              </div>
+                            );
+                          });
+                      }
+                    )
+                  : "null"}
+                {response?.openAiResponse && (
+                  <div>
+                    <hr />
+                    <h5 className="heading">Tokens:</h5>
+                    <div className="row">
+                      <p className="col-lg-4">Prompt Tokens:</p>
+                      <p className="col-lg-1">
+                        {
+                          JSON?.parse(response?.openAiResponse)?.usage
+                            ?.prompt_tokens
+                        }
+                      </p>
+                    </div>
+                    <div className="row">
+                      <p className="col-lg-4">Completion Tokens:</p>
+                      <p className="col-lg-1">
+                        {
+                          JSON?.parse(response?.openAiResponse)?.usage
+                            ?.completion_tokens
+                        }
+                      </p>
+                    </div>
+                    <div className="row">
+                      <p className="col-lg-4">Total Tokens:</p>
+                      <p className="col-lg-1">
+                        {
+                          JSON?.parse(response?.openAiResponse)?.usage
+                            ?.total_tokens
+                        }
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </td>
+              <td className="col-lg-4">
+                {(() => {
+                  try {
+                    const parsedResponse = JSON?.parse(
+                      response?.geminiResponse
+                    );
+                    return (
+                      parsedResponse?.candidates[0]?.content?.parts?.map(
+                        (choice) => {
+                          return choice?.text
+                            ?.split(/\d+\./)
+                            ?.filter(Boolean)
+                            ?.map((para, index) => {
+                              return (
+                                <div key={index}>
+                                  <p>
+                                    {index + 1}. {para?.trim() || "null"}
+                                  </p>
+                                </div>
+                              );
+                            });
+                        }
+                      ) || "N/A"
+                    );
+                  } catch (error) {
+                    return "Error parsing JSON";
+                  }
+                })()}
 
-            <table className="table table-bordered  table-hover rounded">
-              <thead className="bg-secondary text-white">
-                <tr>
-                  <th>Claude Response</th>
-                  <th>Open AI Response</th>
-                  <th>Gemini Response</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    {response?.claudeResponse
-                      ? JSON?.parse(response?.claudeResponse)?.choices?.map(
-                          (choice) => {
-                            return choice?.message?.content
-                              ?.split(/\d+\./)
-                              ?.filter(Boolean)
-                              ?.map((para, index) => {
-                                return (
-                                  <div key={index}>
-                                    <p>
-                                      {index + 1}. {para?.trim() || "null"}
-                                    </p>
-                                  </div>
-                                );
-                              });
+                {response?.geminiResponse && (
+                  <div>
+                    <hr />
+                    <h5 className="heading">Tokens:</h5>
+                    <div className="row">
+                      <p className="col-lg-4">Prompt Tokens:</p>
+                      <p className="col-lg-1">
+                        {(() => {
+                          try {
+                            const parsedResponse = JSON?.parse(
+                              response?.geminiResponse
+                            );
+                            return (
+                              parsedResponse?.usageMetadata?.promptTokenCount ||
+                              "N/A"
+                            );
+                          } catch (error) {
+                            return "Error parsing JSON";
                           }
-                        )
-                      : "null"}
-                  </td>
-                  <td>
-                    {response?.openAiResponse
-                      ? JSON?.parse(response?.openAiResponse)?.choices?.map(
-                          (choice) => {
-                            return choice?.message?.content
-                              ?.split(/\d+\./)
-                              ?.filter(Boolean)
-                              ?.map((para, index) => {
-                                return (
-                                  <div key={index}>
-                                    <p>
-                                      {index + 1}. {para?.trim() || "null"}
-                                    </p>
-                                  </div>
-                                );
-                              });
+                        })()}
+                      </p>
+                    </div>
+                    <div className="row">
+                      <p className="col-lg-4">Candidate Tokens:</p>
+                      <p className="col-lg-1">
+                        {(() => {
+                          try {
+                            const parsedResponse = JSON?.parse(
+                              response?.candidatesTokenCount
+                            );
+                            return (
+                              parsedResponse?.usageMetadata
+                                ?.candidatesTokenCount || "N/A"
+                            );
+                          } catch (error) {
+                            return "Error parsing JSON";
                           }
-                        )
-                      : "null"}
-                  </td>
-                  <td>
-                    {response?.geminiResponse
-                      ? JSON?.parse(response?.geminiResponse)?.choices?.map(
-                          (choice) => {
-                            return choice?.message?.content
-                              ?.split(/\d+\./)
-                              ?.filter(Boolean)
-                              ?.map((para, index) => {
-                                return (
-                                  <div key={index}>
-                                    <p>
-                                      {index + 1}.{para?.trim()}
-                                    </p>
-                                  </div>
-                                );
-                              });
+                        })()}
+                      </p>
+                    </div>
+                    <div className="row">
+                      <p className="col-lg-4">Total Tokens:</p>
+                      <p className="col-lg-1">
+                        {(() => {
+                          try {
+                            const parsedResponse = JSON?.parse(
+                              response?.totalTokenCount
+                            );
+                            return (
+                              parsedResponse?.usageMetadata?.totalTokenCount ||
+                              "N/A"
+                            );
+                          } catch (error) {
+                            return "Error parsing JSON";
                           }
-                        )
-                      : "null"}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </Paper>
-        </Box>
+                        })()}
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   );
