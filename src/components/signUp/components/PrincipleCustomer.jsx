@@ -44,30 +44,7 @@ const PrincipleCustomer = ({
           />
         </div>
       </div>
-      <div className="row mt-4">
-        <div className="col-lg-6 mb-2">
-          <TextField
-            id="dateOfBirth"
-            name="dateOfBirth"
-            variant="outlined"
-            className="form-control"
-            type="date"
-            value={data?.principalCustomer?.date}
-            onChange={(event) => handleChangeText("principalCustomer", event)}
-          />
-        </div>
-        <div className="col-lg-6 mb-2">
-          <TextField
-            id="cityOfResidence"
-            name="cityOfResidence"
-            label="City Of Residence"
-            variant="outlined"
-            className="form-control"
-            value={data?.principalCustomer?.cityOfResidence}
-            onChange={(event) => handleChangeText("principalCustomer", event)}
-          />
-        </div>
-      </div>
+
       <div className="row mt-4">
         <div className="col-lg-6 mb-2">
           <TextField
@@ -101,6 +78,59 @@ const PrincipleCustomer = ({
             variant="outlined"
             className="form-control"
             value={data?.principalCustomer?.nationality}
+            onChange={(event) => handleChangeText("principalCustomer", event)}
+          />
+        </div>
+      </div>
+      <div className="row mt-4">
+        <div className="col-lg-6 mb-2">
+          <TextField
+            id="cityOfResidence"
+            name="cityOfResidence"
+            label="City Of Residence"
+            variant="outlined"
+            className="form-control"
+            value={data?.principalCustomer?.cityOfResidence}
+            onChange={(event) => handleChangeText("principalCustomer", event)}
+          />
+        </div>
+
+        <div className="col-lg-6 mb-2">
+          <TextField
+            id="age"
+            name="age"
+            label="Age"
+            variant="outlined"
+            className="form-control"
+            type="number"
+            value={data?.principalCustomer?.age}
+            onChange={(event) => handleChangeText("principalCustomer", event)}
+          />
+        </div>
+      </div>
+      <div className="row mt-4">
+        <div className="col-lg-6 mb-2">
+          <label className="col-lg-12 mb-2 ">Date Of Birth</label>
+          <TextField
+            id="dateOfBirth"
+            name="dateOfBirth"
+            variant="outlined"
+            className="form-control"
+            type="date"
+            value={data?.principalCustomer?.dateOfBirth}
+            onChange={(event) => handleChangeText("principalCustomer", event)}
+          />
+        </div>
+        <div className="col-lg-6 mb-4">
+          <label className="col-lg-12 mb-2">Upcoming Birthday</label>
+          <TextField
+            id="upcomingBirthday"
+            name="upcomingBirthday"
+            variant="outlined"
+            className="form-control"
+            type="date"
+            style={{ height: "2px" }}
+            value={data?.principalCustomer?.upcomingBirthday}
             onChange={(event) => handleChangeText("principalCustomer", event)}
           />
         </div>
@@ -147,7 +177,7 @@ const PrincipleCustomer = ({
           <label className="mb-2">List Of Available Interests:</label>
           <Card className="py-2">
             {data?.principalCustomer?.mainInterests?.length === 0 ? (
-              <p className="mx-2 mt-3">No Available Interests Found!</p>
+              <p className="mx-2 mt-3 text-sm">No Available Interests Found!</p>
             ) : (
               data?.principalCustomer?.mainInterests?.map((interest, index) => {
                 return (
@@ -202,7 +232,7 @@ const PrincipleCustomer = ({
           <label className="mb-2">List Of Available Media Links:</label>
           <Card className="py-2">
             {data?.principalCustomer?.socialMediaLinks?.length === 0 ? (
-              <p className="mx-2 mt-3">
+              <p className="mx-2 mt-3 text-sm">
                 No Available Social Media Links Found!
               </p>
             ) : (
@@ -258,7 +288,9 @@ const PrincipleCustomer = ({
           <label className="mb-2">List Of Available Loyalty Programs:</label>
           <Card className="py-2">
             {data?.principalCustomer?.loyaltyPrograms?.length === 0 ? (
-              <p className="mx-2 mt-3">No Available Loyalty Programs Found!</p>
+              <p className="mx-2 mt-3 text-sm">
+                No Available Loyalty Programs Found!
+              </p>
             ) : (
               data?.principalCustomer?.loyaltyPrograms?.map(
                 (program, index) => {
@@ -314,7 +346,9 @@ const PrincipleCustomer = ({
           <label className="mb-2">List Of Available Travel Documents:</label>
           <Card className="py-2">
             {data?.principalCustomer?.travelDocuments?.length === 0 ? (
-              <p className="mx-2 mt-3">No Available Travel Documents Found!</p>
+              <p className="mx-2 mt-3 text-sm">
+                No Available Travel Documents Found!
+              </p>
             ) : (
               data?.principalCustomer?.travelDocuments?.map((doc, index) => {
                 return (

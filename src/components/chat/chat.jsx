@@ -1,76 +1,54 @@
 import React from "react";
 import { setupChat } from "../../global-redux/reducers/onBoard/slice";
 import { useDispatch, useSelector } from "react-redux";
-import Paper from "@mui/material/Paper";
-import InputBase from "@mui/material/InputBase";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import DirectionsIcon from "@mui/icons-material/Directions";
-import { v4 as uuidv4 } from "uuid";
-import { CircularProgress } from "@mui/material";
+import weAreHere from "../../assets/we-are-here.svg";
+import { useDetectClickOutside } from "react-detect-click-outside";
 
 const Chat = () => {
   const dispatch = useDispatch();
   const messagesEndRef = React.useRef(null);
-  const unKnowRef = React.useRef(null);
   const { chatResponse, loading } = useSelector((state) => state?.onBoard);
-  const [currentId, setCurrentId] = React.useState("");
   const [question, setQuestion] = React.useState("");
   const [chatHistory, setChatHistory] = React.useState([]);
+  const [showChat, setShowChat] = React.useState(false);
+  const [currentTime, setCurrentTime] = React.useState("");
+  const ref = useDetectClickOutside({ onTriggered: () => setShowChat(false) });
 
   function handleSubmit(event) {
     if (event) {
       event?.preventDefault();
     }
     if (!loading && question !== "" && question) {
-      let id = uuidv4();
-      setCurrentId(id);
-      setChatHistory([
+      setChatHistory([...chatHistory, { role: "user", content: question }]);
+      let localStorageChat = [
         ...chatHistory,
-        { id: id, question: question, answer: "Progress..." },
-      ]);
+        { role: "user", content: question },
+      ];
+      sessionStorage.setItem("chat", JSON.stringify(localStorageChat));
       messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+      setQuestion("");
       dispatch(
-        setupChat(
-          `?query=${question}&previousChat=${
-            chatHistory?.length === 0
-              ? ""
-              : chatHistory?.map((chat) =>
-                  chat?.question + ":" + chat?.answer === "Progress..."
-                    ? "Unable to fetch results."
-                    : chat?.answer
-                )
-          }`
-        )
+        setupChat({
+          query: question,
+          previousChat: [...chatHistory, { role: "user", content: question }],
+        })
       );
     }
   }
 
   React.useEffect(() => {
     if (chatResponse?.content) {
-      setChatHistory((pre) =>
-        pre?.map((singleChat) =>
-          singleChat?.id === currentId
-            ? {
-                ...singleChat,
-                answer: chatResponse?.content[0]?.text,
-              }
-            : singleChat
-        )
-      );
+      setChatHistory([
+        ...chatHistory,
+        { role: "system", content: chatResponse?.content[0]?.text },
+      ]);
 
-      let localStorageChat = chatHistory?.map((singleChat) =>
-        singleChat?.id === currentId
-          ? {
-              ...singleChat,
-              answer: chatResponse?.content[0]?.text,
-            }
-          : singleChat
-      );
+      let localStorageChat = [
+        ...chatHistory,
+        { role: "system", content: chatResponse?.content[0]?.text },
+      ];
       sessionStorage.setItem("chat", JSON.stringify(localStorageChat));
       messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-      setCurrentId("");
-      setQuestion("");
     }
   }, [chatResponse]);
 
@@ -85,97 +63,170 @@ const Chat = () => {
       setChatHistory(parsedChat);
     }
   }, []);
+
+  React.useEffect(() => {
+    const intervalId = setInterval(() => {
+      const date = new Date();
+      const options = {
+        weekday: "long",
+        hour: "numeric",
+        minute: "numeric",
+        hour12: true,
+      };
+      const formattedTime = date.toLocaleString("en-US", options);
+      setCurrentTime(formattedTime);
+    }, 1000);
+    return () => clearInterval(intervalId);
+  }, []);
+
   return (
-    <div>
-      <div className="chat-wrapper">
-        {chatHistory?.length === 0 ? (
-          <div>
-            <h1 className="text-center">How can I help you today?</h1>
+    <div ref={ref}>
+      <div className={`chat-screen ${showChat && "show-chat"}`}>
+        <div className="chat-body hide">
+          <div className="chat-start">{currentTime}</div>
+          <div className="chat-bubble you">
+            Welcome to our site, if you need help simply reply to this message,
+            we are online and ready to help.
           </div>
-        ) : (
-          <div className="chat-container">
-            {chatHistory?.map((chat, mainIndex) => (
-              <div
-                key={chat.id}
-                className="chat-message"
-                ref={
-                  mainIndex === chatHistory?.length - 1
-                    ? messagesEndRef
-                    : unKnowRef
-                }
-              >
-                <div className="question">
-                  {chat.question.split("").map((char, index) => (
-                    <span
-                      key={index}
-                      className={`${
-                        chatHistory?.length - 1 === mainIndex &&
-                        "char-animation"
-                      }`}
-                      style={{
-                        animationDelay: `${index * 0.05}s`,
-                      }}
-                    >
-                      {char}
-                    </span>
-                  ))}
-                </div>
-                <div className="answer">
-                  {chat.answer.split("").map((char, index) => (
-                    <span
-                      key={index}
-                      className={`${
-                        chatHistory?.length - 1 === mainIndex &&
-                        "char-animation"
-                      }`}
-                      style={{
-                        animationDelay: `${index * 0.05}s`,
-                      }}
-                    >
-                      {char}
-                    </span>
-                  ))}
+          <div className="chat-bubble me">Hi, I am back</div>
+          <div className="chat-bubble me">I just want my Report Status.</div>
+          <div className="chat-bubble me">
+            As i am not getting any weekly reports nowadays.
+          </div>
+
+          {chatHistory?.map((chat, index) => {
+            return (
+              <div key={index}>
+                <div
+                  className={`chat-bubble ${
+                    chat?.role === "user" ? "me" : "you"
+                  }`}
+                >
+                  {chat?.content}
                 </div>
               </div>
-            ))}
-          </div>
-        )}
-      </div>
-      <div className="lastInputMainWrap">
-        <Paper
-          component="form"
-          sx={{
-            p: "2px 4px",
-            display: "flex",
-            alignItems: "center",
-            position: "fixed",
-            bottom: "30px",
-            width: "90%",
-          }}
-          onSubmit={handleSubmit}
-        >
-          <InputBase
-            sx={{ ml: 1, flex: 1 }}
-            placeholder="Write Here..."
-            inputProps={{ "aria-label": "Write Here..." }}
-            value={question}
-            onChange={(event) => setQuestion(event?.target?.value)}
-          />
-
-          <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-          {loading ? (
-            <CircularProgress style={{ height: 20, width: 20 }} />
-          ) : (
-            <IconButton
-              color="primary"
-              sx={{ p: "10px" }}
-              aria-label="directions"
-              onClick={handleSubmit}
-            >
-              <DirectionsIcon />
-            </IconButton>
+            );
+          })}
+          {loading && (
+            <div className="chat-bubble you">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                style={{
+                  margin: "auto",
+                  display: "block",
+                  shapeRendering: "auto",
+                  width: "43px",
+                  height: "20px",
+                }}
+                viewBox="0 0 100 100"
+                preserveAspectRatio="xMidYMid"
+              >
+                <circle cx="0" cy="44.1678" r="15" fill="#ffffff">
+                  <animate
+                    attributeName="cy"
+                    calcMode="spline"
+                    keySplines="0 0.5 0.5 1;0.5 0 1 0.5;0.5 0.5 0.5 0.5"
+                    repeatCount="indefinite"
+                    values="57.5;42.5;57.5;57.5"
+                    keyTimes="0;0.3;0.6;1"
+                    dur="1s"
+                    begin="-0.6s"
+                  ></animate>
+                </circle>
+                <circle cx="45" cy="43.0965" r="15" fill="#ffffff">
+                  <animate
+                    attributeName="cy"
+                    calcMode="spline"
+                    keySplines="0 0.5 0.5 1;0.5 0 1 0.5;0.5 0.5 0.5 0.5"
+                    repeatCount="indefinite"
+                    values="57.5;42.5;57.5;57.5"
+                    keyTimes="0;0.3;0.6;1"
+                    dur="1s"
+                    begin="-0.39999999999999997s"
+                  ></animate>
+                </circle>{" "}
+                <circle cx="90" cy="52.0442" r="15" fill="#ffffff">
+                  <animate
+                    attributeName="cy"
+                    calcMode="spline"
+                    keySplines="0 0.5 0.5 1;0.5 0 1 0.5;0.5 0.5 0.5 0.5"
+                    repeatCount="indefinite"
+                    values="57.5;42.5;57.5;57.5"
+                    keyTimes="0;0.3;0.6;1"
+                    dur="1s"
+                    begin="-0.19999999999999998s"
+                  ></animate>
+                </circle>
+              </svg>
+            </div>
           )}
-        </Paper>
+          <div ref={messagesEndRef}></div>
+        </div>
+        <div className={`chat-input ${!showChat ? "hide" : ""}`}>
+          <form onSubmit={handleSubmit}>
+            <input
+              type="text"
+              placeholder="Type a message..."
+              value={question}
+              onChange={(e) => setQuestion(e?.target?.value)}
+            />
+          </form>
+          <div className="input-action-icon">
+            <a onClick={handleSubmit}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                className="feather feather-send"
+              >
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div className="chat-bot-icon" onClick={() => setShowChat((pre) => !pre)}>
+        <img src={weAreHere} className={showChat ? "hide" : ""} />
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          s
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          className={`feather feather-message-square ${
+            !showChat && "animate"
+          } `}
+        >
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class={`feather feather-x  ${showChat && "animate"}`}
+        >
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
       </div>
     </div>
   );

@@ -10,7 +10,6 @@ const Children = ({
   childrenExtraData,
   setChildrenData,
   setChildrenExtraData,
-  index,
 }) => {
   function handleChangeText(id, event) {
     if (id) {
@@ -237,10 +236,8 @@ const Children = ({
     );
   }
 
-
   return (
     <div>
-    
       <div className="row">
         <div className="col-lg-6 mb-2">
           <TextField
@@ -249,7 +246,6 @@ const Children = ({
             label="First Name"
             variant="outlined"
             className="form-control"
-            s
             value={data?.firstName}
             onChange={(event) => handleChangeText(data?.id, event)}
           />
@@ -266,30 +262,7 @@ const Children = ({
           />
         </div>
       </div>
-      <div className="row mt-4">
-        <div className="col-lg-6 mb-2">
-          <TextField
-            id="dateOfBirth"
-            name="dateOfBirth"
-            variant="outlined"
-            className="form-control"
-            type="date"
-            value={data?.date}
-            onChange={(event) => handleChangeText(data?.id, event)}
-          />
-        </div>
-        <div className="col-lg-6 mb-2">
-          <TextField
-            id="cityOfResidence"
-            name="cityOfResidence"
-            label="City Of Residence"
-            variant="outlined"
-            className="form-control"
-            value={data?.cityOfResidence}
-            onChange={(event) => handleChangeText(data?.id, event)}
-          />
-        </div>
-      </div>
+
       <div className="row mt-4">
         <div className="col-lg-6 mb-2">
           <TextField
@@ -323,6 +296,58 @@ const Children = ({
             variant="outlined"
             className="form-control"
             value={data?.nationality}
+            onChange={(event) => handleChangeText(data?.id, event)}
+          />
+        </div>
+      </div>
+      <div className="row mt-4">
+        <div className="col-lg-6 mb-2">
+          <TextField
+            id="cityOfResidence"
+            name="cityOfResidence"
+            label="City Of Residence"
+            variant="outlined"
+            className="form-control"
+            value={data?.cityOfResidence}
+            onChange={(event) => handleChangeText(data?.id, event)}
+          />
+        </div>
+
+        <div className="col-lg-6 mb-2">
+          <TextField
+            id="age"
+            name="age"
+            label="Age"
+            variant="outlined"
+            className="form-control"
+            type="number"
+            value={data?.age}
+            onChange={(event) => handleChangeText(data?.id, event)}
+          />
+        </div>
+      </div>
+      <div className="row mt-4">
+        <div className="col-lg-6 mb-2">
+          <label className="col-lg-12 mb-2 ">Date Of Birth</label>
+          <TextField
+            id="dateOfBirth"
+            name="dateOfBirth"
+            variant="outlined"
+            className="form-control"
+            type="date"
+            value={data?.dateOfBirth}
+            onChange={(event) => handleChangeText(data?.id, event)}
+          />
+        </div>
+        <div className="col-lg-6 mb-4">
+          <label className="col-lg-12 mb-2">Upcoming Birthday</label>
+          <TextField
+            id="upcomingBirthday"
+            name="upcomingBirthday"
+            variant="outlined"
+            className="form-control"
+            type="date"
+            value={data?.upcomingBirthday}
             onChange={(event) => handleChangeText(data?.id, event)}
           />
         </div>
@@ -367,7 +392,7 @@ const Children = ({
           <label className="mb-2">List Of Available Interests:</label>
           <Card className="py-2">
             {data?.mainInterests?.length === 0 ? (
-              <p className="mx-2 mt-3">No Available Interests Found!</p>
+              <p className="mx-2 mt-3 text-sm">No Available Interests Found!</p>
             ) : (
               data?.mainInterests?.map((interest, index) => {
                 return (
@@ -420,7 +445,7 @@ const Children = ({
           <label className="mb-2">List Of Available Media Links:</label>
           <Card className="py-2">
             {data?.socialMediaLinks?.length === 0 ? (
-              <p className="mx-2 mt-3">
+              <p className="mx-2 mt-3 text-sm">
                 No Available Social Media Links Found!
               </p>
             ) : (
@@ -474,7 +499,9 @@ const Children = ({
           <label className="mb-2">List Of Available Loyalty Programs:</label>
           <Card className="py-2">
             {data?.loyaltyPrograms?.length === 0 ? (
-              <p className="mx-2 mt-3">No Available Loyalty Programs Found!</p>
+              <p className="mx-2 mt-3 text-sm">
+                No Available Loyalty Programs Found!
+              </p>
             ) : (
               data?.loyaltyPrograms?.map((program, index) => {
                 return (
@@ -524,7 +551,9 @@ const Children = ({
           <label className="mb-2">List Of Available Travel Documents:</label>
           <Card className="py-2 mb-4">
             {data?.travelDocuments?.length === 0 ? (
-              <p className="mx-2 mt-3">No Available Travel Documents Found!</p>
+              <p className="mx-2 mt-3 text-sm">
+                No Available Travel Documents Found!
+              </p>
             ) : (
               data?.travelDocuments?.map((doc, index) => {
                 return (

@@ -25,6 +25,8 @@ const MainForm = () => {
       cityOfResidence: "",
       email: "",
       phoneNumber: "",
+      age: "",
+      upcomingBirthday: "",
       nationality: "",
       mainInterests: [],
       socialMediaLinks: [],
@@ -37,6 +39,8 @@ const MainForm = () => {
       dateOfBirth: "",
       cityOfResidence: "",
       email: "",
+      age: "",
+      upcomingBirthday: "",
       phoneNumber: "",
       nationality: "",
       mainInterests: [],
@@ -52,6 +56,24 @@ const MainForm = () => {
       dateOfBirth: "",
       cityOfResidence: "",
       email: "",
+      age: "",
+      upcomingBirthday: "",
+      phoneNumber: "",
+      nationality: "",
+      mainInterests: [],
+      socialMediaLinks: [],
+      loyaltyPrograms: [],
+      travelDocuments: [],
+      id: uuidv4(),
+    },
+    {
+      firstName: "",
+      lastName: "",
+      dateOfBirth: "",
+      cityOfResidence: "",
+      email: "",
+      age: "",
+      upcomingBirthday: "",
       phoneNumber: "",
       nationality: "",
       mainInterests: [],
@@ -96,6 +118,8 @@ const MainForm = () => {
         dateOfBirth: "",
         cityOfResidence: "",
         email: "",
+        age: "",
+        upcomingBirthday: "",
         phoneNumber: "",
         nationality: "",
         mainInterests: [],
@@ -150,6 +174,8 @@ const MainForm = () => {
               email: children?.email,
               phoneNumber: children?.phoneNumber,
               nationality: children?.nationality,
+              age: children?.age,
+              upcomingBirthday: children?.upcomingBirthday,
               mainInterests:
                 children?.mainInterests?.map((item) => item?.string) || [],
               socialMediaLinks:
@@ -194,7 +220,7 @@ const MainForm = () => {
     if (event) {
       event.preventDefault();
     }
-    if (extraData[family].interest === "") {
+    if (extraData[family]?.interest === "") {
       toast.error("Provide Interest", {
         toastId: "interest",
       });
@@ -244,7 +270,7 @@ const MainForm = () => {
     if (event) {
       event.preventDefault();
     }
-    if (extraData[family].link === "") {
+    if (extraData[family]?.link === "") {
       toast.error("Provide Link", {
         toastId: "link",
       });
@@ -294,7 +320,7 @@ const MainForm = () => {
     if (event) {
       event.preventDefault();
     }
-    if (extraData[family].program === "") {
+    if (extraData[family]?.program === "") {
       toast.error("Provide Program", {
         toastId: "program",
       });
@@ -344,7 +370,7 @@ const MainForm = () => {
     if (event) {
       event.preventDefault();
     }
-    if (extraData[family].doc === "") {
+    if (extraData[family]?.doc === "") {
       toast.error("Provide Document", {
         toastId: "document",
       });

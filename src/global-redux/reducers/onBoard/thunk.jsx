@@ -16,8 +16,13 @@ export const onBoarding = async (data, thunkAPI) => {
 
 export const chat = async (data, thunkAPI) => {
   try {
-    let props = await axios.get(
-      `https://data-entry-08031d053c68.herokuapp.com/onBoard/chat${data}`
+    let props = await axios.post(
+      `https://data-entry-08031d053c68.herokuapp.com/onBoard/chat`,
+      {
+        query: data?.query,
+        previousChat: data?.previousChat,
+        ai: "CLAUDE",
+      }
     );
     return props.data;
   } catch (error) {
