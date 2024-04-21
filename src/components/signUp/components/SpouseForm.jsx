@@ -109,7 +109,7 @@ const Spouse = ({
         </div>
       </div>
       <div className="row mt-4">
-        <div className="col-lg-6 mb-2">
+        <div className="col-lg-12 mb-2">
           <label className="col-lg-12 mb-2 ">Date Of Birth</label>
           <TextField
             id="dateOfBirth"
@@ -118,19 +118,6 @@ const Spouse = ({
             className="form-control"
             type="date"
             value={data?.spouse?.dateOfBirth}
-            onChange={(event) => handleChangeText("spouse", event)}
-          />
-        </div>
-        <div className="col-lg-6 mb-4">
-          <label className="col-lg-12 mb-2">Upcoming Birthday</label>
-          <TextField
-            id="upcomingBirthday"
-            name="upcomingBirthday"
-            variant="outlined"
-            className="form-control"
-            type="date"
-            style={{ height: "2px" }}
-            value={data?.spouse?.upcomingBirthday}
             onChange={(event) => handleChangeText("spouse", event)}
           />
         </div>

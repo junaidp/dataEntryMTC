@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import weAreHere from "../../assets/we-are-here.svg";
 import { useDetectClickOutside } from "react-detect-click-outside";
 
-const Chat = () => {
+const Chat = ({ value }) => {
   const dispatch = useDispatch();
   const messagesEndRef = React.useRef(null);
   const { chatResponse, loading } = useSelector((state) => state?.onBoard);
@@ -31,21 +31,22 @@ const Chat = () => {
         setupChat({
           query: question,
           previousChat: [...chatHistory, { role: "user", content: question }],
+          type: value,
         })
       );
     }
   }
 
   React.useEffect(() => {
-    if (chatResponse?.content) {
+    if (chatResponse !== "") {
       setChatHistory([
         ...chatHistory,
-        { role: "system", content: chatResponse?.content[0]?.text },
+        { role: "system", content: chatResponse },
       ]);
 
       let localStorageChat = [
         ...chatHistory,
-        { role: "system", content: chatResponse?.content[0]?.text },
+        { role: "system", content: chatResponse },
       ];
       sessionStorage.setItem("chat", JSON.stringify(localStorageChat));
       messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -88,10 +89,15 @@ const Chat = () => {
             Welcome to our site, if you need help simply reply to this message,
             we are online and ready to help.
           </div>
-          <div className="chat-bubble me">Hi, I am back</div>
-          <div className="chat-bubble me">I just want my Report Status.</div>
-          <div className="chat-bubble me">
-            As i am not getting any weekly reports nowadays.
+          <div className="chat-bubble you">
+            Whether you're browsing or need guidance, we're here for you. Just
+            shoot us a message, and we'll lend a hand.
+          </div>
+          <div className="chat-bubble you">
+            Just message us. We're here to assist!.
+          </div>
+          <div className="chat-bubble you">
+            Want info about our website? Just ask, I'm here to help!
           </div>
 
           {chatHistory?.map((chat, index) => {

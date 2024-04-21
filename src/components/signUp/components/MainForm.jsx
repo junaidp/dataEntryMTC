@@ -9,8 +9,6 @@ import {
   setupOnBoarding,
 } from "../../../global-redux/reducers/onBoard/slice";
 import { useSelector, useDispatch } from "react-redux";
-import Paper from "@mui/material/Paper";
-import Box from "@mui/material/Box";
 
 const MainForm = () => {
   const dispatch = useDispatch();
@@ -26,7 +24,6 @@ const MainForm = () => {
       email: "",
       phoneNumber: "",
       age: "",
-      upcomingBirthday: "",
       nationality: "",
       mainInterests: [],
       socialMediaLinks: [],
@@ -40,7 +37,6 @@ const MainForm = () => {
       cityOfResidence: "",
       email: "",
       age: "",
-      upcomingBirthday: "",
       phoneNumber: "",
       nationality: "",
       mainInterests: [],
@@ -57,7 +53,6 @@ const MainForm = () => {
       cityOfResidence: "",
       email: "",
       age: "",
-      upcomingBirthday: "",
       phoneNumber: "",
       nationality: "",
       mainInterests: [],
@@ -103,7 +98,6 @@ const MainForm = () => {
         cityOfResidence: "",
         email: "",
         age: "",
-        upcomingBirthday: "",
         phoneNumber: "",
         nationality: "",
         mainInterests: [],
@@ -161,7 +155,6 @@ const MainForm = () => {
               phoneNumber: children?.phoneNumber,
               nationality: children?.nationality,
               age: Number(children?.age),
-              upcomingBirthday: children?.upcomingBirthday,
               mainInterests:
                 children?.mainInterests?.map((item) => item?.string) || [],
               socialMediaLinks:
@@ -658,7 +651,7 @@ const MainForm = () => {
                       ) || "N/A"
                     );
                   } catch (error) {
-                    return "Error parsing JSON";
+                    return "null";
                   }
                 })()}
 
@@ -668,7 +661,7 @@ const MainForm = () => {
                     <h5 className="heading">Tokens:</h5>
                     <div className="row">
                       <p className="col-lg-4">Prompt Tokens:</p>
-                      <p className="col-lg-1">
+                      <p className="col-lg-4">
                         {(() => {
                           try {
                             const parsedResponse = JSON?.parse(
@@ -686,7 +679,7 @@ const MainForm = () => {
                     </div>
                     <div className="row">
                       <p className="col-lg-4">Candidate Tokens:</p>
-                      <p className="col-lg-1">
+                      <p className="col-lg-4">
                         {(() => {
                           try {
                             const parsedResponse = JSON?.parse(
@@ -704,7 +697,7 @@ const MainForm = () => {
                     </div>
                     <div className="row">
                       <p className="col-lg-4">Total Tokens:</p>
-                      <p className="col-lg-1">
+                      <p className="col-lg-4">
                         {(() => {
                           try {
                             const parsedResponse = JSON?.parse(

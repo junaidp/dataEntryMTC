@@ -21,7 +21,7 @@ export const chat = async (data, thunkAPI) => {
       {
         query: data?.query,
         previousChat: data?.previousChat,
-        ai: "CLAUDE",
+        ai: data?.type,
       }
     );
     return props.data;

@@ -6,7 +6,7 @@ const initialState = {
   loading: false,
   response: {},
   onBoardingAddSuccess: false,
-  chatResponse: {},
+  chatResponse: "",
 };
 
 export const setupOnBoarding = createAsyncThunk(
@@ -57,7 +57,12 @@ export const slice = createSlice({
       })
       .addCase(setupChat.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.chatResponse = payload;
+        if (payload?.model === "claude-3-haiku-20240307") {
+          state.chatResponse = payload?.content[0]?.text;
+        }
+        if (payload?.model === "gpt-3.5-turbo-0125") {
+          state.chatResponse = payload?.choices[0]?.message?.content;
+        }
       })
       .addCase(setupChat.rejected, (state, action) => {
         state.loading = false;
