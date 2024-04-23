@@ -1,7 +1,6 @@
 import React from "react";
 import { setupChat } from "../../global-redux/reducers/onBoard/slice";
 import { useDispatch, useSelector } from "react-redux";
-import weAreHere from "../../assets/we-are-here.svg";
 import { useDetectClickOutside } from "react-detect-click-outside";
 
 const Chat = ({ value }) => {
@@ -85,20 +84,6 @@ const Chat = ({ value }) => {
       <div className={`chat-screen ${showChat && "show-chat"}`}>
         <div className="chat-body hide">
           <div className="chat-start">{currentTime}</div>
-          <div className="chat-bubble you">
-            Welcome to our site, if you need help simply reply to this message,
-            we are online and ready to help.
-          </div>
-          <div className="chat-bubble you">
-            Whether you're browsing or need guidance, we're here for you. Just
-            shoot us a message, and we'll lend a hand.
-          </div>
-          <div className="chat-bubble you">
-            Just message us. We're here to assist!.
-          </div>
-          <div className="chat-bubble you">
-            Want info about our website? Just ask, I'm here to help!
-          </div>
 
           {chatHistory?.map((chat, index) => {
             return (
@@ -200,7 +185,6 @@ const Chat = ({ value }) => {
         </div>
       </div>
       <div className="chat-bot-icon" onClick={() => setShowChat((pre) => !pre)}>
-        <img src={weAreHere} className={showChat ? "hide" : ""} />
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"

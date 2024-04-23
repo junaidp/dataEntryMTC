@@ -4,6 +4,10 @@ import { Card } from "@mui/material";
 import Chip from "@mui/material/Chip";
 import { toast } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
 const Children = ({
   data,
@@ -288,7 +292,7 @@ const Children = ({
         </div>
       </div>
       <div className="row mt-4">
-        <div className="col-lg-12 mb-2">
+        <div className="col-lg-6 mb-2">
           <TextField
             id="nationality"
             name="nationality"
@@ -299,9 +303,29 @@ const Children = ({
             onChange={(event) => handleChangeText(data?.id, event)}
           />
         </div>
+        <div className="col-lg-6 mb-2">
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Relation</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              variant="outlined"
+              value={data?.relation}
+              label="Relation"
+              style={{ background: "white" }}
+              onChange={(event) => handleChangeText(data?.id, event)}
+              name="relation"
+            >
+              <MenuItem value="Spouse">Spouse</MenuItem>
+              <MenuItem value="Child">Child</MenuItem>
+              <MenuItem value="Parent">Parent</MenuItem>
+              <MenuItem value="Sibling">Sibling</MenuItem>
+            </Select>
+          </FormControl>
+        </div>
       </div>
       <div className="row mt-4">
-        <div className="col-lg-6 mb-2">
+        <div className="col-lg-12 mb-2">
           <TextField
             id="cityOfResidence"
             name="cityOfResidence"
@@ -309,19 +333,6 @@ const Children = ({
             variant="outlined"
             className="form-control"
             value={data?.cityOfResidence}
-            onChange={(event) => handleChangeText(data?.id, event)}
-          />
-        </div>
-
-        <div className="col-lg-6 mb-2">
-          <TextField
-            id="age"
-            name="age"
-            label="Age"
-            variant="outlined"
-            className="form-control"
-            type="number"
-            value={data?.age}
             onChange={(event) => handleChangeText(data?.id, event)}
           />
         </div>

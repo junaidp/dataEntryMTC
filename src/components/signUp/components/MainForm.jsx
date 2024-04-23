@@ -1,6 +1,5 @@
 import React from "react";
 import PrincipleCustomer from "./PrincipleCustomer";
-import Spouse from "./SpouseForm";
 import Children from "./ChildrenForm";
 import { toast } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
@@ -23,21 +22,6 @@ const MainForm = () => {
       cityOfResidence: "",
       email: "",
       phoneNumber: "",
-      age: "",
-      nationality: "",
-      mainInterests: [],
-      socialMediaLinks: [],
-      loyaltyPrograms: [],
-      travelDocuments: [],
-    },
-    spouse: {
-      firstName: "",
-      lastName: "",
-      dateOfBirth: "",
-      cityOfResidence: "",
-      email: "",
-      age: "",
-      phoneNumber: "",
       nationality: "",
       mainInterests: [],
       socialMediaLinks: [],
@@ -52,9 +36,9 @@ const MainForm = () => {
       dateOfBirth: "",
       cityOfResidence: "",
       email: "",
-      age: "",
       phoneNumber: "",
       nationality: "",
+      relation: "",
       mainInterests: [],
       socialMediaLinks: [],
       loyaltyPrograms: [],
@@ -65,12 +49,6 @@ const MainForm = () => {
 
   const [extraData, setExtraData] = React.useState({
     principalCustomer: {
-      interest: "",
-      link: "",
-      program: "",
-      doc: "",
-    },
-    spouse: {
       interest: "",
       link: "",
       program: "",
@@ -97,9 +75,9 @@ const MainForm = () => {
         dateOfBirth: "",
         cityOfResidence: "",
         email: "",
-        age: "",
         phoneNumber: "",
         nationality: "",
+        relation: "",
         mainInterests: [],
         socialMediaLinks: [],
         loyaltyPrograms: [],
@@ -109,13 +87,63 @@ const MainForm = () => {
     ]);
   }
 
+  const calculateAge = (dateOfBirth) => {
+    if (dateOfBirth !== "" && dateOfBirth) {
+      const birthDate = new Date(dateOfBirth);
+      const today = new Date();
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
+      const dayDiff = today.getDate() - birthDate.getDate();
+      if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+        age--;
+      }
+      if (age === 0) {
+        return 1;
+      }
+      return age;
+    } else {
+      return 0;
+    }
+  };
+
+  const calculateUpcomingBirthday = (dateOfBirth) => {
+    if (dateOfBirth !== "" && dateOfBirth) {
+      const birthDate = new Date(dateOfBirth);
+      const today = new Date();
+      const currentYear = today.getFullYear();
+      const upcomingBirthday = new Date(
+        currentYear,
+        birthDate.getMonth(),
+        birthDate.getDate()
+      );
+      if (upcomingBirthday < today) {
+        upcomingBirthday.setFullYear(currentYear + 1);
+      }
+      const timeDiff = upcomingBirthday.getTime() - today.getTime();
+      const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+      const monthsDiff = Math.floor(daysDiff / 30);
+      if (monthsDiff === 0) {
+        return "this month";
+      }
+      if (monthsDiff === 1) {
+        return "next month";
+      }
+      return `in ${monthsDiff} months`;
+    } else {
+      return "";
+    }
+  };
+
   function handleSubmit() {
     if (!loading) {
       dispatch(
         setupOnBoarding({
           principalCustomer: {
             ...data?.principalCustomer,
-            age: Number(data?.principalCustomer?.age),
+            age: calculateAge(data?.principalCustomer?.dateOfBirth) || null,
+            upcomingBirthday:
+              calculateUpcomingBirthday(data?.principalCustomer?.dateOfBirth) ||
+              null,
             mainInterests:
               data?.principalCustomer?.mainInterests?.map(
                 (item) => item?.string
@@ -133,19 +161,7 @@ const MainForm = () => {
                 (item) => item?.string
               ) || [],
           },
-          spouse: {
-            ...data?.spouse,
-            age: Number(data?.spouse?.age),
-            mainInterests:
-              data?.spouse?.mainInterests?.map((item) => item?.string) || [],
-            socialMediaLinks:
-              data?.spouse?.socialMediaLinks?.map((item) => item?.string) || [],
-            loyaltyPrograms:
-              data?.spouse?.loyaltyPrograms?.map((item) => item?.string) || [],
-            travelDocuments:
-              data?.spouse?.travelDocuments?.map((item) => item?.string) || [],
-          },
-          children: childrenData?.map((children) => {
+          dependents: childrenData?.map((children) => {
             return {
               firstName: children?.firstName,
               lastName: children?.lastName,
@@ -154,7 +170,9 @@ const MainForm = () => {
               email: children?.email,
               phoneNumber: children?.phoneNumber,
               nationality: children?.nationality,
-              age: Number(children?.age),
+              age: calculateAge(children?.dateOfBirth) || null,
+              upcomingBirthday:
+                calculateUpcomingBirthday(children?.dateOfBirth) || null,
               mainInterests:
                 children?.mainInterests?.map((item) => item?.string) || [],
               socialMediaLinks:
@@ -417,27 +435,11 @@ const MainForm = () => {
         handleAddDoc={handleAddDoc}
         handleDeleteDoc={handleDeleteDoc}
       />
-      <hr className="mt-4" />
-      <div className="mt-4">
-        <Spouse
-          data={data}
-          handleChangeText={handleChangeText}
-          extraData={extraData}
-          handleChangeExtraDataText={handleChangeExtraDataText}
-          handleAddInterest={handleAddInterest}
-          handleDeleteInterest={handleDeleteInterest}
-          handleAddLink={handleAddLink}
-          handleDeleteLink={handleDeleteLink}
-          handleAddProgram={handleAddProgram}
-          handleDeleteProgram={handleDeleteProgram}
-          handleAddDoc={handleAddDoc}
-          handleDeleteDoc={handleDeleteDoc}
-        />
-      </div>
+
       <hr className="mt-4" />
       <div className="mt-4">
         <header className="section-header my-3 align-items-center text-start d-flex">
-          <div className="mb-0 sub-heading">Add More Childrens</div>
+          <div className="mb-0 sub-heading">Add Dependents</div>
           <div
             className="btn btn-labeled btn-primary ms-3 px-3 shadow"
             onClick={handleAddChildrenDataObject}
@@ -472,7 +474,7 @@ const MainForm = () => {
                     <div className="d-flex w-100 me-3 align-items-center justify-content-between">
                       <div className="d-flex align-items-center w-100">
                         <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
-                        <div>Children {index + 1}</div>
+                        <div>Dependent {index + 1}</div>
                       </div>
                       {index !== 0 && (
                         <i
@@ -518,7 +520,7 @@ const MainForm = () => {
           {loading ? "Loading..." : "Submit"}
         </div>
       </div>
-      <div className="mt-4 ">
+      <div className="mt-4 mx-3">
         <table className="table table-bordered  table-hover rounded mb-4">
           <thead className="bg-secondary text-white">
             <tr className="row">

@@ -1080,14 +1080,23 @@ span[aria-label="Insert Ordered List"] .jodit-toolbar-button__trigger {
   box-shadow: 0 5px 5px rgba(0, 0, 0, 0.02);
 }
 .chat-screen .chat-body .chat-bubble.you {
-  background-image: linear-gradient(
+  /* background-image: linear-gradient(
     to right,
     #673ab7,
     #813bcb,
     #9e38de,
     #bc32ef,
     #dc22ff
+  ); */
+  background-image: linear-gradient(
+    to right,
+    #0a7386,
+    #3b91a7,
+    #57bbdd,
+    #74bad9,
+    #7bc2dd
   );
+
   color: #fff;
   border-radius: 0 15px 15px 15px;
   align-self: flex-start;
@@ -1225,14 +1234,24 @@ span[aria-label="Insert Ordered List"] .jodit-toolbar-button__trigger {
   right: 20px;
   height: 50px;
   width: 50px;
-  background-image: linear-gradient(
+  /* background-image: linear-gradient(
     to right,
     #673ab7,
     #813bcb,
     #9e38de,
     #bc32ef,
     #dc22ff
+  ); */
+
+  background-image: linear-gradient(
+    to right,
+    #0a7386,
+    #3b91a7,
+    #57bbdd,
+    #74bad9,
+    #7bc2dd
   );
+
   z-index: 9999;
   border-radius: 30px;
   box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1);

@@ -70,7 +70,7 @@ const PrincipleCustomer = ({
         </div>
       </div>
       <div className="row mt-4">
-        <div className="col-lg-12 mb-2">
+        <div className="col-lg-6 mb-2">
           <TextField
             id="nationality"
             name="nationality"
@@ -81,8 +81,6 @@ const PrincipleCustomer = ({
             onChange={(event) => handleChangeText("principalCustomer", event)}
           />
         </div>
-      </div>
-      <div className="row mt-4">
         <div className="col-lg-6 mb-2">
           <TextField
             id="cityOfResidence"
@@ -94,20 +92,8 @@ const PrincipleCustomer = ({
             onChange={(event) => handleChangeText("principalCustomer", event)}
           />
         </div>
-
-        <div className="col-lg-6 mb-2">
-          <TextField
-            id="age"
-            name="age"
-            label="Age"
-            variant="outlined"
-            className="form-control"
-            type="number"
-            value={data?.principalCustomer?.age}
-            onChange={(event) => handleChangeText("principalCustomer", event)}
-          />
-        </div>
       </div>
+
       <div className="row mt-4">
         <div className="col-lg-12 mb-2">
           <label className="col-lg-12 mb-2 ">Date Of Birth</label>
