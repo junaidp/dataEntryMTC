@@ -3,7 +3,7 @@ import MainForm from "./components/MainForm";
 import ChatBot from "../chat/chat";
 
 const index = () => {
-  const [value, setValue] = React.useState("CLAUDE");
+  const [value, setValue] = React.useState("OPENAI");
   return (
     <div className="mt-4">
       <div className="row float-end" style={{ marginRight: "0px" }}>
