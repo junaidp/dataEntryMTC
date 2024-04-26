@@ -14,9 +14,11 @@ const Responses = ({ response }) => {
         <tbody>
           <tr className="row mb-4">
             <td className="col-lg-4">
-              {response?.claudeResponse
-                ? JSON?.parse(response?.claudeResponse)?.content?.map(
-                    (choice) => {
+              {(() => {
+                try {
+                  const parsedResponse = JSON?.parse(response?.claudeResponse);
+                  return (
+                    parsedResponse?.content?.map((choice) => {
                       return choice?.text
                         ?.split(/\d+\./)
                         ?.filter(Boolean)
@@ -29,9 +31,13 @@ const Responses = ({ response }) => {
                             </div>
                           );
                         });
-                    }
-                  )
-                : "null"}
+                    }) || "N/A"
+                  );
+                } catch (error) {
+                  return "null";
+                }
+              })()}
+
               {response?.claudeResponse && (
                 <div>
                   <hr />
@@ -39,19 +45,31 @@ const Responses = ({ response }) => {
                   <div className="row">
                     <p className="col-lg-3">Input Tokens:</p>
                     <p className="col-lg-1">
-                      {
-                        JSON?.parse(response?.claudeResponse)?.usage
-                          ?.input_tokens
-                      }
+                      {(() => {
+                        try {
+                          const parsedResponse = JSON?.parse(
+                            response?.claudeResponse
+                          );
+                          return parsedResponse?.usage?.input_tokens || "N/A";
+                        } catch (error) {
+                          return "Error parsing JSON";
+                        }
+                      })()}
                     </p>
                   </div>
                   <div className="row">
                     <p className="col-lg-4">Output Tokens:</p>
                     <p className="col-lg-1">
-                      {
-                        JSON?.parse(response?.claudeResponse)?.usage
-                          ?.output_tokens
-                      }
+                      {(() => {
+                        try {
+                          const parsedResponse = JSON?.parse(
+                            response?.claudeResponse
+                          );
+                          return parsedResponse?.usage?.output_tokens || "N/A";
+                        } catch (error) {
+                          return "Error parsing JSON";
+                        }
+                      })()}
                     </p>
                   </div>
                 </div>

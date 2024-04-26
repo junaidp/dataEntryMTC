@@ -7,6 +7,7 @@ const initialState = {
   response: {},
   onBoardingAddSuccess: false,
   chatResponse: "",
+  customerId: "",
 };
 
 export const setupOnBoarding = createAsyncThunk(
@@ -37,10 +38,12 @@ export const slice = createSlice({
         state.loading = true;
       })
       .addCase(setupOnBoarding.fulfilled, (state, { payload }) => {
+        state.response = payload || [{ error: "Not Found" }];
+        sessionStorage.setItem("customerId", payload?.customerId);
+        state.customerId = payload.customerId || "";
         state.loading = false;
         state.onBoardingAddSuccess = true;
         toast.success("On-Boarding Response Fetched Successfully");
-        state.response = payload || [{ error: "Not Found" }];
       })
       .addCase(setupOnBoarding.rejected, (state, action) => {
         state.loading = false;

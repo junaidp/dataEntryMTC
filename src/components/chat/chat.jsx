@@ -6,7 +6,9 @@ import { useDetectClickOutside } from "react-detect-click-outside";
 const Chat = ({ value }) => {
   const dispatch = useDispatch();
   const messagesEndRef = React.useRef(null);
-  const { chatResponse, loading } = useSelector((state) => state?.onBoard);
+  const { chatResponse, loading, customerId } = useSelector(
+    (state) => state?.onBoard
+  );
   const [question, setQuestion] = React.useState("");
   const [chatHistory, setChatHistory] = React.useState([]);
   const [showChat, setShowChat] = React.useState(false);
@@ -31,6 +33,7 @@ const Chat = ({ value }) => {
           query: question,
           previousChat: [...chatHistory, { role: "user", content: question }],
           type: value,
+          customerId: sessionStorage.getItem("customerId") || customerId,
         })
       );
     }

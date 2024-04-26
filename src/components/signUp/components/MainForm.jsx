@@ -41,6 +41,7 @@ const MainForm = () => {
       cityOfResidence: "",
       email: "",
       relation: "",
+      gender: "",
       mainInterests: [],
       socialMediaLinks: [],
       loyaltyPrograms: [],
@@ -90,6 +91,7 @@ const MainForm = () => {
         cityOfResidence: data?.principalCustomer?.cityOfResidence || "",
         email: "",
         relation: "",
+        gender: "",
         mainInterests: [],
         socialMediaLinks: [],
         loyaltyPrograms: [],
@@ -199,6 +201,7 @@ const MainForm = () => {
               cityOfResidence: children?.cityOfResidence,
               email: children?.email,
               relation: children?.relation,
+              gender: children?.gender,
               age: calculateAge(children?.dateOfBirth) || null,
               upcomingBirthday:
                 calculateUpcomingBirthday(children?.dateOfBirth) || null,

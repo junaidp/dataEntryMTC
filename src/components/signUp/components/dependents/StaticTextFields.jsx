@@ -74,7 +74,7 @@ const StaticTextFields = ({ data, handleChangeText }) => {
       </div>
 
       <div className="row mt-4">
-        <div className="col-lg-12 mb-2">
+        <div className="col-lg-6 mb-2">
           <TextField
             id="cityOfResidence"
             name="cityOfResidence"
@@ -84,6 +84,25 @@ const StaticTextFields = ({ data, handleChangeText }) => {
             value={data?.cityOfResidence}
             onChange={(event) => handleChangeText(data?.id, event)}
           />
+        </div>
+        <div className="col-lg-6 mb-2">
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Gender</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              variant="outlined"
+              value={data?.gender}
+              label="Relation"
+              style={{ background: "white" }}
+              onChange={(event) => handleChangeText(data?.id, event)}
+              name="gender"
+            >
+              <MenuItem value="Male">Male</MenuItem>
+              <MenuItem value="Female">Female</MenuItem>
+              <MenuItem value="Other">Other</MenuItem>
+            </Select>
+          </FormControl>
         </div>
       </div>
       <div className="row mt-4">
