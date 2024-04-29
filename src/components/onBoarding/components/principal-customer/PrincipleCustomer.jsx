@@ -8,6 +8,8 @@ import Passions from "./Passion";
 import LifeStyle from "./LifeStyle";
 import TravelBucketList from "./TravelBucketList";
 import SpecialRequirements from "./SpecialRequirements";
+import TypeOfTravel from "./TypeOfTravel";
+import TravelSpan from "./TravelSpan";
 
 const PrincipleCustomer = ({
   data,
@@ -16,12 +18,27 @@ const PrincipleCustomer = ({
   handleChangeExtraDataText,
   handleAdd,
   handleDelete,
+  setData,
 }) => {
   return (
     <div>
       <h1 className="heading mb-4">Principal Customer</h1>
       <StaticTextFields data={data} handleChangeText={handleChangeText} />
+      <Passions
+        handleAdd={handleAdd}
+        handleDelete={handleDelete}
+        handleChangeExtraDataText={handleChangeExtraDataText}
+        extraData={extraData}
+        data={data}
+      />
       <MainInterests
+        handleAdd={handleAdd}
+        handleDelete={handleDelete}
+        handleChangeExtraDataText={handleChangeExtraDataText}
+        extraData={extraData}
+        data={data}
+      />
+      <LifeStyle
         handleAdd={handleAdd}
         handleDelete={handleDelete}
         handleChangeExtraDataText={handleChangeExtraDataText}
@@ -50,20 +67,6 @@ const PrincipleCustomer = ({
         extraData={extraData}
         data={data}
       />
-      <Passions
-        handleAdd={handleAdd}
-        handleDelete={handleDelete}
-        handleChangeExtraDataText={handleChangeExtraDataText}
-        extraData={extraData}
-        data={data}
-      />
-      <LifeStyle
-        handleAdd={handleAdd}
-        handleDelete={handleDelete}
-        handleChangeExtraDataText={handleChangeExtraDataText}
-        extraData={extraData}
-        data={data}
-      />
       <TravelBucketList
         handleAdd={handleAdd}
         handleDelete={handleDelete}
@@ -78,6 +81,8 @@ const PrincipleCustomer = ({
         extraData={extraData}
         data={data}
       />
+      <TypeOfTravel setData={setData} />
+      <TravelSpan setData={setData} />
     </div>
   );
 };

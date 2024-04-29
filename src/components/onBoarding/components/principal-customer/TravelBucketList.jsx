@@ -3,7 +3,7 @@ import TextField from "@mui/material/TextField";
 import { Card } from "@mui/material";
 import Chip from "@mui/material/Chip";
 
-const SpecialRequirements = ({
+const TravelBucketList = ({
   handleAdd,
   handleDelete,
   handleChangeExtraDataText,
@@ -13,25 +13,24 @@ const SpecialRequirements = ({
   return (
     <div className="row mt-4">
       <div>
-        <h5>Special Requirements:</h5>
+        <h6>Travel Bucket List:</h6>
         <div className="row p-0">
           <form
             className="col-lg-10 mb-2"
             onSubmit={(event) =>
               handleAdd(
                 "principalCustomer",
-                "specialRequirements",
-                "specialrequirement",
+                "travelBucketList",
+                "bucketlist",
                 event
               )
             }
           >
-            <label className="w-100">Special Requirements:</label>
             <TextField
               className="form-control w-100s"
-              name="specialrequirement"
-              id="specialrequirement"
-              value={extraData?.principalCustomer?.specialrequirement}
+              name="bucketlist"
+              id="bucketlist"
+              value={extraData?.principalCustomer?.bucketlist}
               onChange={(event) =>
                 handleChangeExtraDataText("principalCustomer", event)
               }
@@ -43,28 +42,19 @@ const SpecialRequirements = ({
               className="btn btn-labeled btn-primary w-100 shadow"
               type="submit"
               onClick={() =>
-                handleAdd(
-                  "principalCustomer",
-                  "specialRequirements",
-                  "specialrequirement"
-                )
+                handleAdd("principalCustomer", "travelBucketList", "bucketlist")
               }
             >
               <span className="btn-label me-2">
                 <i className="fa fa-plus"></i>
               </span>
-              Add Requirement
+              Add Bucket List
             </button>
           </div>
         </div>
-        <label className="mb-2">List Of Available Special Requirements:</label>
-        <Card className="py-2">
-          {data?.principalCustomer?.specialRequirements?.length === 0 ? (
-            <p className="mx-2 mt-3 text-sm">
-              No Available Special Requirements Found!
-            </p>
-          ) : (
-            data?.principalCustomer?.specialRequirements?.map((link, index) => {
+        {data?.principalCustomer?.travelBucketList?.length !== 0 && (
+          <Card className="py-2">
+            {data?.principalCustomer?.travelBucketList?.map((link, index) => {
               return (
                 <Chip
                   label={link?.string}
@@ -74,18 +64,18 @@ const SpecialRequirements = ({
                   onDelete={() =>
                     handleDelete(
                       "principalCustomer",
-                      "specialRequirements",
+                      "travelBucketList",
                       link?.id
                     )
                   }
                 />
               );
-            })
-          )}
-        </Card>
+            })}
+          </Card>
+        )}
       </div>
     </div>
   );
 };
 
-export default SpecialRequirements;
+export default TravelBucketList;

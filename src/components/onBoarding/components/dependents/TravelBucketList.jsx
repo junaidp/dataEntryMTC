@@ -3,7 +3,7 @@ import TextField from "@mui/material/TextField";
 import { Card } from "@mui/material";
 import Chip from "@mui/material/Chip";
 
-const LoyalityPrograms = ({
+const TravelBucketList = ({
   handleAdd,
   handleDelete,
   handleChangeExtraDataText,
@@ -13,61 +13,60 @@ const LoyalityPrograms = ({
   return (
     <div className="row mt-4">
       <div>
-        <h5>Loyalty Programs:</h5>
+        <h6>Travel Bucket List:</h6>
         <div className="row p-0">
           <form
             className="col-lg-10 mb-2"
             onSubmit={(event) =>
-              handleAdd(data?.id, "loyaltyPrograms", "program", event)
+              handleAdd(data?.id, "travelBucketList", "bucketlist", event)
             }
           >
-            <label className="w-100">Loyalty Program:</label>
             <TextField
-              className="form-control"
-              name="program"
-              id="program"
-              value={childrenExtraData?.program}
-              onChange={(event) => handleChangeExtraDataText("program", event)}
+              className="form-control w-100s"
+              name="bucketlist"
+              id="bucketlist"
+              value={childrenExtraData?.bucketlist}
+              onChange={(event) =>
+                handleChangeExtraDataText("bucketlist", event)
+              }
             />
           </form>
+
           <div className={`col-lg-2 text-end float-end align-self-end mb-4`}>
             <button
               className="btn btn-labeled btn-primary w-100 shadow"
               type="submit"
-              onClick={() => handleAdd(data?.id, "loyaltyPrograms", "program")}
+              onClick={() =>
+                handleAdd(data?.id, "travelBucketList", "bucketlist")
+              }
             >
               <span className="btn-label me-2">
                 <i className="fa fa-plus"></i>
               </span>
-              Add Program
+              Add Bucket List
             </button>
           </div>
         </div>
-        <label className="mb-2">List Of Available Loyalty Programs:</label>
-        <Card className="py-2">
-          {data?.loyaltyPrograms?.length === 0 ? (
-            <p className="mx-2 mt-3 text-sm">
-              No Available Loyalty Programs Found!
-            </p>
-          ) : (
-            data?.loyaltyPrograms?.map((program, index) => {
+        {data?.travelBucketList?.length !== 0 && (
+          <Card className="py-2">
+            {data?.travelBucketList?.map((link, index) => {
               return (
                 <Chip
-                  label={program?.string}
+                  label={link?.string}
                   key={index}
                   variant="outlined"
                   className="mx-2 mb-2"
                   onDelete={() =>
-                    handleDelete(data?.id, "loyaltyPrograms", program?.id)
+                    handleDelete(data?.id, "travelBucketList", link?.id)
                   }
                 />
               );
-            })
-          )}
-        </Card>
+            })}
+          </Card>
+        )}
       </div>
     </div>
   );
 };
 
-export default LoyalityPrograms;
+export default TravelBucketList;

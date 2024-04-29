@@ -3,32 +3,31 @@ import TextField from "@mui/material/TextField";
 import { Card } from "@mui/material";
 import Chip from "@mui/material/Chip";
 
-const Passions = ({
+const LifeStyle = ({
   handleAdd,
   handleDelete,
   handleChangeExtraDataText,
-  extraData,
+  childrenExtraData,
   data,
 }) => {
   return (
     <div className="row mt-4">
       <div>
-        <h5>Passions:</h5>
+        <h6>LifeStyles:</h6>
         <div className="row p-0">
           <form
             className="col-lg-10 mb-2"
             onSubmit={(event) =>
-              handleAdd("principalCustomer", "passions", "passion", event)
+              handleAdd(data?.id, "lifestyle", "lifestyle", event)
             }
           >
-            <label className="w-100">Passion:</label>
             <TextField
               className="form-control w-100s"
-              name="passion"
-              id="passion"
-              value={extraData?.principalCustomer?.passion}
+              name="lifestyle"
+              id="lifestyle"
+              value={childrenExtraData?.lifestyle}
               onChange={(event) =>
-                handleChangeExtraDataText("principalCustomer", event)
+                handleChangeExtraDataText("lifestyle", event)
               }
             />
           </form>
@@ -37,40 +36,33 @@ const Passions = ({
             <button
               className="btn btn-labeled btn-primary w-100 shadow"
               type="submit"
-              onClick={() =>
-                handleAdd("principalCustomer", "passions", "passion")
-              }
+              onClick={() => handleAdd(data?.id, "lifestyle", "lifestyle")}
             >
               <span className="btn-label me-2">
                 <i className="fa fa-plus"></i>
               </span>
-              Add Passion
+              Add Lifestyle
             </button>
           </div>
         </div>
-        <label className="mb-2">List Of Available Passions:</label>
-        <Card className="py-2">
-          {data?.principalCustomer?.passions?.length === 0 ? (
-            <p className="mx-2 mt-3 text-sm">No Available Passion Found!</p>
-          ) : (
-            data?.principalCustomer?.passions?.map((link, index) => {
+        {data?.lifestyle?.length !== 0 && (
+          <Card className="py-2">
+            {data?.lifestyle?.map((link, index) => {
               return (
                 <Chip
                   label={link?.string}
                   key={index}
                   variant="outlined"
                   className="mx-2 mb-2"
-                  onDelete={() =>
-                    handleDelete("principalCustomer", "passions", link?.id)
-                  }
+                  onDelete={() => handleDelete(data?.id, "lifestyle", link?.id)}
                 />
               );
-            })
-          )}
-        </Card>
+            })}
+          </Card>
+        )}
       </div>
     </div>
   );
 };
 
-export default Passions;
+export default LifeStyle;

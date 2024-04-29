@@ -4,7 +4,7 @@ import Tabs from "./components/common/Tabs";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import SignUp from "./components/signUp/index";
+import OnBoarding from "./components/onBoarding";
 import ChatPage from "./components/chat/chat";
 
 const App = () => {
@@ -17,7 +17,7 @@ const App = () => {
             <Routes>
               <Route path="/" element={<Tabs />} />
               <Route path="/chat" element={<ChatPage />} />
-              <Route path="/onBoarding" element={<SignUp />} />
+              <Route path="/onBoarding" element={<OnBoarding />} />
             </Routes>
           </BrowserRouter>
         </div>

@@ -3,84 +3,75 @@ import TextField from "@mui/material/TextField";
 import { Card } from "@mui/material";
 import Chip from "@mui/material/Chip";
 
-const LoyalityPrograms = ({
+const SpecialRequirements = ({
   handleAdd,
   handleDelete,
   handleChangeExtraDataText,
-  extraData,
+  childrenExtraData,
   data,
 }) => {
   return (
     <div className="row mt-4">
       <div>
-        <h5>Loyalty Programs:</h5>
+        <h6>Special Requirements:</h6>
         <div className="row p-0">
           <form
             className="col-lg-10 mb-2"
             onSubmit={(event) =>
               handleAdd(
-                "principalCustomer",
-                "loyaltyPrograms",
-                "program",
+                data?.id,
+                "specialRequirements",
+                "specialrequirement",
                 event
               )
             }
           >
-            <label className="w-100">Loyalty Program:</label>
             <TextField
-              className="form-control"
-              name="program"
-              id="program"
-              value={extraData?.principalCustomer?.program}
+              className="form-control w-100s"
+              name="specialrequirement"
+              id="specialrequirement"
+              value={childrenExtraData?.specialrequirement}
               onChange={(event) =>
-                handleChangeExtraDataText("principalCustomer", event)
+                handleChangeExtraDataText("specialrequirement", event)
               }
             />
           </form>
+
           <div className={`col-lg-2 text-end float-end align-self-end mb-4`}>
             <button
               className="btn btn-labeled btn-primary w-100 shadow"
               type="submit"
               onClick={() =>
-                handleAdd("principalCustomer", "loyaltyPrograms", "program")
+                handleAdd(data?.id, "specialRequirements", "specialrequirement")
               }
             >
               <span className="btn-label me-2">
                 <i className="fa fa-plus"></i>
               </span>
-              Add Program
+              Add Requirement
             </button>
           </div>
         </div>
-        <label className="mb-2">List Of Available Loyalty Programs:</label>
-        <Card className="py-2">
-          {data?.principalCustomer?.loyaltyPrograms?.length === 0 ? (
-            <p className="mx-2 mt-3 text-sm">
-              No Available Loyalty Programs Found!
-            </p>
-          ) : (
-            data?.principalCustomer?.loyaltyPrograms?.map((program, index) => {
+        {data?.specialRequirements?.length !== 0 && (
+          <Card className="py-2">
+            {data?.specialRequirements?.map((link, index) => {
               return (
                 <Chip
-                  label={program?.string}
+                  label={link?.string}
                   key={index}
                   variant="outlined"
                   className="mx-2 mb-2"
                   onDelete={() =>
-                    handleDelete(
-                      "principalCustomer",
-                      "loyaltyPrograms",
-                      program?.id
-                    )
+                    handleDelete(data?.id, "specialRequirements", link?.id)
                   }
                 />
               );
-            })
-          )}
-        </Card>
+            })}
+          </Card>
+        )}
       </div>
     </div>
   );
 };
 
-export default LoyalityPrograms;
+export default SpecialRequirements;

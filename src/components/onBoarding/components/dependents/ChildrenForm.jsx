@@ -10,6 +10,8 @@ import Passions from "./Passion";
 import LifeStyle from "./LifeStyle";
 import TravelBucketList from "./TravelBucketList";
 import SpecialRequirements from "./SpecialRequirements";
+import TypeOfTravel from "./TypeOfTravel";
+import TravelSpan from "./TravelSpan";
 
 const Children = ({
   data,
@@ -90,7 +92,21 @@ const Children = ({
   return (
     <div>
       <StaticTextFields data={data} handleChangeText={handleChangeText} />
+      <Passions
+        handleAdd={handleAdd}
+        handleDelete={handleDelete}
+        handleChangeExtraDataText={handleChangeExtraDataText}
+        childrenExtraData={childrenExtraData}
+        data={data}
+      />
       <MainInterests
+        handleAdd={handleAdd}
+        handleDelete={handleDelete}
+        handleChangeExtraDataText={handleChangeExtraDataText}
+        childrenExtraData={childrenExtraData}
+        data={data}
+      />
+      <LifeStyle
         handleAdd={handleAdd}
         handleDelete={handleDelete}
         handleChangeExtraDataText={handleChangeExtraDataText}
@@ -119,20 +135,6 @@ const Children = ({
         childrenExtraData={childrenExtraData}
         data={data}
       />
-      <Passions
-        handleAdd={handleAdd}
-        handleDelete={handleDelete}
-        handleChangeExtraDataText={handleChangeExtraDataText}
-        childrenExtraData={childrenExtraData}
-        data={data}
-      />
-      <LifeStyle
-        handleAdd={handleAdd}
-        handleDelete={handleDelete}
-        handleChangeExtraDataText={handleChangeExtraDataText}
-        childrenExtraData={childrenExtraData}
-        data={data}
-      />
       <TravelBucketList
         handleAdd={handleAdd}
         handleDelete={handleDelete}
@@ -147,6 +149,8 @@ const Children = ({
         childrenExtraData={childrenExtraData}
         data={data}
       />
+      <TypeOfTravel setChildrenData={setChildrenData} data={data} />
+      <TravelSpan setChildrenData={setChildrenData} data={data} />
     </div>
   );
 };

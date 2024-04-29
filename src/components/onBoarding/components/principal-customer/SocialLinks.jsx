@@ -3,32 +3,31 @@ import TextField from "@mui/material/TextField";
 import { Card } from "@mui/material";
 import Chip from "@mui/material/Chip";
 
-const TravelBucketList = ({
+const SocialLinks = ({
   handleAdd,
   handleDelete,
   handleChangeExtraDataText,
-  childrenExtraData,
+  extraData,
   data,
 }) => {
   return (
     <div className="row mt-4">
       <div>
-        <h5>Travel Bucket List:</h5>
+        <h6>Social Media Links:</h6>
         <div className="row p-0">
           <form
             className="col-lg-10 mb-2"
             onSubmit={(event) =>
-              handleAdd(data?.id, "travelBucketList", "bucketlist", event)
+              handleAdd("principalCustomer", "socialMediaLinks", "link", event)
             }
           >
-            <label className="w-100">Travel Bucket Lists:</label>
             <TextField
               className="form-control w-100s"
-              name="bucketlist"
-              id="bucketlist"
-              value={childrenExtraData?.bucketlist}
+              name="link"
+              id="link"
+              value={extraData?.principalCustomer?.link}
               onChange={(event) =>
-                handleChangeExtraDataText("bucketlist", event)
+                handleChangeExtraDataText("principalCustomer", event)
               }
             />
           </form>
@@ -38,24 +37,19 @@ const TravelBucketList = ({
               className="btn btn-labeled btn-primary w-100 shadow"
               type="submit"
               onClick={() =>
-                handleAdd(data?.id, "travelBucketList", "bucketlist")
+                handleAdd("principalCustomer", "socialMediaLinks", "link")
               }
             >
               <span className="btn-label me-2">
                 <i className="fa fa-plus"></i>
               </span>
-              Add Bucket List
+              Add Media Link
             </button>
           </div>
         </div>
-        <label className="mb-2">List Of Available Bucket Lists:</label>
-        <Card className="py-2">
-          {data?.travelBucketList?.length === 0 ? (
-            <p className="mx-2 mt-3 text-sm">
-              No Available Travel Bucket List Found!
-            </p>
-          ) : (
-            data?.travelBucketList?.map((link, index) => {
+        {data?.principalCustomer?.socialMediaLinks?.length !== 0 && (
+          <Card className="py-2">
+            {data?.principalCustomer?.socialMediaLinks?.map((link, index) => {
               return (
                 <Chip
                   label={link?.string}
@@ -63,16 +57,20 @@ const TravelBucketList = ({
                   variant="outlined"
                   className="mx-2 mb-2"
                   onDelete={() =>
-                    handleDelete(data?.id, "travelBucketList", link?.id)
+                    handleDelete(
+                      "principalCustomer",
+                      "socialMediaLinks",
+                      link?.id
+                    )
                   }
                 />
               );
-            })
-          )}
-        </Card>
+            })}
+          </Card>
+        )}
       </div>
     </div>
   );
 };
 
-export default TravelBucketList;
+export default SocialLinks;

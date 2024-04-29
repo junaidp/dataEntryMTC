@@ -3,7 +3,7 @@ import TextField from "@mui/material/TextField";
 import { Card } from "@mui/material";
 import Chip from "@mui/material/Chip";
 
-const SpecialRequirements = ({
+const SocialLinks = ({
   handleAdd,
   handleDelete,
   handleChangeExtraDataText,
@@ -13,28 +13,20 @@ const SpecialRequirements = ({
   return (
     <div className="row mt-4">
       <div>
-        <h5>Special Requirements:</h5>
+        <h6>Social Media Links:</h6>
         <div className="row p-0">
           <form
             className="col-lg-10 mb-2"
             onSubmit={(event) =>
-              handleAdd(
-                data?.id,
-                "specialRequirements",
-                "specialrequirement",
-                event
-              )
+              handleAdd(data?.id, "socialMediaLinks", "link", event)
             }
           >
-            <label className="w-100">Special Requirements:</label>
             <TextField
               className="form-control w-100s"
-              name="specialrequirement"
-              id="specialrequirement"
-              value={childrenExtraData?.specialrequirement}
-              onChange={(event) =>
-                handleChangeExtraDataText("specialrequirement", event)
-              }
+              name="link"
+              id="link"
+              value={childrenExtraData?.link}
+              onChange={(event) => handleChangeExtraDataText("link", event)}
             />
           </form>
 
@@ -42,25 +34,18 @@ const SpecialRequirements = ({
             <button
               className="btn btn-labeled btn-primary w-100 shadow"
               type="submit"
-              onClick={() =>
-                handleAdd(data?.id, "specialRequirements", "specialrequirement")
-              }
+              onClick={() => handleAdd(data?.id, "socialMediaLinks", "link")}
             >
               <span className="btn-label me-2">
                 <i className="fa fa-plus"></i>
               </span>
-              Add Requirement
+              Add Media Link
             </button>
           </div>
         </div>
-        <label className="mb-2">List Of Available Special Requirements:</label>
-        <Card className="py-2">
-          {data?.specialRequirements?.length === 0 ? (
-            <p className="mx-2 mt-3 text-sm">
-              No Available Special Requirements Found!
-            </p>
-          ) : (
-            data?.specialRequirements?.map((link, index) => {
+        {data?.socialMediaLinks?.length !== 0 && (
+          <Card className="py-2">
+            {data?.socialMediaLinks?.map((link, index) => {
               return (
                 <Chip
                   label={link?.string}
@@ -68,16 +53,16 @@ const SpecialRequirements = ({
                   variant="outlined"
                   className="mx-2 mb-2"
                   onDelete={() =>
-                    handleDelete(data?.id, "specialRequirements", link?.id)
+                    handleDelete(data?.id, "socialMediaLinks", link?.id)
                   }
                 />
               );
-            })
-          )}
-        </Card>
+            })}
+          </Card>
+        )}
       </div>
     </div>
   );
 };
 
-export default SpecialRequirements;
+export default SocialLinks;

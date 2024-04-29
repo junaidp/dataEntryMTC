@@ -31,6 +31,8 @@ const MainForm = () => {
       lifestyle: [],
       travelBucketList: [],
       specialRequirements: [],
+      typeOfTravel: [],
+      travelSpan: [],
     },
   });
   const [childrenData, setChildrenData] = React.useState([
@@ -50,6 +52,8 @@ const MainForm = () => {
       lifestyle: [],
       travelBucketList: [],
       specialRequirements: [],
+      typeOfTravel: [],
+      travelSpan: [],
       id: uuidv4(),
     },
   ]);
@@ -100,6 +104,8 @@ const MainForm = () => {
         lifestyle: [],
         travelBucketList: [],
         specialRequirements: [],
+        typeOfTravel: [],
+        travelSpan: [],
         id: uuidv4(),
       },
     ]);
@@ -192,6 +198,10 @@ const MainForm = () => {
               data?.principalCustomer?.specialRequirements?.map(
                 (item) => item?.string
               ) || [],
+            typeOfTravel:
+              data?.principalCustomer?.typeOfTravel?.map((item) => item) || [],
+            travelSpan:
+              data?.principalCustomer?.travelSpan?.map((item) => item) || [],
           },
           dependents: childrenData?.map((children) => {
             return {
@@ -220,6 +230,8 @@ const MainForm = () => {
               specialRequirements:
                 children?.specialRequirements?.map((item) => item?.string) ||
                 [],
+              typeOfTravel: children?.typeOfTravel?.map((item) => item) || [],
+              travelSpan: children?.travelSpan?.map((item) => item) || [],
             };
           }),
         })
@@ -325,6 +337,7 @@ const MainForm = () => {
         handleChangeExtraDataText={handleChangeExtraDataText}
         handleAdd={handleAdd}
         handleDelete={handleDelete}
+        setData={setData}
       />
 
       <hr className="mt-4" />
