@@ -1,12 +1,33 @@
 import React from "react";
 import MainForm from "./components/MainForm";
 import ChatBot from "../chat/chat";
+import ExperienceDialog from "./ExperienceDialog";
+import "./index.css";
 
 const index = () => {
-  const [value, setValue] = React.useState("OPENAI");
+  const [value, setValue] = React.useState("CLAUDE");
+  const [showViewExperienceDialog, setShowViewExperienceDialog] =
+    React.useState(false);
   return (
     <div className="mt-4">
-      <div className="row float-end" style={{ marginRight: "0px" }}>
+      {showViewExperienceDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <ExperienceDialog
+              setShowViewExperienceDialog={setShowViewExperienceDialog}
+            />
+          </div>
+        </div>
+      )}
+      <div className="flex float-end AIWrap" style={{ marginRight: "0px" }}>
+        <div>
+          <p
+            className="viewExperience underline cursor-pointer"
+            onClick={() => setShowViewExperienceDialog(true)}
+          >
+            View Experiences
+          </p>
+        </div>
         <select
           className="form-select  h-40"
           aria-label="Default select example"
@@ -22,7 +43,9 @@ const index = () => {
           <option value="OPENAI">OPENAI</option>
           <option value="GEMINI">GEMINI</option>
         </select>
+        <div></div>
       </div>
+
       <div>
         <MainForm />
         <ChatBot value={value} />

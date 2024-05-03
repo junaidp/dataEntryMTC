@@ -8,6 +8,7 @@ const initialState = {
   onBoardingAddSuccess: false,
   chatResponse: "",
   customerId: "",
+  experiences: JSON.parse(sessionStorage.getItem("experiences")) || [],
 };
 
 export const setupOnBoarding = createAsyncThunk(
@@ -60,11 +61,19 @@ export const slice = createSlice({
       })
       .addCase(setupChat.fulfilled, (state, { payload }) => {
         state.loading = false;
-        if (payload?.model === "claude-3-haiku-20240307") {
-          state.chatResponse = payload?.content[0]?.text;
+        if (
+          JSON.parse(payload?.chatResponse)?.model === "claude-3-haiku-20240307"
+        ) {
+          state.chatResponse = JSON.parse(
+            payload?.chatResponse
+          )?.content[0]?.text;
         }
-        if (payload?.model === "gpt-3.5-turbo-0125") {
-          state.chatResponse = payload?.choices[0]?.message?.content;
+        if (payload?.experiences && payload?.experiences?.length !== 0) {
+          state.experiences = payload?.experiences;
+          sessionStorage.setItem(
+            "experiences",
+            JSON.stringify(payload?.experiences)
+          );
         }
       })
       .addCase(setupChat.rejected, (state, action) => {

@@ -7,7 +7,7 @@ import {
   setupOnBoarding,
 } from "../../../global-redux/reducers/onBoard/slice";
 import { useSelector, useDispatch } from "react-redux";
-import Responses from "./Responses";
+// import Responses from "./Responses";
 import ChildrenWrap from "./dependents/ChildrenWrap";
 
 const MainForm = () => {
@@ -366,7 +366,7 @@ const MainForm = () => {
         </div>
       </div>
 
-      <Responses response={response} />
+      {/* <Responses response={response} /> */}
     </div>
   );
 };
