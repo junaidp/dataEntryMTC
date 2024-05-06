@@ -10,7 +10,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import parse from "html-react-parser";
 import Chip from "@mui/material/Chip";
 import CardMedia from "@mui/material/CardMedia";
-import parisImage from "../../assets/paris.jpg";
+import axios from "axios";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -25,19 +25,37 @@ const ExpandMore = styled((props) => {
 
 export default function RecipeReviewCard({ item }) {
   const [expanded, setExpanded] = React.useState(false);
+  const [currentImage, setCurrentImage] = React.useState("");
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+
+  React.useEffect(() => {
+    if (item?.title) {
+      const searchImages = async () => {
+        try {
+          const response = await axios.get(
+            `https://api.unsplash.com/search/photos?client_id=mnrpDj4EmyAsyh_f5AJVso4idjdVZWK81z3WOmQLn1g&query=${item?.title}`
+          );
+          setCurrentImage(response?.data?.results[0]?.urls?.regular);
+        } catch (error) {
+          setCurrentImage("Image Not Found");
+        }
+      };
+      searchImages();
+    }
+  }, []);
 
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardMedia
         component="img"
         height="194"
-        image={parisImage}
+        image={currentImage}
         alt="Paella dish"
       />
+
       <CardContent>
         <Typography paragraph className="underline">
           {item?.title}

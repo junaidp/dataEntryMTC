@@ -68,13 +68,11 @@ export const slice = createSlice({
             payload?.chatResponse
           )?.content[0]?.text;
         }
-        if (payload?.experiences && payload?.experiences?.length !== 0) {
-          state.experiences = payload?.experiences;
-          sessionStorage.setItem(
-            "experiences",
-            JSON.stringify(payload?.experiences)
-          );
-        }
+        state.experiences = payload?.experiences || [];
+        sessionStorage.setItem(
+          "experiences",
+          JSON.stringify(payload?.experiences) || []
+        );
       })
       .addCase(setupChat.rejected, (state, action) => {
         state.loading = false;
