@@ -9,6 +9,8 @@ import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import parse from "html-react-parser";
 import Chip from "@mui/material/Chip";
+import CardMedia from "@mui/material/CardMedia";
+import parisImage from "../../assets/paris.jpg";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -30,6 +32,12 @@ export default function RecipeReviewCard({ item }) {
 
   return (
     <Card sx={{ maxWidth: 345 }}>
+      <CardMedia
+        component="img"
+        height="194"
+        image={parisImage}
+        alt="Paella dish"
+      />
       <CardContent>
         <Typography paragraph className="underline">
           {item?.title}
