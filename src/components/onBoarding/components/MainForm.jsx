@@ -35,28 +35,7 @@ const MainForm = () => {
       travelSpan: [],
     },
   });
-  const [childrenData, setChildrenData] = React.useState([
-    {
-      firstName: "",
-      lastName: "",
-      dateOfBirth: "",
-      cityOfResidence: "",
-      email: "",
-      relation: "",
-      gender: "",
-      mainInterests: [],
-      socialMediaLinks: [],
-      loyaltyPrograms: [],
-      travelDocuments: [],
-      passions: [],
-      lifestyle: [],
-      travelBucketList: [],
-      specialRequirements: [],
-      typeOfTravel: [],
-      travelSpan: [],
-      id: uuidv4(),
-    },
-  ]);
+  const [childrenData, setChildrenData] = React.useState([]);
 
   const [extraData, setExtraData] = React.useState({
     principalCustomer: {
