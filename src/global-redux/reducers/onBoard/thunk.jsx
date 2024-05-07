@@ -22,8 +22,7 @@ export const chat = async (data, thunkAPI) => {
         query: data?.query,
         previousChat: data?.previousChat,
         ai: data?.type,
-        // customerId: data?.customerId || "",
-        customerId: "66332bb85725cd245aab4459",
+        customerId: data?.customerId || "66332bb85725cd245aab4459",
       }
     );
     return props.data;

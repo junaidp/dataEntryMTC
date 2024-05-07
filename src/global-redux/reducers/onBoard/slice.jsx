@@ -7,8 +7,8 @@ const initialState = {
   response: {},
   onBoardingAddSuccess: false,
   chatResponse: "",
-  customerId: "",
-  experiences: JSON.parse(sessionStorage.getItem("experiences")) || [],
+  customerId: "66332bb85725cd245aab4459",
+  experiences: [],
 };
 
 export const setupOnBoarding = createAsyncThunk(
@@ -39,10 +39,9 @@ export const slice = createSlice({
         state.loading = true;
       })
       .addCase(setupOnBoarding.fulfilled, (state, { payload }) => {
-        state.response = payload || [{ error: "Not Found" }];
-        sessionStorage.setItem("customerId", payload?.customerId);
-        state.customerId = payload.customerId || "";
         state.loading = false;
+        state.response = payload || [{ error: "Not Found" }];
+        state.customerId = payload.customerId || "66332bb85725cd245aab4459";
         state.onBoardingAddSuccess = true;
         toast.success("On-Boarding Response Fetched Successfully");
       })
@@ -61,18 +60,10 @@ export const slice = createSlice({
       })
       .addCase(setupChat.fulfilled, (state, { payload }) => {
         state.loading = false;
-        if (
-          JSON.parse(payload?.chatResponse)?.model === "claude-3-haiku-20240307"
-        ) {
-          state.chatResponse = JSON.parse(
-            payload?.chatResponse
-          )?.content[0]?.text;
+        if (payload?.experiences?.length === 0) {
+          state.chatResponse = payload?.chatResponse || "";
         }
         state.experiences = payload?.experiences || [];
-        sessionStorage.setItem(
-          "experiences",
-          JSON.stringify(payload?.experiences) || []
-        );
       })
       .addCase(setupChat.rejected, (state, action) => {
         state.loading = false;

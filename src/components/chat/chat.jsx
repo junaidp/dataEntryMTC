@@ -21,11 +21,6 @@ const Chat = ({ value }) => {
     }
     if (!loading && question !== "" && question) {
       setChatHistory([...chatHistory, { role: "user", content: question }]);
-      let localStorageChat = [
-        ...chatHistory,
-        { role: "user", content: question },
-      ];
-      sessionStorage.setItem("chat", JSON.stringify(localStorageChat));
       messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
       setQuestion("");
       dispatch(
@@ -33,7 +28,7 @@ const Chat = ({ value }) => {
           query: question,
           previousChat: [...chatHistory, { role: "user", content: question }],
           type: value,
-          customerId: sessionStorage.getItem("customerId") || customerId,
+          customerId: customerId,
         })
       );
     }
@@ -45,12 +40,6 @@ const Chat = ({ value }) => {
         ...chatHistory,
         { role: "system", content: chatResponse },
       ]);
-
-      let localStorageChat = [
-        ...chatHistory,
-        { role: "system", content: chatResponse },
-      ];
-      sessionStorage.setItem("chat", JSON.stringify(localStorageChat));
       messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }
   }, [chatResponse]);
@@ -58,14 +47,6 @@ const Chat = ({ value }) => {
   React.useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chatHistory]);
-
-  React.useEffect(() => {
-    const storedChat = sessionStorage.getItem("chat");
-    if (storedChat) {
-      const parsedChat = JSON.parse(storedChat);
-      setChatHistory(parsedChat);
-    }
-  }, []);
 
   React.useEffect(() => {
     const intervalId = setInterval(() => {

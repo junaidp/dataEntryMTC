@@ -9,10 +9,10 @@ const index = () => {
   const [value, setValue] = React.useState("CLAUDE");
   const [showViewExperienceDialog, setShowViewExperienceDialog] =
     React.useState(false);
-  const { experiences, chatResponse } = useSelector((state) => state?.onBoard);
+  const { experiences } = useSelector((state) => state?.onBoard);
 
   React.useEffect(() => {
-    if (chatResponse !== "" && experiences?.length !== 0) {
+    if (experiences?.length !== 0) {
       setShowViewExperienceDialog(true);
     }
   }, [experiences]);

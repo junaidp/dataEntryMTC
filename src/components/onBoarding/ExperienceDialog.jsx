@@ -3,6 +3,12 @@ import { useSelector } from "react-redux";
 import ExperienceCard from "./ExperienceCard";
 const ViewExperienceDialog = ({ setShowViewExperienceDialog }) => {
   const { experiences } = useSelector((state) => state?.onBoard);
+
+  React.useEffect(() => {
+    if (experiences?.length === 0) {
+      setShowViewExperienceDialog(false);
+    }
+  }, [experiences]);
   return (
     <div className="px-4 py-4">
       <div>
