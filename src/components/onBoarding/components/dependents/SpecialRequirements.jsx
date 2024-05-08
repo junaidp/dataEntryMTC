@@ -9,6 +9,7 @@ const SpecialRequirements = ({
   handleChangeExtraDataText,
   childrenExtraData,
   data,
+  childrenData,
 }) => {
   return (
     <div className="row mt-4">
@@ -22,7 +23,8 @@ const SpecialRequirements = ({
                 data?.id,
                 "specialRequirements",
                 "specialrequirement",
-                event
+                event,
+                childrenData?.id
               )
             }
           >
@@ -32,7 +34,11 @@ const SpecialRequirements = ({
               id="specialrequirement"
               value={childrenExtraData?.specialrequirement}
               onChange={(event) =>
-                handleChangeExtraDataText("specialrequirement", event)
+                handleChangeExtraDataText(
+                  "specialrequirement",
+                  event,
+                  childrenData?.id
+                )
               }
             />
           </form>
@@ -42,7 +48,12 @@ const SpecialRequirements = ({
               className="btn btn-labeled btn-primary w-100 shadow"
               type="submit"
               onClick={() =>
-                handleAdd(data?.id, "specialRequirements", "specialrequirement")
+                handleAdd(
+                  data?.id,
+                  "specialRequirements",
+                  "specialrequirement",
+                  childrenData?.id
+                )
               }
             >
               <span className="btn-label me-2">
@@ -62,7 +73,12 @@ const SpecialRequirements = ({
                   variant="outlined"
                   className="mx-2 mb-2"
                   onDelete={() =>
-                    handleDelete(data?.id, "specialRequirements", link?.id)
+                    handleDelete(
+                      data?.id,
+                      "specialRequirements",
+                      link?.id,
+                      childrenData?.id
+                    )
                   }
                 />
               );

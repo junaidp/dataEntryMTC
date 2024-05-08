@@ -18,7 +18,13 @@ const LifeStyle = ({
           <form
             className="col-lg-10 mb-2"
             onSubmit={(event) =>
-              handleAdd("principalCustomer", "lifestyle", "lifestyle", event)
+              handleAdd(
+                "principalCustomer",
+                "lifestyle",
+                "lifestyle",
+                event,
+                data?.id
+              )
             }
           >
             <TextField
@@ -27,7 +33,7 @@ const LifeStyle = ({
               id="lifestyle"
               value={extraData?.principalCustomer?.lifestyle}
               onChange={(event) =>
-                handleChangeExtraDataText("principalCustomer", event)
+                handleChangeExtraDataText("principalCustomer", event, data?.id)
               }
             />
           </form>
@@ -37,7 +43,12 @@ const LifeStyle = ({
               className="btn btn-labeled btn-primary w-100 shadow"
               type="submit"
               onClick={() =>
-                handleAdd("principalCustomer", "lifestyle", "lifestyle")
+                handleAdd(
+                  "principalCustomer",
+                  "lifestyle",
+                  "lifestyle",
+                  data?.id
+                )
               }
             >
               <span className="btn-label me-2">
@@ -57,7 +68,12 @@ const LifeStyle = ({
                   variant="outlined"
                   className="mx-2 mb-2"
                   onDelete={() =>
-                    handleDelete("principalCustomer", "lifestyle", link?.id)
+                    handleDelete(
+                      "principalCustomer",
+                      "lifestyle",
+                      link?.id,
+                      data?.id
+                    )
                   }
                 />
               );

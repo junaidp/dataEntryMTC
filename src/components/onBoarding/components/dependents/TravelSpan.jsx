@@ -5,7 +5,7 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { Card } from "@mui/material";
 
-const TravelSpan = ({ setChildrenData, data }) => {
+const TravelSpan = ({ setData, data, childrenData }) => {
   const [array, setArray] = React.useState([
     {
       name: "Short gateways",
@@ -40,16 +40,23 @@ const TravelSpan = ({ setChildrenData, data }) => {
   }
 
   React.useEffect(() => {
-    setChildrenData((pre) =>
-      pre?.map((child) =>
-        child?.id === data?.id
+    setData((pre) =>
+      pre?.map((all) =>
+        all?.id === childrenData?.id
           ? {
-              ...child,
-              travelSpan: array
-                ?.filter((all) => all?.selected === true)
-                ?.map((singleItem) => singleItem?.name),
+              ...all,
+              children: all?.children?.map((singleChildrenItem) =>
+                singleChildrenItem?.id === data?.id
+                  ? {
+                      ...singleChildrenItem,
+                      travelSpan: array
+                        ?.filter((all) => all?.selected === true)
+                        ?.map((singleItem) => singleItem?.name),
+                    }
+                  : singleChildrenItem
+              ),
             }
-          : child
+          : all
       )
     );
   }, [array]);

@@ -22,7 +22,8 @@ const SpecialRequirements = ({
                 "principalCustomer",
                 "specialRequirements",
                 "specialrequirement",
-                event
+                event,
+                data?.id
               )
             }
           >
@@ -32,7 +33,7 @@ const SpecialRequirements = ({
               id="specialrequirement"
               value={extraData?.principalCustomer?.specialrequirement}
               onChange={(event) =>
-                handleChangeExtraDataText("principalCustomer", event)
+                handleChangeExtraDataText("principalCustomer", event, data?.id)
               }
             />
           </form>
@@ -45,7 +46,8 @@ const SpecialRequirements = ({
                 handleAdd(
                   "principalCustomer",
                   "specialRequirements",
-                  "specialrequirement"
+                  "specialrequirement",
+                  data?.id
                 )
               }
             >
@@ -70,7 +72,8 @@ const SpecialRequirements = ({
                       handleDelete(
                         "principalCustomer",
                         "specialRequirements",
-                        link?.id
+                        link?.id,
+                        data?.id
                       )
                     }
                   />

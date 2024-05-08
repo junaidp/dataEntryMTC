@@ -18,7 +18,13 @@ const TravelDocuments = ({
           <form
             className="col-lg-10 mb-2"
             onSubmit={(event) =>
-              handleAdd("principalCustomer", "travelDocuments", "doc", event)
+              handleAdd(
+                "principalCustomer",
+                "travelDocuments",
+                "doc",
+                event,
+                data?.id
+              )
             }
           >
             <TextField
@@ -27,7 +33,7 @@ const TravelDocuments = ({
               id="doc"
               value={extraData?.principalCustomer?.doc}
               onChange={(event) =>
-                handleChangeExtraDataText("principalCustomer", event)
+                handleChangeExtraDataText("principalCustomer", event, data?.id)
               }
             />
           </form>
@@ -36,7 +42,12 @@ const TravelDocuments = ({
               className="btn btn-labeled btn-primary w-100 shadow"
               type="submit"
               onClick={() =>
-                handleAdd("principalCustomer", "travelDocuments", "doc")
+                handleAdd(
+                  "principalCustomer",
+                  "travelDocuments",
+                  "doc",
+                  data?.id
+                )
               }
             >
               <span className="btn-label me-2">
@@ -59,7 +70,8 @@ const TravelDocuments = ({
                     handleDelete(
                       "principalCustomer",
                       "travelDocuments",
-                      doc?.id
+                      doc?.id,
+                      data?.id
                     )
                   }
                 />

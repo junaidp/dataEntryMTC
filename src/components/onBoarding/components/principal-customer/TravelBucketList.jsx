@@ -22,7 +22,8 @@ const TravelBucketList = ({
                 "principalCustomer",
                 "travelBucketList",
                 "bucketlist",
-                event
+                event,
+                data?.id
               )
             }
           >
@@ -32,7 +33,7 @@ const TravelBucketList = ({
               id="bucketlist"
               value={extraData?.principalCustomer?.bucketlist}
               onChange={(event) =>
-                handleChangeExtraDataText("principalCustomer", event)
+                handleChangeExtraDataText("principalCustomer", event, data?.id)
               }
             />
           </form>
@@ -42,7 +43,12 @@ const TravelBucketList = ({
               className="btn btn-labeled btn-primary w-100 shadow"
               type="submit"
               onClick={() =>
-                handleAdd("principalCustomer", "travelBucketList", "bucketlist")
+                handleAdd(
+                  "principalCustomer",
+                  "travelBucketList",
+                  "bucketlist",
+                  data?.id
+                )
               }
             >
               <span className="btn-label me-2">
@@ -65,7 +71,8 @@ const TravelBucketList = ({
                     handleDelete(
                       "principalCustomer",
                       "travelBucketList",
-                      link?.id
+                      link?.id,
+                      data?.id
                     )
                   }
                 />

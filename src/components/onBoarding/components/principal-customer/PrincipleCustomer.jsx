@@ -12,7 +12,7 @@ import TypeOfTravel from "./TypeOfTravel";
 import TravelSpan from "./TravelSpan";
 
 const PrincipleCustomer = ({
-  data,
+  singleDataItem,
   handleChangeText,
   extraData,
   handleChangeExtraDataText,
@@ -23,34 +23,37 @@ const PrincipleCustomer = ({
   return (
     <div>
       <h1 className="heading mb-4">Principal Customer</h1>
-      <StaticTextFields data={data} handleChangeText={handleChangeText} />
+      <StaticTextFields
+        data={singleDataItem}
+        handleChangeText={handleChangeText}
+      />
       <Passions
         handleAdd={handleAdd}
         handleDelete={handleDelete}
         handleChangeExtraDataText={handleChangeExtraDataText}
         extraData={extraData}
-        data={data}
+        data={singleDataItem}
       />
       <MainInterests
         handleAdd={handleAdd}
         handleDelete={handleDelete}
         handleChangeExtraDataText={handleChangeExtraDataText}
         extraData={extraData}
-        data={data}
+        data={singleDataItem}
       />
       <LifeStyle
         handleAdd={handleAdd}
         handleDelete={handleDelete}
         handleChangeExtraDataText={handleChangeExtraDataText}
         extraData={extraData}
-        data={data}
+        data={singleDataItem}
       />
       <SocialLinks
         handleAdd={handleAdd}
         handleDelete={handleDelete}
         handleChangeExtraDataText={handleChangeExtraDataText}
         extraData={extraData}
-        data={data}
+        data={singleDataItem}
       />
 
       <LoyalityPrograms
@@ -58,31 +61,31 @@ const PrincipleCustomer = ({
         handleDelete={handleDelete}
         handleChangeExtraDataText={handleChangeExtraDataText}
         extraData={extraData}
-        data={data}
+        data={singleDataItem}
       />
       <TravelDocuments
         handleAdd={handleAdd}
         handleDelete={handleDelete}
         handleChangeExtraDataText={handleChangeExtraDataText}
         extraData={extraData}
-        data={data}
+        data={singleDataItem}
       />
       <TravelBucketList
         handleAdd={handleAdd}
         handleDelete={handleDelete}
         handleChangeExtraDataText={handleChangeExtraDataText}
         extraData={extraData}
-        data={data}
+        data={singleDataItem}
       />
       <SpecialRequirements
         handleAdd={handleAdd}
         handleDelete={handleDelete}
         handleChangeExtraDataText={handleChangeExtraDataText}
         extraData={extraData}
-        data={data}
+        data={singleDataItem}
       />
-      <TypeOfTravel setData={setData} />
-      <TravelSpan setData={setData} />
+      <TypeOfTravel setData={setData} data={singleDataItem} />
+      <TravelSpan setData={setData} data={singleDataItem} />
     </div>
   );
 };

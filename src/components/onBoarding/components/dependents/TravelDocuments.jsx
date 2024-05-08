@@ -9,6 +9,7 @@ const TravelDocuments = ({
   handleChangeExtraDataText,
   childrenExtraData,
   data,
+  childrenData,
 }) => {
   return (
     <div className="row mt-4">
@@ -18,7 +19,13 @@ const TravelDocuments = ({
           <form
             className="col-lg-10 mb-2"
             onSubmit={(event) =>
-              handleAdd(data?.id, "travelDocuments", "doc", event)
+              handleAdd(
+                data?.id,
+                "travelDocuments",
+                "doc",
+                event,
+                childrenData?.id
+              )
             }
           >
             <TextField
@@ -26,14 +33,18 @@ const TravelDocuments = ({
               name="doc"
               id="doc"
               value={childrenExtraData?.doc}
-              onChange={(event) => handleChangeExtraDataText("doc", event)}
+              onChange={(event) =>
+                handleChangeExtraDataText("doc", event, childrenData?.id)
+              }
             />
           </form>
           <div className={`col-lg-2 text-end float-end align-self-end mb-4`}>
             <button
               className="btn btn-labeled btn-primary w-100 shadow"
               type="submit"
-              onClick={() => handleAdd(data?.id, "travelDocuments", "doc")}
+              onClick={() =>
+                handleAdd(data?.id, "travelDocuments", "doc", childrenData?.id)
+              }
             >
               <span className="btn-label me-2">
                 <i className="fa fa-plus"></i>
@@ -52,7 +63,12 @@ const TravelDocuments = ({
                   variant="outlined"
                   className="mx-2 mb-2"
                   onDelete={() =>
-                    handleDelete(data?.id, "travelDocuments", doc?.id)
+                    handleDelete(
+                      data?.id,
+                      "travelDocuments",
+                      doc?.id,
+                      childrenData?.id
+                    )
                   }
                 />
               );

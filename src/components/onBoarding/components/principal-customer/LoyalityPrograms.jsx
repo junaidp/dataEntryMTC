@@ -22,7 +22,8 @@ const LoyalityPrograms = ({
                 "principalCustomer",
                 "loyaltyPrograms",
                 "program",
-                event
+                event,
+                data?.id
               )
             }
           >
@@ -32,7 +33,7 @@ const LoyalityPrograms = ({
               id="program"
               value={extraData?.principalCustomer?.program}
               onChange={(event) =>
-                handleChangeExtraDataText("principalCustomer", event)
+                handleChangeExtraDataText("principalCustomer", event, data?.id)
               }
             />
           </form>
@@ -41,7 +42,12 @@ const LoyalityPrograms = ({
               className="btn btn-labeled btn-primary w-100 shadow"
               type="submit"
               onClick={() =>
-                handleAdd("principalCustomer", "loyaltyPrograms", "program")
+                handleAdd(
+                  "principalCustomer",
+                  "loyaltyPrograms",
+                  "program",
+                  data?.id
+                )
               }
             >
               <span className="btn-label me-2">
@@ -64,7 +70,8 @@ const LoyalityPrograms = ({
                     handleDelete(
                       "principalCustomer",
                       "loyaltyPrograms",
-                      program?.id
+                      program?.id,
+                      data?.id
                     )
                   }
                 />

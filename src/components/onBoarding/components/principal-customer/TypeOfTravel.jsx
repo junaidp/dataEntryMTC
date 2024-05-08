@@ -5,7 +5,7 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { Card } from "@mui/material";
 
-const TypeOfTravel = ({ setData }) => {
+const TypeOfTravel = ({ setData, data }) => {
   const [array, setArray] = React.useState([
     {
       name: "Adventure",
@@ -133,16 +133,21 @@ const TypeOfTravel = ({ setData }) => {
   }
 
   React.useEffect(() => {
-    setData((pre) => {
-      return {
-        principalCustomer: {
-          ...pre?.principalCustomer,
-          typeOfTravel: array
-            ?.filter((all) => all?.selected === true)
-            ?.map((singleItem) => singleItem?.name),
-        },
-      };
-    });
+    setData((pre) =>
+      pre?.map((all) =>
+        all?.id === data?.id
+          ? {
+              ...all,
+              principalCustomer: {
+                ...all?.principalCustomer,
+                typeOfTravel: array
+                  ?.filter((all) => all?.selected === true)
+                  ?.map((singleItem) => singleItem?.name),
+              },
+            }
+          : all
+      )
+    );
   }, [array]);
   return (
     <div className="row mt-4 mx-1">

@@ -9,6 +9,7 @@ const TravelBucketList = ({
   handleChangeExtraDataText,
   childrenExtraData,
   data,
+  childrenData,
 }) => {
   return (
     <div className="row mt-4">
@@ -18,7 +19,13 @@ const TravelBucketList = ({
           <form
             className="col-lg-10 mb-2"
             onSubmit={(event) =>
-              handleAdd(data?.id, "travelBucketList", "bucketlist", event)
+              handleAdd(
+                data?.id,
+                "travelBucketList",
+                "bucketlist",
+                event,
+                childrenData?.id
+              )
             }
           >
             <TextField
@@ -27,7 +34,7 @@ const TravelBucketList = ({
               id="bucketlist"
               value={childrenExtraData?.bucketlist}
               onChange={(event) =>
-                handleChangeExtraDataText("bucketlist", event)
+                handleChangeExtraDataText("bucketlist", event, childrenData?.id)
               }
             />
           </form>
@@ -37,7 +44,12 @@ const TravelBucketList = ({
               className="btn btn-labeled btn-primary w-100 shadow"
               type="submit"
               onClick={() =>
-                handleAdd(data?.id, "travelBucketList", "bucketlist")
+                handleAdd(
+                  data?.id,
+                  "travelBucketList",
+                  "bucketlist",
+                  childrenData?.id
+                )
               }
             >
               <span className="btn-label me-2">
@@ -57,7 +69,12 @@ const TravelBucketList = ({
                   variant="outlined"
                   className="mx-2 mb-2"
                   onDelete={() =>
-                    handleDelete(data?.id, "travelBucketList", link?.id)
+                    handleDelete(
+                      data?.id,
+                      "travelBucketList",
+                      link?.id,
+                      childrenData?.id
+                    )
                   }
                 />
               );

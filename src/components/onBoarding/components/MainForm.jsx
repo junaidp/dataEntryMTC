@@ -7,35 +7,37 @@ import {
   setupOnBoarding,
 } from "../../../global-redux/reducers/onBoard/slice";
 import { useSelector, useDispatch } from "react-redux";
-// import Responses from "./Responses";
 import ChildrenWrap from "./dependents/ChildrenWrap";
 
 const MainForm = () => {
   const dispatch = useDispatch();
-  const { loading, response, onBoardingAddSuccess } = useSelector(
+  const { loading, onBoardingAddSuccess } = useSelector(
     (state) => state?.onBoard
   );
-  const [data, setData] = React.useState({
-    principalCustomer: {
-      firstName: "",
-      lastName: "",
-      dateOfBirth: "",
-      cityOfResidence: "",
-      email: "",
-      gender: "",
-      mainInterests: [],
-      socialMediaLinks: [],
-      loyaltyPrograms: [],
-      travelDocuments: [],
-      passions: [],
-      lifestyle: [],
-      travelBucketList: [],
-      specialRequirements: [],
-      typeOfTravel: [],
-      travelSpan: [],
+  const [data, setData] = React.useState([
+    {
+      id: uuidv4(),
+      principalCustomer: {
+        firstName: "",
+        lastName: "",
+        dateOfBirth: "",
+        cityOfResidence: "",
+        email: "",
+        gender: "",
+        mainInterests: [],
+        socialMediaLinks: [],
+        loyaltyPrograms: [],
+        travelDocuments: [],
+        passions: [],
+        lifestyle: [],
+        travelBucketList: [],
+        specialRequirements: [],
+        typeOfTravel: [],
+        travelSpan: [],
+      },
+      children: [],
     },
-  });
-  const [childrenData, setChildrenData] = React.useState([]);
+  ]);
 
   const [extraData, setExtraData] = React.useState({
     principalCustomer: {
@@ -60,34 +62,85 @@ const MainForm = () => {
     specialrequirement: "",
   });
 
-  function handleDeleteAccordion(id) {
-    setChildrenData((pre) => pre?.filter((item) => item?.id !== id));
+  function handleDeleteAccordionPrincipalCustomer(id) {
+    setData((pre) => pre?.filter((all) => all?.id !== id));
   }
-
-  function handleAddChildrenDataObject() {
-    setChildrenData([
-      ...childrenData,
+  function handleAddPricipalCustomers() {
+    setData([
+      ...data,
       {
-        firstName: "",
-        lastName: "",
-        dateOfBirth: "",
-        cityOfResidence: data?.principalCustomer?.cityOfResidence || "",
-        email: "",
-        relation: "",
-        gender: "",
-        mainInterests: [],
-        socialMediaLinks: [],
-        loyaltyPrograms: [],
-        travelDocuments: [],
-        passions: [],
-        lifestyle: [],
-        travelBucketList: [],
-        specialRequirements: [],
-        typeOfTravel: [],
-        travelSpan: [],
         id: uuidv4(),
+        principalCustomer: {
+          firstName: "",
+          lastName: "",
+          dateOfBirth: "",
+          cityOfResidence: "",
+          email: "",
+          gender: "",
+          mainInterests: [],
+          socialMediaLinks: [],
+          loyaltyPrograms: [],
+          travelDocuments: [],
+          passions: [],
+          lifestyle: [],
+          travelBucketList: [],
+          specialRequirements: [],
+          typeOfTravel: [],
+          travelSpan: [],
+        },
+        children: [],
       },
     ]);
+  }
+
+  function handleDeleteAccordion(id, mainId) {
+    setData((all) =>
+      all?.id === mainId
+        ? {
+            ...all,
+            children: all?.children?.filter(
+              (singleChildren) => singleChildren?.id !== id
+            ),
+          }
+        : all
+    );
+  }
+
+  function handleAddChildrenDataObject(id) {
+    setData((pre) =>
+      pre?.map((all) =>
+        all?.id === id
+          ? {
+              ...all,
+              children: [
+                ...all?.children,
+                {
+                  firstName: "",
+                  lastName: "",
+                  dateOfBirth: "",
+                  cityOfResidence:
+                    data?.find((singleData) => singleData?.id === id)
+                      ?.principalCustomer?.cityOfResidence || "",
+                  email: "",
+                  relation: "",
+                  gender: "",
+                  mainInterests: [],
+                  socialMediaLinks: [],
+                  loyaltyPrograms: [],
+                  travelDocuments: [],
+                  passions: [],
+                  lifestyle: [],
+                  travelBucketList: [],
+                  specialRequirements: [],
+                  typeOfTravel: [],
+                  travelSpan: [],
+                  id: uuidv4(),
+                },
+              ],
+            }
+          : all
+      )
+    );
   }
 
   const calculateAge = (dateOfBirth) => {
@@ -139,82 +192,110 @@ const MainForm = () => {
 
   function handleSubmit() {
     if (!loading) {
-      dispatch(
-        setupOnBoarding({
-          principalCustomer: {
-            ...data?.principalCustomer,
-            age: calculateAge(data?.principalCustomer?.dateOfBirth) || null,
-            upcomingBirthday:
-              calculateUpcomingBirthday(data?.principalCustomer?.dateOfBirth) ||
-              null,
-            mainInterests:
-              data?.principalCustomer?.mainInterests?.map(
-                (item) => item?.string
-              ) || [],
-            socialMediaLinks:
-              data?.principalCustomer?.socialMediaLinks?.map(
-                (item) => item?.string
-              ) || [],
-            loyaltyPrograms:
-              data?.principalCustomer?.loyaltyPrograms?.map(
-                (item) => item?.string
-              ) || [],
-            travelDocuments:
-              data?.principalCustomer?.travelDocuments?.map(
-                (item) => item?.string
-              ) || [],
-            passions:
-              data?.principalCustomer?.passions?.map((item) => item?.string) ||
-              [],
-            lifestyle:
-              data?.principalCustomer?.lifestyle?.map((item) => item?.string) ||
-              [],
-            travelBucketList:
-              data?.principalCustomer?.travelBucketList?.map(
-                (item) => item?.string
-              ) || [],
-            specialRequirements:
-              data?.principalCustomer?.specialRequirements?.map(
-                (item) => item?.string
-              ) || [],
-            typeOfTravel:
-              data?.principalCustomer?.typeOfTravel?.map((item) => item) || [],
-            travelSpan:
-              data?.principalCustomer?.travelSpan?.map((item) => item) || [],
-          },
-          dependents: childrenData?.map((children) => {
-            return {
-              firstName: children?.firstName,
-              lastName: children?.lastName,
-              dateOfBirth: children?.dateOfBirth,
-              cityOfResidence: children?.cityOfResidence,
-              email: children?.email,
-              relation: children?.relation,
-              gender: children?.gender,
-              age: calculateAge(children?.dateOfBirth) || null,
-              upcomingBirthday:
-                calculateUpcomingBirthday(children?.dateOfBirth) || null,
-              mainInterests:
-                children?.mainInterests?.map((item) => item?.string) || [],
-              socialMediaLinks:
-                children?.socialMediaLinks?.map((item) => item?.string) || [],
-              loyaltyPrograms:
-                children?.loyaltyPrograms?.map((item) => item?.string) || [],
-              travelDocuments:
-                children?.travelDocuments?.map((item) => item?.string) || [],
-              passions: children?.passions?.map((item) => item?.string) || [],
-              lifestyle: children?.lifestyle?.map((item) => item?.string) || [],
-              travelBucketList:
-                children?.travelBucketList?.map((item) => item?.string) || [],
-              specialRequirements:
-                children?.specialRequirements?.map((item) => item?.string) ||
-                [],
-              typeOfTravel: children?.typeOfTravel?.map((item) => item) || [],
-              travelSpan: children?.travelSpan?.map((item) => item) || [],
-            };
-          }),
-        })
-      );
+      if (data?.length === 0) {
+        toast.error("Please provide atlease one principal customer");
+      }
+      if (data?.length !== 0) {
+        dispatch(
+          setupOnBoarding(
+            data?.map((singleDataItem) => {
+              return {
+                principalCustomer: {
+                  ...singleDataItem?.principalCustomer,
+                  age:
+                    calculateAge(
+                      singleDataItem?.principalCustomer?.dateOfBirth
+                    ) || null,
+                  upcomingBirthday:
+                    calculateUpcomingBirthday(
+                      singleDataItem?.principalCustomer?.dateOfBirth
+                    ) || null,
+                  mainInterests:
+                    singleDataItem?.principalCustomer?.mainInterests?.map(
+                      (item) => item?.string
+                    ) || [],
+                  socialMediaLinks:
+                    singleDataItem?.principalCustomer?.socialMediaLinks?.map(
+                      (item) => item?.string
+                    ) || [],
+                  loyaltyPrograms:
+                    singleDataItem?.principalCustomer?.loyaltyPrograms?.map(
+                      (item) => item?.string
+                    ) || [],
+                  travelDocuments:
+                    singleDataItem?.principalCustomer?.travelDocuments?.map(
+                      (item) => item?.string
+                    ) || [],
+                  passions:
+                    singleDataItem?.principalCustomer?.passions?.map(
+                      (item) => item?.string
+                    ) || [],
+                  lifestyle:
+                    singleDataItem?.principalCustomer?.lifestyle?.map(
+                      (item) => item?.string
+                    ) || [],
+                  travelBucketList:
+                    singleDataItem?.principalCustomer?.travelBucketList?.map(
+                      (item) => item?.string
+                    ) || [],
+                  specialRequirements:
+                    singleDataItem?.principalCustomer?.specialRequirements?.map(
+                      (item) => item?.string
+                    ) || [],
+                  typeOfTravel:
+                    singleDataItem?.principalCustomer?.typeOfTravel?.map(
+                      (item) => item
+                    ) || [],
+                  travelSpan:
+                    singleDataItem?.principalCustomer?.travelSpan?.map(
+                      (item) => item
+                    ) || [],
+                },
+                dependents: singleDataItem?.children?.map((children) => {
+                  return {
+                    firstName: children?.firstName,
+                    lastName: children?.lastName,
+                    dateOfBirth: children?.dateOfBirth,
+                    cityOfResidence: children?.cityOfResidence,
+                    email: children?.email,
+                    relation: children?.relation,
+                    gender: children?.gender,
+                    age: calculateAge(children?.dateOfBirth) || null,
+                    upcomingBirthday:
+                      calculateUpcomingBirthday(children?.dateOfBirth) || null,
+                    mainInterests:
+                      children?.mainInterests?.map((item) => item?.string) ||
+                      [],
+                    socialMediaLinks:
+                      children?.socialMediaLinks?.map((item) => item?.string) ||
+                      [],
+                    loyaltyPrograms:
+                      children?.loyaltyPrograms?.map((item) => item?.string) ||
+                      [],
+                    travelDocuments:
+                      children?.travelDocuments?.map((item) => item?.string) ||
+                      [],
+                    passions:
+                      children?.passions?.map((item) => item?.string) || [],
+                    lifestyle:
+                      children?.lifestyle?.map((item) => item?.string) || [],
+                    travelBucketList:
+                      children?.travelBucketList?.map((item) => item?.string) ||
+                      [],
+                    specialRequirements:
+                      children?.specialRequirements?.map(
+                        (item) => item?.string
+                      ) || [],
+                    typeOfTravel:
+                      children?.typeOfTravel?.map((item) => item) || [],
+                    travelSpan: children?.travelSpan?.map((item) => item) || [],
+                  };
+                }),
+              };
+            })
+          )
+        );
+      }
     }
   }
 
@@ -230,41 +311,48 @@ const MainForm = () => {
     });
   }
 
-  function handleChangeText(family, event) {
-    setData((pre) => {
-      return {
-        ...pre,
-        [family]: {
-          ...pre[family],
-          [event?.target?.name]: event?.target?.value,
-        },
-      };
-    });
+  function handleChangeText(family, event, id) {
+    setData((pre) =>
+      pre?.map((all) =>
+        all?.id === id
+          ? {
+              ...all,
+              [family]: {
+                ...all[family],
+                [event?.target?.name]: event?.target?.value,
+              },
+            }
+          : all
+      )
+    );
   }
 
-  // For the Interest
-  function handleAdd(family, subFamily, extraFieldFamily, event) {
+  function handleAdd(family, subFamily, extraFieldFamily, event, id) {
     if (event) {
       event.preventDefault();
     }
     if (extraData[family][extraFieldFamily] === "") {
       toast.error(`Provide ${extraFieldFamily}`);
     } else {
-      setData((pre) => {
-        return {
-          ...pre,
-          [family]: {
-            ...pre[family],
-            [subFamily]: [
-              ...pre[family][subFamily],
-              {
-                id: uuidv4(),
-                string: extraData[family][extraFieldFamily],
-              },
-            ],
-          },
-        };
-      });
+      setData((pre) =>
+        pre?.map((all) =>
+          all?.id === id
+            ? {
+                ...all,
+                [family]: {
+                  ...all[family],
+                  [subFamily]: [
+                    ...all[family][subFamily],
+                    {
+                      id: uuidv4(),
+                      string: extraData[family][extraFieldFamily],
+                    },
+                  ],
+                },
+              }
+            : all
+        )
+      );
       setExtraData((pre) => {
         return {
           ...pre,
@@ -277,16 +365,22 @@ const MainForm = () => {
     }
   }
 
-  function handleDelete(family, subFamily, id) {
-    setData((pre) => {
-      return {
-        ...pre,
-        [family]: {
-          ...pre[family],
-          [subFamily]: pre[family][subFamily]?.filter((all) => all?.id !== id),
-        },
-      };
-    });
+  function handleDelete(family, subFamily, id, mainId) {
+    setData((pre) =>
+      pre?.map((all) =>
+        all?.id === mainId
+          ? {
+              ...all,
+              [family]: {
+                ...all[family],
+                [subFamily]: all[family][subFamily]?.filter(
+                  (subFamilyItem) => subFamilyItem?.id !== id
+                ),
+              },
+            }
+          : all
+      )
+    );
   }
 
   React.useEffect(() => {
@@ -295,41 +389,108 @@ const MainForm = () => {
     }
   }, [onBoardingAddSuccess]);
 
-  React.useEffect(() => {
-    setChildrenData((pre) => {
-      return pre?.map((child) => {
-        return {
-          ...child,
-          cityOfResidence: data?.principalCustomer?.cityOfResidence,
-        };
-      });
-    });
-  }, [data?.principalCustomer?.cityOfResidence]);
-
   return (
     <div className="my-4">
       <h3 className=" my-4 underline">OnBoarding</h3>
-      <PrincipleCustomer
-        data={data}
-        handleChangeText={handleChangeText}
-        extraData={extraData}
-        handleChangeExtraDataText={handleChangeExtraDataText}
-        handleAdd={handleAdd}
-        handleDelete={handleDelete}
-        setData={setData}
-      />
-
-      <hr className="mt-4" />
-
-      <ChildrenWrap
-        handleAddChildrenDataObject={handleAddChildrenDataObject}
-        childrenData={childrenData}
-        setChildrenExtraData={setChildrenExtraData}
-        extraData={extraData}
-        childrenExtraData={childrenExtraData}
-        setChildrenData={setChildrenData}
-        handleDeleteAccordion={handleDeleteAccordion}
-      />
+      <header className="section-header my-3 align-items-center text-start d-flex">
+        <div className="mb-0 sub-heading">Add Principal Customers</div>
+        <div
+          className="btn btn-labeled btn-primary ms-3 px-3 shadow"
+          onClick={handleAddPricipalCustomers}
+        >
+          <span className="btn-label me-2">
+            <i className="fa fa-plus-circle"></i>
+          </span>
+          Add
+        </div>
+      </header>
+      <div className="accordion" id="accordionFlushExample">
+        {data?.length === 0 ? (
+          <p>No Principal Customer Added Yet!</p>
+        ) : (
+          data?.map((singleDataItem, index) => {
+            return (
+              <div className="accordion-item" key={index}>
+                <h2 className="accordion-header">
+                  <button
+                    className="accordion-button collapsed br-8"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target={`#flush-collapse${index}`}
+                    aria-expanded="false"
+                    aria-controls={`flush-collapse${index}`}
+                    onClick={() => {
+                      setChildrenExtraData({
+                        interest: "",
+                        link: "",
+                        program: "",
+                        doc: "",
+                        passion: "",
+                        lifestyle: "",
+                        bucketlist: "",
+                        specialrequirement: "",
+                      });
+                      setExtraData({
+                        principalCustomer: {
+                          interest: "",
+                          link: "",
+                          program: "",
+                          doc: "",
+                          passion: "",
+                          lifestyle: "",
+                          bucketlist: "",
+                          specialrequirement: "",
+                        },
+                      });
+                    }}
+                  >
+                    <div className="d-flex w-100 me-3 align-items-center justify-content-between">
+                      <div className="d-flex align-items-center w-100">
+                        <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
+                        <div>Principal Customer {index + 1}</div>
+                      </div>
+                      <i
+                        class="fa fa-trash text-danger f-18 cusrsor-pointer"
+                        onClick={() =>
+                          handleDeleteAccordionPrincipalCustomer(
+                            singleDataItem?.id
+                          )
+                        }
+                      ></i>
+                    </div>
+                  </button>
+                </h2>
+                <div
+                  id={`flush-collapse${index}`}
+                  className="accordion-collapse collapse"
+                  data-bs-parent="#accordionFlushExample"
+                >
+                  <div className="accordion-body">
+                    <PrincipleCustomer
+                      singleDataItem={singleDataItem}
+                      handleChangeText={handleChangeText}
+                      extraData={extraData}
+                      handleChangeExtraDataText={handleChangeExtraDataText}
+                      handleAdd={handleAdd}
+                      handleDelete={handleDelete}
+                      setData={setData}
+                    />
+                    <hr className="mt-4" />
+                    <ChildrenWrap
+                      handleAddChildrenDataObject={handleAddChildrenDataObject}
+                      childrenData={singleDataItem}
+                      setChildrenExtraData={setChildrenExtraData}
+                      childrenExtraData={childrenExtraData}
+                      setData={setData}
+                      handleDeleteAccordion={handleDeleteAccordion}
+                    />
+                  </div>
+                </div>
+              </div>
+            );
+          })
+        )}
+      </div>
 
       <div>
         <div
@@ -344,8 +505,6 @@ const MainForm = () => {
           {loading ? "Loading..." : "Submit"}
         </div>
       </div>
-
-      {/* <Responses response={response} /> */}
     </div>
   );
 };

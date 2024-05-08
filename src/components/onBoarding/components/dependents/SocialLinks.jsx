@@ -9,6 +9,7 @@ const SocialLinks = ({
   handleChangeExtraDataText,
   childrenExtraData,
   data,
+  childrenData,
 }) => {
   return (
     <div className="row mt-4">
@@ -18,7 +19,13 @@ const SocialLinks = ({
           <form
             className="col-lg-10 mb-2"
             onSubmit={(event) =>
-              handleAdd(data?.id, "socialMediaLinks", "link", event)
+              handleAdd(
+                data?.id,
+                "socialMediaLinks",
+                "link",
+                event,
+                childrenData?.id
+              )
             }
           >
             <TextField
@@ -26,7 +33,9 @@ const SocialLinks = ({
               name="link"
               id="link"
               value={childrenExtraData?.link}
-              onChange={(event) => handleChangeExtraDataText("link", event)}
+              onChange={(event) =>
+                handleChangeExtraDataText("link", event, childrenData?.id)
+              }
             />
           </form>
 
@@ -34,7 +43,14 @@ const SocialLinks = ({
             <button
               className="btn btn-labeled btn-primary w-100 shadow"
               type="submit"
-              onClick={() => handleAdd(data?.id, "socialMediaLinks", "link")}
+              onClick={() =>
+                handleAdd(
+                  data?.id,
+                  "socialMediaLinks",
+                  "link",
+                  childrenData?.id
+                )
+              }
             >
               <span className="btn-label me-2">
                 <i className="fa fa-plus"></i>
@@ -53,7 +69,12 @@ const SocialLinks = ({
                   variant="outlined"
                   className="mx-2 mb-2"
                   onDelete={() =>
-                    handleDelete(data?.id, "socialMediaLinks", link?.id)
+                    handleDelete(
+                      data?.id,
+                      "socialMediaLinks",
+                      link?.id,
+                      childrenData?.id
+                    )
                   }
                 />
               );

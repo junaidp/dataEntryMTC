@@ -18,7 +18,13 @@ const Passions = ({
           <form
             className="col-lg-10 mb-2"
             onSubmit={(event) =>
-              handleAdd("principalCustomer", "passions", "passion", event)
+              handleAdd(
+                "principalCustomer",
+                "passions",
+                "passion",
+                event,
+                data?.id
+              )
             }
           >
             <TextField
@@ -27,7 +33,7 @@ const Passions = ({
               id="passion"
               value={extraData?.principalCustomer?.passion}
               onChange={(event) =>
-                handleChangeExtraDataText("principalCustomer", event)
+                handleChangeExtraDataText("principalCustomer", event, data?.id)
               }
             />
           </form>
@@ -37,7 +43,7 @@ const Passions = ({
               className="btn btn-labeled btn-primary w-100 shadow"
               type="submit"
               onClick={() =>
-                handleAdd("principalCustomer", "passions", "passion")
+                handleAdd("principalCustomer", "passions", "passion", data?.id)
               }
             >
               <span className="btn-label me-2">
@@ -57,7 +63,12 @@ const Passions = ({
                   variant="outlined"
                   className="mx-2 mb-2"
                   onDelete={() =>
-                    handleDelete("principalCustomer", "passions", link?.id)
+                    handleDelete(
+                      "principalCustomer",
+                      "passions",
+                      link?.id,
+                      data?.id
+                    )
                   }
                 />
               );

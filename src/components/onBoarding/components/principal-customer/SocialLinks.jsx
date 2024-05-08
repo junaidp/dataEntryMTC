@@ -18,7 +18,13 @@ const SocialLinks = ({
           <form
             className="col-lg-10 mb-2"
             onSubmit={(event) =>
-              handleAdd("principalCustomer", "socialMediaLinks", "link", event)
+              handleAdd(
+                "principalCustomer",
+                "socialMediaLinks",
+                "link",
+                event,
+                data?.id
+              )
             }
           >
             <TextField
@@ -27,7 +33,7 @@ const SocialLinks = ({
               id="link"
               value={extraData?.principalCustomer?.link}
               onChange={(event) =>
-                handleChangeExtraDataText("principalCustomer", event)
+                handleChangeExtraDataText("principalCustomer", event, data?.id)
               }
             />
           </form>
@@ -37,7 +43,12 @@ const SocialLinks = ({
               className="btn btn-labeled btn-primary w-100 shadow"
               type="submit"
               onClick={() =>
-                handleAdd("principalCustomer", "socialMediaLinks", "link")
+                handleAdd(
+                  "principalCustomer",
+                  "socialMediaLinks",
+                  "link",
+                  data?.id
+                )
               }
             >
               <span className="btn-label me-2">
@@ -60,7 +71,8 @@ const SocialLinks = ({
                     handleDelete(
                       "principalCustomer",
                       "socialMediaLinks",
-                      link?.id
+                      link?.id,
+                      data?.id
                     )
                   }
                 />

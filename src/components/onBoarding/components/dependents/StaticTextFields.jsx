@@ -5,7 +5,7 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 
-const StaticTextFields = ({ data, handleChangeText }) => {
+const StaticTextFields = ({ data, handleChangeText, childrenData }) => {
   return (
     <div>
       <div className="row">
@@ -17,7 +17,9 @@ const StaticTextFields = ({ data, handleChangeText }) => {
             variant="outlined"
             className="form-control"
             value={data?.firstName}
-            onChange={(event) => handleChangeText(data?.id, event)}
+            onChange={(event) =>
+              handleChangeText(data?.id, event, childrenData?.id)
+            }
           />
         </div>
         <div className="col-lg-6 mb-2">
@@ -28,7 +30,9 @@ const StaticTextFields = ({ data, handleChangeText }) => {
             variant="outlined"
             className="form-control"
             value={data?.lastName}
-            onChange={(event) => handleChangeText(data?.id, event)}
+            onChange={(event) =>
+              handleChangeText(data?.id, event, childrenData?.id)
+            }
           />
         </div>
       </div>
@@ -42,7 +46,9 @@ const StaticTextFields = ({ data, handleChangeText }) => {
             variant="outlined"
             className="form-control"
             value={data?.email}
-            onChange={(event) => handleChangeText(data?.id, event)}
+            onChange={(event) =>
+              handleChangeText(data?.id, event, childrenData?.id)
+            }
           />
         </div>
         <div className="col-lg-6 mb-2">
@@ -57,7 +63,9 @@ const StaticTextFields = ({ data, handleChangeText }) => {
               value={data?.relation}
               label="Relation"
               style={{ background: "white" }}
-              onChange={(event) => handleChangeText(data?.id, event)}
+              onChange={(event) =>
+                handleChangeText(data?.id, event, childrenData?.id)
+              }
               name="relation"
             >
               <MenuItem value="spouse">Spouse</MenuItem>
@@ -82,7 +90,9 @@ const StaticTextFields = ({ data, handleChangeText }) => {
             variant="outlined"
             className="form-control"
             value={data?.cityOfResidence}
-            onChange={(event) => handleChangeText(data?.id, event)}
+            onChange={(event) =>
+              handleChangeText(data?.id, event, childrenData?.id)
+            }
           />
         </div>
         <div className="col-lg-6 mb-2">
@@ -95,7 +105,9 @@ const StaticTextFields = ({ data, handleChangeText }) => {
               value={data?.gender}
               label="Relation"
               style={{ background: "white" }}
-              onChange={(event) => handleChangeText(data?.id, event)}
+              onChange={(event) =>
+                handleChangeText(data?.id, event, childrenData?.id)
+              }
               name="gender"
             >
               <MenuItem value="Male">Male</MenuItem>
@@ -115,7 +127,9 @@ const StaticTextFields = ({ data, handleChangeText }) => {
             className="form-control"
             type="date"
             value={data?.dateOfBirth}
-            onChange={(event) => handleChangeText(data?.id, event)}
+            onChange={(event) =>
+              handleChangeText(data?.id, event, childrenData?.id)
+            }
           />
         </div>
       </div>

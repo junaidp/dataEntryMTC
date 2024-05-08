@@ -16,20 +16,26 @@ import TravelSpan from "./TravelSpan";
 const Children = ({
   data,
   childrenExtraData,
-  setChildrenData,
+  setData,
   setChildrenExtraData,
+  childrenData,
 }) => {
-  function handleChangeText(id, event) {
+  function handleChangeText(id, event, mainId) {
     if (id) {
-      setChildrenData((pre) =>
-        pre?.map((item) =>
-          item?.id === id
-            ? {
-                ...item,
-                [event?.target?.name]: event?.target?.value,
-              }
-            : item
-        )
+      setData((pre) =>
+        pre?.map((all) => all?.id === mainId)
+          ? {
+              ...all,
+              children: all?.children?.map((singleChildrenItem) =>
+                singleChildrenItem?.id === id
+                  ? {
+                      ...singleChildrenItem,
+                      [event?.target?.name]: event?.target?.value,
+                    }
+                  : singleChildrenItem
+              ),
+            }
+          : all
       );
     }
   }
@@ -43,25 +49,32 @@ const Children = ({
     });
   }
 
-  function handleAdd(id, subFamily, extraFieldFamily, event) {
+  function handleAdd(id, subFamily, extraFieldFamily, event, mainId) {
     if (event) {
       event.preventDefault();
     }
     if (childrenExtraData[extraFieldFamily] === "") {
       toast.error(`Provide ${extraFieldFamily}`);
     } else {
-      setChildrenData((pre) =>
+      setData((pre) =>
         pre?.map((item) =>
-          item?.id === id
+          item?.id === mainId
             ? {
                 ...item,
-                [subFamily]: [
-                  ...item[subFamily],
-                  {
-                    id: uuidv4(),
-                    string: childrenExtraData[extraFieldFamily],
-                  },
-                ],
+                children: item?.children?.map((singleChildrenItem) =>
+                  singleChildrenItem?.id === id
+                    ? {
+                        ...singleChildrenItem,
+                        [subFamily]: [
+                          ...singleChildrenItem[subFamily],
+                          {
+                            id: uuidv4(),
+                            string: childrenExtraData[extraFieldFamily],
+                          },
+                        ],
+                      }
+                    : singleChildrenItem
+                ),
               }
             : item
         )
@@ -76,28 +89,42 @@ const Children = ({
     }
   }
 
-  function handleDelete(mainId, subFamily, id) {
-    setChildrenData((pre) =>
-      pre?.map((item) =>
-        item?.id === mainId
+  function handleDelete(subChildrenId, subFamily, id, mainId) {
+    setData((pre) =>
+      pre?.map((all) =>
+        all?.id === mainId
           ? {
-              ...item,
-              [subFamily]: item[subFamily]?.filter((chip) => chip?.id !== id),
+              ...all,
+              children: all?.children?.map((singleChildrenItem) =>
+                singleChildrenItem?.id === subChildrenId
+                  ? {
+                      ...singleChildrenItem,
+                      [subFamily]: singleChildrenItem[subFamily]?.filter(
+                        (chip) => chip?.id !== id
+                      ),
+                    }
+                  : singleChildrenItem
+              ),
             }
-          : item
+          : all
       )
     );
   }
 
   return (
     <div>
-      <StaticTextFields data={data} handleChangeText={handleChangeText} />
+      <StaticTextFields
+        data={data}
+        handleChangeText={handleChangeText}
+        childrenData={childrenData}
+      />
       <Passions
         handleAdd={handleAdd}
         handleDelete={handleDelete}
         handleChangeExtraDataText={handleChangeExtraDataText}
         childrenExtraData={childrenExtraData}
         data={data}
+        childrenData={childrenData}
       />
       <MainInterests
         handleAdd={handleAdd}
@@ -105,6 +132,7 @@ const Children = ({
         handleChangeExtraDataText={handleChangeExtraDataText}
         childrenExtraData={childrenExtraData}
         data={data}
+        childrenData={childrenData}
       />
       <LifeStyle
         handleAdd={handleAdd}
@@ -112,6 +140,7 @@ const Children = ({
         handleChangeExtraDataText={handleChangeExtraDataText}
         childrenExtraData={childrenExtraData}
         data={data}
+        childrenData={childrenData}
       />
       <SocialLinks
         handleAdd={handleAdd}
@@ -119,6 +148,7 @@ const Children = ({
         handleChangeExtraDataText={handleChangeExtraDataText}
         childrenExtraData={childrenExtraData}
         data={data}
+        childrenData={childrenData}
       />
 
       <LoyalityPrograms
@@ -127,6 +157,7 @@ const Children = ({
         handleChangeExtraDataText={handleChangeExtraDataText}
         childrenExtraData={childrenExtraData}
         data={data}
+        childrenData={childrenData}
       />
       <TravelDocuments
         handleAdd={handleAdd}
@@ -134,6 +165,7 @@ const Children = ({
         handleChangeExtraDataText={handleChangeExtraDataText}
         childrenExtraData={childrenExtraData}
         data={data}
+        childrenData={childrenData}
       />
       <TravelBucketList
         handleAdd={handleAdd}
@@ -141,6 +173,7 @@ const Children = ({
         handleChangeExtraDataText={handleChangeExtraDataText}
         childrenExtraData={childrenExtraData}
         data={data}
+        childrenData={childrenData}
       />
       <SpecialRequirements
         handleAdd={handleAdd}
@@ -148,9 +181,10 @@ const Children = ({
         handleChangeExtraDataText={handleChangeExtraDataText}
         childrenExtraData={childrenExtraData}
         data={data}
+        childrenData={childrenData}
       />
-      <TypeOfTravel setChildrenData={setChildrenData} data={data} />
-      <TravelSpan setChildrenData={setChildrenData} data={data} />
+      <TypeOfTravel setData={setData} data={data} childrenData={childrenData} />
+      <TravelSpan setData={setData} data={data} childrenData={childrenData} />
     </div>
   );
 };

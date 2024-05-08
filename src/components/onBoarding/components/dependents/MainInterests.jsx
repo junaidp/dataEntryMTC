@@ -9,6 +9,7 @@ const MainInterests = ({
   handleChangeExtraDataText,
   childrenExtraData,
   data,
+  childrenData
 }) => {
   return (
     <div className="row mt-4">
@@ -19,7 +20,7 @@ const MainInterests = ({
             <form
               className="col-lg-10 mb-2"
               onSubmit={(event) =>
-                handleAdd(data?.id, "mainInterests", "interest", event)
+                handleAdd(data?.id, "mainInterests", "interest", event,childrenData?.id)
               }
             >
               <TextField
@@ -28,7 +29,7 @@ const MainInterests = ({
                 id="interest"
                 value={childrenExtraData?.interest}
                 onChange={(event) =>
-                  handleChangeExtraDataText("interest", event)
+                  handleChangeExtraDataText("interest", event,childrenData?.id)
                 }
               />
             </form>
@@ -37,7 +38,7 @@ const MainInterests = ({
               <button
                 className="btn btn-labeled btn-primary w-100 shadow"
                 type="submit"
-                onClick={() => handleAdd(data?.id, "mainInterests", "interest")}
+                onClick={() => handleAdd(data?.id, "mainInterests", "interest",childrenData?.id)}
               >
                 <span className="btn-label me-2">
                   <i className="fa fa-plus"></i>
@@ -57,7 +58,7 @@ const MainInterests = ({
                   variant="outlined"
                   className="mx-2 mb-2"
                   onDelete={() =>
-                    handleDelete(data?.id, "mainInterests", interest?.id)
+                    handleDelete(data?.id, "mainInterests", interest?.id,childrenData?.id)
                   }
                 />
               );

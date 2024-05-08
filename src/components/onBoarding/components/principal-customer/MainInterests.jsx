@@ -23,7 +23,8 @@ const MainInterests = ({
                   "principalCustomer",
                   "mainInterests",
                   "interest",
-                  event
+                  event,
+                  data?.id
                 )
               }
             >
@@ -33,7 +34,11 @@ const MainInterests = ({
                 id="interest"
                 value={extraData?.principalCustomer?.interest}
                 onChange={(event) =>
-                  handleChangeExtraDataText("principalCustomer", event)
+                  handleChangeExtraDataText(
+                    "principalCustomer",
+                    event,
+                    data?.id
+                  )
                 }
               />
             </form>
@@ -43,7 +48,12 @@ const MainInterests = ({
                 className="btn btn-labeled btn-primary w-100 shadow"
                 type="submit"
                 onClick={() =>
-                  handleAdd("principalCustomer", "mainInterests", "interest")
+                  handleAdd(
+                    "principalCustomer",
+                    "mainInterests",
+                    "interest",
+                    data?.id
+                  )
                 }
               >
                 <span className="btn-label me-2">
@@ -67,7 +77,8 @@ const MainInterests = ({
                     handleDelete(
                       "principalCustomer",
                       "mainInterests",
-                      interest?.id
+                      interest?.id,
+                      data?.id
                     )
                   }
                 />

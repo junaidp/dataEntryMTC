@@ -9,6 +9,7 @@ const Passions = ({
   handleChangeExtraDataText,
   childrenExtraData,
   data,
+  childrenData,
 }) => {
   return (
     <div className="row mt-4">
@@ -18,7 +19,13 @@ const Passions = ({
           <form
             className="col-lg-10 mb-2"
             onSubmit={(event) =>
-              handleAdd(data?.id, "passions", "passion", event)
+              handleAdd(
+                data?.id,
+                "passions",
+                "passion",
+                event,
+                childrenData?.id
+              )
             }
           >
             <TextField
@@ -26,7 +33,9 @@ const Passions = ({
               name="passion"
               id="passion"
               value={childrenExtraData?.passion}
-              onChange={(event) => handleChangeExtraDataText("passion", event)}
+              onChange={(event) =>
+                handleChangeExtraDataText("passion", event, childrenData?.id)
+              }
             />
           </form>
 
@@ -34,7 +43,9 @@ const Passions = ({
             <button
               className="btn btn-labeled btn-primary w-100 shadow"
               type="submit"
-              onClick={() => handleAdd(data?.id, "passions", "passion")}
+              onClick={() =>
+                handleAdd(data?.id, "passions", "passion", childrenData?.id)
+              }
             >
               <span className="btn-label me-2">
                 <i className="fa fa-plus"></i>
@@ -52,7 +63,14 @@ const Passions = ({
                   key={index}
                   variant="outlined"
                   className="mx-2 mb-2"
-                  onDelete={() => handleDelete(data?.id, "passions", link?.id)}
+                  onDelete={() =>
+                    handleDelete(
+                      data?.id,
+                      "passions",
+                      link?.id,
+                      childrenData?.id
+                    )
+                  }
                 />
               );
             })}

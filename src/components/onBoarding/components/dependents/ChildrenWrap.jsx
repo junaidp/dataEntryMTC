@@ -5,9 +5,8 @@ const ChildrenWrap = ({
   handleAddChildrenDataObject,
   childrenData,
   setChildrenExtraData,
-  extraData,
   childrenExtraData,
-  setChildrenData,
+  setData,
   handleDeleteAccordion,
 }) => {
   return (
@@ -18,7 +17,7 @@ const ChildrenWrap = ({
           <div className="mb-0 sub-heading">Add Dependents</div>
           <div
             className="btn btn-labeled btn-primary ms-3 px-3 shadow"
-            onClick={handleAddChildrenDataObject}
+            onClick={() => handleAddChildrenDataObject(childrenData?.id)}
           >
             <span className="btn-label me-2">
               <i className="fa fa-plus-circle"></i>
@@ -27,20 +26,20 @@ const ChildrenWrap = ({
           </div>
         </header>
         <div className="accordion" id="accordionFlushExample">
-          {childrenData?.length === 0 ? (
+          {childrenData?.children?.length === 0 ? (
             <p>No dependents added yet!</p>
           ) : (
-            childrenData?.map((children, index) => {
+            childrenData?.children?.map((children, index) => {
               return (
-                <div className="accordion-item">
+                <div className="accordion-item" key={children?.id}>
                   <h2 className="accordion-header">
                     <button
                       className="accordion-button collapsed br-8"
                       type="button"
                       data-bs-toggle="collapse"
-                      data-bs-target={`#flush-collapse${index}`}
+                      data-bs-target={`#flush-collapse${children?.id}`}
                       aria-expanded="false"
-                      aria-controls={`flush-collapse${index}`}
+                      aria-controls={`flush-collapse${children?.id}`}
                       onClick={() =>
                         setChildrenExtraData({
                           interest: "",
@@ -61,25 +60,28 @@ const ChildrenWrap = ({
                         </div>
                         <i
                           class="fa fa-trash text-danger f-18 cusrsor-pointer"
-                          onClick={() => handleDeleteAccordion(children?.id)}
+                          onClick={() =>
+                            handleDeleteAccordion(
+                              children?.id,
+                              childrenData?.id
+                            )
+                          }
                         ></i>
                       </div>
                     </button>
                   </h2>
                   <div
-                    id={`flush-collapse${index}`}
+                    id={`flush-collapse${children?.id}`}
                     className="accordion-collapse collapse"
                     data-bs-parent="#accordionFlushExample"
                   >
                     <div className="accordion-body">
                       <Children
-                        index={index}
-                        key={index}
                         data={children}
-                        extraData={extraData}
                         childrenExtraData={childrenExtraData}
-                        setChildrenData={setChildrenData}
+                        setData={setData}
                         setChildrenExtraData={setChildrenExtraData}
+                        childrenData={childrenData}
                       />
                     </div>
                   </div>

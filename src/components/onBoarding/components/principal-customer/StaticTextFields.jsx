@@ -5,7 +5,6 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 
-
 const StaticTextFields = ({ data, handleChangeText }) => {
   return (
     <div>
@@ -18,7 +17,9 @@ const StaticTextFields = ({ data, handleChangeText }) => {
             variant="outlined"
             className="form-control"
             value={data?.principalCustomer?.firstName}
-            onChange={(event) => handleChangeText("principalCustomer", event)}
+            onChange={(event) =>
+              handleChangeText("principalCustomer", event, data?.id)
+            }
           />
         </div>
         <div className="col-lg-6 mb-2">
@@ -29,7 +30,9 @@ const StaticTextFields = ({ data, handleChangeText }) => {
             variant="outlined"
             className="form-control"
             value={data?.principalCustomer?.lastName}
-            onChange={(event) => handleChangeText("principalCustomer", event)}
+            onChange={(event) =>
+              handleChangeText("principalCustomer", event, data?.id)
+            }
           />
         </div>
       </div>
@@ -43,7 +46,9 @@ const StaticTextFields = ({ data, handleChangeText }) => {
             variant="outlined"
             className="form-control"
             value={data?.principalCustomer?.email}
-            onChange={(event) => handleChangeText("principalCustomer", event)}
+            onChange={(event) =>
+              handleChangeText("principalCustomer", event, data?.id)
+            }
           />
         </div>
         <div className="col-lg-6 mb-2">
@@ -54,7 +59,9 @@ const StaticTextFields = ({ data, handleChangeText }) => {
             variant="outlined"
             className="form-control"
             value={data?.principalCustomer?.cityOfResidence}
-            onChange={(event) => handleChangeText("principalCustomer", event)}
+            onChange={(event) =>
+              handleChangeText("principalCustomer", event, data?.id)
+            }
           />
         </div>
       </div>
@@ -75,7 +82,9 @@ const StaticTextFields = ({ data, handleChangeText }) => {
               value={data?.principalCustomer?.gender}
               label="Relation"
               style={{ background: "white" }}
-              onChange={(event) => handleChangeText("principalCustomer", event)}
+              onChange={(event) =>
+                handleChangeText("principalCustomer", event, data?.id)
+              }
               name="gender"
             >
               <MenuItem value="Male">Male</MenuItem>
@@ -93,7 +102,9 @@ const StaticTextFields = ({ data, handleChangeText }) => {
             className="form-control"
             type="date"
             value={data?.principalCustomer?.dateOfBirth}
-            onChange={(event) => handleChangeText("principalCustomer", event)}
+            onChange={(event) =>
+              handleChangeText("principalCustomer", event, data?.id)
+            }
           />
         </div>
       </div>
