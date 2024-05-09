@@ -13,7 +13,6 @@ const TravelDocuments = ({
   return (
     <div className="row mt-4">
       <div>
-        <h6>Travel Documents:</h6>
         <div className="row p-0">
           <form
             className="col-lg-10 mb-2"
@@ -31,13 +30,17 @@ const TravelDocuments = ({
               className="form-control"
               name="doc"
               id="doc"
+              label="Travel Document"
+              variant="outlined"
               value={extraData?.principalCustomer?.doc}
               onChange={(event) =>
                 handleChangeExtraDataText("principalCustomer", event, data?.id)
               }
             />
           </form>
-          <div className={`col-lg-2 text-end float-end align-self-end mb-4`}>
+          <div
+            className={`col-lg-2 text-end float-end align-self-end mb-4 mt-4`}
+          >
             <button
               className="btn btn-labeled btn-primary w-100 shadow"
               type="submit"

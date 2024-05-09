@@ -21,9 +21,20 @@ export const chat = async (data, thunkAPI) => {
       {
         query: data?.query,
         previousChat: data?.previousChat,
-        ai: data?.type,
+        // ai: data?.type,
+        ai: "CLAUDE",
         customerId: data?.customerId || "66332bb85725cd245aab4459",
       }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+export const signIn = async (data, thunkAPI) => {
+  try {
+    let props = await axios.get(
+      `https://data-entry-08031d053c68.herokuapp.com/onBoard/signIn${data}`
     );
     return props.data;
   } catch (error) {

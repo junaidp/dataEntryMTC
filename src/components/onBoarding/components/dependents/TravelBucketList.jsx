@@ -14,7 +14,6 @@ const TravelBucketList = ({
   return (
     <div className="row mt-4">
       <div>
-        <h6>Travel Bucket List:</h6>
         <div className="row p-0">
           <form
             className="col-lg-10 mb-2"
@@ -32,6 +31,8 @@ const TravelBucketList = ({
               className="form-control w-100s"
               name="bucketlist"
               id="bucketlist"
+              label="Bucket List"
+              variant="outlined"
               value={childrenExtraData?.bucketlist}
               onChange={(event) =>
                 handleChangeExtraDataText("bucketlist", event, childrenData?.id)
@@ -39,7 +40,7 @@ const TravelBucketList = ({
             />
           </form>
 
-          <div className={`col-lg-2 text-end float-end align-self-end mb-4`}>
+          <div className={`col-lg-2 text-end float-end align-self-end mb-4 mt-4`}>
             <button
               className="btn btn-labeled btn-primary w-100 shadow"
               type="submit"

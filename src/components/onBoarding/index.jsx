@@ -4,9 +4,11 @@ import ChatBot from "../chat/chat";
 import ExperienceDialog from "./ExperienceDialog";
 import "./index.css";
 import { useSelector } from "react-redux";
+import SignInDialog from "./SignInDialog";
 
 const index = () => {
   const [value, setValue] = React.useState("CLAUDE");
+  const [showSignInDialog, setShowLoginDialog] = React.useState(false);
   const [showViewExperienceDialog, setShowViewExperienceDialog] =
     React.useState(false);
   const { experiences } = useSelector((state) => state?.onBoard);
@@ -27,31 +29,20 @@ const index = () => {
           </div>
         </div>
       )}
+      {showSignInDialog && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <SignInDialog setShowLoginDialog={setShowLoginDialog} />
+          </div>
+        </div>
+      )}
       <div className="flex float-end AIWrap" style={{ marginRight: "0px" }}>
-        {/* <div>
-          <p
-            className="viewExperience underline cursor-pointer"
-            onClick={() => setShowViewExperienceDialog(true)}
-          >
-            View Experiences
-          </p>
-        </div> */}
-        <select
-          className="form-select  h-40"
-          aria-label="Default select example"
-          onChange={(e) => {
-            if (e?.target?.value !== "") {
-              setValue(e?.target?.value);
-            }
-          }}
-          value={value}
+        <h5
+          className="link-info cursor-pointer mt-1"
+          onClick={() => setShowLoginDialog(true)}
         >
-          <option value="">Select AI Type</option>
-          <option value="CLAUDE">CLAUDE</option>
-          <option value="OPENAI">OPENAI</option>
-          <option value="GEMINI">GEMINI</option>
-        </select>
-        <div></div>
+          Sign In
+        </h5>
       </div>
 
       <div>

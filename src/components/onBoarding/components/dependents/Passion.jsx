@@ -14,7 +14,6 @@ const Passions = ({
   return (
     <div className="row mt-4">
       <div>
-        <h6>Passions:</h6>
         <div className="row p-0">
           <form
             className="col-lg-10 mb-2"
@@ -32,6 +31,8 @@ const Passions = ({
               className="form-control w-100s"
               name="passion"
               id="passion"
+              label="Passion"
+              variant="outlined"
               value={childrenExtraData?.passion}
               onChange={(event) =>
                 handleChangeExtraDataText("passion", event, childrenData?.id)
@@ -39,7 +40,7 @@ const Passions = ({
             />
           </form>
 
-          <div className={`col-lg-2 text-end float-end align-self-end mb-4`}>
+          <div className={`col-lg-2 text-end float-end align-self-end mb-4 mt-4`}>
             <button
               className="btn btn-labeled btn-primary w-100 shadow"
               type="submit"

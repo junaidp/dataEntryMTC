@@ -197,60 +197,62 @@ const MainForm = () => {
       }
       if (data?.length !== 0) {
         dispatch(
-          setupOnBoarding(
-            data?.map((singleDataItem) => {
+          setupOnBoarding({
+            groupName: "string",
+            userName: "string",
+            password: "string",
+            augmentedData: "string",
+            customers: data?.map((singleDataItem) => {
               return {
-                principalCustomer: {
-                  ...singleDataItem?.principalCustomer,
-                  age:
-                    calculateAge(
-                      singleDataItem?.principalCustomer?.dateOfBirth
-                    ) || null,
-                  upcomingBirthday:
-                    calculateUpcomingBirthday(
-                      singleDataItem?.principalCustomer?.dateOfBirth
-                    ) || null,
-                  mainInterests:
-                    singleDataItem?.principalCustomer?.mainInterests?.map(
-                      (item) => item?.string
-                    ) || [],
-                  socialMediaLinks:
-                    singleDataItem?.principalCustomer?.socialMediaLinks?.map(
-                      (item) => item?.string
-                    ) || [],
-                  loyaltyPrograms:
-                    singleDataItem?.principalCustomer?.loyaltyPrograms?.map(
-                      (item) => item?.string
-                    ) || [],
-                  travelDocuments:
-                    singleDataItem?.principalCustomer?.travelDocuments?.map(
-                      (item) => item?.string
-                    ) || [],
-                  passions:
-                    singleDataItem?.principalCustomer?.passions?.map(
-                      (item) => item?.string
-                    ) || [],
-                  lifestyle:
-                    singleDataItem?.principalCustomer?.lifestyle?.map(
-                      (item) => item?.string
-                    ) || [],
-                  travelBucketList:
-                    singleDataItem?.principalCustomer?.travelBucketList?.map(
-                      (item) => item?.string
-                    ) || [],
-                  specialRequirements:
-                    singleDataItem?.principalCustomer?.specialRequirements?.map(
-                      (item) => item?.string
-                    ) || [],
-                  typeOfTravel:
-                    singleDataItem?.principalCustomer?.typeOfTravel?.map(
-                      (item) => item
-                    ) || [],
-                  travelSpan:
-                    singleDataItem?.principalCustomer?.travelSpan?.map(
-                      (item) => item
-                    ) || [],
-                },
+                ...singleDataItem?.principalCustomer,
+                age:
+                  calculateAge(
+                    singleDataItem?.principalCustomer?.dateOfBirth
+                  ) || null,
+                upcomingBirthday:
+                  calculateUpcomingBirthday(
+                    singleDataItem?.principalCustomer?.dateOfBirth
+                  ) || null,
+                mainInterests:
+                  singleDataItem?.principalCustomer?.mainInterests?.map(
+                    (item) => item?.string
+                  ) || [],
+                socialMediaLinks:
+                  singleDataItem?.principalCustomer?.socialMediaLinks?.map(
+                    (item) => item?.string
+                  ) || [],
+                loyaltyPrograms:
+                  singleDataItem?.principalCustomer?.loyaltyPrograms?.map(
+                    (item) => item?.string
+                  ) || [],
+                travelDocuments:
+                  singleDataItem?.principalCustomer?.travelDocuments?.map(
+                    (item) => item?.string
+                  ) || [],
+                passions:
+                  singleDataItem?.principalCustomer?.passions?.map(
+                    (item) => item?.string
+                  ) || [],
+                lifestyle:
+                  singleDataItem?.principalCustomer?.lifestyle?.map(
+                    (item) => item?.string
+                  ) || [],
+                travelBucketList:
+                  singleDataItem?.principalCustomer?.travelBucketList?.map(
+                    (item) => item?.string
+                  ) || [],
+                specialRequirements:
+                  singleDataItem?.principalCustomer?.specialRequirements?.map(
+                    (item) => item?.string
+                  ) || [],
+                typeOfTravel:
+                  singleDataItem?.principalCustomer?.typeOfTravel?.map(
+                    (item) => item
+                  ) || [],
+                travelSpan:
+                  singleDataItem?.principalCustomer?.travelSpan?.map(
+                    (item) => item
+                  ) || [],
                 dependents: singleDataItem?.children?.map((children) => {
                   return {
                     firstName: children?.firstName,
@@ -292,96 +294,97 @@ const MainForm = () => {
                   };
                 }),
               };
-            })
-          )
+            }),
+          })
         );
       }
     }
   }
 
-  function handleChangeExtraDataText(family, event) {
-    setExtraData((pre) => {
-      return {
-        ...pre,
-        [family]: {
-          ...pre[family],
-          [event?.target?.name]: event?.target?.value,
-        },
-      };
-    });
-  }
+  const handleChangeExtraDataText = React.useCallback((family, event) => {
+    setExtraData((prevExtraData) => ({
+      ...prevExtraData,
+      [family]: {
+        ...prevExtraData[family],
+        [event.target.name]: event.target.value,
+      },
+    }));
+  }, []);
 
-  function handleChangeText(family, event, id) {
-    setData((pre) =>
-      pre?.map((all) =>
-        all?.id === id
+  const handleChangeText = React.useCallback((family, event, id) => {
+    setData((prevData) =>
+      prevData.map((all) =>
+        all.id === id
           ? {
               ...all,
               [family]: {
                 ...all[family],
-                [event?.target?.name]: event?.target?.value,
+                [event.target.name]: event.target.value,
               },
             }
           : all
       )
     );
-  }
+  }, []);
 
-  function handleAdd(family, subFamily, extraFieldFamily, event, id) {
-    if (event) {
-      event.preventDefault();
-    }
-    if (extraData[family][extraFieldFamily] === "") {
-      toast.error(`Provide ${extraFieldFamily}`);
-    } else {
-      setData((pre) =>
-        pre?.map((all) =>
-          all?.id === id
-            ? {
-                ...all,
-                [family]: {
-                  ...all[family],
-                  [subFamily]: [
-                    ...all[family][subFamily],
-                    {
-                      id: uuidv4(),
-                      string: extraData[family][extraFieldFamily],
-                    },
-                  ],
-                },
-              }
-            : all
-        )
-      );
-      setExtraData((pre) => {
-        return {
-          ...pre,
+  const handleAdd = React.useCallback(
+    (family, subFamily, extraFieldFamily, event, id) => {
+      if (event) {
+        event.preventDefault();
+      }
+
+      if (extraData[family][extraFieldFamily] === "") {
+        toast.error(`Provide ${extraFieldFamily}`);
+      } else {
+        setData((prevData) =>
+          prevData.map((all) =>
+            all.id === id
+              ? {
+                  ...all,
+                  [family]: {
+                    ...all[family],
+                    [subFamily]: [
+                      ...all[family][subFamily],
+                      {
+                        id: uuidv4(),
+                        string: extraData[family][extraFieldFamily],
+                      },
+                    ],
+                  },
+                }
+              : all
+          )
+        );
+
+        setExtraData((prevExtraData) => ({
+          ...prevExtraData,
           [family]: {
-            ...pre[family],
+            ...prevExtraData[family],
             [extraFieldFamily]: "",
           },
-        };
-      });
-    }
-  }
+        }));
+      }
+    },
+    [extraData]
+  );
 
-  function handleDelete(family, subFamily, id, mainId) {
-    setData((pre) =>
-      pre?.map((all) =>
-        all?.id === mainId
+  const handleDelete = React.useCallback((family, subFamily, id, mainId) => {
+    setData((prevData) =>
+      prevData.map((all) =>
+        all.id === mainId
           ? {
               ...all,
               [family]: {
                 ...all[family],
                 [subFamily]: all[family][subFamily]?.filter(
-                  (subFamilyItem) => subFamilyItem?.id !== id
+                  (subFamilyItem) => subFamilyItem.id !== id
                 ),
               },
             }
           : all
       )
     );
-  }
+  }, []);
 
   React.useEffect(() => {
     if (onBoardingAddSuccess) {
@@ -391,7 +394,9 @@ const MainForm = () => {
 
   return (
     <div className="my-4">
-      <h3 className=" my-4 underline">OnBoarding</h3>
+      <h5 className="link-info cursor-pointer">OnBoarding</h5>
+      <hr />
+
       <header className="section-header my-3 align-items-center text-start d-flex">
         <div className="mb-0 sub-heading">Add Principal Customers</div>
         <div

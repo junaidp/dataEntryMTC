@@ -13,7 +13,6 @@ const LifeStyle = ({
   return (
     <div className="row mt-4">
       <div>
-        <h6>LifeStyles:</h6>
         <div className="row p-0">
           <form
             className="col-lg-10 mb-2"
@@ -31,6 +30,8 @@ const LifeStyle = ({
               className="form-control w-100s"
               name="lifestyle"
               id="lifestyle"
+              label="LifeStyle"
+              variant="outlined"
               value={extraData?.principalCustomer?.lifestyle}
               onChange={(event) =>
                 handleChangeExtraDataText("principalCustomer", event, data?.id)
@@ -38,7 +39,7 @@ const LifeStyle = ({
             />
           </form>
 
-          <div className={`col-lg-2 text-end float-end align-self-end mb-4`}>
+          <div className={`col-lg-2 text-end float-end align-self-end mb-4 mt-4`}>
             <button
               className="btn btn-labeled btn-primary w-100 shadow"
               type="submit"

@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import { onBoarding, chat } from "./thunk";
+import { onBoarding, chat, signIn } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
@@ -21,6 +21,12 @@ export const setupChat = createAsyncThunk(
   "onBoard/chat",
   async (data, thunkAPI) => {
     return chat(data, thunkAPI);
+  }
+);
+export const setupSignIn = createAsyncThunk(
+  "onBoard/signIn",
+  async (data, thunkAPI) => {
+    return signIn(data, thunkAPI);
   }
 );
 
@@ -66,6 +72,24 @@ export const slice = createSlice({
         state.experiences = payload?.experiences || [];
       })
       .addCase(setupChat.rejected, (state, action) => {
+        state.loading = false;
+        if (action.payload?.response?.data?.message) {
+          toast.error(action.payload.response.data.message);
+        } else {
+          toast.error("An Error has occurred");
+        }
+      });
+    // Sign In
+    builder
+      .addCase(setupSignIn.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupSignIn.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        toast.success("User Sign In Successfully");
+        state.onBoardingAddSuccess = true;
+      })
+      .addCase(setupSignIn.rejected, (state, action) => {
         state.loading = false;
         if (action.payload?.response?.data?.message) {
           toast.error(action.payload.response.data.message);

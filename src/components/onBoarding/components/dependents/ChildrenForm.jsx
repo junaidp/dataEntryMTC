@@ -20,96 +20,101 @@ const Children = ({
   setChildrenExtraData,
   childrenData,
 }) => {
-  function handleChangeText(id, event, mainId) {
+  const handleChangeText = React.useCallback((id, event, mainId) => {
     if (id) {
-      setData((pre) =>
-        pre?.map((all) => all?.id === mainId)
-          ? {
-              ...all,
-              children: all?.children?.map((singleChildrenItem) =>
-                singleChildrenItem?.id === id
-                  ? {
-                      ...singleChildrenItem,
-                      [event?.target?.name]: event?.target?.value,
-                    }
-                  : singleChildrenItem
-              ),
-            }
-          : all
-      );
-    }
-  }
-
-  function handleChangeExtraDataText(family, event) {
-    setChildrenExtraData((pre) => {
-      return {
-        ...pre,
-        [family]: event?.target?.value,
-      };
-    });
-  }
-
-  function handleAdd(id, subFamily, extraFieldFamily, event, mainId) {
-    if (event) {
-      event.preventDefault();
-    }
-    if (childrenExtraData[extraFieldFamily] === "") {
-      toast.error(`Provide ${extraFieldFamily}`);
-    } else {
-      setData((pre) =>
-        pre?.map((item) =>
-          item?.id === mainId
+      setData((prevData) =>
+        prevData.map((all) =>
+          all.id === mainId
             ? {
-                ...item,
-                children: item?.children?.map((singleChildrenItem) =>
-                  singleChildrenItem?.id === id
+                ...all,
+                children: all.children.map((singleChildrenItem) =>
+                  singleChildrenItem.id === id
                     ? {
                         ...singleChildrenItem,
-                        [subFamily]: [
-                          ...singleChildrenItem[subFamily],
-                          {
-                            id: uuidv4(),
-                            string: childrenExtraData[extraFieldFamily],
-                          },
-                        ],
+                        [event.target.name]: event.target.value,
                       }
                     : singleChildrenItem
                 ),
               }
-            : item
+            : all
         )
       );
-
-      setChildrenExtraData((pre) => {
-        return {
-          ...pre,
-          [extraFieldFamily]: "",
-        };
-      });
     }
-  }
+  }, []);
 
-  function handleDelete(subChildrenId, subFamily, id, mainId) {
-    setData((pre) =>
-      pre?.map((all) =>
-        all?.id === mainId
-          ? {
-              ...all,
-              children: all?.children?.map((singleChildrenItem) =>
-                singleChildrenItem?.id === subChildrenId
-                  ? {
-                      ...singleChildrenItem,
-                      [subFamily]: singleChildrenItem[subFamily]?.filter(
-                        (chip) => chip?.id !== id
-                      ),
-                    }
-                  : singleChildrenItem
-              ),
-            }
-          : all
-      )
-    );
-  }
+  const handleChangeExtraDataText = React.useCallback((family, event) => {
+    setChildrenExtraData((prevExtraData) => ({
+      ...prevExtraData,
+      [family]: event.target.value,
+    }));
+  }, []);
+
+  const handleAdd = React.useCallback(
+    (id, subFamily, extraFieldFamily, event, mainId) => {
+      if (event) {
+        event.preventDefault();
+      }
+
+      if (childrenExtraData[extraFieldFamily] === "") {
+        toast.error(`Provide ${extraFieldFamily}`);
+      } else {
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.id === mainId
+              ? {
+                  ...item,
+                  children: item.children.map((singleChildrenItem) =>
+                    singleChildrenItem.id === id
+                      ? {
+                          ...singleChildrenItem,
+                          [subFamily]: [
+                            ...singleChildrenItem[subFamily],
+                            {
+                              id: uuidv4(),
+                              string: childrenExtraData[extraFieldFamily],
+                            },
+                          ],
+                        }
+                      : singleChildrenItem
+                  ),
+                }
+              : item
+          )
+        );
+
+        setChildrenExtraData((prevExtraData) => ({
+          ...prevExtraData,
+          [extraFieldFamily]: "",
+        }));
+      }
+    },
+    [childrenExtraData]
+  );
+
+  const handleDelete = React.useCallback(
+    (subChildrenId, subFamily, id, mainId) => {
+      setData((prevData) =>
+        prevData.map((all) =>
+          all.id === mainId
+            ? {
+                ...all,
+                children: all.children.map((singleChildrenItem) =>
+                  singleChildrenItem.id === subChildrenId
+                    ? {
+                        ...singleChildrenItem,
+                        [subFamily]: singleChildrenItem[subFamily]?.filter(
+                          (chip) => chip.id !== id
+                        ),
+                      }
+                    : singleChildrenItem
+                ),
+              }
+            : all
+        )
+      );
+    },
+    []
+  );
 
   return (
     <div>

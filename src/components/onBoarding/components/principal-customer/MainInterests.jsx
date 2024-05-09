@@ -13,7 +13,6 @@ const MainInterests = ({
   return (
     <div className="row mt-4">
       <div>
-        <h6>Interests:</h6>
         <div>
           <div className="row p-0">
             <form
@@ -32,6 +31,8 @@ const MainInterests = ({
                 className="form-control"
                 name="interest"
                 id="interest"
+                label="Interest"
+                variant="outlined"
                 value={extraData?.principalCustomer?.interest}
                 onChange={(event) =>
                   handleChangeExtraDataText(
@@ -43,7 +44,7 @@ const MainInterests = ({
               />
             </form>
 
-            <div className={`col-lg-2 text-end float-end align-self-end mb-4`}>
+            <div className={`col-lg-2 text-end float-end align-self-end mb-4 mt-4`}>
               <button
                 className="btn btn-labeled btn-primary w-100 shadow"
                 type="submit"

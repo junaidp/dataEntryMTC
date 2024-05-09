@@ -25,7 +25,7 @@ const ChildrenWrap = ({
             Add
           </div>
         </header>
-        <div className="accordion" id="accordionFlushExample">
+        <div className="accordion" id="sub-accordionExample">
           {childrenData?.children?.length === 0 ? (
             <p>No dependents added yet!</p>
           ) : (
@@ -37,9 +37,9 @@ const ChildrenWrap = ({
                       className="accordion-button collapsed br-8"
                       type="button"
                       data-bs-toggle="collapse"
-                      data-bs-target={`#flush-collapse${children?.id}`}
+                      data-bs-target={`#sub-collapse${children?.id}`}
                       aria-expanded="false"
-                      aria-controls={`flush-collapse${children?.id}`}
+                      aria-controls={`sub-collapse${children?.id}`}
                       onClick={() =>
                         setChildrenExtraData({
                           interest: "",
@@ -71,9 +71,9 @@ const ChildrenWrap = ({
                     </button>
                   </h2>
                   <div
-                    id={`flush-collapse${children?.id}`}
+                    id={`sub-collapse${children?.id}`}
                     className="accordion-collapse collapse"
-                    data-bs-parent="#accordionFlushExample"
+                    data-bs-parent="#sub-accordionExample"
                   >
                     <div className="accordion-body">
                       <Children
