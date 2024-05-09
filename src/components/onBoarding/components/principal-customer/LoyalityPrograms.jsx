@@ -42,11 +42,12 @@ const LoyalityPrograms = ({
             <button
               className="btn btn-labeled btn-primary w-100 shadow"
               type="submit"
-              onClick={() =>
+              onClick={(event) =>
                 handleAdd(
                   "principalCustomer",
                   "loyaltyPrograms",
                   "program",
+                  event,
                   data?.id
                 )
               }

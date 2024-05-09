@@ -44,8 +44,8 @@ const Passions = ({
             <button
               className="btn btn-labeled btn-primary w-100 shadow"
               type="submit"
-              onClick={() =>
-                handleAdd(data?.id, "passions", "passion", childrenData?.id)
+              onClick={(event) =>
+                handleAdd(data?.id, "passions", "passion", event,childrenData?.id)
               }
             >
               <span className="btn-label me-2">

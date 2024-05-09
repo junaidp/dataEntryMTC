@@ -43,11 +43,12 @@ const SpecialRequirements = ({
             <button
               className="btn btn-labeled btn-primary w-100 shadow"
               type="submit"
-              onClick={() =>
+              onClick={(event) =>
                 handleAdd(
                   "principalCustomer",
                   "specialRequirements",
                   "specialrequirement",
+                  event,
                   data?.id
                 )
               }

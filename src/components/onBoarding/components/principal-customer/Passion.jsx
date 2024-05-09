@@ -43,8 +43,8 @@ const Passions = ({
             <button
               className="btn btn-labeled btn-primary w-100 shadow"
               type="submit"
-              onClick={() =>
-                handleAdd("principalCustomer", "passions", "passion", data?.id)
+              onClick={(event) =>
+                handleAdd("principalCustomer", "passions", "passion", event,data?.id)
               }
             >
               <span className="btn-label me-2">

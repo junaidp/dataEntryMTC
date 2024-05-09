@@ -39,15 +39,18 @@ const LifeStyle = ({
             />
           </form>
 
-          <div className={`col-lg-2 text-end float-end align-self-end mb-4 mt-4`}>
+          <div
+            className={`col-lg-2 text-end float-end align-self-end mb-4 mt-4`}
+          >
             <button
               className="btn btn-labeled btn-primary w-100 shadow"
               type="submit"
-              onClick={() =>
+              onClick={(event) =>
                 handleAdd(
                   "principalCustomer",
                   "lifestyle",
                   "lifestyle",
+                  event,
                   data?.id
                 )
               }

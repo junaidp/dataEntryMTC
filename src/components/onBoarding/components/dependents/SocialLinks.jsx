@@ -44,11 +44,12 @@ const SocialLinks = ({
             <button
               className="btn btn-labeled btn-primary w-100 shadow"
               type="submit"
-              onClick={() =>
+              onClick={(event) =>
                 handleAdd(
                   data?.id,
                   "socialMediaLinks",
                   "link",
+                  event,
                   childrenData?.id
                 )
               }

@@ -39,12 +39,20 @@ const TravelDocuments = ({
               }
             />
           </form>
-          <div className={`col-lg-2 text-end float-end align-self-end mb-4 mt-4`}>
+          <div
+            className={`col-lg-2 text-end float-end align-self-end mb-4 mt-4`}
+          >
             <button
               className="btn btn-labeled btn-primary w-100 shadow"
               type="submit"
-              onClick={() =>
-                handleAdd(data?.id, "travelDocuments", "doc", childrenData?.id)
+              onClick={(event) =>
+                handleAdd(
+                  data?.id,
+                  "travelDocuments",
+                  "doc",
+                  event,
+                  childrenData?.id
+                )
               }
             >
               <span className="btn-label me-2">

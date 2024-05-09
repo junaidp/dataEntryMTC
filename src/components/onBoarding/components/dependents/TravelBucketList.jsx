@@ -44,11 +44,12 @@ const TravelBucketList = ({
             <button
               className="btn btn-labeled btn-primary w-100 shadow"
               type="submit"
-              onClick={() =>
+              onClick={(event) =>
                 handleAdd(
                   data?.id,
                   "travelBucketList",
                   "bucketlist",
+                  event,
                   childrenData?.id
                 )
               }

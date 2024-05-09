@@ -8,12 +8,16 @@ import {
 } from "../../../global-redux/reducers/onBoard/slice";
 import { useSelector, useDispatch } from "react-redux";
 import ChildrenWrap from "./dependents/ChildrenWrap";
+import TextField from "@mui/material/TextField";
+import Tooltip from "@mui/material/Tooltip";
 
 const MainForm = () => {
   const dispatch = useDispatch();
   const { loading, onBoardingAddSuccess } = useSelector(
     (state) => state?.onBoard
   );
+  const [userName, setUserName] = React.useState("");
+  const [password, setPassword] = React.useState("");
   const [data, setData] = React.useState([
     {
       id: uuidv4(),
@@ -94,15 +98,17 @@ const MainForm = () => {
   }
 
   function handleDeleteAccordion(id, mainId) {
-    setData((all) =>
-      all?.id === mainId
-        ? {
-            ...all,
-            children: all?.children?.filter(
-              (singleChildren) => singleChildren?.id !== id
-            ),
-          }
-        : all
+    setData((pre) =>
+      pre?.map((all) =>
+        all?.id === mainId
+          ? {
+              ...all,
+              children: all?.children?.filter(
+                (singleChildren) => singleChildren?.id !== id
+              ),
+            }
+          : all
+      )
     );
   }
 
@@ -199,8 +205,8 @@ const MainForm = () => {
         dispatch(
           setupOnBoarding({
             groupName: "string",
-            userName: "string",
-            password: "string",
+            userName: userName,
+            password: password,
             augmentedData: "string",
             customers: data?.map((singleDataItem) => {
               return {
@@ -495,6 +501,36 @@ const MainForm = () => {
             );
           })
         )}
+      </div>
+
+      <div className="row mt-4">
+        <div className="col-lg-5 mb-2">
+          <TextField
+            id="firstName"
+            name="firstName"
+            label="User Name"
+            variant="outlined"
+            className="form-control"
+            value={userName}
+            onChange={(event) => setUserName(event?.target?.value)}
+          />
+        </div>
+        <div className="col-lg-6 mb-2">
+          <TextField
+            id="lastName"
+            name="lastName"
+            label="Password"
+            variant="outlined"
+            className="form-control"
+            value={password}
+            onChange={(event) => setPassword(event?.target?.value)}
+          />
+        </div>
+        <div className="col-lg-1 mt-3 cursor-pointer">
+          <Tooltip title="Optional To Sign In Later" placement="top">
+            <p className="underline">Note</p>
+          </Tooltip>
+        </div>
       </div>
 
       <div>

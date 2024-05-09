@@ -46,8 +46,14 @@ const LifeStyle = ({
             <button
               className="btn btn-labeled btn-primary w-100 shadow "
               type="submit"
-              onClick={() =>
-                handleAdd(data?.id, "lifestyle", "lifestyle", childrenData?.id)
+              onClick={(event) =>
+                handleAdd(
+                  data?.id,
+                  "lifestyle",
+                  "lifestyle",
+                  event,
+                  childrenData?.id
+                )
               }
             >
               <span className="btn-label me-2">
