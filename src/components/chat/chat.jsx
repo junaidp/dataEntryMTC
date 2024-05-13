@@ -6,9 +6,8 @@ import { useDetectClickOutside } from "react-detect-click-outside";
 const Chat = ({ value }) => {
   const dispatch = useDispatch();
   const messagesEndRef = React.useRef(null);
-  const { chatResponse, loading, customerId } = useSelector(
-    (state) => state?.onBoard
-  );
+  const { chatResponse, loading, customerId, onBoardingAddSuccess } =
+    useSelector((state) => state?.onBoard);
   const [question, setQuestion] = React.useState("");
   const [chatHistory, setChatHistory] = React.useState([]);
   const [showChat, setShowChat] = React.useState(false);
@@ -62,6 +61,20 @@ const Chat = ({ value }) => {
     }, 1000);
     return () => clearInterval(intervalId);
   }, []);
+
+  React.useEffect(() => {
+    if (onBoardingAddSuccess) {
+      setShowChat(true);
+      setChatHistory([
+        ...chatHistory,
+        {
+          role: "system",
+          content:
+            "We have received your info about your self. Now tell us a little bit, what you looking for",
+        },
+      ]);
+    }
+  }, [onBoardingAddSuccess]);
 
   return (
     <div ref={ref}>

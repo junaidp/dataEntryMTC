@@ -9,6 +9,7 @@ const initialState = {
   chatResponse: "",
   customerId: "66332bb85725cd245aab4459",
   experiences: [],
+  signUpAddSuccess: false,
 };
 
 export const setupOnBoarding = createAsyncThunk(
@@ -36,6 +37,7 @@ export const slice = createSlice({
   reducers: {
     resetOnBoardingAddSuccess: (state) => {
       state.onBoardingAddSuccess = false;
+      state.signUpAddSuccess = false;
     },
   },
   extraReducers: (builder) => {
@@ -87,7 +89,7 @@ export const slice = createSlice({
       .addCase(setupSignIn.fulfilled, (state, { payload }) => {
         state.loading = false;
         toast.success("User Sign In Successfully");
-        state.onBoardingAddSuccess = true;
+        state.signUpAddSuccess = true;
       })
       .addCase(setupSignIn.rejected, (state, action) => {
         state.loading = false;

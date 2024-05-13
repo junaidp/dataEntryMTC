@@ -6,9 +6,7 @@ import { setupSignIn } from "../../global-redux/reducers/onBoard/slice";
 
 const Login = ({ setShowLoginDialog }) => {
   const dispatch = useDispatch();
-  const { loading, onBoardingAddSuccess } = useSelector(
-    (state) => state?.onBoard
-  );
+  const { loading, signUpAddSuccess } = useSelector((state) => state?.onBoard);
   const [showpassword, setShowPassword] = React.useState(false);
   const [password, setPassword] = React.useState("");
   const [userName, setUserName] = React.useState("");
@@ -27,10 +25,10 @@ const Login = ({ setShowLoginDialog }) => {
   }
 
   React.useEffect(() => {
-    if (onBoardingAddSuccess) {
+    if (signUpAddSuccess) {
       setShowLoginDialog(false);
     }
-  }, [onBoardingAddSuccess]);
+  }, [signUpAddSuccess]);
 
   return (
     <div className="px-4 py-4">

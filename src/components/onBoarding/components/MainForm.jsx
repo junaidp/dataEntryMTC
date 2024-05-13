@@ -9,7 +9,6 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import ChildrenWrap from "./dependents/ChildrenWrap";
 import TextField from "@mui/material/TextField";
-import Tooltip from "@mui/material/Tooltip";
 
 const MainForm = () => {
   const dispatch = useDispatch();
@@ -424,11 +423,13 @@ const MainForm = () => {
               <div className="accordion-item" key={index}>
                 <h2 className="accordion-header">
                   <button
-                    className="accordion-button collapsed br-8"
+                    className={`accordion-button ${
+                      index === 0 && "collapsed"
+                    } br-8`}
                     type="button"
                     data-bs-toggle="collapse"
                     data-bs-target={`#flush-collapse${index}`}
-                    aria-expanded="false"
+                    aria-expanded={index === 0 ? "true" : "false"}
                     aria-controls={`flush-collapse${index}`}
                     onClick={() => {
                       setChildrenExtraData({
@@ -473,7 +474,9 @@ const MainForm = () => {
                 </h2>
                 <div
                   id={`flush-collapse${index}`}
-                  className="accordion-collapse collapse"
+                  className={`accordion-collapse collapse ${
+                    index === 0 && "show"
+                  }`}
                   data-bs-parent="#accordionFlushExample"
                 >
                   <div className="accordion-body">
@@ -504,7 +507,7 @@ const MainForm = () => {
       </div>
 
       <div className="row mt-4">
-        <div className="col-lg-5 mb-2">
+        <div className="col-lg-4 mb-2">
           <TextField
             id="firstName"
             name="firstName"
@@ -515,7 +518,7 @@ const MainForm = () => {
             onChange={(event) => setUserName(event?.target?.value)}
           />
         </div>
-        <div className="col-lg-6 mb-2">
+        <div className="col-lg-4 mb-2">
           <TextField
             id="lastName"
             name="lastName"
@@ -526,10 +529,8 @@ const MainForm = () => {
             onChange={(event) => setPassword(event?.target?.value)}
           />
         </div>
-        <div className="col-lg-1 mt-3 cursor-pointer">
-          <Tooltip title="Optional To Sign In Later" placement="top">
-            <p className="underline">Note</p>
-          </Tooltip>
+        <div className="col-lg-4 mt-3 cursor-pointer">
+          <p>Optional (to sign in later)</p>
         </div>
       </div>
 
