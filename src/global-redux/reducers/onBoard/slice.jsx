@@ -48,8 +48,7 @@ export const slice = createSlice({
       })
       .addCase(setupOnBoarding.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.response = payload || [{ error: "Not Found" }];
-        state.customerId = payload.customerId || "66332bb85725cd245aab4459";
+        state.customerId = payload || "66332bb85725cd245aab4459";
         state.onBoardingAddSuccess = true;
         toast.success("On-Boarding Response Fetched Successfully");
       })
@@ -68,9 +67,7 @@ export const slice = createSlice({
       })
       .addCase(setupChat.fulfilled, (state, { payload }) => {
         state.loading = false;
-        if (payload?.experiences?.length === 0) {
-          state.chatResponse = payload?.chatResponse || "";
-        }
+        state.chatResponse = payload?.chatResponse || "";
         state.experiences = payload?.experiences || [];
       })
       .addCase(setupChat.rejected, (state, action) => {

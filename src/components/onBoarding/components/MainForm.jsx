@@ -2,10 +2,7 @@ import React from "react";
 import PrincipleCustomer from "./principal-customer/PrincipleCustomer";
 import { toast } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
-import {
-  resetOnBoardingAddSuccess,
-  setupOnBoarding,
-} from "../../../global-redux/reducers/onBoard/slice";
+import { setupOnBoarding } from "../../../global-redux/reducers/onBoard/slice";
 import { useSelector, useDispatch } from "react-redux";
 import ChildrenWrap from "./dependents/ChildrenWrap";
 import TextField from "@mui/material/TextField";
@@ -390,12 +387,6 @@ const MainForm = () => {
       )
     );
   }, []);
-
-  React.useEffect(() => {
-    if (onBoardingAddSuccess) {
-      dispatch(resetOnBoardingAddSuccess());
-    }
-  }, [onBoardingAddSuccess]);
 
   return (
     <div className="my-4">

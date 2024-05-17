@@ -3,7 +3,7 @@ import { setupChat } from "../../global-redux/reducers/onBoard/slice";
 import { useDispatch, useSelector } from "react-redux";
 import { useDetectClickOutside } from "react-detect-click-outside";
 
-const Chat = ({ value }) => {
+const Chat = ({ sessionId }) => {
   const dispatch = useDispatch();
   const messagesEndRef = React.useRef(null);
   const { chatResponse, loading, customerId, onBoardingAddSuccess } =
@@ -25,9 +25,8 @@ const Chat = ({ value }) => {
       dispatch(
         setupChat({
           query: question,
-          previousChat: [...chatHistory, { role: "user", content: question }],
-          type: value,
           customerId: customerId,
+          sessionId: sessionId,
         })
       );
     }
@@ -48,6 +47,20 @@ const Chat = ({ value }) => {
   }, [chatHistory]);
 
   React.useEffect(() => {
+    if (onBoardingAddSuccess) {
+      setShowChat(true);
+      setChatHistory([
+        ...chatHistory,
+        {
+          role: "system",
+          content:
+            "We have received your info about your self. Now tell us a little bit, what you looking for",
+        },
+      ]);
+    }
+  }, [onBoardingAddSuccess]);
+
+  React.useEffect(() => {
     const intervalId = setInterval(() => {
       const date = new Date();
       const options = {
@@ -61,20 +74,6 @@ const Chat = ({ value }) => {
     }, 1000);
     return () => clearInterval(intervalId);
   }, []);
-
-  React.useEffect(() => {
-    if (onBoardingAddSuccess) {
-      setShowChat(true);
-      setChatHistory([
-        ...chatHistory,
-        {
-          role: "system",
-          content:
-            "We have received your info about your self. Now tell us a little bit, what you looking for",
-        },
-      ]);
-    }
-  }, [onBoardingAddSuccess]);
 
   return (
     <div ref={ref}>

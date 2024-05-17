@@ -20,9 +20,7 @@ export const chat = async (data, thunkAPI) => {
       `https://data-entry-08031d053c68.herokuapp.com/onBoard/chat`,
       {
         query: data?.query,
-        previousChat: data?.previousChat,
-        // ai: data?.type,
-        ai: "CLAUDE",
+        session_id: data?.sessionId,
         customerId: data?.customerId || "66332bb85725cd245aab4459",
       }
     );
