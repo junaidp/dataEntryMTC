@@ -6,12 +6,11 @@ import { setupOnBoarding } from "../../../global-redux/reducers/onBoard/slice";
 import { useSelector, useDispatch } from "react-redux";
 import ChildrenWrap from "./dependents/ChildrenWrap";
 import TextField from "@mui/material/TextField";
+import moment from "moment";
 
 const MainForm = () => {
   const dispatch = useDispatch();
-  const { loading, onBoardingAddSuccess } = useSelector(
-    (state) => state?.onBoard
-  );
+  const { loading, signInData } = useSelector((state) => state?.onBoard);
   const [userName, setUserName] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [data, setData] = React.useState([
@@ -388,6 +387,224 @@ const MainForm = () => {
     );
   }, []);
 
+  React.useEffect(() => {
+    if (
+      signInData &&
+      signInData?.customers &&
+      signInData?.customers?.length !== 0
+    ) {
+      setData(
+        signInData?.customers?.map((singleDataItem) => {
+          return {
+            id: singleDataItem?.id || uuidv4(),
+            principalCustomer: {
+              firstName: singleDataItem?.firstName || "",
+              lastName: singleDataItem?.lastName || "",
+              dateOfBirth: singleDataItem?.dateOfBirth
+                ? moment.utc(singleDataItem?.dateOfBirth).format("YYYY-MM-DD")
+                : "",
+              cityOfResidence: singleDataItem?.cityOfResidence || "",
+              email: singleDataItem?.email || "",
+              gender: singleDataItem?.gender || "",
+              mainInterests:
+                singleDataItem?.mainInterests &&
+                singleDataItem?.mainInterests?.length !== 0
+                  ? singleDataItem?.mainInterests?.map((item) => {
+                      return {
+                        string: item,
+                        id: uuidv4(),
+                      };
+                    })
+                  : [],
+              socialMediaLinks:
+                singleDataItem?.socialMediaLinks &&
+                singleDataItem?.socialMediaLinks?.length !== 0
+                  ? singleDataItem?.socialMediaLinks?.map((item) => {
+                      return {
+                        string: item,
+                        id: uuidv4(),
+                      };
+                    })
+                  : [],
+              loyaltyPrograms:
+                singleDataItem?.loyaltyPrograms &&
+                singleDataItem?.loyaltyPrograms?.length !== 0
+                  ? singleDataItem?.loyaltyPrograms?.map((item) => {
+                      return {
+                        string: item,
+                        id: uuidv4(),
+                      };
+                    })
+                  : [],
+              travelDocuments:
+                singleDataItem?.travelDocuments &&
+                singleDataItem?.travelDocuments?.length !== 0
+                  ? singleDataItem?.travelDocuments?.map((item) => {
+                      return {
+                        string: item,
+                        id: uuidv4(),
+                      };
+                    })
+                  : [],
+              passions:
+                singleDataItem?.passions &&
+                singleDataItem?.passions?.length !== 0
+                  ? singleDataItem?.passions?.map((item) => {
+                      return {
+                        string: item,
+                        id: uuidv4(),
+                      };
+                    })
+                  : [],
+              lifestyle:
+                singleDataItem?.lifestyle &&
+                singleDataItem?.lifestyle?.length !== 0
+                  ? singleDataItem?.lifestyle?.map((item) => {
+                      return {
+                        string: item,
+                        id: uuidv4(),
+                      };
+                    })
+                  : [],
+              travelBucketList:
+                singleDataItem?.travelBucketList &&
+                singleDataItem?.travelBucketList?.length !== 0
+                  ? singleDataItem?.travelBucketList?.map((item) => {
+                      return {
+                        string: item,
+                        id: uuidv4(),
+                      };
+                    })
+                  : [],
+              specialRequirements:
+                singleDataItem?.specialRequirements &&
+                singleDataItem?.specialRequirements?.length !== 0
+                  ? singleDataItem?.specialRequirements?.map((item) => {
+                      return {
+                        string: item,
+                        id: uuidv4(),
+                      };
+                    })
+                  : [],
+              typeOfTravel:
+                singleDataItem?.typeOfTravel &&
+                singleDataItem?.typeOfTravel?.length !== 0
+                  ? singleDataItem?.typeOfTravel?.map((item) => item)
+                  : [],
+              travelSpan:
+                singleDataItem?.travelSpan &&
+                singleDataItem?.travelSpan?.length !== 0
+                  ? singleDataItem?.travelSpan?.map((item) => item)
+                  : [],
+            },
+            children: singleDataItem?.dependents?.map((children) => {
+              return {
+                id: children?.id || uuidv4(),
+                firstName: children?.firstName || "",
+                lastName: children?.lastName || "",
+                dateOfBirth: children?.dateOfBirth
+                  ? moment.utc(children?.dateOfBirth).format("YYYY-MM-DD")
+                  : "",
+                cityOfResidence: children?.cityOfResidence || "",
+                email: children?.email || "",
+                relation: children?.relation || "",
+                gender: children?.gender || "",
+                mainInterests:
+                  children?.mainInterests &&
+                  children?.mainInterests?.length !== 0
+                    ? children?.mainInterests?.map((item) => {
+                        return {
+                          string: item,
+                          id: uuidv4(),
+                        };
+                      })
+                    : [],
+                socialMediaLinks:
+                  children?.socialMediaLinks &&
+                  children?.socialMediaLinks?.length !== 0
+                    ? children?.socialMediaLinks?.map((item) => {
+                        return {
+                          string: item,
+                          id: uuidv4(),
+                        };
+                      })
+                    : [],
+                loyaltyPrograms:
+                  children?.loyaltyPrograms &&
+                  children?.loyaltyPrograms?.length !== 0
+                    ? children?.loyaltyPrograms?.map((item) => {
+                        return {
+                          string: item,
+                          id: uuidv4(),
+                        };
+                      })
+                    : [],
+                travelDocuments:
+                  children?.travelDocuments &&
+                  children?.travelDocuments?.length !== 0
+                    ? children?.travelDocuments?.map((item) => {
+                        return {
+                          string: item,
+                          id: uuidv4(),
+                        };
+                      })
+                    : [],
+                passions:
+                  children?.passions && children?.passions?.length !== 0
+                    ? children?.passions?.map((item) => {
+                        return {
+                          string: item,
+                          id: uuidv4(),
+                        };
+                      })
+                    : [],
+                lifestyle:
+                  children?.lifestyle && children?.lifestyle?.length !== 0
+                    ? children?.lifestyle?.map((item) => {
+                        return {
+                          string: item,
+                          id: uuidv4(),
+                        };
+                      })
+                    : [],
+                travelBucketList:
+                  children?.travelBucketList &&
+                  children?.travelBucketList?.length !== 0
+                    ? children?.travelBucketList?.map((item) => {
+                        return {
+                          string: item,
+                          id: uuidv4(),
+                        };
+                      })
+                    : [],
+                specialRequirements:
+                  children?.specialRequirements &&
+                  children?.specialRequirements?.length !== 0
+                    ? children?.specialRequirements?.map((item) => {
+                        return {
+                          string: item,
+                          id: uuidv4(),
+                        };
+                      })
+                    : [],
+                typeOfTravel:
+                  children?.typeOfTravel && children?.typeOfTravel?.length !== 0
+                    ? children?.typeOfTravel?.map((item) => item)
+                    : [],
+                travelSpan:
+                  children?.travelSpan && children?.travelSpan?.length !== 0
+                    ? children?.travelSpan?.map((item) => item)
+                    : [],
+              };
+            }),
+          };
+        })
+      );
+      setUserName(signInData?.userName || "");
+      setPassword(signInData?.password || "");
+    }
+  }, [signInData]);
+
   return (
     <div className="my-4">
       <h5 className="link-info cursor-pointer">OnBoarding</h5>
@@ -479,6 +696,7 @@ const MainForm = () => {
                       handleAdd={handleAdd}
                       handleDelete={handleDelete}
                       setData={setData}
+                      index={index}
                     />
                     <hr className="mt-4" />
                     <ChildrenWrap
@@ -488,6 +706,7 @@ const MainForm = () => {
                       childrenExtraData={childrenExtraData}
                       setData={setData}
                       handleDeleteAccordion={handleDeleteAccordion}
+                      index={index}
                     />
                   </div>
                 </div>
@@ -496,34 +715,35 @@ const MainForm = () => {
           })
         )}
       </div>
-
-      <div className="row mt-4">
-        <div className="col-lg-4 mb-2">
-          <TextField
-            id="firstName"
-            name="firstName"
-            label="User Name"
-            variant="outlined"
-            className="form-control"
-            value={userName}
-            onChange={(event) => setUserName(event?.target?.value)}
-          />
+      {!signInData?.customers && (
+        <div className="row mt-4">
+          <div className="col-lg-4 mb-2">
+            <TextField
+              id="firstName"
+              name="firstName"
+              label="User Name"
+              variant="outlined"
+              className="form-control"
+              value={userName}
+              onChange={(event) => setUserName(event?.target?.value)}
+            />
+          </div>
+          <div className="col-lg-4 mb-2">
+            <TextField
+              id="lastName"
+              name="lastName"
+              label="Password"
+              variant="outlined"
+              className="form-control"
+              value={password}
+              onChange={(event) => setPassword(event?.target?.value)}
+            />
+          </div>
+          <div className="col-lg-4 mt-3 cursor-pointer">
+            <p>Optional (to sign in later)</p>
+          </div>
         </div>
-        <div className="col-lg-4 mb-2">
-          <TextField
-            id="lastName"
-            name="lastName"
-            label="Password"
-            variant="outlined"
-            className="form-control"
-            value={password}
-            onChange={(event) => setPassword(event?.target?.value)}
-          />
-        </div>
-        <div className="col-lg-4 mt-3 cursor-pointer">
-          <p>Optional (to sign in later)</p>
-        </div>
-      </div>
+      )}
 
       <div>
         <div

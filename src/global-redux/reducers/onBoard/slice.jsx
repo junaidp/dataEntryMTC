@@ -10,6 +10,7 @@ const initialState = {
   customerId: "66332bb85725cd245aab4459",
   experiences: [],
   signUpAddSuccess: false,
+  signInData: {},
 };
 
 export const setupOnBoarding = createAsyncThunk(
@@ -84,8 +85,12 @@ export const slice = createSlice({
         state.loading = true;
       })
       .addCase(setupSignIn.fulfilled, (state, { payload }) => {
-        state.loading = false;
+        if (payload && Object.keys(payload)?.length !== 0) {
+          state.signInData = payload;
+          state.customerId = payload?.id || "66332bb85725cd245aab4459";
+        }
         toast.success("User Sign In Successfully");
+        state.loading = false;
         state.signUpAddSuccess = true;
       })
       .addCase(setupSignIn.rejected, (state, action) => {

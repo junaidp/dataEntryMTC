@@ -4,8 +4,11 @@ import Stack from "@mui/material/Stack";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { Card } from "@mui/material";
+import { useSelector } from "react-redux";
 
-const TravelSpan = ({ setData, data, childrenData }) => {
+const TravelSpan = ({ setData, data, childrenData, index, childIndex }) => {
+  const { signInData } = useSelector((state) => state?.onBoard);
+
   const [array, setArray] = React.useState([
     {
       name: "Short gateways",
@@ -60,6 +63,34 @@ const TravelSpan = ({ setData, data, childrenData }) => {
       )
     );
   }, [array]);
+  React.useEffect(() => {
+    if (
+      signInData &&
+      signInData?.customers &&
+      signInData?.customers?.length !== 0
+    ) {
+      let selectedArray = signInData?.customers[index];
+      if (selectedArray?.dependents?.length === 0 || !selectedArray?.dependents) {
+        return;
+      }
+      if (selectedArray?.dependents?.length !== 0) {
+        selectedArray = selectedArray?.dependents[childIndex];
+        if (
+          selectedArray?.travelSpan &&
+          selectedArray?.travelSpan?.length !== 0
+        ) {
+          setArray((pre) =>
+            pre?.map((arrayItem) =>
+              selectedArray?.travelSpan?.includes(arrayItem?.name)
+                ? { ...arrayItem, selected: true }
+                : arrayItem
+            )
+          );
+        }
+      }
+    }
+  }, [signInData]);
+
   return (
     <div className="row mt-4 p-0 mx-1">
       <div>

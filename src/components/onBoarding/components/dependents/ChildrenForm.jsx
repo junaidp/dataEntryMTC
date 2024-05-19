@@ -19,6 +19,8 @@ const Children = ({
   setData,
   setChildrenExtraData,
   childrenData,
+  index,
+  childIndex,
 }) => {
   const handleChangeText = React.useCallback((id, event, mainId) => {
     if (id) {
@@ -188,8 +190,20 @@ const Children = ({
         data={data}
         childrenData={childrenData}
       />
-      <TypeOfTravel setData={setData} data={data} childrenData={childrenData} />
-      <TravelSpan setData={setData} data={data} childrenData={childrenData} />
+      <TypeOfTravel
+        setData={setData}
+        data={data}
+        childrenData={childrenData}
+        index={index}
+        childIndex={childIndex}
+      />
+      <TravelSpan
+        setData={setData}
+        data={data}
+        childrenData={childrenData}
+        index={index}
+        childIndex={childIndex}
+      />
     </div>
   );
 };

@@ -8,6 +8,7 @@ const ChildrenWrap = ({
   childrenExtraData,
   setData,
   handleDeleteAccordion,
+  index
 }) => {
   return (
     <div>
@@ -29,7 +30,7 @@ const ChildrenWrap = ({
           {childrenData?.children?.length === 0 ? (
             <p>No dependents added yet!</p>
           ) : (
-            childrenData?.children?.map((children, index) => {
+            childrenData?.children?.map((children, childIndex) => {
               return (
                 <div className="accordion-item" key={children?.id}>
                   <h2 className="accordion-header">
@@ -56,7 +57,7 @@ const ChildrenWrap = ({
                       <div className="d-flex w-100 me-3 align-items-center justify-content-between">
                         <div className="d-flex align-items-center w-100">
                           <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
-                          <div>Dependent {index + 1}</div>
+                          <div>Dependent {childIndex + 1}</div>
                         </div>
                         <i
                           class="fa fa-trash text-danger f-18 cusrsor-pointer"
@@ -82,6 +83,8 @@ const ChildrenWrap = ({
                         setData={setData}
                         setChildrenExtraData={setChildrenExtraData}
                         childrenData={childrenData}
+                        index={index}
+                        childIndex={childIndex}
                       />
                     </div>
                   </div>

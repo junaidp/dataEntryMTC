@@ -13,9 +13,9 @@ const index = () => {
   const [showSignInDialog, setShowLoginDialog] = React.useState(false);
   const [showViewExperienceDialog, setShowViewExperienceDialog] =
     React.useState(false);
-  const { experiences, onBoardingAddSuccess, signUpAddSuccess } = useSelector(
-    (state) => state?.onBoard
-  );
+  const [buttonName, setButtonName] = React.useState("Sign In");
+  const { experiences, onBoardingAddSuccess, signUpAddSuccess, signInData } =
+    useSelector((state) => state?.onBoard);
   const [sessionId, setSessionId] = React.useState("");
 
   React.useEffect(() => {
@@ -28,6 +28,12 @@ const index = () => {
       dispatch(resetOnBoardingAddSuccess());
     }
   }, [onBoardingAddSuccess, signUpAddSuccess]);
+
+  React.useEffect(() => {
+    if (signInData?.customers && signInData?.customers?.length !== 0) {
+      setButtonName(signInData?.customers[0]?.firstName || "Name Not Found");
+    }
+  }, [signInData]);
 
   React.useEffect(() => {
     setSessionId(uuidv4());
@@ -55,7 +61,7 @@ const index = () => {
           className="link-info cursor-pointer mt-1"
           onClick={() => setShowLoginDialog(true)}
         >
-          Sign In
+          {buttonName}
         </h5>
       </div>
 

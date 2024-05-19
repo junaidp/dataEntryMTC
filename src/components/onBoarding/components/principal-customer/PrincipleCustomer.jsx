@@ -19,6 +19,7 @@ const PrincipleCustomer = ({
   handleAdd,
   handleDelete,
   setData,
+  index
 }) => {
   return (
     <div>
@@ -84,8 +85,8 @@ const PrincipleCustomer = ({
         extraData={extraData}
         data={singleDataItem}
       />
-      <TypeOfTravel setData={setData} data={singleDataItem} />
-      <TravelSpan setData={setData} data={singleDataItem} />
+      <TypeOfTravel setData={setData} data={singleDataItem} index={index} />
+      <TravelSpan setData={setData} data={singleDataItem} index={index} />
     </div>
   );
 };
