@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import ExperienceCard from "./ExperienceCard";
 const ViewExperienceDialog = ({ setShowViewExperienceDialog }) => {
-  const { experiences } = useSelector((state) => state?.onBoard);
+  const { experiences, hypothesis } = useSelector((state) => state?.onBoard);
 
   React.useEffect(() => {
     if (experiences?.length === 0) {
@@ -12,6 +12,7 @@ const ViewExperienceDialog = ({ setShowViewExperienceDialog }) => {
   return (
     <div className="px-4 py-4">
       <div>
+        <p className="mt-2 mb-2">{hypothesis}</p>
         <h2 className="pb-4 heading">List Of Experiences</h2>
 
         <div className="mx-2">

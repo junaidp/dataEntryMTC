@@ -11,6 +11,7 @@ const initialState = {
   experiences: [],
   signUpAddSuccess: false,
   signInData: {},
+  hypothesis: "",
 };
 
 export const setupOnBoarding = createAsyncThunk(
@@ -49,7 +50,7 @@ export const slice = createSlice({
       })
       .addCase(setupOnBoarding.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.customerId = payload || "66332bb85725cd245aab4459";
+        state.customerId = payload?.slice(0, 36) || "66332bb85725cd245aab4459";
         state.onBoardingAddSuccess = true;
         toast.success("On-Boarding Response Fetched Successfully");
       })
@@ -70,6 +71,7 @@ export const slice = createSlice({
         state.loading = false;
         state.chatResponse = payload?.chatResponse || "";
         state.experiences = payload?.experiences || [];
+        state.hypothesis = payload?.hypothesis;
       })
       .addCase(setupChat.rejected, (state, action) => {
         state.loading = false;

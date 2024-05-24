@@ -8,10 +8,9 @@ import ChildrenWrap from "./dependents/ChildrenWrap";
 import TextField from "@mui/material/TextField";
 import moment from "moment";
 
-const MainForm = () => {
+const MainForm = ({ userName, setUserName }) => {
   const dispatch = useDispatch();
   const { loading, signInData } = useSelector((state) => state?.onBoard);
-  const [userName, setUserName] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [data, setData] = React.useState([
     {
@@ -737,6 +736,7 @@ const MainForm = () => {
               className="form-control"
               value={password}
               onChange={(event) => setPassword(event?.target?.value)}
+              type="password"
             />
           </div>
           <div className="col-lg-4 mt-3 cursor-pointer">

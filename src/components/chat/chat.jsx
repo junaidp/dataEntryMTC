@@ -3,7 +3,7 @@ import { setupChat } from "../../global-redux/reducers/onBoard/slice";
 import { useDispatch, useSelector } from "react-redux";
 import { useDetectClickOutside } from "react-detect-click-outside";
 
-const Chat = ({ sessionId }) => {
+const Chat = ({ sessionId, userName }) => {
   const dispatch = useDispatch();
   const messagesEndRef = React.useRef(null);
   const {
@@ -59,8 +59,7 @@ const Chat = ({ sessionId }) => {
         ...chatHistory,
         {
           role: "system",
-          content:
-            "We have received your info about your self. Now tell us a little bit, what you looking for",
+          content: `Hi ${userName} Thanks for telling about yourself, Do you have some ideas for your trip.`,
         },
       ]);
     }
@@ -92,7 +91,7 @@ const Chat = ({ sessionId }) => {
               <div key={index}>
                 <div
                   className={`chat-bubble ${
-                    chat?.role === "user" ? "me" : "you"
+                    chat?.role === "user" ? "me" : "youMe"
                   }`}
                 >
                   {chat?.content}

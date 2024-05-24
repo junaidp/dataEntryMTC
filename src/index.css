@@ -43,6 +43,11 @@ body {
   font-size: 16px !important;
   font-family: "Poppins", sans-serif !important;
 }
+.youMe {
+  color: black;
+  border-radius: 15px 0px 15px 15px;
+  background-color: white;
+}
 .css-e4w4as-MuiFormLabel-root-MuiInputLabel-root {
   font-family: "Poppins", sans-serif !important;
 }

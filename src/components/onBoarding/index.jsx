@@ -10,6 +10,7 @@ import { v4 as uuidv4 } from "uuid";
 
 const index = () => {
   const dispatch = useDispatch();
+  const [userName, setUserName] = React.useState("");
   const [showSignInDialog, setShowLoginDialog] = React.useState(false);
   const [showViewExperienceDialog, setShowViewExperienceDialog] =
     React.useState(false);
@@ -66,8 +67,8 @@ const index = () => {
       </div>
 
       <div>
-        <MainForm />
-        <ChatBot sessionId={sessionId} />
+        <MainForm userName={userName} setUserName={setUserName} />
+        <ChatBot sessionId={sessionId} userName={userName} />
       </div>
     </div>
   );
