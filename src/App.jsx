@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import OnBoarding from "./components/onBoarding";
 import ChatPage from "./components/chat/chat";
+import FlowController from "./components/flow/flowController";
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
               <Route path="/" element={<Tabs />} />
               <Route path="/chat" element={<ChatPage />} />
               <Route path="/onBoarding" element={<OnBoarding />} />
+              <Route path="/flow" element={<FlowController />} />
             </Routes>
           </BrowserRouter>
         </div>

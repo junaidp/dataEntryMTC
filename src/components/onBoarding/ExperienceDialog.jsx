@@ -12,7 +12,9 @@ const ViewExperienceDialog = ({ setShowViewExperienceDialog }) => {
   return (
     <div className="px-4 py-4">
       <div>
-        <p className="mt-2 mb-2">{hypothesis}</p>
+        <p className="mt-2 mb-2">
+          {hypothesis !== "" ? hypothesis : "No hypothesis to show"}
+        </p>
         <h2 className="pb-4 heading">List Of Experiences</h2>
 
         <div className="mx-2">
