@@ -5,6 +5,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 const initialState = {
   loading: false,
   flowData: {},
+  previousFlow: "",
 };
 
 export const setupGetFlow = createAsyncThunk(
@@ -17,7 +18,11 @@ export const setupGetFlow = createAsyncThunk(
 export const slice = createSlice({
   name: "flow",
   initialState,
-  reducers: {},
+  reducers: {
+    changePreviousFlow: (state, action) => {
+      state.previousFlow = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     // Get Flow Data
     builder
@@ -39,6 +44,6 @@ export const slice = createSlice({
   },
 });
 
-export const {} = slice.actions;
+export const { changePreviousFlow } = slice.actions;
 
 export default slice.reducer;

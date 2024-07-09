@@ -1,5 +1,8 @@
 import React from "react";
-import { setupGetFlow } from "../../global-redux/reducers/flow/slice";
+import {
+  setupGetFlow,
+  changePreviousFlow,
+} from "../../global-redux/reducers/flow/slice";
 import Mermaid from "react-mermaid2";
 import { useDispatch, useSelector } from "react-redux";
 import { Card, CircularProgress } from "@mui/material";
@@ -7,14 +10,17 @@ import { toast } from "react-toastify";
 
 const flowController = () => {
   const dispatch = useDispatch();
-  const { flowData, loading } = useSelector((state) => state?.flow);
+  const { flowData, loading, previousFlow } = useSelector(
+    (state) => state?.flow
+  );
   const [flowName, setFlowName] = React.useState("");
 
   function handleSubmitFlow() {
     if (flowName === "") {
       toast.error("Provide the flow name");
     } else {
-      dispatch(setupGetFlow(flowName));
+      dispatch(setupGetFlow({ flowName, previousFlow }));
+      dispatch(changePreviousFlow(flowName));
     }
   }
 
