@@ -22,6 +22,9 @@ export const slice = createSlice({
     changePreviousFlow: (state, action) => {
       state.previousFlow = action.payload;
     },
+    resetPreviousFlow: (state) => {
+      state.previousFlow = "";
+    },
   },
   extraReducers: (builder) => {
     // Get Flow Data
@@ -44,6 +47,6 @@ export const slice = createSlice({
   },
 });
 
-export const { changePreviousFlow } = slice.actions;
+export const { changePreviousFlow, resetPreviousFlow } = slice.actions;
 
 export default slice.reducer;

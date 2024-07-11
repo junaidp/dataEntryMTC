@@ -2,6 +2,7 @@ import React from "react";
 import {
   setupGetFlow,
   changePreviousFlow,
+  resetPreviousFlow,
 } from "../../global-redux/reducers/flow/slice";
 import Mermaid from "react-mermaid2";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,7 +16,10 @@ const flowController = () => {
   );
   const [flowName, setFlowName] = React.useState("");
 
-  function handleSubmitFlow() {
+  function handleSubmitFlow(event) {
+    if (event) {
+      event?.preventDefault();
+    }
     if (flowName === "") {
       toast.error("Provide the flow name");
     } else {
@@ -29,16 +33,21 @@ const flowController = () => {
       <div className="row gap-4">
         <Card className="col-lg-4 p-4 bg-primary">
           <div>
-            <input
-              className="form-control m-0"
-              placeholder="Enter Process Name"
-              value={flowName}
-              onChange={(event) => setFlowName(event?.target?.value)}
-            />
+            <form onSubmit={handleSubmitFlow}>
+              <input
+                className="form-control m-0"
+                placeholder="Enter Process Name"
+                value={flowName}
+                onChange={(event) => setFlowName(event?.target?.value)}
+              />
+            </form>
             <div className="mt-4 row ">
               <div
                 className="btn btn-labeled btn-primary  col-lg-6 mx-2 mb-2"
-                onClick={() => setFlowName("")}
+                onClick={() => {
+                  dispatch(resetPreviousFlow());
+                  setFlowName("");
+                }}
               >
                 CLEAR
               </div>
