@@ -17,14 +17,16 @@ const flowController = () => {
   const [flowName, setFlowName] = React.useState("");
 
   function handleSubmitFlow(event) {
-    if (event) {
-      event?.preventDefault();
-    }
-    if (flowName === "") {
-      toast.error("Provide the flow name");
-    } else {
-      dispatch(setupGetFlow({ flowName, previousFlow }));
-      dispatch(changePreviousFlow(flowName));
+    if (!loading) {
+      if (event) {
+        event?.preventDefault();
+      }
+      if (flowName === "") {
+        toast.error("Provide the flow name");
+      } else {
+        dispatch(setupGetFlow({ flowName, previousFlow }));
+        dispatch(changePreviousFlow(flowName));
+      }
     }
   }
 
@@ -52,10 +54,12 @@ const flowController = () => {
                 CLEAR
               </div>
               <div
-                className="btn btn-labeled btn-secondary col-lg-5 mx-2 mb-2"
+                className={`btn btn-labeled btn-secondary col-lg-5 mx-2 mb-2 ${
+                  loading && "disabled"
+                }`}
                 onClick={handleSubmitFlow}
               >
-                SUBMIT
+                {loading ? "Loading" : "SUBMIT"}
               </div>
             </div>
           </div>

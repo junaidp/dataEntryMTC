@@ -20,7 +20,7 @@ export const slice = createSlice({
   initialState,
   reducers: {
     changePreviousFlow: (state, action) => {
-      state.previousFlow = action.payload;
+      state.previousFlow = state.previousFlow + " " + action.payload;
     },
     resetPreviousFlow: (state) => {
       state.previousFlow = "";
