@@ -1,9 +1,10 @@
 import axios from "axios";
+import { BASE_URL } from "../../../constants/index";
 
 export const getAllProvider = async (data, thunkAPI) => {
   try {
     let props = await axios.get(
-      `https://data-entry-08031d053c68.herokuapp.com/provider/getProviders?vendorId=${data}`
+      `${BASE_URL}/provider/getProviders?vendorId=${data}`
     );
     return props.data;
   } catch (error) {
@@ -12,9 +13,7 @@ export const getAllProvider = async (data, thunkAPI) => {
 };
 export const getAllProviderWithOutParams = async (_, thunkAPI) => {
   try {
-    let props = await axios.get(
-      `https://data-entry-08031d053c68.herokuapp.com/provider/getProviders`
-    );
+    let props = await axios.get(`${BASE_URL}/provider/getProviders`);
     return props.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
@@ -23,7 +22,7 @@ export const getAllProviderWithOutParams = async (_, thunkAPI) => {
 export const getProviderByQuery = async (data, thunkAPI) => {
   try {
     let props = await axios.get(
-      `https://data-entry-08031d053c68.herokuapp.com/provider/getProviders?name=${data}`
+      `${BASE_URL}/provider/getProviders?name=${data}`
     );
     return props.data;
   } catch (error) {
@@ -33,10 +32,7 @@ export const getProviderByQuery = async (data, thunkAPI) => {
 
 export const addProvider = async (data, thunkAPI) => {
   try {
-    let props = await axios.post(
-      `https://data-entry-08031d053c68.herokuapp.com/provider/saveProviders`,
-      data
-    );
+    let props = await axios.post(`${BASE_URL}/provider/saveProviders`, data);
     return props.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
@@ -45,7 +41,7 @@ export const addProvider = async (data, thunkAPI) => {
 export const deleteProvider = async (data, thunkAPI) => {
   try {
     let props = await axios.delete(
-      `https://data-entry-08031d053c68.herokuapp.com/provider/deleteProvider${data}`
+      `${BASE_URL}/provider/deleteProvider${data}`
     );
     return props.data;
   } catch (error) {

@@ -15,4 +15,6 @@ const regions = [
   "Corsica",
 ];
 
-export {regions}
+const BASE_URL = "https://483094dc5909.ngrok.app";
+
+export { regions, BASE_URL };

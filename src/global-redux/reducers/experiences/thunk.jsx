@@ -1,9 +1,10 @@
 import axios from "axios";
+import { BASE_URL } from "../../../constants/index";
 
 export const getAllExperience = async (data, thunkAPI) => {
   try {
     let props = await axios.get(
-      `https://data-entry-08031d053c68.herokuapp.com/experience/getExperiences?vendorId=${data}`
+      `${BASE_URL}/experience/getExperiences?vendorId=${data}`
     );
     return props.data;
   } catch (error) {
@@ -13,9 +14,7 @@ export const getAllExperience = async (data, thunkAPI) => {
 
 export const getAllExperienceWithOutParams = async (_, thunkAPI) => {
   try {
-    let props = await axios.get(
-      `https://data-entry-08031d053c68.herokuapp.com/experience/getExperiences`
-    );
+    let props = await axios.get(`${BASE_URL}/experience/getExperiences`);
     return props.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
@@ -24,7 +23,7 @@ export const getAllExperienceWithOutParams = async (_, thunkAPI) => {
 export const getExperienceWithQuerySearch = async (data, thunkAPI) => {
   try {
     let props = await axios.get(
-      `https://data-entry-08031d053c68.herokuapp.com/experience/getExperiences?name=${data}`
+      `${BASE_URL}/experience/getExperiences?name=${data}`
     );
     return props.data;
   } catch (error) {
@@ -34,7 +33,7 @@ export const getExperienceWithQuerySearch = async (data, thunkAPI) => {
 export const addExperience = async (data, thunkAPI) => {
   try {
     let props = await axios.post(
-      `https://data-entry-08031d053c68.herokuapp.com/experience/saveExperiences`,
+      `${BASE_URL}/experience/saveExperiences`,
       data
     );
     return props.data;
@@ -46,7 +45,7 @@ export const addExperience = async (data, thunkAPI) => {
 export const addDuplicateExperience = async (data, thunkAPI) => {
   try {
     let props = await axios.post(
-      `https://data-entry-08031d053c68.herokuapp.com/experience/saveExperiences`,
+      `${BASE_URL}/experience/saveExperiences`,
       data
     );
     return props.data;
@@ -57,7 +56,7 @@ export const addDuplicateExperience = async (data, thunkAPI) => {
 export const deleteExperience = async (data, thunkAPI) => {
   try {
     let props = await axios.delete(
-      `https://data-entry-08031d053c68.herokuapp.com/experience/deleteExperience${data}`
+      `${BASE_URL}/experience/deleteExperience${data}`
     );
     return props.data;
   } catch (error) {
@@ -67,14 +66,9 @@ export const deleteExperience = async (data, thunkAPI) => {
 
 export const editProvider = async (data, thunkAPI) => {
   try {
-    let props = await axios.post(
-      `https://data-entry-08031d053c68.herokuapp.com/provider/saveProviders`,
-      data
-    );
+    let props = await axios.post(`${BASE_URL}/provider/saveProviders`, data);
     return props.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
   }
 };
-
-
