@@ -1,6 +1,7 @@
 import React from "react";
 import MainForm from "./components/MainForm";
 import ChatBot from "../chat/chat";
+import ChatContainer from "../chat/ChatBox.jsx/index";
 import ExperienceDialog from "./ExperienceDialog";
 import "./index.css";
 import { useSelector, useDispatch } from "react-redux";
@@ -10,13 +11,14 @@ import { v4 as uuidv4 } from "uuid";
 
 const index = () => {
   const dispatch = useDispatch();
+  const { experiences, onBoardingAddSuccess, signUpAddSuccess, signInData } =
+    useSelector((state) => state?.onBoard);
+  const [showChat, setShowChat] = React.useState(false);
   const [userName, setUserName] = React.useState("");
   const [showSignInDialog, setShowLoginDialog] = React.useState(false);
   const [showViewExperienceDialog, setShowViewExperienceDialog] =
     React.useState(false);
   const [buttonName, setButtonName] = React.useState("Sign In");
-  const { experiences, onBoardingAddSuccess, signUpAddSuccess, signInData } =
-    useSelector((state) => state?.onBoard);
   const [sessionId, setSessionId] = React.useState("");
 
   React.useEffect(() => {
@@ -39,6 +41,7 @@ const index = () => {
   React.useEffect(() => {
     setSessionId(uuidv4());
   }, []);
+
   return (
     <div className="mt-4">
       {showViewExperienceDialog && (
@@ -67,8 +70,17 @@ const index = () => {
       </div>
 
       <div>
-        <MainForm userName={userName} setUserName={setUserName} />
-        <ChatBot sessionId={sessionId} userName={userName} />
+        {!showChat ? (
+          <MainForm userName={userName} setUserName={setUserName} />
+        ) : (
+          <ChatContainer />
+        )}
+        <ChatBot
+          sessionId={sessionId}
+          userName={userName}
+          showChat={showChat}
+          setShowChat={setShowChat}
+        />
       </div>
     </div>
   );
