@@ -92,7 +92,7 @@ const ChatPage = () => {
 
     try {
       const response = await fetch(apiUrl, {
-        method: "POST",
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
