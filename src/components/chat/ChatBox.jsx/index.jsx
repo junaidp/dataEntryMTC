@@ -12,6 +12,7 @@ import { styled } from "@mui/system";
 import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
 import SendIcon from "@mui/icons-material/Send";
 import logo from "../../../../src/assets/log.png";
+import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
 // Styled components
@@ -67,6 +68,7 @@ const TypingEffect = styled("span")({
 
 const ChatPage = () => {
   const chatBoxRef = useRef(null);
+  const { customerId } = useSelector((state) => state?.onBoard);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -81,9 +83,9 @@ const ChatPage = () => {
 
     const requestBody = {
       query: query,
-      newUser: true,
+      newUser: messages.length > 1 ? false : true,
       ai: "OPENAI",
-      customerId: "293b846f-9207-4988-b067-0fc21a2bc4b3",
+      customerId: customerId,
     };
 
     setLoading(true);
@@ -92,7 +94,7 @@ const ChatPage = () => {
 
     try {
       const response = await fetch(apiUrl, {
-        method: "GET",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },

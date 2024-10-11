@@ -16,6 +16,6 @@ const regions = [
 ];
 
 const BASE_URL =
-  "https://2588-2a0a-a547-a807-0-c922-aec9-b892-6d84.ngrok-free.app";
+  "https://e8253ed85e8b.ngrok.app";
 
 export { regions, BASE_URL };

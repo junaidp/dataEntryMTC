@@ -7,7 +7,7 @@ const initialState = {
   response: {},
   onBoardingAddSuccess: false,
   chatResponse: "",
-  customerId: "66332bb85725cd245aab4459",
+  customerId: "293b846f-9207-4988-b067-0fc21a2bc4b3",
   experiences: [],
   signUpAddSuccess: false,
   signInData: {},
@@ -50,7 +50,7 @@ export const slice = createSlice({
       })
       .addCase(setupOnBoarding.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.customerId = payload?.slice(0, 36) || "66332bb85725cd245aab4459";
+        state.customerId = payload?.slice(0, 36) || "293b846f-9207-4988-b067-0fc21a2bc4b3";
         state.onBoardingAddSuccess = true;
         toast.success("On-Boarding Response Fetched Successfully");
       })
@@ -89,7 +89,7 @@ export const slice = createSlice({
       .addCase(setupSignIn.fulfilled, (state, { payload }) => {
         if (payload && Object.keys(payload)?.length !== 0) {
           state.signInData = payload;
-          state.customerId = payload?.id || "66332bb85725cd245aab4459";
+          state.customerId = payload?.id || "293b846f-9207-4988-b067-0fc21a2bc4b3";
         }
         toast.success("User Sign In Successfully");
         state.loading = false;
