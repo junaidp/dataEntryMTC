@@ -77,7 +77,7 @@ const ChatPage = () => {
     if (loading || isTyping || !query.trim()) return;
 
     const apiUrl =
-      "https://3345-2a0a-a547-a807-0-2540-ea42-1a48-8f78.ngrok-free.app/chat";
+      "https://2588-2a0a-a547-a807-0-c922-aec9-b892-6d84.ngrok-free.app/chat";
 
     const requestBody = {
       query: query,
