@@ -14,7 +14,8 @@ export const onBoardingSecondCall = async (data, thunkAPI) => {
   try {
     let props = await axios.post(
       `https://tripplanning-frosty-waterfall-7876.fly.dev/generate_hypotheses/`,
-      data
+      data,
+      { timeout: 300000 }
     );
     return props.data;
   } catch (error) {

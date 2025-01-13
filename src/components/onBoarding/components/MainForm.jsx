@@ -591,7 +591,10 @@ const MainForm = ({ userName, setUserName }) => {
       {onBoardingAddSuccess && (
         <div className="modal-objective">
           <div className="model-wrap">
-            <FirstDialog firstOnBoardingResult={firstOnBoardingResult} />
+            <FirstDialog
+              firstOnBoardingResult={firstOnBoardingResult}
+              secondOnBoardingResult={secondOnBoardingResult}
+            />
           </div>
         </div>
       )}

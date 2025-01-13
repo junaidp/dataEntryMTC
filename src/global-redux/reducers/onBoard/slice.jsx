@@ -19,6 +19,7 @@ const initialState = {
   hypothesis: "",
   firstOnBoardingResult: [],
   secondOnBoardingResult: [],
+  secondOnBoardLoading: false,
 };
 
 export const setupOnBoardingFirstCall = createAsyncThunk(
@@ -86,15 +87,15 @@ export const slice = createSlice({
     // On Boarding Second Result
     builder
       .addCase(setupOnBoardingSecondCall.pending, (state) => {
-        state.loading = true;
+        state.secondOnBoardLoading = true;
       })
       .addCase(setupOnBoardingSecondCall.fulfilled, (state, action) => {
-        state.loading = false;
-        state.secondOnBoardingResult = action.payload || [];
+        state.secondOnBoardLoading = false;
         state.onBoardingAddSuccess = true;
+        state.secondOnBoardingResult = action.payload || [];
       })
       .addCase(setupOnBoardingSecondCall.rejected, (state, action) => {
-        state.loading = false;
+        state.secondOnBoardLoading = false;
         action.payload.response.data.detail.forEach((errorMsg) => {
           toast.error(`${errorMsg?.loc[2]} ${errorMsg.msg}`);
         });
