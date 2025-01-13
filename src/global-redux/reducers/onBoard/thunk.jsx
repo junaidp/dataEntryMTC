@@ -3,9 +3,7 @@ import { BASE_URL } from "../../../constants/index";
 
 export const onBoarding = async (data, thunkAPI) => {
   try {
-    let props = await axios.post(`${BASE_URL}/onBoard/signup`, {
-      ...data,
-    });
+    let props = await axios.post(`http://195.35.1.22:8003/process_data/`, data);
     return props.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error);

@@ -16,6 +16,7 @@ const MainForm = ({ userName, setUserName }) => {
     {
       id: uuidv4(),
       principalCustomer: {
+        id: uuidv4(),
         firstName: "",
         lastName: "",
         dateOfBirth: "",
@@ -59,37 +60,6 @@ const MainForm = ({ userName, setUserName }) => {
     bucketlist: "",
     specialrequirement: "",
   });
-
-  function handleDeleteAccordionPrincipalCustomer(id) {
-    setData((pre) => pre?.filter((all) => all?.id !== id));
-  }
-  function handleAddPricipalCustomers() {
-    setData([
-      ...data,
-      {
-        id: uuidv4(),
-        principalCustomer: {
-          firstName: "",
-          lastName: "",
-          dateOfBirth: "",
-          cityOfResidence: "",
-          email: "",
-          gender: "",
-          mainInterests: [],
-          socialMediaLinks: [],
-          loyaltyPrograms: [],
-          travelDocuments: [],
-          passions: [],
-          lifestyle: [],
-          travelBucketList: [],
-          specialRequirements: [],
-          typeOfTravel: [],
-          travelSpan: [],
-        },
-        children: [],
-      },
-    ]);
-  }
 
   function handleDeleteAccordion(id, mainId) {
     setData((pre) =>
@@ -192,112 +162,93 @@ const MainForm = ({ userName, setUserName }) => {
 
   function handleSubmit() {
     if (!loading) {
-      if (data?.length === 0) {
-        toast.error("Please provide atlease one principal customer");
-      }
-      if (data?.length !== 0) {
-        dispatch(
-          setupOnBoarding({
-            groupName: "string",
-            userName: userName,
-            password: password,
-            augmentedData: "string",
-            customers: data?.map((singleDataItem) => {
+      dispatch(
+        setupOnBoarding({
+          id: data[0].id,
+          groupName: "string",
+          userName: userName,
+          password: password,
+          augmentedData: "string",
+          mainUser: {
+            ...data[0].principalCustomer,
+            age: calculateAge(data[0]?.principalCustomer?.dateOfBirth) || null,
+            upcomingBirthday:
+              calculateUpcomingBirthday(
+                data[0]?.principalCustomer?.dateOfBirth
+              ) || null,
+            mainInterests:
+              data[0]?.principalCustomer?.mainInterests?.map(
+                (item) => item?.string
+              ) || [],
+            socialMediaLinks:
+              data[0]?.principalCustomer?.socialMediaLinks?.map(
+                (item) => item?.string
+              ) || [],
+            loyaltyPrograms:
+              data[0]?.principalCustomer?.loyaltyPrograms?.map(
+                (item) => item?.string
+              ) || [],
+            travelDocuments:
+              data[0]?.principalCustomer?.travelDocuments?.map(
+                (item) => item?.string
+              ) || [],
+            passions:
+              data[0]?.principalCustomer?.passions?.map(
+                (item) => item?.string
+              ) || [],
+            lifestyle:
+              data[0]?.principalCustomer?.lifestyle?.map(
+                (item) => item?.string
+              ) || [],
+            travelBucketList:
+              data[0]?.principalCustomer?.travelBucketList?.map(
+                (item) => item?.string
+              ) || [],
+            specialRequirements:
+              data[0]?.principalCustomer?.specialRequirements?.map(
+                (item) => item?.string
+              ) || [],
+            typeOfTravel:
+              data[0]?.principalCustomer?.typeOfTravel?.map((item) => item) ||
+              [],
+            travelSpan:
+              data[0]?.principalCustomer?.travelSpan?.map((item) => item) || [],
+            dependents: data[0]?.children?.map((children) => {
               return {
-                ...singleDataItem?.principalCustomer,
-                age:
-                  calculateAge(
-                    singleDataItem?.principalCustomer?.dateOfBirth
-                  ) || null,
+                id: children?.id,
+                firstName: children?.firstName,
+                lastName: children?.lastName,
+                dateOfBirth: children?.dateOfBirth,
+                cityOfResidence: children?.cityOfResidence,
+                email: children?.email,
+                relation: children?.relation,
+                gender: children?.gender,
+                age: calculateAge(children?.dateOfBirth) || null,
                 upcomingBirthday:
-                  calculateUpcomingBirthday(
-                    singleDataItem?.principalCustomer?.dateOfBirth
-                  ) || null,
+                  calculateUpcomingBirthday(children?.dateOfBirth) || null,
                 mainInterests:
-                  singleDataItem?.principalCustomer?.mainInterests?.map(
-                    (item) => item?.string
-                  ) || [],
+                  children?.mainInterests?.map((item) => item?.string) || [],
                 socialMediaLinks:
-                  singleDataItem?.principalCustomer?.socialMediaLinks?.map(
-                    (item) => item?.string
-                  ) || [],
+                  children?.socialMediaLinks?.map((item) => item?.string) || [],
                 loyaltyPrograms:
-                  singleDataItem?.principalCustomer?.loyaltyPrograms?.map(
-                    (item) => item?.string
-                  ) || [],
+                  children?.loyaltyPrograms?.map((item) => item?.string) || [],
                 travelDocuments:
-                  singleDataItem?.principalCustomer?.travelDocuments?.map(
-                    (item) => item?.string
-                  ) || [],
-                passions:
-                  singleDataItem?.principalCustomer?.passions?.map(
-                    (item) => item?.string
-                  ) || [],
+                  children?.travelDocuments?.map((item) => item?.string) || [],
+                passions: children?.passions?.map((item) => item?.string) || [],
                 lifestyle:
-                  singleDataItem?.principalCustomer?.lifestyle?.map(
-                    (item) => item?.string
-                  ) || [],
+                  children?.lifestyle?.map((item) => item?.string) || [],
                 travelBucketList:
-                  singleDataItem?.principalCustomer?.travelBucketList?.map(
-                    (item) => item?.string
-                  ) || [],
+                  children?.travelBucketList?.map((item) => item?.string) || [],
                 specialRequirements:
-                  singleDataItem?.principalCustomer?.specialRequirements?.map(
-                    (item) => item?.string
-                  ) || [],
-                typeOfTravel:
-                  singleDataItem?.principalCustomer?.typeOfTravel?.map(
-                    (item) => item
-                  ) || [],
-                travelSpan:
-                  singleDataItem?.principalCustomer?.travelSpan?.map(
-                    (item) => item
-                  ) || [],
-                dependents: singleDataItem?.children?.map((children) => {
-                  return {
-                    firstName: children?.firstName,
-                    lastName: children?.lastName,
-                    dateOfBirth: children?.dateOfBirth,
-                    cityOfResidence: children?.cityOfResidence,
-                    email: children?.email,
-                    relation: children?.relation,
-                    gender: children?.gender,
-                    age: calculateAge(children?.dateOfBirth) || null,
-                    upcomingBirthday:
-                      calculateUpcomingBirthday(children?.dateOfBirth) || null,
-                    mainInterests:
-                      children?.mainInterests?.map((item) => item?.string) ||
-                      [],
-                    socialMediaLinks:
-                      children?.socialMediaLinks?.map((item) => item?.string) ||
-                      [],
-                    loyaltyPrograms:
-                      children?.loyaltyPrograms?.map((item) => item?.string) ||
-                      [],
-                    travelDocuments:
-                      children?.travelDocuments?.map((item) => item?.string) ||
-                      [],
-                    passions:
-                      children?.passions?.map((item) => item?.string) || [],
-                    lifestyle:
-                      children?.lifestyle?.map((item) => item?.string) || [],
-                    travelBucketList:
-                      children?.travelBucketList?.map((item) => item?.string) ||
-                      [],
-                    specialRequirements:
-                      children?.specialRequirements?.map(
-                        (item) => item?.string
-                      ) || [],
-                    typeOfTravel:
-                      children?.typeOfTravel?.map((item) => item) || [],
-                    travelSpan: children?.travelSpan?.map((item) => item) || [],
-                  };
-                }),
+                  children?.specialRequirements?.map((item) => item?.string) ||
+                  [],
+                typeOfTravel: children?.typeOfTravel?.map((item) => item) || [],
+                travelSpan: children?.travelSpan?.map((item) => item) || [],
               };
             }),
-          })
-        );
-      }
+          },
+        })
+      );
     }
   }
 
@@ -609,18 +560,6 @@ const MainForm = ({ userName, setUserName }) => {
       <h5 className="link-info cursor-pointer">OnBoarding</h5>
       <hr />
 
-      <header className="section-header my-3 align-items-center text-start d-flex">
-        <div className="mb-0 sub-heading">Add Principal Customers</div>
-        <div
-          className="btn btn-labeled btn-primary ms-3 px-3 shadow"
-          onClick={handleAddPricipalCustomers}
-        >
-          <span className="btn-label me-2">
-            <i className="fa fa-plus-circle"></i>
-          </span>
-          Add
-        </div>
-      </header>
       <div className="accordion" id="accordionFlushExample">
         {data?.length === 0 ? (
           <p>No Principal Customer Added Yet!</p>
@@ -666,16 +605,8 @@ const MainForm = ({ userName, setUserName }) => {
                     <div className="d-flex w-100 me-3 align-items-center justify-content-between">
                       <div className="d-flex align-items-center w-100">
                         <i className="fa fa-check-circle fs-3 text-success pe-3"></i>
-                        <div>Principal Customer {index + 1}</div>
+                        <div>Main User</div>
                       </div>
-                      <i
-                        class="fa fa-trash text-danger f-18 cusrsor-pointer"
-                        onClick={() =>
-                          handleDeleteAccordionPrincipalCustomer(
-                            singleDataItem?.id
-                          )
-                        }
-                      ></i>
                     </div>
                   </button>
                 </h2>
