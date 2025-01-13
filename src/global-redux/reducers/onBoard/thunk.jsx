@@ -1,9 +1,21 @@
 import axios from "axios";
 import { BASE_URL } from "../../../constants/index";
 
-export const onBoarding = async (data, thunkAPI) => {
+export const onBoardingFirstCall = async (data, thunkAPI) => {
   try {
     let props = await axios.post(`http://195.35.1.22:8003/process_data/`, data);
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
+export const onBoardingSecondCall = async (data, thunkAPI) => {
+  try {
+    let props = await axios.post(
+      `https://tripplanning-frosty-waterfall-7876.fly.dev/generate_hypotheses/`,
+      data
+    );
     return props.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error);

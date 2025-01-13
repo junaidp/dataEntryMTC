@@ -23,10 +23,8 @@ const ChatBox = styled(Box)({
   backgroundColor: "#f5f5f5",
   display: "flex",
   background: "#f5f5f5",
-  padding: "40px",
   minHeight: "80vh",
   margin: "40px",
-  overflowY: "auto",
   flexDirection: "column",
   "@media (max-width: 700px)": {
     margin: "40px 0px",

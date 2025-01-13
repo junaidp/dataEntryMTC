@@ -36,6 +36,34 @@ const StaticTextFields = ({ data, handleChangeText }) => {
           />
         </div>
       </div>
+      <div className="row mt-4">
+        <div className="col-lg-6 mb-2">
+          <TextField
+            id="phoneNumber"
+            name="phoneNumber"
+            label="Phone Number"
+            variant="outlined"
+            className="form-control"
+            value={data?.principalCustomer?.phoneNumber}
+            onChange={(event) =>
+              handleChangeText("principalCustomer", event, data?.id)
+            }
+          />
+        </div>
+        <div className="col-lg-6 mb-2">
+          <TextField
+            id="nationality"
+            name="nationality"
+            label="Nationality"
+            variant="outlined"
+            className="form-control"
+            value={data?.principalCustomer?.nationality}
+            onChange={(event) =>
+              handleChangeText("principalCustomer", event, data?.id)
+            }
+          />
+        </div>
+      </div>
 
       <div className="row mt-4">
         <div className="col-lg-6 mb-2">

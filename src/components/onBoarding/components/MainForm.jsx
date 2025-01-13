@@ -2,15 +2,26 @@ import React from "react";
 import PrincipleCustomer from "./principal-customer/PrincipleCustomer";
 import { toast } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
-import { setupOnBoarding } from "../../../global-redux/reducers/onBoard/slice";
+import {
+  setupOnBoardingFirstCall,
+  setupOnBoardingSecondCall,
+} from "../../../global-redux/reducers/onBoard/slice";
 import { useSelector, useDispatch } from "react-redux";
 import ChildrenWrap from "./dependents/ChildrenWrap";
 import TextField from "@mui/material/TextField";
 import moment from "moment";
+import FirstDialog from "./first-dialog";
 
 const MainForm = ({ userName, setUserName }) => {
   const dispatch = useDispatch();
-  const { loading, signInData } = useSelector((state) => state?.onBoard);
+  const {
+    loading,
+    signInData,
+    onBoardingAddSuccess,
+    firstOnBoardingResult,
+    secondOnBoardingResult,
+  } = useSelector((state) => state?.onBoard);
+
   const [password, setPassword] = React.useState("");
   const [data, setData] = React.useState([
     {
@@ -23,6 +34,8 @@ const MainForm = ({ userName, setUserName }) => {
         cityOfResidence: "",
         email: "",
         gender: "",
+        phoneNumber: "",
+        nationality: "",
         mainInterests: [],
         socialMediaLinks: [],
         loyaltyPrograms: [],
@@ -94,6 +107,8 @@ const MainForm = ({ userName, setUserName }) => {
                   email: "",
                   relation: "",
                   gender: "",
+                  phoneNumber: "",
+                  nationality: "",
                   mainInterests: [],
                   socialMediaLinks: [],
                   loyaltyPrograms: [],
@@ -162,93 +177,107 @@ const MainForm = ({ userName, setUserName }) => {
 
   function handleSubmit() {
     if (!loading) {
-      dispatch(
-        setupOnBoarding({
-          id: data[0].id,
-          groupName: "string",
-          userName: userName,
-          password: password,
-          augmentedData: "string",
-          mainUser: {
-            ...data[0].principalCustomer,
-            age: calculateAge(data[0]?.principalCustomer?.dateOfBirth) || null,
+      let obj = {
+        id: data[0].id,
+        groupName: "string",
+        userName: userName,
+        password: password,
+        augmentedData: "string",
+        mainUser: {
+          ...data[0].principalCustomer,
+          age: calculateAge(data[0]?.principalCustomer?.dateOfBirth) || null,
+          upcomingBirthday:
+            calculateUpcomingBirthday(
+              data[0]?.principalCustomer?.dateOfBirth
+            ) || null,
+          mainInterests:
+            data[0]?.principalCustomer?.mainInterests?.map(
+              (item) => item?.string
+            ) || [],
+          socialMediaLinks:
+            data[0]?.principalCustomer?.socialMediaLinks?.map(
+              (item) => item?.string
+            ) || [],
+          loyaltyPrograms:
+            data[0]?.principalCustomer?.loyaltyPrograms?.map(
+              (item) => item?.string
+            ) || [],
+          travelDocuments:
+            data[0]?.principalCustomer?.travelDocuments?.map(
+              (item) => item?.string
+            ) || [],
+          passions:
+            data[0]?.principalCustomer?.passions?.map((item) => item?.string) ||
+            [],
+          lifestyle:
+            data[0]?.principalCustomer?.lifestyle?.map(
+              (item) => item?.string
+            ) || [],
+          travelBucketList:
+            data[0]?.principalCustomer?.travelBucketList?.map(
+              (item) => item?.string
+            ) || [],
+          specialRequirements:
+            data[0]?.principalCustomer?.specialRequirements?.map(
+              (item) => item?.string
+            ) || [],
+          typeOfTravel:
+            data[0]?.principalCustomer?.typeOfTravel?.map((item) => item) || [],
+          travelSpan:
+            data[0]?.principalCustomer?.travelSpan?.map((item) => item) || [],
+        },
+        dependents: data[0]?.children?.map((children) => {
+          return {
+            id: children?.id,
+            firstName: children?.firstName,
+            lastName: children?.lastName,
+            dateOfBirth: children?.dateOfBirth,
+            cityOfResidence: children?.cityOfResidence,
+            email: children?.email,
+            relation: children?.relation,
+            gender: children?.gender,
+            phoneNumber: children?.phoneNumber,
+            nationality: children?.nationality,
+            age: calculateAge(children?.dateOfBirth) || null,
             upcomingBirthday:
-              calculateUpcomingBirthday(
-                data[0]?.principalCustomer?.dateOfBirth
-              ) || null,
+              calculateUpcomingBirthday(children?.dateOfBirth) || null,
             mainInterests:
-              data[0]?.principalCustomer?.mainInterests?.map(
-                (item) => item?.string
-              ) || [],
+              children?.mainInterests?.map((item) => item?.string) || [],
             socialMediaLinks:
-              data[0]?.principalCustomer?.socialMediaLinks?.map(
-                (item) => item?.string
-              ) || [],
+              children?.socialMediaLinks?.map((item) => item?.string) || [],
             loyaltyPrograms:
-              data[0]?.principalCustomer?.loyaltyPrograms?.map(
-                (item) => item?.string
-              ) || [],
+              children?.loyaltyPrograms?.map((item) => item?.string) || [],
             travelDocuments:
-              data[0]?.principalCustomer?.travelDocuments?.map(
-                (item) => item?.string
-              ) || [],
-            passions:
-              data[0]?.principalCustomer?.passions?.map(
-                (item) => item?.string
-              ) || [],
-            lifestyle:
-              data[0]?.principalCustomer?.lifestyle?.map(
-                (item) => item?.string
-              ) || [],
+              children?.travelDocuments?.map((item) => item?.string) || [],
+            passions: children?.passions?.map((item) => item?.string) || [],
+            lifestyle: children?.lifestyle?.map((item) => item?.string) || [],
             travelBucketList:
-              data[0]?.principalCustomer?.travelBucketList?.map(
-                (item) => item?.string
-              ) || [],
+              children?.travelBucketList?.map((item) => item?.string) || [],
             specialRequirements:
-              data[0]?.principalCustomer?.specialRequirements?.map(
-                (item) => item?.string
-              ) || [],
-            typeOfTravel:
-              data[0]?.principalCustomer?.typeOfTravel?.map((item) => item) ||
-              [],
-            travelSpan:
-              data[0]?.principalCustomer?.travelSpan?.map((item) => item) || [],
-            dependents: data[0]?.children?.map((children) => {
-              return {
-                id: children?.id,
-                firstName: children?.firstName,
-                lastName: children?.lastName,
-                dateOfBirth: children?.dateOfBirth,
-                cityOfResidence: children?.cityOfResidence,
-                email: children?.email,
-                relation: children?.relation,
-                gender: children?.gender,
-                age: calculateAge(children?.dateOfBirth) || null,
-                upcomingBirthday:
-                  calculateUpcomingBirthday(children?.dateOfBirth) || null,
-                mainInterests:
-                  children?.mainInterests?.map((item) => item?.string) || [],
-                socialMediaLinks:
-                  children?.socialMediaLinks?.map((item) => item?.string) || [],
-                loyaltyPrograms:
-                  children?.loyaltyPrograms?.map((item) => item?.string) || [],
-                travelDocuments:
-                  children?.travelDocuments?.map((item) => item?.string) || [],
-                passions: children?.passions?.map((item) => item?.string) || [],
-                lifestyle:
-                  children?.lifestyle?.map((item) => item?.string) || [],
-                travelBucketList:
-                  children?.travelBucketList?.map((item) => item?.string) || [],
-                specialRequirements:
-                  children?.specialRequirements?.map((item) => item?.string) ||
-                  [],
-                typeOfTravel: children?.typeOfTravel?.map((item) => item) || [],
-                travelSpan: children?.travelSpan?.map((item) => item) || [],
-              };
-            }),
-          },
-        })
-      );
+              children?.specialRequirements?.map((item) => item?.string) || [],
+            typeOfTravel: children?.typeOfTravel?.map((item) => item) || [],
+            travelSpan: children?.travelSpan?.map((item) => item) || [],
+          };
+        }),
+      };
+      dispatch(setupOnBoardingFirstCall(obj));
+      setTimeout(() => {
+        dispatch(
+          setupOnBoardingSecondCall({
+            id: data[0]?.id,
+            groupName: "string",
+            userName: userName,
+            password: password,
+            augmentedData: "User family travel data",
+            customers: [
+              {
+                ...obj?.mainUser,
+                dependents: obj?.dependents || [],
+              },
+            ],
+          })
+        );
+      }, 5000);
     }
   }
 
@@ -356,6 +385,8 @@ const MainForm = ({ userName, setUserName }) => {
               cityOfResidence: singleDataItem?.cityOfResidence || "",
               email: singleDataItem?.email || "",
               gender: singleDataItem?.gender || "",
+              phoneNumber: singleDataItem?.phoneNumber,
+              nationality: singleDataItem?.nationality,
               mainInterests:
                 singleDataItem?.mainInterests &&
                 singleDataItem?.mainInterests?.length !== 0
@@ -557,6 +588,13 @@ const MainForm = ({ userName, setUserName }) => {
 
   return (
     <div className="my-4">
+      {onBoardingAddSuccess && (
+        <div className="modal-objective">
+          <div className="model-wrap">
+            <FirstDialog firstOnBoardingResult={firstOnBoardingResult} />
+          </div>
+        </div>
+      )}
       <h5 className="link-info cursor-pointer">OnBoarding</h5>
       <hr />
 
