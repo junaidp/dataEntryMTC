@@ -5,7 +5,9 @@ import { Chip, CircularProgress } from "@mui/material";
 
 const FirstDialog = ({ firstOnBoardingResult, secondOnBoardingResult }) => {
   const dispatch = useDispatch();
-  const { secondOnBoardLoading } = useSelector((state) => state?.onBoard);
+  const { secondOnBoardLoading, loading } = useSelector(
+    (state) => state?.onBoard
+  );
   const augmentedData = firstOnBoardingResult?.augmentedData || [];
 
   return (
@@ -24,18 +26,24 @@ const FirstDialog = ({ firstOnBoardingResult, secondOnBoardingResult }) => {
           className="col-lg-6"
           style={{ borderRight: "1px solid lightGrey" }}
         >
-          <p className="heading">Group Hypotheses :</p>
+          {loading ? (
+            <CircularProgress />
+          ) : (
+            <div>
+              <p className="heading">Group Hypotheses :</p>
 
-          <ol>
-            {augmentedData.map((item, index) => (
-              <li key={index} className="mb-4">
-                {item
-                  ?.replace(/^"|"$/g, "")
-                  ?.replace(/,$/, "")
-                  ?.replace(/^\d+\.\s*/, "")}
-              </li>
-            ))}
-          </ol>
+              <ol>
+                {augmentedData.map((item, index) => (
+                  <li key={index} className="mb-4">
+                    {item
+                      ?.replace(/^"|"$/g, "")
+                      ?.replace(/,$/, "")
+                      ?.replace(/^\d+\.\s*/, "")}
+                  </li>
+                ))}
+              </ol>
+            </div>
+          )}
         </div>
         <div className="col-lg-6">
           {secondOnBoardLoading ? (

@@ -3,7 +3,7 @@ import { BASE_URL } from "../../../constants/index";
 
 export const onBoardingFirstCall = async (data, thunkAPI) => {
   try {
-    let props = await axios.post(`http://195.35.1.22:8003/process_data/`, data);
+    let props = await axios.post(`https://abrj.pythonanywhere.com/process_data/`, data);
     return props.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
