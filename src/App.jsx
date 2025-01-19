@@ -1,12 +1,10 @@
 import React from "react";
 import "./App.css";
-import Tabs from "./components/common/Tabs";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import OnBoarding from "./components/onBoarding";
 import ChatPage from "./components/chat/chat";
-import FlowController from "./components/flow/flowController";
 
 const App = () => {
   return (
@@ -16,10 +14,9 @@ const App = () => {
         <div className="mb-4">
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={<Tabs />} />
+              <Route path="/" element={<Navigate to="/onBoarding" />} />
               <Route path="/chat" element={<ChatPage />} />
               <Route path="/onBoarding" element={<OnBoarding />} />
-              <Route path="/flow" element={<FlowController />} />
             </Routes>
           </BrowserRouter>
         </div>

@@ -260,7 +260,21 @@ const MainForm = ({ userName, setUserName }) => {
           };
         }),
       };
-      dispatch(setupOnBoardingFirstCall(obj));
+      dispatch(
+        setupOnBoardingFirstCall({
+          id: data[0]?.id,
+          groupName: "string",
+          userName: userName,
+          password: password,
+          augmentedData: "User family travel data",
+          customers: [
+            {
+              ...obj?.mainUser,
+              dependents: obj?.dependents || [],
+            },
+          ],
+        })
+      );
       setTimeout(() => {
         dispatch(
           setupOnBoardingSecondCall({
