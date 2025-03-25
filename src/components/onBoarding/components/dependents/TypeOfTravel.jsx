@@ -12,88 +12,88 @@ const TypeOfTravel = ({ setData, data, childrenData, index, childIndex }) => {
   const [array, setArray] = React.useState([
     {
       name: "Adventure",
-      selected: false,
+      selected: true,
       id: 1,
     },
     {
       name: "Safaris",
-      selected: false,
+      selected: true,
       id: 2,
     },
     {
       name: "Remote Locations",
-      selected: false,
+      selected: true,
       id: 3,
     },
     {
       name: "Eco-tourism",
-      selected: false,
+      selected: true,
       id: 4,
     },
     {
       name: "Cultural",
-      selected: false,
+      selected: true,
       id: 5,
     },
     {
       name: "Heritage",
-      selected: false,
+      selected: true,
       id: 6,
     },
     {
       name: "Festival & Events",
-      selected: false,
+      selected: true,
       id: 7,
     },
     {
       name: "Educational",
-      selected: false,
+      selected: true,
       id: 8,
     },
     {
       name: "Staycations",
-      selected: false,
+      selected: true,
       id: 9,
     },
     {
       name: "Wellness",
-      selected: false,
+      selected: true,
       id: 10,
     },
     {
       name: "Gastronomy",
-      selected: false,
+      selected: true,
       id: 11,
     },
     {
       name: "Wine tasting",
-      selected: false,
+      selected: true,
       id: 12,
     },
 
     {
       name: "Yachting",
-      selected: false,
+      selected: true,
       id: 13,
     },
     {
       name: "Ski, Sports",
-      selected: false,
+      selected: true,
       id: 14,
     },
     {
       name: "Games",
-      selected: false,
+      selected: true,
       id: 15,
     },
     {
       name: "Multi-generation",
-      selected: false,
+      selected: true,
       id: 16,
     },
     {
       name: "Kid trips",
-      selected: false,
+      selected: true,
       id: 17,
     },
     {

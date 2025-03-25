@@ -2,8 +2,10 @@ import React from "react";
 import { changeOnBoardingAddSuccess } from "../../../global-redux/reducers/onBoard/slice";
 import { useDispatch, useSelector } from "react-redux";
 import { Chip, CircularProgress } from "@mui/material";
+import { data } from "./data";
 
-const FirstDialog = ({ firstOnBoardingResult, secondOnBoardingResult }) => {
+const ResponseDialog = ({ firstOnBoardingResult, secondOnBoardingResult }) => {
+  console.log(secondOnBoardingResult);
   const dispatch = useDispatch();
   const { secondOnBoardLoading, loading } = useSelector(
     (state) => state?.onBoard
@@ -22,69 +24,123 @@ const FirstDialog = ({ firstOnBoardingResult, secondOnBoardingResult }) => {
         </button>
       </div>
       <div className="row">
-        <div
-          className="col-lg-6"
-          style={{ borderRight: "1px solid lightGrey" }}
-        >
+        <div className="col-lg-12">
           {loading ? (
             <CircularProgress />
           ) : (
             <div>
-              <p className="heading">Group Hypotheses :</p>
-
-              <ol>
-                {augmentedData.map((item, index) => (
-                  <li key={index} className="mb-4">
-                    {item
-                      ?.replace(/^"|"$/g, "")
-                      ?.replace(/,$/, "")
-                      ?.replace(/^\d+\.\s*/, "")}
-                  </li>
-                ))}
-              </ol>
-            </div>
-          )}
-        </div>
-        <div className="col-lg-6">
-          {secondOnBoardLoading ? (
-            <CircularProgress />
-          ) : (
-            <div>
               <div>
-                <p className="heading">Group Hypotheses :</p>
-                <ol>
-                  {secondOnBoardingResult?.groupHypotheses?.map(
-                    (groupHypothesesPoint, ind) => {
+                {secondOnBoardingResult?.data?.length &&
+                  secondOnBoardingResult?.data[0]?.members?.map(
+                    (singleMember, ind) => {
                       return (
-                        <li key={ind} className="mb-4">
-                          {groupHypothesesPoint?.replace(/^- /, "")}
-                        </li>
+                        <div key={ind}>
+                          <div>
+                            <p className="heading">
+                              Member Name: {singleMember?.name}
+                            </p>
+                          </div>
+                          <hr />
+                          <p className="heading">Correlations</p>
+                          <hr />
+                          <ul>
+                            {singleMember?.hypothesis?.correlations?.map(
+                              (correlation) => (
+                                <>
+                                  <li className="mb-4">
+                                    Relation : {correlation?.["Relation"]}
+                                  </li>
+
+                                  <li className="mb-4">
+                                    Reasoning : {correlation?.["Reasoning"]}
+                                  </li>
+                                  <li className="mb-4">
+                                    Data Pair :{" "}
+                                    {correlation?.["Data Pair"]?.map((pair) => (
+                                      <Chip label={pair} className="mx-2" />
+                                    ))}
+                                  </li>
+                                  <hr />
+                                </>
+                              )
+                            )}
+                          </ul>
+                          <hr />
+                          <p className="heading">Extracted Data:</p>
+                          <hr />
+                          <div>
+                            {Object.entries(
+                              singleMember?.hypothesis?.extracted_data
+                            )?.map((data) => {
+                              return (
+                                <div>
+                                  <p className="heading mb-4">{data[0]} :</p>
+                                  <ul>
+                                    {data[1]?.map((singleExtractedData) => {
+                                      return (
+                                        <>
+                                          <li className="mb-4">
+                                            label: {singleExtractedData?.label}
+                                          </li>
+                                          <li className="mb-4">
+                                            {" "}
+                                            weight:{" "}
+                                            {singleExtractedData?.weight}
+                                          </li>
+                                          <hr />
+                                        </>
+                                      );
+                                    })}
+                                  </ul>
+                                </div>
+                              );
+                            })}
+                          </div>
+                          <hr />
+                          <p className="heading">Final Hypotheses:</p>
+                          <hr />
+                          <ul>
+                            {singleMember?.final_hypotheses?.map(
+                              (hypotheses) => (
+                                <>
+                                  <li className="mb-4">
+                                    Hypothesis : {hypotheses?.["Hypothesis"]}
+                                  </li>
+                                  <li className="mb-4">
+                                    Confidence Score :{" "}
+                                    {hypotheses?.["Confidence Score"]}
+                                  </li>
+                                  <li className="mb-4">
+                                    Explanation : {hypotheses?.["Explanation"]}
+                                  </li>
+                                  <hr />
+                                </>
+                              )
+                            )}
+                          </ul>
+                          <hr />
+                          <p className="heading">Updated Weights :</p>
+                          <hr />
+                          <ul>
+                            {singleMember?.updated_weights?.map((weight) => (
+                              <>
+                                <li className="mb-4">
+                                  Data Point: {weight?.["Data Point"]}
+                                </li>
+                                <li className="mb-4">
+                                  Updated Weight: {weight?.["Updated Weight"]}
+                                </li>
+                                <li className="mb-4">
+                                  Details : {weight?.["Details"]}
+                                </li>
+                                <hr />
+                              </>
+                            ))}
+                          </ul>
+                        </div>
                       );
                     }
                   )}
-                </ol>
-              </div>
-              <div>
-                {secondOnBoardingResult?.familyHypotheses?.map(
-                  (member, mainInd) => {
-                    return (
-                      <div key={mainInd}>
-                        <p className="heading">
-                          Member Name : {member?.familyName?.toUpperCase()}
-                        </p>
-                        <ol>
-                          {member?.familyHypotheses?.map((point, subInd) => {
-                            return (
-                              <li key={subInd} className="mb-4">
-                                {point?.replace(/^- /, "")}
-                              </li>
-                            );
-                          })}
-                        </ol>
-                      </div>
-                    );
-                  }
-                )}
               </div>
             </div>
           )}
@@ -94,4 +150,4 @@ const FirstDialog = ({ firstOnBoardingResult, secondOnBoardingResult }) => {
   );
 };
 
-export default FirstDialog;
+export default ResponseDialog;

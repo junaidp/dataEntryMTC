@@ -18,7 +18,7 @@ const initialState = {
   signInData: {},
   hypothesis: "",
   firstOnBoardingResult: [],
-  secondOnBoardingResult: [],
+  secondOnBoardingResult: {},
   secondOnBoardLoading: false,
 };
 
@@ -74,7 +74,7 @@ export const slice = createSlice({
       })
       .addCase(setupOnBoardingFirstCall.rejected, (state, action) => {
         state.loading = false;
-        action.payload.response.data.detail.forEach((errorMsg) => {
+        action.payload.response?.data?.detail?.forEach((errorMsg) => {
           toast.error(`${errorMsg?.loc[2]} ${errorMsg.msg}`);
         });
         if (
@@ -87,16 +87,17 @@ export const slice = createSlice({
     // On Boarding Second Result
     builder
       .addCase(setupOnBoardingSecondCall.pending, (state) => {
-        state.secondOnBoardLoading = true;
+        state.loading = true;
+        state.onBoardingAddSuccess = true;
       })
       .addCase(setupOnBoardingSecondCall.fulfilled, (state, action) => {
-        state.secondOnBoardLoading = false;
+        state.loading = false;
         state.onBoardingAddSuccess = true;
-        state.secondOnBoardingResult = action.payload || [];
+        state.secondOnBoardingResult = action.payload || {};
       })
       .addCase(setupOnBoardingSecondCall.rejected, (state, action) => {
-        state.secondOnBoardLoading = false;
-        action.payload.response.data.detail.forEach((errorMsg) => {
+        state.loading = false;
+        action.payload.response?.data?.detail?.forEach((errorMsg) => {
           toast.error(`${errorMsg?.loc[2]} ${errorMsg.msg}`);
         });
         if (

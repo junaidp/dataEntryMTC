@@ -2,7 +2,6 @@ import React from "react";
 import MainForm from "./components/MainForm";
 import ChatBot from "../chat/chat";
 import ChatContainer from "../chat/ChatBox.jsx/index";
-import ExperienceDialog from "./ExperienceDialog";
 import "./index.css";
 import { useSelector, useDispatch } from "react-redux";
 import SignInDialog from "./SignInDialog";
@@ -14,18 +13,12 @@ const index = () => {
   const { experiences, onBoardingAddSuccess, signUpAddSuccess, signInData } =
     useSelector((state) => state?.onBoard);
   const [showChat, setShowChat] = React.useState(false);
-  const [userName, setUserName] = React.useState("");
+  const [userName, setUserName] = React.useState("Ricardo");
   const [showSignInDialog, setShowLoginDialog] = React.useState(false);
-  const [showViewExperienceDialog, setShowViewExperienceDialog] =
-    React.useState(false);
   const [buttonName, setButtonName] = React.useState("Sign In");
   const [sessionId, setSessionId] = React.useState("");
 
-  React.useEffect(() => {
-    if (experiences?.length !== 0) {
-      setShowViewExperienceDialog(true);
-    }
-  }, [experiences]);
+
   React.useEffect(() => {
     if (onBoardingAddSuccess || signUpAddSuccess) {
       dispatch(resetOnBoardingAddSuccess());
@@ -44,15 +37,6 @@ const index = () => {
 
   return (
     <div className="mt-4">
-      {showViewExperienceDialog && (
-        <div className="modal-objective">
-          <div className="model-wrap">
-            <ExperienceDialog
-              setShowViewExperienceDialog={setShowViewExperienceDialog}
-            />
-          </div>
-        </div>
-      )}
       {showSignInDialog && (
         <div className="modal-objective">
           <div className="model-wrap">

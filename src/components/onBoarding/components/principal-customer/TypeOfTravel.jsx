@@ -9,121 +9,121 @@ import { useSelector } from "react-redux";
 const TypeOfTravel = ({ setData, data, index }) => {
   const { signInData } = useSelector((state) => state?.onBoard);
 
-  const [array, setArray] = React.useState([
-    {
-      name: "Adventure",
-      selected: false,
-      id: 1,
-    },
-    {
-      name: "Safaris",
-      selected: false,
-      id: 2,
-    },
-    {
-      name: "Remote Locations",
-      selected: false,
-      id: 3,
-    },
-    {
-      name: "Eco-tourism",
-      selected: false,
-      id: 4,
-    },
-    {
-      name: "Cultural",
-      selected: false,
-      id: 5,
-    },
-    {
-      name: "Heritage",
-      selected: false,
-      id: 6,
-    },
-    {
-      name: "Festival & Events",
-      selected: false,
-      id: 7,
-    },
-    {
-      name: "Educational",
-      selected: false,
-      id: 8,
-    },
-    {
-      name: "Staycations",
-      selected: false,
-      id: 9,
-    },
-    {
-      name: "Wellness",
-      selected: false,
-      id: 10,
-    },
-    {
-      name: "Gastronomy",
-      selected: false,
-      id: 11,
-    },
-    {
-      name: "Wine tasting",
-      selected: false,
-      id: 12,
-    },
-
-    {
-      name: "Yachting",
-      selected: false,
-      id: 13,
-    },
-    {
-      name: "Ski, Sports",
-      selected: false,
-      id: 14,
-    },
-    {
-      name: "Games",
-      selected: false,
-      id: 15,
-    },
-    {
-      name: "Multi-generation",
-      selected: false,
-      id: 16,
-    },
-    {
-      name: "Kid trips",
-      selected: false,
-      id: 17,
-    },
-    {
-      name: "Business",
-      selected: false,
-      id: 18,
-    },
-
-    {
-      name: "Workations",
-      selected: false,
-      id: 19,
-    },
-    {
-      name: "Sabbaticals",
-      selected: false,
-      id: 20,
-    },
-    {
-      name: "Group trips",
-      selected: false,
-      id: 21,
-    },
-
-    {
-      name: "Road trips",
-      selected: false,
-      id: 22,
-    },
-  ]);
+   const [array, setArray] = React.useState([
+      {
+        name: "Adventure",
+        selected: true,
+        id: 1,
+      },
+      {
+        name: "Safaris",
+        selected: true,
+        id: 2,
+      },
+      {
+        name: "Remote Locations",
+        selected: true,
+        id: 3,
+      },
+      {
+        name: "Eco-tourism",
+        selected: true,
+        id: 4,
+      },
+      {
+        name: "Cultural",
+        selected: true,
+        id: 5,
+      },
+      {
+        name: "Heritage",
+        selected: true,
+        id: 6,
+      },
+      {
+        name: "Festival & Events",
+        selected: false,
+        id: 7,
+      },
+      {
+        name: "Educational",
+        selected: true,
+        id: 8,
+      },
+      {
+        name: "Staycations",
+        selected: true,
+        id: 9,
+      },
+      {
+        name: "Wellness",
+        selected: true,
+        id: 10,
+      },
+      {
+        name: "Gastronomy",
+        selected: false,
+        id: 11,
+      },
+      {
+        name: "Wine tasting",
+        selected: true,
+        id: 12,
+      },
+  
+      {
+        name: "Yachting",
+        selected: true,
+        id: 13,
+      },
+      {
+        name: "Ski, Sports",
+        selected: true,
+        id: 14,
+      },
+      {
+        name: "Games",
+        selected: true,
+        id: 15,
+      },
+      {
+        name: "Multi-generation",
+        selected: true,
+        id: 16,
+      },
+      {
+        name: "Kid trips",
+        selected: false,
+        id: 17,
+      },
+      {
+        name: "Business",
+        selected: false,
+        id: 18,
+      },
+  
+      {
+        name: "Workations",
+        selected: false,
+        id: 19,
+      },
+      {
+        name: "Sabbaticals",
+        selected: true,
+        id: 20,
+      },
+      {
+        name: "Group trips",
+        selected: false,
+        id: 21,
+      },
+  
+      {
+        name: "Road trips",
+        selected: true,
+        id: 22,
+      },
+    ]);
 
   function handleClickChip(id) {
     setArray((pre) => {

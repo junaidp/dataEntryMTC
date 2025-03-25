@@ -12,22 +12,22 @@ const TravelSpan = ({ setData, data, index }) => {
   const [array, setArray] = React.useState([
     {
       name: "Short gateways",
-      selected: false,
+      selected: true,
       id: 1,
     },
     {
       name: "local exploration",
-      selected: false,
+      selected: true,
       id: 2,
     },
     {
       name: "extended journeys",
-      selected: false,
+      selected: true,
       id: 3,
     },
     {
       name: "lengthy expeditions",
-      selected: false,
+      selected: true,
       id: 4,
     },
   ]);

@@ -22,32 +22,163 @@ const MainForm = ({ userName, setUserName }) => {
     secondOnBoardingResult,
   } = useSelector((state) => state?.onBoard);
 
-  const [password, setPassword] = React.useState("");
+  const [password, setPassword] = React.useState("ricardo");
   const [data, setData] = React.useState([
     {
       id: uuidv4(),
       principalCustomer: {
         id: uuidv4(),
-        firstName: "",
-        lastName: "",
-        dateOfBirth: "",
-        cityOfResidence: "",
-        email: "",
-        gender: "",
-        phoneNumber: "",
-        nationality: "",
-        mainInterests: [],
-        socialMediaLinks: [],
+        firstName: "Ricardo",
+        lastName: "Arauja",
+        dateOfBirth: "1978-07-20",
+        cityOfResidence: "Paris",
+        email: "ricardoarauja@ariodante.uk",
+        gender: "Male",
+        phoneNumber: "+33768897772",
+        nationality: "Colombian",
+        mainInterests: [
+          { id: "1", string: "Arts" },
+          { id: "2", string: "Opera" },
+          {
+            id: "3",
+            string: "Castles",
+          },
+          {
+            id: "4",
+            string: "Legends",
+          },
+          {
+            id: "5",
+            string: "Rock Art",
+          },
+          {
+            id: "6",
+            string: "Immersive Games",
+          },
+          {
+            id: "7",
+            string: "AI",
+          },
+          {
+            id: "8",
+            string: "wildlife",
+          },
+        ],
+        socialMediaLinks: [
+          {
+            id: "1",
+            string: "https://www.instagram.com/therealtravelchemist/",
+          },
+        ],
         loyaltyPrograms: [],
-        travelDocuments: [],
-        passions: [],
-        lifestyle: [],
-        travelBucketList: [],
-        specialRequirements: [],
+        travelDocuments: [
+          {
+            id: "1",
+            string: "Passport",
+          },
+        ],
+        passions: [
+          { id: "1", string: "Music" },
+          { id: "2", string: "History" },
+          {
+            id: "3",
+            string: "Culture",
+          },
+          {
+            id: "4",
+            string: "Modern Art",
+          },
+          {
+            id: "5",
+            string: "Creativity",
+          },
+        ],
+        lifestyle: [
+          { id: "1", string: "Easygoing" },
+          { id: "2", string: "High Quality focus" },
+        ],
+        travelBucketList: [
+          {
+            id: "1",
+            string: "Swimming with whales",
+          },
+          {
+            id: "2",
+            string: "the legend of King Arthur",
+          },
+        ],
+        specialRequirements: [
+          {
+            id: "1",
+            string: "No Cheese",
+          },
+        ],
         typeOfTravel: [],
         travelSpan: [],
       },
-      children: [],
+      children: [
+        {
+          firstName: "Elisabeth",
+          lastName: "Spencer",
+          dateOfBirth: "1998-04-16",
+          cityOfResidence: "London",
+          email: "lizzyspencer@gmail.com",
+          relation: "spouse",
+          gender: "Female",
+          phoneNumber: "",
+          nationality: "British",
+          mainInterests: [
+            {
+              id: "1",
+              string: "Wellness",
+            },
+            {
+              id: "2",
+              string: "Ballet",
+            },
+            {
+              id: "3",
+              string: "Reading",
+            },
+            {
+              id: "4",
+              string: "Nature",
+            },
+          ],
+          socialMediaLinks: [],
+          loyaltyPrograms: [],
+          travelDocuments: [],
+          passions: [
+            {
+              id: "1",
+              string: "Art",
+            },
+            {
+              id: "2",
+              string: "Fashion",
+            },
+            {
+              id: "3",
+              string: "Photography",
+            },
+            {
+              id: "4",
+              string: "Travle",
+            },
+          ],
+          lifestyle: [
+            {
+              id: "1",
+              string: "Luxury",
+            },
+          ],
+          travelBucketList: [],
+          specialRequirements: [],
+          typeOfTravel: [],
+          travelSpan: [],
+          id: uuidv4(),
+        },
+      ],
     },
   ]);
 
@@ -260,8 +391,24 @@ const MainForm = ({ userName, setUserName }) => {
           };
         }),
       };
+      // dispatch(
+      //   setupOnBoardingFirstCall({
+      //     id: data[0]?.id,
+      //     groupName: "string",
+      //     userName: userName,
+      //     password: password,
+      //     augmentedData: "User family travel data",
+      //     customers: [
+      //       {
+      //         ...obj?.mainUser,
+      //         dependents: obj?.dependents || [],
+      //       },
+      //     ],
+      //   })
+      // );
+      // setTimeout(() => {
       dispatch(
-        setupOnBoardingFirstCall({
+        setupOnBoardingSecondCall({
           id: data[0]?.id,
           groupName: "string",
           userName: userName,
@@ -275,23 +422,7 @@ const MainForm = ({ userName, setUserName }) => {
           ],
         })
       );
-      setTimeout(() => {
-        dispatch(
-          setupOnBoardingSecondCall({
-            id: data[0]?.id,
-            groupName: "string",
-            userName: userName,
-            password: password,
-            augmentedData: "User family travel data",
-            customers: [
-              {
-                ...obj?.mainUser,
-                dependents: obj?.dependents || [],
-              },
-            ],
-          })
-        );
-      }, 5000);
+      // }, 5000);
     }
   }
 
