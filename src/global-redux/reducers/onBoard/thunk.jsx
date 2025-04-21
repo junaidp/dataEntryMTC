@@ -17,7 +17,7 @@ export const onBoardingFirstCall = async (data, thunkAPI) => {
 
     const csvData = await parseCSV(text);
 
-    const apiKey = "here-comes-the-key-of-openai-chat-gpt";
+    const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
     const prompt = `You are an AI data analyst. Your task is to analyze the provided customers' personal information and CSV data, then return a structured JSON response.
 
 ### **INPUT DATA**
@@ -109,7 +109,7 @@ Strictly return the response in this exact JSON structure:
 export const onBoardingSecondCall = async (data, thunkAPI) => {
   try {
     let props = await axios.post(
-      `https://tripplanning-frosty-waterfall-7876.fly.dev/generate_response/`,
+      `https://mtcv2-production-cefa.up.railway.app/generate_response/`,
       {
         input_data: {
           ...data,
