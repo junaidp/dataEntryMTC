@@ -1,10 +1,10 @@
 import React from "react";
 import PrincipleCustomer from "./principal-customer/PrincipleCustomer";
 import { toast } from "react-toastify";
+import { Modal, CircularProgress, Button } from '@mui/material';
 import { v4 as uuidv4 } from "uuid";
 import {
-  setupOnBoardingFirstCall,
-  setupOnBoardingSecondCall
+  setupOnBoardingCall
 } from "../../../global-redux/reducers/onBoard/slice";
 import { useSelector, useDispatch } from "react-redux";
 import ChildrenWrap from "./dependents/ChildrenWrap";
@@ -16,12 +16,13 @@ const MainForm = ({ userName, setUserName }) => {
   const dispatch = useDispatch();
   const {
     loading,
-    signInData,
-    onBoardingAddSuccess,
-    subLoading
+    signInData
   } = useSelector((state) => state?.onBoard);
 
   const [password, setPassword] = React.useState("ricardo");
+  const [controller, setController] = React.useState(null);
+  const [fetch, setFetch] = React.useState(false)
+  const [showResponseDialog, setShowResponseDialog] = React.useState(false)
   const [data, setData] = React.useState([
     {
       id: uuidv4(),
@@ -183,8 +184,6 @@ const MainForm = ({ userName, setUserName }) => {
     },
   ]);
 
-  console.log(data)
-
   const [extraData, setExtraData] = React.useState({
     principalCustomer: {
       interest: "",
@@ -309,7 +308,7 @@ const MainForm = ({ userName, setUserName }) => {
     }
   };
 
-  function handleSubmit() {
+  const handleSubmit = async () => {
     if (!loading) {
       let obj = {
         id: data[0].id,
@@ -395,38 +394,54 @@ const MainForm = ({ userName, setUserName }) => {
           };
         }),
       };
-      dispatch(
-        setupOnBoardingFirstCall({
-          id: data[0]?.id,
-          groupName: "string",
-          userName: userName,
-          password: password,
-          augmentedData: "User family travel data",
-          customers: [
+      let onBoradingArray = [
+        {
+          customerName: obj?.mainUser?.firstName,
+          passions: obj?.mainUser?.passions,
+          lifestyle: obj?.mainUser?.lifestyle,
+          mainInterests: obj?.mainUser?.mainInterests
+        },
+        ...obj?.dependents.map((dependent) => {
+          return (
             {
-              ...obj?.mainUser,
-              dependents: obj?.dependents || [],
-            },
-          ],
+              customerName: dependent?.firstName,
+              passions: dependent?.passions,
+              lifestyle: dependent?.lifestyle,
+              mainInterests: dependent?.mainInterests
+            }
+          )
         })
-      );
-      setTimeout(() => {
-        dispatch(
-          setupOnBoardingSecondCall({
-            id: data[0]?.id,
-            groupName: "string",
-            userName: userName,
-            password: password,
-            augmentedData: "User family travel data",
-            customers: [
-              {
-                ...obj?.mainUser,
-                dependents: obj?.dependents || [],
-              },
-            ],
-          })
-        );
-      }, 5000)
+      ]
+      const newController = new AbortController();
+      setController(newController);
+      setFetch(true);
+      try {
+        const resultAction = await dispatch(setupOnBoardingCall({
+          data: onBoradingArray,
+          signal: newController.signal,
+        }));
+
+        if (setupOnBoardingCall.fulfilled.match(resultAction)) {
+          setShowResponseDialog(true);
+        } else {
+          // Checking if request was aborted
+          if (resultAction?.error?.name === 'AbortError' || resultAction?.error?.message === 'Rejected' || resultAction?.error?.message?.includes("aborted")) {
+            toast.info("Request was cancelled.");
+          } else {
+            toast.error("Failed to get response");
+          }
+        }
+      } catch (error) {
+        // This block might not be hit unless there's an actual thrown error
+        if (error.name === "AbortError") {
+          toast.info("Request was cancelled.");
+        } else {
+          toast.error("Something went wrong");
+        }
+      } finally {
+        setFetch(false);
+      }
+
     }
   }
 
@@ -735,12 +750,39 @@ const MainForm = ({ userName, setUserName }) => {
     }
   }, [signInData]);
 
+  const handleCancel = () => {
+    if (controller) {
+      controller.abort();
+    }
+    setFetch(false);
+  };
+
   return (
     <div className="my-4">
-      {onBoardingAddSuccess && (
+      {fetch && (
+        <Modal open>
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100vh',
+            background: 'white',
+            padding: '2rem',
+          }}>
+            <CircularProgress />
+            <p>Analyzing data using AI... This may take some time.</p>
+            <Button onClick={handleCancel} style={{ marginTop: '1rem' }}>
+              Cancel
+            </Button>
+          </div>
+        </Modal>
+      )}
+      {showResponseDialog && (
         <div className="modal-objective">
           <div className="model-wrap">
             <FirstDialog
+              setShowResponseDialog={setShowResponseDialog}
             />
           </div>
         </div>
@@ -864,14 +906,14 @@ const MainForm = ({ userName, setUserName }) => {
 
       <div>
         <div
-          className={`btn btn-labeled btn-primary px-3 shadow  my-4 ${loading || subLoading && "disabled"
+          className={`btn btn-labeled btn-primary px-3 shadow  my-4 ${loading && "disabled"
             } `}
           onClick={handleSubmit}
         >
           <span className="btn-label me-2">
             <i className="fa fa-check-circle f-18"></i>
           </span>
-          {loading || subLoading ? "Loading..." : "Submit"}
+          {loading ? "Loading..." : "Submit"}
         </div>
       </div>
     </div>

@@ -1,109 +1,286 @@
-import axios from "axios";
-import Papa from "papaparse";
+import axios from "axios"
+// export const onBoardingCall = async (data, thunkAPI) => {
+//   try {
+//     const res = await fetch("/file.csv");
+//     const text = await res.text();
 
-export const onBoardingFirstCall = async (data, thunkAPI) => {
+//     const parseCSV = (text) => {
+//       return new Promise((resolve) => {
+//         Papa.parse(text, {
+//           complete: (result) => resolve(result.data),
+//           header: true,
+//         });
+//       });
+//     };
+
+//     const csvData = await parseCSV(text);
+
+//     const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
+//     const prompt = `You are an AI data analyst. Your task is to analyze the provided customers' personal information and CSV data, then return a structured JSON response.
+
+// ### **INPUT DATA**
+// 1️⃣ **CSV Data:** ${JSON.stringify(csvData)}
+// 2️⃣ **Customers Personal Info:** ${JSON.stringify(data?.customers)}
+
+// ### **TASK**
+// - Extract **'data point used'** column values relevant to each customer.
+// - Analyze the **'Reasoning'** and **'Refinement Considerations'** columns.
+// - Answer the questions from the **'Goals'** column.
+// - Generate insights about **date of birth, place of birth, gender, email, phone number, city of residence, and combined identity**.
+// - **DO NOT** return explanations, only structured JSON.
+
+// ### **STRICT JSON FORMAT**
+// Strictly return the response in this exact JSON structure:
+// [
+//   {
+//     "name": "<string>",
+//     "dateOfBirth": {
+//       "exactAge": <number>,
+//       "timeBeforeNextBirthday": "<string> days",
+//       "lifeMilestones": "<string>",
+//       "culturalTouchstones": "<string>",
+//       "legalAdultStatus": "<string>",
+//       "ageRestrictions": "<string>"
+//     },
+//     "placeOfBirth": {
+//       "countryOfBirth": "<string>",
+//       "likelyLanguages": ["<string>", "<string>"]
+//     },
+//     "gender": {
+//       "likelyPronouns": "<string>"
+//     },
+//     "email": {
+//       "placeOfWork": "<string>",
+//       "digitalFamiliarity": "<string>"
+//     },
+//     "phoneNumber": {
+//       "countryLinked": "<string>",
+//       "internationalConnections": "<string>"
+//     },
+//     "cityOfResidence": {
+//       "countryOfResidence": "<string>",
+//       "likelyLanguages": ["<string>", "<string>"],
+//       "presentDayEnvironment": "<string>",
+//       "lifeStyle": "<string>"
+//     },
+//     "combined": {
+//       "emailAndFullName": "<string>",
+//       "emailAndAge": "<string>",
+//       "rootedness": "<string>",
+//       "culturalRoots": "<string>",
+//       "livingStyle": "<string>",
+//       "demographicPreferences": "<string>",
+//       "lifeNarrative": "<string>",
+//       "selfExpression": "<string>",
+//       "culturalConnections": "<string>",
+//       "careerStatus": "<string>"
+//     }
+//   }
+// ]
+
+// ### **RULES**
+// - **DO NOT** add extra explanations.
+// - **DO NOT** include additional text outside the JSON object.
+// - **Ensure valid JSON format** (no missing commas, quotes, or brackets).`;
+
+//     const openAIResponse = await axios.post(
+//       "https://api.openai.com/v1/chat/completions",
+//       {
+//         model: "gpt-4",
+//         messages: [{ role: "user", content: prompt }],
+//         temperature: 0.7,
+//       },
+//       {
+//         headers: {
+//           Authorization: `Bearer ${apiKey}`,
+//           "Content-Type": "application/json",
+//         },
+//       }
+//     );
+//     return openAIResponse.data.choices[0].message.content;
+//   } catch (error) {
+//     return thunkAPI.rejectWithValue(error);
+//   }
+// };
+
+// New One
+export const onBoardingCall = async ({ data: allCustomers, signal }, thunkAPI) => {
+  const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
+
+  const systemPrompt = `Objective: Decide whether there is a relationship between Concept A and Concept B when
+concept A is dependent on concept B.
+STEP 1. Clarify Definitions and Ontologies
+Human Equivalent: Conscious access to stable concepts
+Instruction:
+Define Concept A and Concept B as precisely and objectively as possible, without using
+examples or interpretations. Then determine whether their definitions share any terms,
+structures, or referential dependencies.
+✅ Purpose: Prevent vague overlaps. Blocks misalignment from the start.
+STEP 2. Understanding Dependencies
+Human Equivalent: Understanding concepts using a specific one-way direction
+Instruction:
+Clearly understand the relationship of dependence or necessity between Concept A and
+Concept B as a one-way dependency. This means the existence, nature, or functioning of
+Concept A is dependent on Concept B. If Concept B does not exist, is absent, or is not
+functioning correctly, then Concept A cannot exist, is absent, or will not function correctly.
+You must understand this one-way direction of the dependency instead of using the most
+community relationship based on your known patterns.
+✅ Purpose: Establish a clear relationship of dependence between concepts to obtain the right
+analysis.
+
+STEP 3. Generate All Possible Relationship Types (Taxonomy)
+Human Equivalent: Unconscious mental branching of relationship categories
+Instruction:
+List all relationship types that could theoretically exist between any two concepts (e.g. causal,
+semantic, functional, structural, formal, epistemic, ontological, procedural, symbolic,
+metaphorical, historical, etc.). For each, define it.
+✅ Purpose: Simulates the subconscious tree-generation humans do automatically.
+
+STEP 4. Map Each Relationship Type to the Current Pair
+Human Equivalent: Intuition cross-matching categories
+Instruction:
+For each relationship type, assess whether it is plausibly present, plausibly absent, or
+undecidable between Concept A and Concept B. Do not justify. Only label.
+✅ Purpose: Simulates initial wide filtering. Prevents early commitment.
+STEP 5. Justify All “Plausibly Present” Relationships
+Individually
+Human Equivalent: Rational synthesis and filtering
+Instruction:
+For each relationship marked “plausibly present”, write one short justification for why it could
+exist. Then write one counterpoint that challenges its validity. Do this evenly for each case.
+✅ Purpose: Enforces dual-perspective evaluation. Blocks post-hoc rationalisation.
+STEP 6. Introduce Experiential Simulation
+Human Equivalent: Memory and personal knowledge
+Instruction:
+Simulate the thought process of someone with deep experience in each domain (A and B). How
+would a person trained for 20 years in each field see the connection? What lived experiences
+would shape their answer?
+
+✅ Purpose: Fakes experience/memory by prompting domain emulation. Forces perspective-
+shifting.
+
+STEP 7. Cultural and Emotional Modelling
+Human Equivalent: Cultural priors, emotion-laden memory
+Instruction:
+Consider how different cultures or emotional frameworks might shape the perception of the
+relationship between A and B. Would this change the answer in some contexts?
+✅ Purpose: Mimics the emotional-intuitive filters humans use unconsciously.
+STEP 8. Contradiction Search
+Human Equivalent: Subconscious error-check
+Instruction:
+Search for any internal contradictions, category errors, or conflated meanings in the prior steps.
+List each one you can find. If none are found, state why that is justifiable.
+✅ Purpose: Introduces internal challenge that LLMs do not perform by default.
+STEP 9. Re-synthesis and Final Evaluation
+Human Equivalent: Tree-to-root summary
+Instruction:
+Given all prior steps, summarise the strongest argument for, the strongest argument against,
+and state the final judgment: Is there a relationship between Concept A and Concept B? Answer
+only "yes" or "no", followed by one sentence of rationale grounded in the steps above.
+✅ Purpose: Forces a judgment that is a true synthesis, not an early convergence.
+
+KEY IMPLEMENTATION RULES • Hard sequence enforcement: The model must not skip or reorder steps
+• Zero output until all prior steps complete
+• Strictly enforce the one-way dependency from Concept A to Concept B
+• No output justification allowed after the final decision—it must be contained in the rationale
+sentence
+• Must acknowledge all contradictions uncovered
+• Must simulate reasoning as steps, not text—no narrative blending
+. Return your final answer strictly in the following valid JSON format (with double quotes around all keys and string values):
+
+{
+  "Answer": "yes" or "no",
+  "Reasoning": "Step-by-step explanation from Steps 1 to 9, as described above"
+}
+
+Do not include any extra text, commentary, or markdown formatting before or after the JSON object.
+Only return the JSON object exactly as shown above.
+`;
+
+  const categories = ['passions', 'lifestyle', 'mainInterests'];
+  const CATEGORY_WEIGHTS = {
+    passions: 3,
+    lifestyle: 0.5,
+    mainInterests: 1,
+  };
+
   try {
-    const res = await fetch("/file.csv");
-    const text = await res.text();
+    const finalResults = [];
 
-    const parseCSV = (text) => {
-      return new Promise((resolve) => {
-        Papa.parse(text, {
-          complete: (result) => resolve(result.data),
-          header: true,
-        });
-      });
-    };
+    for (const customer of allCustomers) {
+      const conceptWeights = {};
+      const reasoningPairs = [];
 
-    const csvData = await parseCSV(text);
-
-    const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
-    const prompt = `You are an AI data analyst. Your task is to analyze the provided customers' personal information and CSV data, then return a structured JSON response.
-
-### **INPUT DATA**
-1️⃣ **CSV Data:** ${JSON.stringify(csvData)}
-2️⃣ **Customers Personal Info:** ${JSON.stringify(data?.customers)}
-
-### **TASK**
-- Extract **'data point used'** column values relevant to each customer.
-- Analyze the **'Reasoning'** and **'Refinement Considerations'** columns.
-- Answer the questions from the **'Goals'** column.
-- Generate insights about **date of birth, place of birth, gender, email, phone number, city of residence, and combined identity**.
-- **DO NOT** return explanations, only structured JSON.
-
-### **STRICT JSON FORMAT**
-Strictly return the response in this exact JSON structure:
-[
-  {
-    "name": "<string>",
-    "dateOfBirth": {
-      "exactAge": <number>,
-      "timeBeforeNextBirthday": "<string> days",
-      "lifeMilestones": "<string>",
-      "culturalTouchstones": "<string>",
-      "legalAdultStatus": "<string>",
-      "ageRestrictions": "<string>"
-    },
-    "placeOfBirth": {
-      "countryOfBirth": "<string>",
-      "likelyLanguages": ["<string>", "<string>"]
-    },
-    "gender": {
-      "likelyPronouns": "<string>"
-    },
-    "email": {
-      "placeOfWork": "<string>",
-      "digitalFamiliarity": "<string>"
-    },
-    "phoneNumber": {
-      "countryLinked": "<string>",
-      "internationalConnections": "<string>"
-    },
-    "cityOfResidence": {
-      "countryOfResidence": "<string>",
-      "likelyLanguages": ["<string>", "<string>"],
-      "presentDayEnvironment": "<string>",
-      "lifeStyle": "<string>"
-    },
-    "combined": {
-      "emailAndFullName": "<string>",
-      "emailAndAge": "<string>",
-      "rootedness": "<string>",
-      "culturalRoots": "<string>",
-      "livingStyle": "<string>",
-      "demographicPreferences": "<string>",
-      "lifeNarrative": "<string>",
-      "selfExpression": "<string>",
-      "culturalConnections": "<string>",
-      "careerStatus": "<string>"
-    }
-  }
-]
-
-### **RULES**
-- **DO NOT** add extra explanations.
-- **DO NOT** include additional text outside the JSON object.
-- **Ensure valid JSON format** (no missing commas, quotes, or brackets).`;
-
-    const openAIResponse = await axios.post(
-      "https://api.openai.com/v1/chat/completions",
-      {
-        model: "gpt-4",
-        messages: [{ role: "user", content: prompt }],
-        temperature: 0.7,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          "Content-Type": "application/json",
-        },
+      // Initialize weights
+      for (const category of categories) {
+        for (const item of customer[category]) {
+          if (!conceptWeights[item]) {
+            conceptWeights[item] = CATEGORY_WEIGHTS[category];
+          }
+        }
       }
-    );
-    return openAIResponse.data.choices[0].message.content;
+
+      // Compare each pair across different categories
+      for (let i = 0; i < categories.length; i++) {
+        for (let j = 0; j < categories.length; j++) {
+          if (i === j) continue;
+
+          const fromCategory = categories[i];
+          const toCategory = categories[j];
+
+          for (const conceptA of customer[fromCategory]) {
+            for (const conceptB of customer[toCategory]) {
+              const userMessage = `Concept A = ${conceptA} Concept B = ${conceptB} : Decide whether there is a relationship between ${conceptA} (A) and ${conceptB} (B), when ${conceptA} is dependent on ${conceptB}.`;
+
+              const response = await axios.post(
+                "https://api.openai.com/v1/chat/completions",
+                {
+                  model: "gpt-4",
+                  messages: [
+                    { role: "system", content: systemPrompt },
+                    { role: "user", content: userMessage },
+                  ],
+                  temperature: 0.2,
+                },
+                {
+                  signal,
+                  headers: {
+                    Authorization: `Bearer ${apiKey}`,
+                    "Content-Type": "application/json",
+                  },
+                }
+              );
+
+              const gptResponse = JSON.parse(response.data.choices[0].message.content);
+
+              if (gptResponse.Answer.toLowerCase() === "yes") {
+                conceptWeights[conceptA] += CATEGORY_WEIGHTS[toCategory];
+              }
+
+              reasoningPairs.push({
+                conceptA,
+                conceptB,
+                gptResponse,
+              });
+            }
+          }
+        }
+      }
+
+      finalResults.push({
+        customerName: customer.customerName || "Unknown",
+        conceptWeights,
+        reasoning: reasoningPairs,
+      });
+    }
+
+    return finalResults;
+
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
   }
 };
+
 
 
 export const onBoardingSecondCall = async (data, thunkAPI) => {

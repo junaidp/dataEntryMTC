@@ -1,6 +1,6 @@
 import { toast } from "react-toastify";
 import {
-  onBoardingFirstCall,
+  onBoardingCall,
   chat,
   signIn,
   onBoardingSecondCall,
@@ -19,13 +19,14 @@ const initialState = {
   hypothesis: "",
   firstOnBoardingResult: [],
   secondOnBoardingResult: {},
+  onBoardingResult: [],
   subLoading: false,
 };
 
-export const setupOnBoardingFirstCall = createAsyncThunk(
-  "onBoard/onBoardingFirstCall",
+export const setupOnBoardingCall = createAsyncThunk(
+  "onBoard/onBoardingCall",
   async (data, thunkAPI) => {
-    return onBoardingFirstCall(data, thunkAPI);
+    return onBoardingCall(data, thunkAPI);
   }
 );
 
@@ -63,26 +64,15 @@ export const slice = createSlice({
   extraReducers: (builder) => {
     // On Boarding
     builder
-      .addCase(setupOnBoardingFirstCall.pending, (state) => {
-        state.subLoading = true;
-        state.onBoardingAddSuccess = true;
+      .addCase(setupOnBoardingCall.pending, (state) => {
+        state.loading = true;
       })
-      .addCase(setupOnBoardingFirstCall.fulfilled, (state, action) => {
-        state.subLoading = false;
-        state.firstOnBoardingResult = JSON.parse(action?.payload) || [];
-        state.onBoardingAddSuccess = true;
+      .addCase(setupOnBoardingCall.fulfilled, (state, action) => {
+        state.loading = false;
+        state.onBoardingResult = action?.payload || [];
       })
-      .addCase(setupOnBoardingFirstCall.rejected, (state, action) => {
-        state.subLoading = false;
-        action.payload.response?.data?.detail?.forEach((errorMsg) => {
-          toast.error(`${errorMsg?.loc[2]} ${errorMsg.msg}`);
-        });
-        if (
-          action.payload?.response?.data?.message &&
-          !action?.payload?.response?.data?.detail
-        ) {
-          toast.error(action.payload.response.data.message);
-        }
+      .addCase(setupOnBoardingCall.rejected, (state, action) => {
+        state.loading = false;
       });
     // On Boarding Second Result
     builder
