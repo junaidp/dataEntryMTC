@@ -106,6 +106,7 @@ import axios from "axios"
 // New One
 export const onBoardingCall = async ({ data: allCustomers, signal }, thunkAPI) => {
   const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
+  const backendURL = import.meta.env.VITE_BACKEND_BASE_URL;
 
   const systemPrompt = `Objective: Decide whether there is a relationship between Concept A and Concept B when
 concept A is dependent on concept B.
@@ -211,7 +212,6 @@ Only return the JSON object exactly as shown above.
       const conceptWeights = {};
       const reasoningPairs = [];
 
-      // Initialize weights
       for (const category of categories) {
         for (const item of customer[category]) {
           if (!conceptWeights[item]) {
@@ -220,7 +220,6 @@ Only return the JSON object exactly as shown above.
         }
       }
 
-      // Compare each pair across different categories
       for (let i = 0; i < categories.length; i++) {
         for (let j = 0; j < categories.length; j++) {
           if (i === j) continue;
@@ -230,28 +229,56 @@ Only return the JSON object exactly as shown above.
 
           for (const conceptA of customer[fromCategory]) {
             for (const conceptB of customer[toCategory]) {
-              const userMessage = `Concept A = ${conceptA} Concept B = ${conceptB} : Decide whether there is a relationship between ${conceptA} (A) and ${conceptB} (B), when ${conceptA} is dependent on ${conceptB}.`;
+              const checkUrl = `${backendURL}/api/v1/relationship?conceptA=${encodeURIComponent(conceptA)}&conceptB=${encodeURIComponent(conceptB)}`;
 
-              const response = await axios.post(
-                "https://api.openai.com/v1/chat/completions",
-                {
-                  model: "gpt-4",
-                  messages: [
-                    { role: "system", content: systemPrompt },
-                    { role: "user", content: userMessage },
-                  ],
-                  temperature: 0.2,
-                },
-                {
-                  signal,
-                  headers: {
-                    Authorization: `Bearer ${apiKey}`,
-                    "Content-Type": "application/json",
-                  },
+              // Try to get from database first
+              let gptResponse;
+
+              try {
+                const dbResponse = await axios.get(checkUrl, { signal });
+
+                if (dbResponse.data?.gptResponse) {
+                  gptResponse = dbResponse.data.gptResponse;
                 }
-              );
+              } catch (err) {
+                // Ignore not found errors (e.g., 404), but log others
+                if (err.response?.status !== 404) {
+                  console.error(`DB check failed for ${conceptA} -> ${conceptB}`, err);
+                }
+              }
 
-              const gptResponse = JSON.parse(response.data.choices[0].message.content);
+              // If not found in DB, call OpenAI
+              if (!gptResponse) {
+                const userMessage = `Concept A = ${conceptA} Concept B = ${conceptB} : Decide whether there is a relationship between ${conceptA} (A) and ${conceptB} (B), when ${conceptA} is dependent on ${conceptB}.`;
+
+                const aiResponse = await axios.post(
+                  "https://api.openai.com/v1/chat/completions",
+                  {
+                    model: "gpt-4",
+                    messages: [
+                      { role: "system", content: systemPrompt },
+                      { role: "user", content: userMessage },
+                    ],
+                    temperature: 0.2,
+                  },
+                  {
+                    signal,
+                    headers: {
+                      Authorization: `Bearer ${apiKey}`,
+                      "Content-Type": "application/json",
+                    },
+                  }
+                );
+
+                gptResponse = JSON.parse(aiResponse.data.choices[0].message.content);
+
+                // Save the new relationship in your DB
+                await axios.post(`${backendURL}/api/v1/relationship`, {
+                  conceptA,
+                  conceptB,
+                  gptResponse,
+                }, { signal });
+              }
 
               if (gptResponse.Answer.toLowerCase() === "yes") {
                 conceptWeights[conceptA] += CATEGORY_WEIGHTS[toCategory];
@@ -280,7 +307,6 @@ Only return the JSON object exactly as shown above.
     return thunkAPI.rejectWithValue(error);
   }
 };
-
 
 
 export const onBoardingSecondCall = async (data, thunkAPI) => {
