@@ -88,15 +88,10 @@ const MainForm = ({ userName, setUserName }) => {
           {
             id: "4",
             string: "Modern Art",
-          },
-          {
-            id: "5",
-            string: "Creativity",
-          },
+          }
         ],
         lifestyle: [
-          { id: "1", string: "Easygoing" },
-          { id: "2", string: "High Quality focus" },
+          { id: "1", string: "Easygoing" }
         ],
         travelBucketList: [
           {
@@ -134,18 +129,18 @@ const MainForm = ({ userName, setUserName }) => {
               id: "1",
               string: "Wellness",
             },
-            {
-              id: "2",
-              string: "Ballet",
-            },
-            {
-              id: "3",
-              string: "Reading",
-            },
-            {
-              id: "4",
-              string: "Nature",
-            },
+            // {
+            //   id: "2",
+            //   string: "Ballet",
+            // },
+            // {
+            //   id: "3",
+            //   string: "Reading",
+            // },
+            // {
+            //   id: "4",
+            //   string: "Nature",
+            // },
           ],
           // socialMediaLinks: [],
           // loyaltyPrograms: [],
@@ -159,14 +154,14 @@ const MainForm = ({ userName, setUserName }) => {
               id: "2",
               string: "Fashion",
             },
-            {
-              id: "3",
-              string: "Photography",
-            },
-            {
-              id: "4",
-              string: "Travle",
-            },
+            // {
+            //   id: "3",
+            //   string: "Photography",
+            // },
+            // {
+            //   id: "4",
+            //   string: "Travle",
+            // },
           ],
           lifestyle: [
             {

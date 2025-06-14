@@ -210,16 +210,20 @@ Only return the JSON object exactly as shown above.
 
     for (const customer of allCustomers) {
       const conceptWeights = {};
+      const weightBreakdown = {}; // <-- NEW: to track detailed contribution
       const reasoningPairs = [];
 
+      // Initialize weights and breakdown for each base category
       for (const category of categories) {
         for (const item of customer[category]) {
           if (!conceptWeights[item]) {
             conceptWeights[item] = CATEGORY_WEIGHTS[category];
+            weightBreakdown[item] = [{ source: category, from: null, weight: CATEGORY_WEIGHTS[category] }];
           }
         }
       }
 
+      // Check for relationships and apply weighted adjustments
       for (let i = 0; i < categories.length; i++) {
         for (let j = 0; j < categories.length; j++) {
           if (i === j) continue;
@@ -241,7 +245,6 @@ Only return the JSON object exactly as shown above.
                   gptResponse = dbResponse.data.gptResponse;
                 }
               } catch (err) {
-                // Ignore not found errors (e.g., 404), but log others
                 if (err.response?.status !== 404) {
                   console.error(`DB check failed for ${conceptA} -> ${conceptB}`, err);
                 }
@@ -272,7 +275,6 @@ Only return the JSON object exactly as shown above.
 
                 gptResponse = JSON.parse(aiResponse.data.choices[0].message.content);
 
-                // Save the new relationship in your DB
                 await axios.post(`${backendURL}/api/v1/relationship`, {
                   conceptA,
                   conceptB,
@@ -281,7 +283,19 @@ Only return the JSON object exactly as shown above.
               }
 
               if (gptResponse.Answer.toLowerCase() === "yes") {
-                conceptWeights[conceptA] += CATEGORY_WEIGHTS[toCategory];
+                const weightToAdd = CATEGORY_WEIGHTS[toCategory];
+                conceptWeights[conceptA] += weightToAdd;
+
+                // Track the reason for the added weight
+                if (!weightBreakdown[conceptA]) {
+                  weightBreakdown[conceptA] = [];
+                }
+
+                weightBreakdown[conceptA].push({
+                  source: toCategory,
+                  from: conceptB,
+                  weight: weightToAdd,
+                });
               }
 
               reasoningPairs.push({
@@ -298,6 +312,7 @@ Only return the JSON object exactly as shown above.
         customerName: customer.customerName || "Unknown",
         conceptWeights,
         reasoning: reasoningPairs,
+        breakdown: weightBreakdown, // <-- Add it to the result
       });
     }
 
@@ -306,6 +321,7 @@ Only return the JSON object exactly as shown above.
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
   }
+
 };
 
 
