@@ -4,7 +4,8 @@ import { toast } from "react-toastify";
 import { Modal, CircularProgress, Button } from '@mui/material';
 import { v4 as uuidv4 } from "uuid";
 import {
-  setupOnBoardingCall
+  setupOnBoardingCall,
+  setupGetAllPairs
 } from "../../../global-redux/reducers/onBoard/slice";
 import { useSelector, useDispatch } from "react-redux";
 import ChildrenWrap from "./dependents/ChildrenWrap";
@@ -407,35 +408,48 @@ const MainForm = ({ userName, setUserName }) => {
           )
         })
       ]
-      const newController = new AbortController();
-      setController(newController);
-      setFetch(true);
-      try {
-        const resultAction = await dispatch(setupOnBoardingCall({
-          data: onBoradingArray,
-          signal: newController.signal,
-        }));
+      // const newController = new AbortController();
+      // setController(newController);
+      // setFetch(true);
+      // try {
+      //   const resultAction = await dispatch(setupOnBoardingCall({
+      //     data: onBoradingArray,
+      //     signal: newController.signal,
+      //   }));
 
-        if (setupOnBoardingCall.fulfilled.match(resultAction)) {
+      //   if (setupOnBoardingCall.fulfilled.match(resultAction)) {
+      //     setShowResponseDialog(true);
+      //   } else {
+      //     // Checking if request was aborted
+      //     if (resultAction?.error?.name === 'AbortError' || resultAction?.error?.message === 'Rejected' || resultAction?.error?.message?.includes("aborted")) {
+      //       toast.info("Request was cancelled.");
+      //     } else {
+      //       toast.error("Failed to get response");
+      //     }
+      //   }
+      // } catch (error) {
+      //   // This block might not be hit unless there's an actual thrown error
+      //   if (error.name === "AbortError") {
+      //     toast.info("Request was cancelled.");
+      //   } else {
+      //     toast.error("Something went wrong");
+      //   }
+      // } finally {
+      //   setFetch(false);
+      // }
+
+      try {
+        const resultAction = await dispatch(setupGetAllPairs());
+
+        if (setupGetAllPairs.fulfilled.match(resultAction)) {
           setShowResponseDialog(true);
         } else {
-          // Checking if request was aborted
-          if (resultAction?.error?.name === 'AbortError' || resultAction?.error?.message === 'Rejected' || resultAction?.error?.message?.includes("aborted")) {
-            toast.info("Request was cancelled.");
-          } else {
-            toast.error("Failed to get response");
-          }
+          toast.error("Failed to get response");
         }
       } catch (error) {
-        // This block might not be hit unless there's an actual thrown error
-        if (error.name === "AbortError") {
-          toast.info("Request was cancelled.");
-        } else {
-          toast.error("Something went wrong");
-        }
-      } finally {
-        setFetch(false);
+        toast.error("Something went wrong");
       }
+
 
     }
   }

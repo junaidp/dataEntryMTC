@@ -326,6 +326,7 @@ Only return the JSON object exactly as shown above.
 
 
 export const onBoardingSecondCall = async (data, thunkAPI) => {
+
   try {
     let props = await axios.post(
       `https://mtcv2-production-cefa.up.railway.app/generate_response/`,
@@ -335,6 +336,19 @@ export const onBoardingSecondCall = async (data, thunkAPI) => {
         },
       },
       { timeout: 1800000 }
+    );
+    return props.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+};
+
+export const getAllPairs = async (_, thunkAPI) => {
+      const backendURL = import.meta.env.VITE_BACKEND_BASE_URL;
+
+  try {
+    let props = await axios.get(
+      `${backendURL}/api/v1/pairs/getAll`
     );
     return props.data;
   } catch (error) {

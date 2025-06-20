@@ -4,6 +4,7 @@ import {
   chat,
   signIn,
   onBoardingSecondCall,
+  getAllPairs
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -21,6 +22,7 @@ const initialState = {
   secondOnBoardingResult: {},
   onBoardingResult: [],
   subLoading: false,
+  ReasoningPairs:{}
 };
 
 export const setupOnBoardingCall = createAsyncThunk(
@@ -50,6 +52,13 @@ export const setupSignIn = createAsyncThunk(
   }
 );
 
+export const setupGetAllPairs = createAsyncThunk(
+  "onBoard/getAllPairs",
+  async (data, thunkAPI) => {
+    return getAllPairs(data, thunkAPI);
+  }
+);
+
 export const slice = createSlice({
   name: "onBoard",
   initialState,
@@ -72,6 +81,18 @@ export const slice = createSlice({
         state.onBoardingResult = action?.payload || [];
       })
       .addCase(setupOnBoardingCall.rejected, (state, action) => {
+        state.loading = false;
+      });
+    // All Pairs
+    builder
+      .addCase(setupGetAllPairs.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setupGetAllPairs.fulfilled, (state, action) => {
+        state.loading = false;
+        state.ReasoningPairs = action?.payload || {};
+      })
+      .addCase(setupGetAllPairs.rejected, (state, action) => {
         state.loading = false;
       });
     // On Boarding Second Result
