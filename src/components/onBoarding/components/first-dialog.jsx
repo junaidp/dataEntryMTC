@@ -1,6 +1,6 @@
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 import { useSelector } from "react-redux";
-import { Chip, Typography, Divider, Button, List, ListItem, ListItemText } from "@mui/material";
+import { Chip, Divider, Typography } from "@mui/material";
 
 const CATEGORY_WEIGHTS = {
   passions: 3,
@@ -9,7 +9,6 @@ const CATEGORY_WEIGHTS = {
 
 const ResponseDialog = ({ setShowResponseDialog }) => {
   const { ReasoningPairs: { passions = [], interests = [], pairs = [] } } = useSelector((state) => state?.onBoard || {});
-  const [expanded, setExpanded] = useState({});
 
   // Create a map of each concept to its category
   const categoryMap = useMemo(() => {
@@ -20,7 +19,7 @@ const ResponseDialog = ({ setShowResponseDialog }) => {
   }, [passions, interests]);
 
   // Compute concept weights and breakdowns
-  const { conceptWeights, weightBreakdown } = useMemo(() => {
+  const { weightBreakdown } = useMemo(() => {
     const weights = {};
     const breakdown = {};
 
@@ -55,20 +54,6 @@ const ResponseDialog = ({ setShowResponseDialog }) => {
     return { conceptWeights: weights, weightBreakdown: breakdown };
   }, [passions, interests, categoryMap, pairs]);
 
-  // Extract reasoning steps from GPT response
-  const extractSteps = (reasoningObj) => {
-    if (!reasoningObj || typeof reasoningObj !== "object") return [];
-    return Object.entries(reasoningObj)
-      .filter(([key]) => key.toLowerCase().startsWith("step"))
-      .map(([key, value]) => {
-        const stringified = typeof value === "string" ? value : JSON.stringify(value, null, 2);
-        return `${key}: ${stringified}`;
-      });
-  };
-
-  const toggleExpanded = (index) => {
-    setExpanded((prev) => ({ ...prev, [index]: !prev[index] }));
-  };
 
   return (
     <div className="p-4">
@@ -100,14 +85,28 @@ const ResponseDialog = ({ setShowResponseDialog }) => {
       <h1 className="heading">Reasoning:</h1>
 
       {pairs.map((pair, index) => {
-        const steps = Object.entries(pair?.gptResponse?.Reasoning || {})
-          .filter(([key]) => key.toLowerCase().startsWith("step"))
-          .map(([stepTitle, stepContent]) => ({
-            stepTitle,
-            content: stepContent,
-          }));
-        const showAll = expanded[index];
-        const stepsToShow = showAll ? steps : steps.slice(0, 3);
+        let parsedPairGptResponse;
+
+        try {
+          parsedPairGptResponse = JSON.parse(pair.gptResponse);
+        } catch (error) {
+          console.error(`Invalid JSON at index ${index}:`, error);
+          return (
+            <div key={index} className="mb-3">
+              <Typography variant="body1" color="error">
+                Invalid AI response format.
+              </Typography>
+              <Divider className="mt-3" />
+            </div>
+          );
+        }
+
+        const reasoningText = parsedPairGptResponse?.Reasoning || "";
+
+        const steps = reasoningText
+          .split(/(?=Step\s\d+(-\d+)?:)/g)
+          .map((s) => (typeof s === "string" ? s.trim() : ""))
+          .filter((s) => s && !s.startsWith("-"));
 
         return (
           <div key={index} className="mb-3">
@@ -118,78 +117,17 @@ const ResponseDialog = ({ setShowResponseDialog }) => {
               <strong>Concept B:</strong> {pair.ConceptB}
             </Typography>
             <Typography variant="body1" className="mt-2">
-              <strong>AI Answer:</strong> {pair.gptResponse?.Answer}
+              <strong>AI Answer:</strong> {parsedPairGptResponse.Answer}
             </Typography>
 
             <Typography variant="body2" className="mt-2">
               <strong>Reasoning:</strong>
             </Typography>
-
-            <List sx={{ listStyleType: "disc", pl: 2 }} component="ul">
-              {stepsToShow.map((step, i) => (
-                <div key={i} style={{ paddingBottom: "12px" }}>
-                  <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
-                    {step.stepTitle}
-                  </Typography>
-
-                  {typeof step.content === "string" ? (
-                    <Typography variant="body2" sx={{ whiteSpace: "pre-line", pl: 2 }}>
-                      {step.content}
-                    </Typography>
-                  ) : (
-                    <>
-                      {(step.stepTitle === "STEP 3" || step.stepTitle === "STEP 5") ? (
-                        <List sx={{ pl: 2 }} component="ul">
-                          {Object.entries(step.content).map(([mainKey, subValue], j) => (
-                            <ListItem key={j} sx={{ display: "block", pb: 1 }}>
-                              <Typography variant="subtitle2"><strong>{mainKey}</strong></Typography>
-                              {typeof subValue === "object" ? (
-                                <List sx={{ pl: 3 }} component="ul">
-                                  {Object.entries(subValue).map(([subKey, subVal], k) => (
-                                    <ListItem key={k} sx={{ display: "list-item", py: 0 }}>
-                                      <ListItemText
-                                        primary={
-                                          <span><strong>{subKey}:</strong> {subVal}</span>
-                                        }
-                                      />
-                                    </ListItem>
-                                  ))}
-                                </List>
-                              ) : (
-                                <Typography variant="body2" sx={{ pl: 2 }}>{subValue}</Typography>
-                              )}
-                            </ListItem>
-                          ))}
-                        </List>
-                      ) : (
-                        <List sx={{ listStyleType: "disc", pl: 4 }} component="ul">
-                          {Object.entries(step.content).map(([key, value], j) => (
-                            <ListItem key={j} sx={{ display: "list-item", py: 0 }}>
-                              <ListItemText
-                                primary={
-                                  <span>
-                                    <strong>{key}:</strong> {typeof value === "string" ? value : JSON.stringify(value)}
-                                  </span>
-                                }
-                              />
-                            </ListItem>
-                          ))}
-                        </List>
-                      )}
-                    </>
-                  )}
-
-                </div>
+            <ul className="pl-5 list-disc">
+              {steps.map((step, i) => (
+                <li key={i}>{step}</li>
               ))}
-
-            </List>
-
-            {steps.length > 3 && (
-              <Button variant="text" size="small" onClick={() => toggleExpanded(index)}>
-                {showAll ? "See less" : "See more"}
-              </Button>
-            )}
-
+            </ul>
             <Divider className="mt-3" />
           </div>
         );
