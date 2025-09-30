@@ -85,29 +85,6 @@ const ResponseDialog = ({ setShowResponseDialog }) => {
       <h1 className="heading">Reasoning:</h1>
 
       {pairs.map((pair, index) => {
-        let parsedPairGptResponse;
-
-        try {
-          parsedPairGptResponse = JSON.parse(pair.gptResponse);
-        } catch (error) {
-          console.error(`Invalid JSON at index ${index}:`, error);
-          return (
-            <div key={index} className="mb-3">
-              <Typography variant="body1" color="error">
-                Invalid AI response format.
-              </Typography>
-              <Divider className="mt-3" />
-            </div>
-          );
-        }
-
-        const reasoningText = parsedPairGptResponse?.Reasoning || "";
-
-        const steps = reasoningText
-          .split(/(?=Step\s\d+(-\d+)?:)/g)
-          .map((s) => (typeof s === "string" ? s.trim() : ""))
-          .filter((s) => s && !s.startsWith("-"));
-
         return (
           <div key={index} className="mb-3">
             <Typography variant="body1">
@@ -117,17 +94,11 @@ const ResponseDialog = ({ setShowResponseDialog }) => {
               <strong>Concept B:</strong> {pair.ConceptB}
             </Typography>
             <Typography variant="body1" className="mt-2">
-              <strong>AI Answer:</strong> {parsedPairGptResponse.Answer}
+              <strong>Prompt:</strong> {pair.Prompt}
             </Typography>
-
-            <Typography variant="body2" className="mt-2">
-              <strong>Reasoning:</strong>
+            <Typography variant="body1" className="mt-2">
+              <strong>AI Answer:</strong> {pair.ChatGPTAnswers}
             </Typography>
-            <ul className="pl-5 list-disc">
-              {steps.map((step, i) => (
-                <li key={i}>{step}</li>
-              ))}
-            </ul>
             <Divider className="mt-3" />
           </div>
         );
