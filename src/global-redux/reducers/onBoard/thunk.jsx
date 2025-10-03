@@ -343,12 +343,12 @@ export const onBoardingSecondCall = async (data, thunkAPI) => {
   }
 };
 
-export const getAllPairs = async (_, thunkAPI) => {
-      const backendURL = import.meta.env.VITE_BACKEND_BASE_URL;
+export const getAllPairs = async (data, thunkAPI) => {
+  const backendURL = import.meta.env.VITE_BACKEND_BASE_URL;
 
   try {
-    let props = await axios.get(
-      `${backendURL}/api/v1/pairs/getAll`
+    let props = await axios.post(
+      `${backendURL}/api/v1/pairs/getAll`, data
     );
     return props.data;
   } catch (error) {
