@@ -2,9 +2,6 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { Chip, Divider, Typography } from "@mui/material";
 
-const buildDisplayPrompt = (from, to) =>
-  `How would you approach the following task by mirroring neuro symbolic ai principles: is ${from} ${to} ? Concept A is ${from} and concept B is ${to}. They are 2 independent concepts. Answer Only in Yes Or No`;
-
 const PairsDialog = ({ setShowResponseDialog }) => {
   // Safe, resilient selector: won't throw if slices are missing
   const { pairs = [], weights = {} } =
@@ -55,9 +52,6 @@ const PairsDialog = ({ setShowResponseDialog }) => {
             </Typography>
             <Typography variant="body1">
               <strong>Concept B:</strong> {pair.to}
-            </Typography>
-            <Typography variant="body1" className="mt-2">
-              <strong>Prompt:</strong> {buildDisplayPrompt(pair.from, pair.to)}
             </Typography>
             <Typography variant="body1" className="mt-2">
               <strong>AI Answer:</strong> {pair.answer}
