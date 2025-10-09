@@ -14,9 +14,11 @@ const PairsDialog = ({ setShowResponseDialog }) => {
         name,
         score: data?.score,
         type: data?.type,
+        label: data?.label || "",
       })),
     [weights]
   );
+
 
   const handleClose = React.useCallback(() => {
     setShowResponseDialog(false);
@@ -32,13 +34,38 @@ const PairsDialog = ({ setShowResponseDialog }) => {
       </div>
 
       <h1 className="heading">Concept Weights:</h1>
-      <div>
+      <div style={{marginLeft:"25px"}}>
         {weightsArray.map((w) => (
-          <p key={w.name}>
-            {w.name} ({w.score})
-          </p>
+          <div key={w.name} className="mb-4">
+            <Typography variant="h5 bold">
+              {w.name} ({w.score}) – {w.type}
+            </Typography>
+
+            {w.label && (
+              <div className="mt-2">
+                {/* split by newlines and render as bullet points if line starts with "•" */}
+                {w.label.split("\n").map((line, idx) => {
+                  const trimmed = line.trim();
+                  if (!trimmed) return null;
+                  if (trimmed.startsWith("•")) {
+                    return (
+                      <li key={idx}>
+                        {trimmed.replace(/^•\s*/, "")}
+                      </li>
+                    );
+                  }
+                  return (
+                    <Typography key={idx} variant="body2">
+                      {trimmed}
+                    </Typography>
+                  );
+                })}
+              </div>
+            )}
+          </div>
         ))}
       </div>
+
 
       <Divider className="my-3" />
 
