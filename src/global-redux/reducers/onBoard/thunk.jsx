@@ -356,6 +356,40 @@ export const getAllPairs = async (data, thunkAPI) => {
   }
 };
 
+export const runCombinationPipeline = async (data, thunkAPI) => {
+  const backendURL = import.meta.env.VITE_BACKEND_BASE_URL;
+
+  try {
+    // STEP 1 – Generate combinations
+    await axios.post(`${backendURL}/api/v1/combos/generate`, {
+      dataPoints: [
+        ...(data?.interests || []).map((n) => ({ name: n })),
+        ...(data?.passions || []).map((n) => ({ name: n })),
+      ],
+    });
+
+    // STEP 2 – Process combinations (tune as needed)
+    await axios.post(`${backendURL}/api/v1/combos/process`, {
+      batchSize: 200,
+      concurrency: 2,
+      onlySize: 2, // start with pairs; remove to process all sizes
+    });
+
+    // STEP 3 – Aggregate derived results
+    await axios.post(`${backendURL}/api/v1/derived/aggregate`);
+
+    // STEP 4 – Fetch preview of aggregated results
+    const preview = await axios.get(
+      `${backendURL}/api/v1/derived/preview?limit=50`
+    );
+
+    // Return only what UI needs (consistent with your pattern)
+    return preview.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error?.response?.data || error?.message);
+  }
+};
+
 export const chat = async (data, thunkAPI) => {
   try {
     let props = await axios.post(`${BASE_URL}/onBoard/chat`, {

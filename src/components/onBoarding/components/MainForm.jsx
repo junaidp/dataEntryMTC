@@ -2,7 +2,7 @@ import React from "react";
 import PrincipleCustomer from "./principal-customer/PrincipleCustomer";
 import { toast } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
-import { setupGetAllPairs } from "../../../global-redux/reducers/onBoard/slice";
+import { setupRunCombinationPipeline } from "../../../global-redux/reducers/onBoard/slice";
 import { useSelector, useDispatch } from "react-redux";
 import FirstDialog from "./pairs-dialog";
 
@@ -193,42 +193,33 @@ const MainForm = () => {
     if (loading) return;
 
     const main = data[0]?.principalCustomer || {};
-    const age = calculateAge(main?.dateOfBirth) || null;
-    const upcomingBirthday = calculateUpcomingBirthday(main?.dateOfBirth) || null;
-
     const obj = {
       id: data[0]?.id,
-      groupName: "string",
-      augmentedData: "string",
       mainUser: {
         ...main,
-        age,
-        upcomingBirthday,
         mainInterests: (main?.mainInterests || []).map((i) => i?.string),
         passions: (main?.passions || []).map((p) => p?.string),
-        lifestyle: (main?.lifestyle || []).map((l) => l?.string),
-        travelBucketList: (main?.travelBucketList || []).map((t) => t?.string),
-        typeOfTravel: (main?.typeOfTravel || []).map((t) => t),
       },
     };
 
     try {
       const resultAction = await dispatch(
-        setupGetAllPairs({
+        setupRunCombinationPipeline({
           interests: obj.mainUser.mainInterests,
           passions: obj.mainUser.passions,
         })
       );
 
-      if (setupGetAllPairs.fulfilled.match(resultAction)) {
+      if (setupRunCombinationPipeline.fulfilled.match(resultAction)) {
         setShowResponseDialog(true);
       } else {
-        toast.error("Failed to get response");
+        toast.error("Failed to run combination pipeline");
       }
     } catch (_err) {
       toast.error("Something went wrong");
     }
   }, [data, dispatch, loading]);
+
 
   /* Derived flags */
   const submitBtnClass = React.useMemo(

@@ -4,7 +4,8 @@ import {
   chat,
   signIn,
   onBoardingSecondCall,
-  getAllPairs
+  getAllPairs,
+  runCombinationPipeline
 } from "./thunk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -22,7 +23,9 @@ const initialState = {
   secondOnBoardingResult: {},
   onBoardingResult: [],
   subLoading: false,
-  ReasoningPairs:{}
+  ReasoningPairs: {},
+  derivedPreview: [],
+
 };
 
 export const setupOnBoardingCall = createAsyncThunk(
@@ -58,6 +61,14 @@ export const setupGetAllPairs = createAsyncThunk(
     return getAllPairs(data, thunkAPI);
   }
 );
+
+export const setupRunCombinationPipeline = createAsyncThunk(
+  "onBoard/runCombinationPipeline",
+  async (data, thunkAPI) => {
+    return runCombinationPipeline(data, thunkAPI);
+  }
+);
+
 
 export const slice = createSlice({
   name: "onBoard",
@@ -95,6 +106,21 @@ export const slice = createSlice({
       .addCase(setupGetAllPairs.rejected, (state, action) => {
         state.loading = false;
       });
+
+    builder
+      .addCase(setupRunCombinationPipeline.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(setupRunCombinationPipeline.fulfilled, (state, action) => {
+        state.loading = false;
+        state.derivedPreview = action?.payload?.items ?? [];
+      })
+      .addCase(setupRunCombinationPipeline.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Failed to run pipeline";
+      });
+
     // On Boarding Second Result
     builder
       .addCase(setupOnBoardingSecondCall.pending, (state) => {

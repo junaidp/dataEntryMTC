@@ -7,12 +7,21 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const PairsDialog = ({ setShowResponseDialog }) => {
+  // Existing data (unchanged)
   const { pairs = [], weights = {}, clusterAnalysis = "" } =
     useSelector((state) => state?.onBoard?.ReasoningPairs) ?? {};
+
+  // NEW: aggregated derived points preview from new pipeline
+  const { derivedPreview = [] } = useSelector((state) => state?.onBoard ?? {});
 
   const weightsArray = React.useMemo(
     () =>
@@ -98,28 +107,63 @@ const PairsDialog = ({ setShowResponseDialog }) => {
         </>
       )}
 
-      <Divider className="my-3" />
+      {/* NEW: Derived Data Points (Aggregated) */}
+      {Array.isArray(derivedPreview) && derivedPreview.length > 0 && (
+        <>
+          <Divider className="my-3" />
+          <Accordion
+            className="mt-2"
+            sx={{
+              background: "#f9f9f9",
+              boxShadow: "none",
+              border: "1px solid #e0e0e0",
+              borderRadius: "8px",
+            }}
+          >
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography variant="subtitle1" fontWeight="bold">
+                Derived Data Points (Aggregated)
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Typography variant="body2" className="mb-2">
+                Showing {derivedPreview.length} item
+                {derivedPreview.length > 1 ? "s" : ""} ranked by occurrences.
+              </Typography>
 
-      {/* Reasoning pairs */}
-      <h1 className="heading">Reasoning:</h1>
-      {pairs.map((pair, index) => {
-        const key =
-          pair?._id ?? `${pair?.from || "A"}->${pair?.to || "B"}-${index}`;
-        return (
-          <div key={key} className="mb-3">
-            <Typography variant="body1">
-              <strong>Concept A:</strong> {pair.from}
-            </Typography>
-            <Typography variant="body1">
-              <strong>Concept B:</strong> {pair.to}
-            </Typography>
-            <Typography variant="body1" className="mt-2">
-              <strong>AI Answer:</strong> {pair.answer}
-            </Typography>
-            <Divider className="mt-3" />
-          </div>
-        );
-      })}
+              <Table size="small" aria-label="derived-aggregates">
+                <TableHead>
+                  <TableRow>
+                    <TableCell><strong>Derived Data Point</strong></TableCell>
+                    <TableCell width={140} align="right">
+                      <strong>Occurrences</strong>
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {derivedPreview.map((item, idx) => (
+                    <TableRow key={`${item?.derived || "item"}-${idx}`}>
+                      <TableCell>
+                        <Typography variant="body2">
+                          {item?.derived || "—"}
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="right">
+                        <Typography variant="body2">
+                          {Number.isFinite(item?.occurrences)
+                            ? item.occurrences
+                            : "—"}
+                        </Typography>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </AccordionDetails>
+          </Accordion>
+        </>
+      )}
+
     </div>
   );
 };
