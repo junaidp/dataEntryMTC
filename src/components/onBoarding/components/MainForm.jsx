@@ -59,11 +59,11 @@ const createInitialCustomer = () => ({
       { id: "1", string: "Arts" },
       { id: "2", string: "Opera" },
       { id: "3", string: "Castles" },
-      { id: "4", string: "Legends" },
-      { id: "5", string: "Rock Art" },
-      { id: "6", string: "Immersive Games" },
-      { id: "7", string: "AI" },
-      { id: "8", string: "wildlife" },
+      // { id: "4", string: "Legends" },
+      // { id: "5", string: "Rock Art" },
+      // { id: "6", string: "Immersive Games" },
+      // { id: "7", string: "AI" },
+      // { id: "8", string: "wildlife" },
     ],
     passions: [
       { id: "1", string: "Music" },
@@ -202,6 +202,9 @@ const MainForm = () => {
       },
     };
 
+    toast.info("🧩 Generating combinations... this may take up to 2 minutes");
+
+
     try {
       const resultAction = await dispatch(
         setupRunCombinationPipeline({
@@ -212,6 +215,7 @@ const MainForm = () => {
 
       if (setupRunCombinationPipeline.fulfilled.match(resultAction)) {
         setShowResponseDialog(true);
+        toast.success("✅ Data processed successfully!");
       } else {
         toast.error("Failed to run combination pipeline");
       }

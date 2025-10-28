@@ -368,24 +368,35 @@ export const runCombinationPipeline = async (data, thunkAPI) => {
       ],
     });
 
-    // STEP 2 – Process combinations (tune as needed)
+    // STEP 2 – Start background processing
     await axios.post(`${backendURL}/api/v1/combos/process`, {
       batchSize: 200,
-      concurrency: 2,
-      onlySize: 2, // start with pairs; remove to process all sizes
+      concurrency: 3,
+      onlySize: 2,
     });
 
-    // STEP 3 – Aggregate derived results
+    // STEP 3 – Poll progress instead of preview
+    const maxRetries = 40;
+    const delayMs = 5000;
+    let percent = 0;
+
+    // for (let attempt = 0; attempt < maxRetries; attempt++) {
+    //   const status = await axios.get(`${backendURL}/api/v1/combos/status`);
+    //   percent = status.data?.percent ?? 0;
+    //   console.log(`🧭 Progress: ${percent}%`);
+
+    //   if (percent >= 90) break; // done enough to preview
+
+    //   await new Promise((r) => setTimeout(r, delayMs));
+    // }
+
+    // STEP 4 – Aggregate and preview
     await axios.post(`${backendURL}/api/v1/derived/aggregate`);
+    const preview = await axios.get(`${backendURL}/api/v1/derived/preview?limit=50`);
 
-    // STEP 4 – Fetch preview of aggregated results
-    const preview = await axios.get(
-      `${backendURL}/api/v1/derived/preview?limit=50`
-    );
-
-    // Return only what UI needs (consistent with your pattern)
     return preview.data;
   } catch (error) {
+    console.error("❌ runCombinationPipeline error:", error);
     return thunkAPI.rejectWithValue(error?.response?.data || error?.message);
   }
 };
