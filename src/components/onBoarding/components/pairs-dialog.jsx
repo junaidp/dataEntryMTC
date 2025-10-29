@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import { useSelector } from "react-redux";
 import {
   Chip,
@@ -12,16 +13,22 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  TablePagination,
+  Box,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const PairsDialog = ({ setShowResponseDialog }) => {
-  // Existing data (unchanged)
   const { pairs = [], weights = {}, clusterAnalysis = "" } =
     useSelector((state) => state?.onBoard?.ReasoningPairs) ?? {};
 
-  // NEW: aggregated derived points preview from new pipeline
-  const { derivedPreview = [] } = useSelector((state) => state?.onBoard ?? {});
+  const backendURL = import.meta.env.VITE_BACKEND_BASE_URL;
+
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(25);
+  const [derivedData, setDerivedData] = React.useState([]);
+  const [total, setTotal] = React.useState(0);
+  const [loading, setLoading] = React.useState(false);
 
   const weightsArray = React.useMemo(
     () =>
@@ -38,17 +45,54 @@ const PairsDialog = ({ setShowResponseDialog }) => {
     setShowResponseDialog(false);
   }, [setShowResponseDialog]);
 
+  // Fetch derived data with pagination
+  const fetchDerivedData = React.useCallback(async () => {
+    try {
+      setLoading(true);
+      const res = await axios.get(
+        `${backendURL}/api/v1/derived/preview?page=${page + 1}&limit=${rowsPerPage}`
+      );
+      if (res.data?.ok) {
+        setDerivedData(res.data.items);
+        setTotal(res.data.total);
+      }
+    } catch (err) {
+      console.error("Error fetching derived preview:", err);
+    } finally {
+      setLoading(false);
+    }
+  }, [backendURL, page, rowsPerPage]);
+
+  React.useEffect(() => {
+    fetchDerivedData();
+  }, [fetchDerivedData]);
+
+  const handleChangePage = (_, newPage) => setPage(newPage);
+  const handleChangeRowsPerPage = (e) => {
+    setRowsPerPage(parseInt(e.target.value, 10));
+    setPage(0);
+  };
+
   return (
-    <div className="p-4">
+    <div
+      className="p-4"
+      style={{
+        backgroundColor: "#fefefe",
+        borderRadius: "10px",
+        maxHeight: "85vh",
+        overflowY: "auto",
+      }}
+    >
+      {/* ─── Header ─────────────────────────────────────────────── */}
       <div className="d-flex justify-content-between mb-4">
-        <Chip label="AI Response" />
+        <Chip label="AI Response" color="primary" />
         <button type="button" className="btn btn-danger" onClick={handleClose}>
           Close
         </button>
       </div>
 
-      {/* Concept weights + labels */}
-      <h1 className="heading">Concept Weights:</h1>
+      {/* ─── Concept Weights ─────────────────────────────────────── */}
+      <h1 className="heading mb-3">Concept Weights:</h1>
       <div style={{ marginLeft: "25px" }}>
         {weightsArray.map((w) => (
           <div key={w.name} className="mb-4">
@@ -80,7 +124,7 @@ const PairsDialog = ({ setShowResponseDialog }) => {
         ))}
       </div>
 
-      {/* SINGLE Cluster Analysis for the whole set */}
+      {/* ─── Cluster Analysis ────────────────────────────────────── */}
       {!!clusterAnalysis && (
         <>
           <Divider className="my-3" />
@@ -99,7 +143,10 @@ const PairsDialog = ({ setShowResponseDialog }) => {
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <Typography variant="body2" style={{ whiteSpace: "pre-wrap" }}>
+              <Typography
+                variant="body2"
+                style={{ whiteSpace: "pre-wrap", lineHeight: 1.6 }}
+              >
                 {clusterAnalysis}
               </Typography>
             </AccordionDetails>
@@ -107,63 +154,108 @@ const PairsDialog = ({ setShowResponseDialog }) => {
         </>
       )}
 
-      {/* NEW: Derived Data Points (Aggregated) */}
-      {Array.isArray(derivedPreview) && derivedPreview.length > 0 && (
-        <>
-          <Divider className="my-3" />
-          <Accordion
-            className="mt-2"
-            sx={{
-              background: "#f9f9f9",
-              boxShadow: "none",
-              border: "1px solid #e0e0e0",
-              borderRadius: "8px",
-            }}
-          >
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography variant="subtitle1" fontWeight="bold">
-                Derived Data Points (Aggregated)
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Typography variant="body2" className="mb-2">
-                Showing {derivedPreview.length} item
-                {derivedPreview.length > 1 ? "s" : ""} ranked by occurrences.
-              </Typography>
+      {/* ─── Derived Data Points (Paginated + Combos) ────────────── */}
+      <Divider className="my-3" />
+      <Accordion
+        className="mt-2"
+        defaultExpanded
+        sx={{
+          background: "#f9f9f9",
+          boxShadow: "none",
+          border: "1px solid #e0e0e0",
+          borderRadius: "8px",
+        }}
+      >
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography variant="subtitle1" fontWeight="bold">
+            Derived Data Points (Aggregated & Paginated)
+          </Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Typography variant="body2" className="mb-2">
+            Showing {derivedData.length} of {total} items ranked by occurrences.
+          </Typography>
 
-              <Table size="small" aria-label="derived-aggregates">
-                <TableHead>
-                  <TableRow>
-                    <TableCell><strong>Derived Data Point</strong></TableCell>
-                    <TableCell width={140} align="right">
-                      <strong>Occurrences</strong>
+          <Table size="small" aria-label="derived-aggregates">
+            <TableHead>
+              <TableRow sx={{ backgroundColor: "#f3f3f3" }}>
+                <TableCell>
+                  <strong>Derived Data Point</strong>
+                </TableCell>
+                <TableCell width={140} align="right">
+                  <strong>Occurrences</strong>
+                </TableCell>
+                <TableCell>
+                  <strong>Source Combos</strong>
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {loading ? (
+                <TableRow>
+                  <TableCell colSpan={3} align="center">
+                    <em>Loading...</em>
+                  </TableCell>
+                </TableRow>
+              ) : derivedData.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={3} align="center">
+                    <em>No derived data found.</em>
+                  </TableCell>
+                </TableRow>
+              ) : (
+                derivedData.map((item, idx) => (
+                  <TableRow key={idx}>
+                    <TableCell>
+                      <Typography variant="body2">
+                        {item?.derived || "—"}
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="right">
+                      <Typography variant="body2">
+                        {Number.isFinite(item?.occurrences)
+                          ? item.occurrences
+                          : "—"}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexWrap: "wrap",
+                          gap: "4px",
+                        }}
+                      >
+                        {Array.isArray(item.combos) && item.combos.length > 0
+                          ? item.combos.map((combo, i) => (
+                              <Chip
+                                key={i}
+                                label={combo.join(" + ")}
+                                size="small"
+                                color="secondary"
+                                variant="outlined"
+                              />
+                            ))
+                          : "—"}
+                      </Box>
                     </TableCell>
                   </TableRow>
-                </TableHead>
-                <TableBody>
-                  {derivedPreview.map((item, idx) => (
-                    <TableRow key={`${item?.derived || "item"}-${idx}`}>
-                      <TableCell>
-                        <Typography variant="body2">
-                          {item?.derived || "—"}
-                        </Typography>
-                      </TableCell>
-                      <TableCell align="right">
-                        <Typography variant="body2">
-                          {Number.isFinite(item?.occurrences)
-                            ? item.occurrences
-                            : "—"}
-                        </Typography>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </AccordionDetails>
-          </Accordion>
-        </>
-      )}
+                ))
+              )}
+            </TableBody>
+          </Table>
 
+          <TablePagination
+            component="div"
+            count={total}
+            page={page}
+            onPageChange={handleChangePage}
+            rowsPerPage={rowsPerPage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+            rowsPerPageOptions={[10, 25, 50, 100]}
+          />
+        </AccordionDetails>
+      </Accordion>
     </div>
   );
 };
