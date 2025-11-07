@@ -368,38 +368,36 @@ export const runCombinationPipeline = async (data, thunkAPI) => {
       ],
     });
 
-    // STEP 2 – Start background processing
+    // STEP 2 – Process in background (pairs, triplets, etc.)
     await axios.post(`${backendURL}/api/v1/combos/process`, {
-      batchSize: 200,
-      concurrency: 3,
-      onlySize: 2,
+      batchSize: 50,
+      concurrency: 3
     });
 
-    // STEP 3 – Poll progress instead of preview
-    const maxRetries = 40;
-    const delayMs = 5000;
-    let percent = 0;
-
-    // for (let attempt = 0; attempt < maxRetries; attempt++) {
-    //   const status = await axios.get(`${backendURL}/api/v1/combos/status`);
-    //   percent = status.data?.percent ?? 0;
-    //   console.log(`🧭 Progress: ${percent}%`);
-
-    //   if (percent >= 90) break; // done enough to preview
-
-    //   await new Promise((r) => setTimeout(r, delayMs));
-    // }
-
-    // STEP 4 – Aggregate and preview
+    // STEP 3 – Aggregate derived points
     await axios.post(`${backendURL}/api/v1/derived/aggregate`);
-    const preview = await axios.get(`${backendURL}/api/v1/derived/preview?limit=50`);
 
-    return preview.data;
+    // STEP 4 – Get derived preview
+    const preview = await axios.get(`${backendURL}/api/v1/derived/preview?limit=50`);
+    const derivedItems = preview.data?.items || [];
+
+    // ✅ STEP 5 – Run Cluster Analysis (new)
+    // Send all derived item names to backend for caching & GPT analysis
+    const clusterResp = await axios.post(`${backendURL}/api/v1/cluster/run`, {
+      dataPoints: derivedItems.map((d) => ({ name: d.derived })),
+    });
+
+    // Combine both results
+    return {
+      derivedPreview: derivedItems,
+      clusterAnalysis: clusterResp.data?.data || null,
+    };
   } catch (error) {
     console.error("❌ runCombinationPipeline error:", error);
     return thunkAPI.rejectWithValue(error?.response?.data || error?.message);
   }
 };
+
 
 export const chat = async (data, thunkAPI) => {
   try {

@@ -15,53 +15,44 @@ import {
   TableRow,
   TablePagination,
   Box,
+  CircularProgress,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const PairsDialog = ({ setShowResponseDialog }) => {
-  const { pairs = [], weights = {}, clusterAnalysis = "" } =
-    useSelector((state) => state?.onBoard?.ReasoningPairs) ?? {};
+  const { derivedPreview = [], clusterAnalysis } =
+    useSelector((state) => state?.onBoard) ?? {};
 
   const backendURL = import.meta.env.VITE_BACKEND_BASE_URL;
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(25);
-  const [derivedData, setDerivedData] = React.useState([]);
-  const [total, setTotal] = React.useState(0);
+  const [derivedData, setDerivedData] = React.useState(derivedPreview || []);
+  const [total, setTotal] = React.useState(derivedPreview?.length || 0);
   const [loading, setLoading] = React.useState(false);
-
-  const weightsArray = React.useMemo(
-    () =>
-      Object.entries(weights).map(([name, data]) => ({
-        name,
-        score: data?.score,
-        type: data?.type,
-        label: data?.label || "",
-      })),
-    [weights]
-  );
 
   const handleClose = React.useCallback(() => {
     setShowResponseDialog(false);
   }, [setShowResponseDialog]);
 
-  // Fetch derived data with pagination
+  // Fallback fetch (only runs if no Redux data exists)
   const fetchDerivedData = React.useCallback(async () => {
+    if (derivedPreview?.length > 0) return; // ✅ already have data from Redux
     try {
       setLoading(true);
       const res = await axios.get(
         `${backendURL}/api/v1/derived/preview?page=${page + 1}&limit=${rowsPerPage}`
       );
       if (res.data?.ok) {
-        setDerivedData(res.data.items);
-        setTotal(res.data.total);
+        setDerivedData(res.data.items || []);
+        setTotal(res.data.total || 0);
       }
     } catch (err) {
-      console.error("Error fetching derived preview:", err);
+      console.error("❌ Error fetching derived preview:", err);
     } finally {
       setLoading(false);
     }
-  }, [backendURL, page, rowsPerPage]);
+  }, [backendURL, page, rowsPerPage, derivedPreview?.length]);
 
   React.useEffect(() => {
     fetchDerivedData();
@@ -77,87 +68,24 @@ const PairsDialog = ({ setShowResponseDialog }) => {
     <div
       className="p-4"
       style={{
-        backgroundColor: "#fefefe",
+        backgroundColor: "#fff",
         borderRadius: "10px",
         maxHeight: "85vh",
         overflowY: "auto",
+        boxShadow: "0 0 10px rgba(0,0,0,0.1)",
       }}
     >
-      {/* ─── Header ─────────────────────────────────────────────── */}
-      <div className="d-flex justify-content-between mb-4">
+      {/* Header */}
+      <div className="d-flex justify-content-between align-items-center mb-4">
         <Chip label="AI Response" color="primary" />
         <button type="button" className="btn btn-danger" onClick={handleClose}>
           Close
         </button>
       </div>
 
-      {/* ─── Concept Weights ─────────────────────────────────────── */}
-      <h1 className="heading mb-3">Concept Weights:</h1>
-      <div style={{ marginLeft: "25px" }}>
-        {weightsArray.map((w) => (
-          <div key={w.name} className="mb-4">
-            <Typography variant="h6" fontWeight="bold">
-              {w.name} ({w.score}) – {w.type}
-            </Typography>
-
-            {w.label && (
-              <div className="mt-2">
-                {w.label.split("\n").map((line, idx) => {
-                  const trimmed = line.trim();
-                  if (!trimmed) return null;
-                  if (trimmed.startsWith("•")) {
-                    return (
-                      <li key={idx} style={{ marginLeft: "20px" }}>
-                        {trimmed.replace(/^•\s*/, "")}
-                      </li>
-                    );
-                  }
-                  return (
-                    <Typography key={idx} variant="body2">
-                      {trimmed}
-                    </Typography>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
-
-      {/* ─── Cluster Analysis ────────────────────────────────────── */}
-      {!!clusterAnalysis && (
-        <>
-          <Divider className="my-3" />
-          <Accordion
-            className="mt-2"
-            sx={{
-              background: "#f9f9f9",
-              boxShadow: "none",
-              border: "1px solid #e0e0e0",
-              borderRadius: "8px",
-            }}
-          >
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography variant="subtitle1" fontWeight="bold">
-                Cluster Analysis
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Typography
-                variant="body2"
-                style={{ whiteSpace: "pre-wrap", lineHeight: 1.6 }}
-              >
-                {clusterAnalysis}
-              </Typography>
-            </AccordionDetails>
-          </Accordion>
-        </>
-      )}
-
-      {/* ─── Derived Data Points (Paginated + Combos) ────────────── */}
+      {/* Derived Data Points */}
       <Divider className="my-3" />
       <Accordion
-        className="mt-2"
         defaultExpanded
         sx={{
           background: "#f9f9f9",
@@ -171,6 +99,7 @@ const PairsDialog = ({ setShowResponseDialog }) => {
             Derived Data Points (Aggregated & Paginated)
           </Typography>
         </AccordionSummary>
+
         <AccordionDetails>
           <Typography variant="body2" className="mb-2">
             Showing {derivedData.length} of {total} items ranked by occurrences.
@@ -190,11 +119,12 @@ const PairsDialog = ({ setShowResponseDialog }) => {
                 </TableCell>
               </TableRow>
             </TableHead>
+
             <TableBody>
               {loading ? (
                 <TableRow>
                   <TableCell colSpan={3} align="center">
-                    <em>Loading...</em>
+                    <CircularProgress size={24} />
                   </TableCell>
                 </TableRow>
               ) : derivedData.length === 0 ? (
@@ -204,30 +134,32 @@ const PairsDialog = ({ setShowResponseDialog }) => {
                   </TableCell>
                 </TableRow>
               ) : (
-                derivedData.map((item, idx) => (
-                  <TableRow key={idx}>
-                    <TableCell>
-                      <Typography variant="body2">
-                        {item?.derived || "—"}
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="right">
-                      <Typography variant="body2">
-                        {Number.isFinite(item?.occurrences)
-                          ? item.occurrences
-                          : "—"}
-                      </Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flexWrap: "wrap",
-                          gap: "4px",
-                        }}
-                      >
-                        {Array.isArray(item.combos) && item.combos.length > 0
-                          ? item.combos.map((combo, i) => (
+                derivedData
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((item, idx) => (
+                    <TableRow key={idx}>
+                      <TableCell>
+                        <Typography variant="body2">
+                          {item?.derived || "—"}
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="right">
+                        <Typography variant="body2">
+                          {Number.isFinite(item?.occurrences)
+                            ? item.occurrences
+                            : "—"}
+                        </Typography>
+                      </TableCell>
+                      <TableCell>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexWrap: "wrap",
+                            gap: "4px",
+                          }}
+                        >
+                          {Array.isArray(item.combos) && item.combos.length > 0
+                            ? item.combos.map((combo, i) => (
                               <Chip
                                 key={i}
                                 label={combo.join(" + ")}
@@ -236,15 +168,16 @@ const PairsDialog = ({ setShowResponseDialog }) => {
                                 variant="outlined"
                               />
                             ))
-                          : "—"}
-                      </Box>
-                    </TableCell>
-                  </TableRow>
-                ))
+                            : "—"}
+                        </Box>
+                      </TableCell>
+                    </TableRow>
+                  ))
               )}
             </TableBody>
           </Table>
 
+          {/* Pagination */}
           <TablePagination
             component="div"
             count={total}
@@ -256,6 +189,36 @@ const PairsDialog = ({ setShowResponseDialog }) => {
           />
         </AccordionDetails>
       </Accordion>
+
+      {/* Cluster Analysis Result */}
+      {clusterAnalysis && (
+        <>
+          <Divider className="my-3" />
+          <Accordion
+            defaultExpanded
+            sx={{
+              background: "#f9f9f9",
+              boxShadow: "none",
+              border: "1px solid #e0e0e0",
+              borderRadius: "8px",
+            }}
+          >
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography variant="subtitle1" fontWeight="bold">
+                Cluster Analysis (Final Step)
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Typography
+                variant="body2"
+                sx={{ whiteSpace: "pre-wrap", lineHeight: 1.6 }}
+              >
+                {clusterAnalysis}
+              </Typography>
+            </AccordionDetails>
+          </Accordion>
+        </>
+      )}
     </div>
   );
 };

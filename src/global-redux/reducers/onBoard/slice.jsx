@@ -25,7 +25,7 @@ const initialState = {
   subLoading: false,
   ReasoningPairs: {},
   derivedPreview: [],
-
+  clusterAnalysis: null,
 };
 
 export const setupOnBoardingCall = createAsyncThunk(
@@ -114,7 +114,8 @@ export const slice = createSlice({
       })
       .addCase(setupRunCombinationPipeline.fulfilled, (state, action) => {
         state.loading = false;
-        state.derivedPreview = action?.payload?.items ?? [];
+        state.derivedPreview = action?.payload?.derivedPreview ?? [];
+        state.clusterAnalysis = action?.payload?.clusterAnalysis ?? null;
       })
       .addCase(setupRunCombinationPipeline.rejected, (state, action) => {
         state.loading = false;
