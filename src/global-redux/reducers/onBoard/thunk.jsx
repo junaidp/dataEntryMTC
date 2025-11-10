@@ -382,10 +382,13 @@ export const runCombinationPipeline = async (data, thunkAPI) => {
     const derivedItems = preview.data?.items || [];
 
     // ✅ STEP 5 – Run Cluster Analysis (new)
-    // Send all derived item names to backend for caching & GPT analysis
     const clusterResp = await axios.post(`${backendURL}/api/v1/cluster/run`, {
-      dataPoints: derivedItems.map((d) => ({ name: d.derived })),
+      dataPoints: derivedItems.map((d) => ({
+        name: d.derived,
+        weight: d.occurrences,
+      })),
     });
+
 
     // Combine both results
     return {

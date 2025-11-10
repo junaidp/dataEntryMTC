@@ -191,33 +191,46 @@ const PairsDialog = ({ setShowResponseDialog }) => {
       </Accordion>
 
       {/* Cluster Analysis Result */}
-      {clusterAnalysis && (
-        <>
-          <Divider className="my-3" />
-          <Accordion
-            defaultExpanded
-            sx={{
-              background: "#f9f9f9",
-              boxShadow: "none",
-              border: "1px solid #e0e0e0",
-              borderRadius: "8px",
-            }}
-          >
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography variant="subtitle1" fontWeight="bold">
-                Cluster Analysis (Final Step)
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Typography
-                variant="body2"
-                sx={{ whiteSpace: "pre-wrap", lineHeight: 1.6 }}
-              >
-                {clusterAnalysis}
-              </Typography>
-            </AccordionDetails>
-          </Accordion>
-        </>
+      {Array.isArray(clusterAnalysis) && clusterAnalysis.length > 0 && (
+        <Accordion defaultExpanded>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography variant="subtitle1" fontWeight="bold">
+              Cluster Analysis (Structured Results)
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Derived</TableCell>
+                  <TableCell>O</TableCell>
+                  <TableCell>PWM</TableCell>
+                  <TableCell>PSM</TableCell>
+                  <TableCell>E</TableCell>
+                  <TableCell>PL</TableCell>
+                  <TableCell>Tag Entropy</TableCell>
+                  <TableCell>Source Event Counts</TableCell>
+                  <TableCell>Factor Support Top</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {clusterAnalysis.map((row, i) => (
+                  <TableRow key={i}>
+                    <TableCell>{row.derived}</TableCell>
+                    <TableCell>{row.occurrences}</TableCell>
+                    <TableCell>{row.pwm}</TableCell>
+                    <TableCell>{row.psm}</TableCell>
+                    <TableCell>{row.e}</TableCell>
+                    <TableCell>{row.pl}</TableCell>
+                    <TableCell>{row.tagEntropy}</TableCell>
+                    <TableCell>{row.sourceEventCounts}</TableCell>
+                    <TableCell>{row.factorSupportTop}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </AccordionDetails>
+        </Accordion>
       )}
     </div>
   );
