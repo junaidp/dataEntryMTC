@@ -12,6 +12,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 const initialState = {
   loading: false,
   response: {},
+  labeledData: [],
   onBoardingAddSuccess: false,
   chatResponse: "",
   customerId: "293b846f-9207-4988-b067-0fc21a2bc4b3",
@@ -114,6 +115,7 @@ export const slice = createSlice({
       })
       .addCase(setupRunCombinationPipeline.fulfilled, (state, action) => {
         state.loading = false;
+        state.labeledData = action?.payload?.labeledData ?? [];
         state.derivedPreview = action?.payload?.derivedPreview ?? [];
         state.clusterAnalysis = action?.payload?.clusterAnalysis ?? null;
       })

@@ -20,8 +20,9 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const PairsDialog = ({ setShowResponseDialog }) => {
-  const { derivedPreview = [], clusterAnalysis } =
+  const { derivedPreview, clusterAnalysis, labeledData } =
     useSelector((state) => state?.onBoard) ?? {};
+
 
   const backendURL = import.meta.env.VITE_BACKEND_BASE_URL;
 
@@ -82,6 +83,43 @@ const PairsDialog = ({ setShowResponseDialog }) => {
           Close
         </button>
       </div>
+
+      {Array.isArray(labeledData) && labeledData.length > 0 && (
+        <Accordion defaultExpanded>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography variant="subtitle1" fontWeight="bold">
+              Original Data Points (With Nuance Tags)
+            </Typography>
+          </AccordionSummary>
+
+          <AccordionDetails>
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  <TableCell><strong>Name</strong></TableCell>
+                  <TableCell><strong>Weight</strong></TableCell>
+                  <TableCell><strong>Nuance Tag</strong></TableCell>
+                  <TableCell><strong>Factors</strong></TableCell>
+                </TableRow>
+              </TableHead>
+
+              <TableBody>
+                {labeledData.map((item, i) => (
+                  <TableRow key={i}>
+                    <TableCell>{item.name}</TableCell>
+                    <TableCell>{item.weight}</TableCell>
+                    <TableCell>{item.nuanceTag}</TableCell>
+                    <TableCell>
+                      {(item.factors || []).join(", ")}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </AccordionDetails>
+        </Accordion>
+      )}
+
 
       {/* Derived Data Points */}
       <Divider className="my-3" />

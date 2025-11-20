@@ -360,38 +360,63 @@ export const runCombinationPipeline = async (data, thunkAPI) => {
   const backendURL = import.meta.env.VITE_BACKEND_BASE_URL;
 
   try {
-    // STEP 1 – Generate combinations
+    const interests = data?.interests || [];
+    const passions = data?.passions || [];
+
+    // 👉 STEP 1: Compute weights locally using helper logic (frontend or backend)
+    const weightResp = await axios.post(`${backendURL}/api/v1/weights/compute`, {
+      interests,
+      passions,
+    });
+
+    const computedWeights = weightResp.data?.weights || {};
+
+    // 👉 Prepare labeling input
+    const conceptsArray = Object.keys(computedWeights).map((name) => ({
+      name,
+      weight: computedWeights[name].score,
+      importance: computedWeights[name].score >= 6 ? "High Importance"
+        : computedWeights[name].score >= 4 ? "Moderate Importance"
+          : "Low Importance",
+    }));
+
+    // 👉 STEP 2: Label all data points (Nuance Tag + Factors)
+    const labeledResp = await axios.post(`${backendURL}/api/v1/labels/run`, {
+      dataPoints: conceptsArray,
+    });
+
+    const labeledData = labeledResp.data?.items || [];
+
+    // 👉 STEP 3: Generate combinations
     await axios.post(`${backendURL}/api/v1/combos/generate`, {
-      dataPoints: [
-        ...(data?.interests || []).map((n) => ({ name: n })),
-        ...(data?.passions || []).map((n) => ({ name: n })),
-      ],
-    });
-
-    // STEP 2 – Process in background (pairs, triplets, etc.)
-    await axios.post(`${backendURL}/api/v1/combos/process`, {
-      batchSize: 50,
-      concurrency: 3
-    });
-
-    // STEP 3 – Aggregate derived points
-    await axios.post(`${backendURL}/api/v1/derived/aggregate`);
-
-    // STEP 4 – Get derived preview
-    const preview = await axios.get(`${backendURL}/api/v1/derived/preview?limit=50`);
-    const derivedItems = preview.data?.items || [];
-
-    // ✅ STEP 5 – Run Cluster Analysis (new)
-    const clusterResp = await axios.post(`${backendURL}/api/v1/cluster/run`, {
-      dataPoints: derivedItems.map((d) => ({
-        name: d.derived,
-        weight: d.occurrences,
+      dataPoints: labeledData.map((d) => ({
+        name: d.name,
       })),
     });
 
+    // 👉 STEP 4: Process combinations
+    await axios.post(`${backendURL}/api/v1/combos/process`, {
+      batchSize: 50,
+      concurrency: 3,
+    });
 
-    // Combine both results
+    // 👉 STEP 5: Aggregate derived points
+    await axios.post(`${backendURL}/api/v1/derived/aggregate`);
+
+    // 👉 STEP 6: Fetch preview (still needed for UI)
+    const preview = await axios.get(`${backendURL}/api/v1/derived/preview?limit=50`);
+    const derivedItems = preview.data?.items || [];
+
+    // 👉 STEP 7: NEW — Cluster Analysis using ORIGINAL LABELED DATA
+    const clusterResp = await axios.post(`${backendURL}/api/v1/cluster/run`, {
+      dataPoints: labeledData.map((d) => ({
+        name: d.name,
+        weight: d.weight,
+      })),
+    });
+
     return {
+      labeledData,       // NEW
       derivedPreview: derivedItems,
       clusterAnalysis: clusterResp.data?.data || null,
     };
